@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SandBoxScriptVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Antlr4 Include="ANTLR\SandBoxScript.g4">
