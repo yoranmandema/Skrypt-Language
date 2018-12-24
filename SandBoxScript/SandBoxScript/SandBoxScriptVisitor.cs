@@ -3,71 +3,95 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System.Collections.Generic;
 using SandBoxScript.ANTLR;
+using System.Linq;
 
 namespace SandBoxScript {
-    public class SandBoxScriptVisitor : SandBoxScriptBaseVisitor<object> {
-        public delegate object Delegate(object[] p);
+    public class SandBoxScriptVisitor : SandBoxScriptBaseVisitor<BaseObject> {
+        private readonly Engine _engine;
 
-        public override object VisitNumericAtomExp(SandBoxScriptParser.NumericAtomExpContext context) {
-            return double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
+        public SandBoxScriptVisitor (Engine engine) {
+            _engine = engine;
         }
 
-        public override object VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
+        public override BaseObject VisitNumericAtomExp(SandBoxScriptParser.NumericAtomExpContext context) {
+            var value = double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
+
+            return _engine.Create<NumberObject>(value);
+        }
+
+        public override BaseObject VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
             return Visit(context.expression());
         }
 
-        public override object VisitNameExp(SandBoxScriptParser.NameExpContext context) {
-            if (context.GetText() == "a") {
-                return (Delegate)((object[] p) => {
-                    var a = (double)(p[0]);
-                    var b = (double)(p[1]);
-                    var c = (double)(p[2]);
+        public override BaseObject VisitNameExp(SandBoxScriptParser.NameExpContext context) {
+            //throw new Exception("Name not found!");
 
-                    return a * b * c;
+            return _engine.Create<NumberObject>(1);
+        }
+
+        public override BaseObject VisitOperationExp(SandBoxScriptParser.OperationExpContext context) {
+            var operationName = context.Operation.Text;
+            var result = default(BaseObject);
+            var operation = default(IOperation);
+
+            var left = Visit(context.expression(0));
+            var leftType = left.Name;
+
+            var isBinary = context.expression().Length == 2;
+
+            if (isBinary) {
+                var right = Visit(context.expression(1));
+                var rightType = right.Name;
+
+                var types = new[] { leftType, rightType };
+
+                operation = Array.Find(left.StaticObject.Operations, x => {
+                    if (x.GetType() != typeof(BinaryOperation)) return false;
+                    if (x.Name != operationName) return false;
+
+                    var op = (BinaryOperation)x;
+
+                    if (op.LeftType != leftType) return false;
+                    if (op.RightType != rightType) return false;
+
+                    return true;
                 });
+
+                if (operation == null) {
+                    operation = Array.Find(left.StaticObject.Operations, x => {
+                        if (x.GetType() != typeof(BinaryOperation)) return false;
+                        if (x.Name != operationName) return false;
+
+                        var op = (BinaryOperation)x;
+
+                        if (op.LeftType != leftType) return false;
+                        if (op.RightType != rightType) return false;
+
+                        return true;
+                    });
+                }
+
+                result = operation.Function.Run(left, right);
             } else {
-                throw new Exception("Name not found!");
+                operation = Array.Find(left.StaticObject.Operations, x => {
+                    if (x.GetType() != typeof(UnaryOperation)) return false;
+                    if (x.Name != operationName) return false;
+
+                    var op = (UnaryOperation)x;
+
+                    if (op.Type != leftType) return false;
+
+                    return true;
+                });
+
+                result = operation.Function.Run(left);
             }
-        }
-
-        public override object VisitMulDivExp(SandBoxScriptParser.MulDivExpContext context) {
-            double left = (double)Visit(context.expression(0));
-            double right = (double)Visit(context.expression(1));
-            double result = 0;
-
-            if (context.ASTERISK() != null)
-                result = left * right;
-            if (context.SLASH() != null)
-                result = left / right;
 
             return result;
         }
 
-        public override object VisitAddSubExp(SandBoxScriptParser.AddSubExpContext context) {
-            double left = (double)Visit(context.expression(0));
-            double right = (double)Visit(context.expression(1));
-            double result = 0;
-
-            if (context.PLUS() != null)
-                result = left + right;
-            if (context.MINUS() != null)
-                result = left - right;
-
-            return result;
-        }
-
-        public override object VisitPowerExp(SandBoxScriptParser.PowerExpContext context) {
-            double left = (double)Visit(context.expression(0));
-            double right = (double)Visit(context.expression(1));
-            double result = 0;
-
-            result = Math.Pow(left, right);
-
-            return result;
-        }
-
-        public override object VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
-            var function = (Delegate)Visit(context.expression(0));
+        public override BaseObject VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
+            //var function = (Delegate)Visit(context.expression(0));
 
             var arguments = new object[context.expression().Length - 1];
 
@@ -75,7 +99,7 @@ namespace SandBoxScript {
                 arguments[i - 1] = Visit(context.expression(i));
             }
 
-            return function.Invoke(arguments);
+            return null;
         }
     }
 }

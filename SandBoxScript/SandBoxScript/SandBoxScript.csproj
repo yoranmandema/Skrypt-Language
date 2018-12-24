@@ -55,6 +55,15 @@
     <Compile Include="ANTLR\SandBoxScript.g4.parser.cs">
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>
+    <Compile Include="Engine.cs" />
+    <Compile Include="Native\BinaryOperation.cs" />
+    <Compile Include="Native\Exceptions\InvalidOperationException.cs" />
+    <Compile Include="Native\Function\FunctionObject.cs" />
+    <Compile Include="Native\Function\IFunction.cs" />
+    <Compile Include="Native\Operation.cs" />
+    <Compile Include="Native\NumberObject.cs" />
+    <Compile Include="Native\UnaryOperation.cs" />
+    <Compile Include="Native\Value.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SandBoxScriptVisitor.cs" />

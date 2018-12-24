@@ -1,14 +1,14 @@
 grammar SandBoxScript;
 
-expression          : '(' expression ')'                        #parenthesisExp
-					| expression DOT expression					#memberAccessExp
-					| expression '[' expression ']'				#computedMemberAccessExp
-                    | expression '(' expression (',' expression)* ')'    #functionCallExp
-                    | expression (ASTERISK|SLASH) expression    #mulDivExp
-                    | expression (PLUS|MINUS) expression        #addSubExp
-					| <assoc=right>  expression '^' expression	#powerExp
-					| NAME						                #nameExp
-                    | NUMBER                                    #numericAtomExp
+expression          : '(' expression ')'										#parenthesisExp
+					| expression DOT expression									#memberAccessExp
+					| expression '[' expression ']'								#computedMemberAccessExp
+                    | expression '(' expression (',' expression)* ')'			#functionCallExp
+                    | expression Operation=(ASTERISK|SLASH) expression			#operationExp
+                    | expression Operation=(PLUS|MINUS) expression				#operationExp
+					| <assoc=right>  expression Operation='^' expression		#operationExp
+					| NAME														#nameExp
+                    | NUMBER													#numericAtomExp
                     ;
 
 fragment LETTER     : [a-zA-Z] ;
