@@ -35,15 +35,13 @@ namespace SandBoxScript {
             var operation = default(IOperation);
 
             var left = Visit(context.expression(0));
-            var leftType = left.Name;
+            var leftType = left.GetType();
 
             var isBinary = context.expression().Length == 2;
 
             if (isBinary) {
                 var right = Visit(context.expression(1));
-                var rightType = right.Name;
-
-                var types = new[] { leftType, rightType };
+                var rightType = right.GetType();
 
                 operation = Array.Find(left.StaticObject.Operations, x => {
                     if (x.GetType() != typeof(BinaryOperation)) return false;

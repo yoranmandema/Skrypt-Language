@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     internal class Scope {
-        private Dictionary<string, BaseObject> Types = new Dictionary<string, BaseObject>();
+        public Dictionary<string, BaseObject> Types = new Dictionary<string, BaseObject>();
 
         public BaseObject GetType (string name) {
             return Types[name];

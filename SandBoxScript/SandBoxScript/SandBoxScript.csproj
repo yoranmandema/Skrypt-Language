@@ -56,14 +56,19 @@
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine.cs" />
-    <Compile Include="Native\BinaryOperation.cs" />
+    <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
+    <Compile Include="Native\Function\DelegateFunction.cs" />
+    <Compile Include="Native\Object\Member.cs" />
+    <Compile Include="Operations\BinaryOperation.cs" />
     <Compile Include="Native\Exceptions\InvalidOperationException.cs" />
     <Compile Include="Native\Function\FunctionObject.cs" />
     <Compile Include="Native\Function\IFunction.cs" />
-    <Compile Include="Native\Operation.cs" />
-    <Compile Include="Native\NumberObject.cs" />
-    <Compile Include="Native\UnaryOperation.cs" />
-    <Compile Include="Native\Value.cs" />
+    <Compile Include="Operations\Operation.cs" />
+    <Compile Include="Native\Number\NumberObject.cs" />
+    <Compile Include="Operations\OperatorData.cs" />
+    <Compile Include="Scope.cs" />
+    <Compile Include="Operations\UnaryOperation.cs" />
+    <Compile Include="Native\Object\BaseObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SandBoxScriptVisitor.cs" />
@@ -78,6 +83,8 @@
       <SubType>Component</SubType>
     </None>
     <None Include="packages.config" />
+    <Compile Include="TypeGeneration\MethodInfoExtensions.cs" />
+    <Compile Include="TypeGeneration\TypeGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

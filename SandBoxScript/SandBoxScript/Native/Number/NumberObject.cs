@@ -13,5 +13,9 @@ namespace SandBoxScript {
         public NumberObject (double value) {
             Value = value;
         }
+
+        public NumberObject __add(NumberObject left, NumberObject right) {
+            return Engine.Create<NumberObject>(left.Value + right.Value);
+        }
     }
 }

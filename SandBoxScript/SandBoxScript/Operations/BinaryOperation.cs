@@ -8,8 +8,8 @@ namespace SandBoxScript {
     public class BinaryOperation : IOperation {   
         public string Name { get; set; }
 
-        public string LeftType { get; set; }
-        public string RightType { get; set; }
+        public Type LeftType { get; set; }
+        public Type RightType { get; set; }
 
         public IFunction Function { get; set; }
     }
