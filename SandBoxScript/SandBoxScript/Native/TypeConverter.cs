@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public interface IFunction {
-        BaseObject Run(Engine engine, BaseObject self, BaseObject[] args);
+    public class TypeConverter {
+        public static NumberObject ToNumber (BaseObject val) {
+            return (NumberObject)val;
+        }
     }
 }

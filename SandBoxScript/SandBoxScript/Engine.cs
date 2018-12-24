@@ -23,25 +23,56 @@ namespace SandBoxScript {
 
             foreach (var m in methods) {
                 if (!typeof(BaseObject).IsAssignableFrom(m.ReturnType)) continue;
-                if (m.GetParameters().Length != 1) continue;
-                if (m.GetParameters()[0].ParameterType != typeof(BaseObject[])) continue;
+                if (m.GetParameters().Length != 3) continue;
+                if (m.GetParameters()[0].ParameterType != typeof(Engine)) continue;
+                if (m.GetParameters()[1].ParameterType != typeof(BaseObject)) continue;
+                if (m.GetParameters()[2].ParameterType != typeof(BaseObject[])) continue;
 
-                var del = m.CreateDelegate(typeof(BaseDelegate), instance);
+                var del = (BaseDelegate)m.CreateDelegate(typeof(BaseDelegate), instance);
 
-                var function = new FunctionObject {
-                    Function = new DelegateFunction {
-                        Function = (BaseDelegate)del
+                var binaryOp = (BinaryOperationAttribute)m.GetCustomAttribute(typeof(BinaryOperationAttribute));
+                var unaryOp = (UnaryOperationAttribute)m.GetCustomAttribute(typeof(UnaryOperationAttribute));
+
+                if (binaryOp != null) {
+                    var operation = new BinaryOperation {
+                        Name = binaryOp.Name,
+                        LeftType = binaryOp.LeftType,
+                        RightType = binaryOp.RightType,
+                        Function = new DelegateFunction {
+                            Function = del
+                        }
+                    };
+
+                    instanceObj.Operations.Add(operation);
+                }
+                else if (unaryOp != null) {
+                    var operation = new UnaryOperation {
+                        Name = binaryOp.Name,
+                        Type = binaryOp.LeftType,
+                        Function = new DelegateFunction {
+                            Function = del
+                        }
+                    };
+
+                    instanceObj.Operations.Add(operation);
+                }
+                else {
+                    var function = new FunctionObject {
+                        Function = new DelegateFunction {
+                            Function = del
+                        }
+                    };
+
+                    if (m.GetCustomAttributes(typeof(StaticAttribute)).Any()) {
+                        staticObj.Members[m.Name] = new Member {
+                            Value = function
+                        };
                     }
-                };
-
-                if (m.GetCustomAttributes(typeof(StaticAttribute), true).Any()) {
-                    staticObj.Members[m.Name] = new Member {
-                        Value = function
-                    };
-                } else {
-                    instanceObj.Members[m.Name] = new Member {
-                        Value = function
-                    };
+                    else {
+                        instanceObj.Members[m.Name] = new Member {
+                            Value = function
+                        };
+                    }
                 }
             }
 

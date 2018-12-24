@@ -15,8 +15,8 @@ namespace SandBoxScript {
 
         public override BaseObject VisitNumericAtomExp(SandBoxScriptParser.NumericAtomExpContext context) {
             var value = double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
-
-            return _engine.Create<NumberObject>(value);
+            var num = _engine.Create<NumberObject>(value);
+            return num;
         }
 
         public override BaseObject VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
@@ -35,12 +35,12 @@ namespace SandBoxScript {
             var operation = default(IOperation);
 
             var left = Visit(context.expression(0));
-            var leftType = left.GetType();
+            var leftType = left.Name;
 
             var right = Visit(context.expression(1));
-            var rightType = right.GetType();
+            var rightType = right.Name;
 
-            operation = Array.Find(left.StaticObject.Operations, x => {
+            operation = left.Operations.Find(x => {
                 if (x.GetType() != typeof(BinaryOperation)) return false;
                 if (x.Name != operationName) return false;
 
@@ -53,7 +53,7 @@ namespace SandBoxScript {
             });
 
             if (operation == null) {
-                operation = Array.Find(left.StaticObject.Operations, x => {
+                operation = left.Operations.Find(x => {
                     if (x.GetType() != typeof(BinaryOperation)) return false;
                     if (x.Name != operationName) return false;
 
@@ -66,7 +66,11 @@ namespace SandBoxScript {
                 });
             }
 
-            result = operation.Function.Run(new[] { left, right });
+            if (operation == null) {
+                throw new InvalidOperationException($"No such operation: {leftType} {operationName} {rightType}");
+            }
+
+            result = operation.Function.Run(_engine, null, new[] { left, right });
 
             return result;
         }
@@ -91,7 +95,7 @@ namespace SandBoxScript {
                 arguments[i - 1] = Visit(context.expression(i));
             }
 
-            return ((FunctionObject)function).Function.Run(arguments);
+            return ((FunctionObject)function).Function.Run(_engine, null, arguments);
         }
     }
 }

@@ -56,11 +56,15 @@
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine.cs" />
+    <Compile Include="Native\Attributes\BinaryOperationAttribute.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
+    <Compile Include="Native\Attributes\OperationAttribute.cs" />
     <Compile Include="Native\Attributes\StaticAttribute.cs" />
+    <Compile Include="Native\Attributes\UnaryAttribute.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
     <Compile Include="Native\Function\DelegateFunction.cs" />
     <Compile Include="Native\Object\Member.cs" />
+    <Compile Include="Native\TypeConverter.cs" />
     <Compile Include="Operations\BinaryOperation.cs" />
     <Compile Include="Native\Exceptions\InvalidOperationException.cs" />
     <Compile Include="Native\Function\FunctionObject.cs" />

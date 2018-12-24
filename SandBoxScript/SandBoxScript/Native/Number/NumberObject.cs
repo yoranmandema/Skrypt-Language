@@ -16,12 +16,24 @@ namespace SandBoxScript {
             Value = value;
         }
 
-        public NumberObject __add(NumberObject left, NumberObject right) {
-            return Engine.Create<NumberObject>(left.Value + right.Value);
+        [BinaryOperation("+", "Number", "Number")]
+        public BaseObject AddNumberNumber(Engine engine, BaseObject self, BaseObject[] input) {
+            var left = TypeConverter.ToNumber(input[0]);
+            var right = TypeConverter.ToNumber(input[1]);
+
+            return engine.Create<NumberObject>(left.Value + right.Value);
+        }
+
+        [BinaryOperation("*", "Number", "Number")]
+        public BaseObject MulNumberNumber(Engine engine, BaseObject self, BaseObject[] input) {
+            var left = TypeConverter.ToNumber(input[0]);
+            var right = TypeConverter.ToNumber(input[1]);
+
+            return engine.Create<NumberObject>(left.Value * right.Value);
         }
 
         [Static]
-        public BaseObject Parse(BaseObject[] input) {
+        public BaseObject Parse(Engine engine, BaseObject self, BaseObject[] input) {
             var value = double.Parse(input.ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
             return Engine.Create<NumberObject>(value);

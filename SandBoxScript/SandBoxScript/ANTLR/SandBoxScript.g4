@@ -5,8 +5,8 @@ expression          : '(' expression ')'										#parenthesisExp
 					| expression '[' expression ']'								#computedMemberAccessExp
                     | expression '(' expression* (',' expression)* ')'			#functionCallExp
                     | expression Operation=(ASTERISK|SLASH) expression			#binaryOperationExp
-                    | expression Operation=(PLUS|MINUS) expression				#binaryoperationExp
-					| <assoc=right>  expression Operation='^' expression		#binaryoperationExp
+                    | expression Operation=(PLUS|MINUS) expression				#binaryOperationExp
+					| <assoc=right>  expression Operation='^' expression		#binaryOperationExp
 					| NAME														#nameExp
                     | NUMBER													#numericAtomExp
                     ;

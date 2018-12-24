@@ -10,7 +10,7 @@ namespace SandBoxScript {
 
         public BaseObject StaticObject { get; set; }
         public Engine Engine { get; set; }
-        public IOperation[] Operations { get; set; }
+        public List<IOperation> Operations = new List<IOperation>();
         public Dictionary<string, Member> Members = new Dictionary<string, Member>();
 
         public virtual void Initialise(Engine engine, params object[] args) {

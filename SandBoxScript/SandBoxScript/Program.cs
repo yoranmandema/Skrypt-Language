@@ -9,11 +9,11 @@ using SandBoxScript.ANTLR;
 
 namespace SandBoxScript {
     class Program {
-        static void Main(string[] args) {
-            string input = "Number.Parse()";
+        static void Main(string[] args){
+            string input = "3 + 4";
             var engine = new Engine();
 
-            engine.Run(input);
+            Console.WriteLine(engine.Run(input));
 
             Console.ReadKey();
         }
