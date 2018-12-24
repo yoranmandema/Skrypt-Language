@@ -13,30 +13,44 @@ namespace SandBoxScript {
     public class Engine {
         internal Scope Scope = new Scope();
 
-        public BaseObject GenerateType(Type type) {
-            var obj = new BaseObject {
-                Engine = this
-            };
+        public void GenerateType(Type type) {
+            var instanceObj = new BaseObject ();
+            var staticObj = new BaseObject();
+
+            var instance = (BaseObject)Activator.CreateInstance(type);
 
             var methods = type.GetRuntimeMethods();
 
-            var instance = Activator.CreateInstance(type, null);
-
             foreach (var m in methods) {
                 if (!typeof(BaseObject).IsAssignableFrom(m.ReturnType)) continue;
+                if (m.GetParameters().Length != 1) continue;
+                if (m.GetParameters()[0].ParameterType != typeof(BaseObject[])) continue;
 
-                
+                var del = m.CreateDelegate(typeof(BaseDelegate), instance);
+
+                var function = new FunctionObject {
+                    Function = new DelegateFunction {
+                        Function = (BaseDelegate)del
+                    }
+                };
+
+                if (m.GetCustomAttributes(typeof(StaticAttribute), true).Any()) {
+                    staticObj.Members[m.Name] = new Member {
+                        Value = function
+                    };
+                } else {
+                    instanceObj.Members[m.Name] = new Member {
+                        Value = function
+                    };
+                }
             }
 
-            return null;
-        }
-
-        public void CreateBaseTypes () {
-            Scope.Types["Number"] = GenerateType(typeof(NumberObject));
+            Scope.Variables[instance.Name]  = staticObj;
+            Scope.Types[instance.Name]      = instanceObj;
         }
 
         public BaseObject Run (string code) {
-            CreateBaseTypes();
+            GenerateType(typeof(NumberObject));
 
             var inputStream         = new AntlrInputStream(code);
             var sandBoxScriptLexer  = new SandBoxScriptLexer(inputStream);

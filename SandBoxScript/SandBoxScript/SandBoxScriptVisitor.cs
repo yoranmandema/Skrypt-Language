@@ -26,10 +26,10 @@ namespace SandBoxScript {
         public override BaseObject VisitNameExp(SandBoxScriptParser.NameExpContext context) {
             //throw new Exception("Name not found!");
 
-            return _engine.Create<NumberObject>(1);
+            return _engine.Scope.Variables[context.NAME().GetText()];
         }
 
-        public override BaseObject VisitOperationExp(SandBoxScriptParser.OperationExpContext context) {
+        public override BaseObject VisitBinaryOperationExp(SandBoxScriptParser.BinaryOperationExpContext context) {
             var operationName = context.Operation.Text;
             var result = default(BaseObject);
             var operation = default(IOperation);
@@ -37,12 +37,22 @@ namespace SandBoxScript {
             var left = Visit(context.expression(0));
             var leftType = left.GetType();
 
-            var isBinary = context.expression().Length == 2;
+            var right = Visit(context.expression(1));
+            var rightType = right.GetType();
 
-            if (isBinary) {
-                var right = Visit(context.expression(1));
-                var rightType = right.GetType();
+            operation = Array.Find(left.StaticObject.Operations, x => {
+                if (x.GetType() != typeof(BinaryOperation)) return false;
+                if (x.Name != operationName) return false;
 
+                var op = (BinaryOperation)x;
+
+                if (op.LeftType != leftType) return false;
+                if (op.RightType != rightType) return false;
+
+                return true;
+            });
+
+            if (operation == null) {
                 operation = Array.Find(left.StaticObject.Operations, x => {
                     if (x.GetType() != typeof(BinaryOperation)) return false;
                     if (x.Name != operationName) return false;
@@ -54,50 +64,34 @@ namespace SandBoxScript {
 
                     return true;
                 });
-
-                if (operation == null) {
-                    operation = Array.Find(left.StaticObject.Operations, x => {
-                        if (x.GetType() != typeof(BinaryOperation)) return false;
-                        if (x.Name != operationName) return false;
-
-                        var op = (BinaryOperation)x;
-
-                        if (op.LeftType != leftType) return false;
-                        if (op.RightType != rightType) return false;
-
-                        return true;
-                    });
-                }
-
-                result = operation.Function.Run(left, right);
-            } else {
-                operation = Array.Find(left.StaticObject.Operations, x => {
-                    if (x.GetType() != typeof(UnaryOperation)) return false;
-                    if (x.Name != operationName) return false;
-
-                    var op = (UnaryOperation)x;
-
-                    if (op.Type != leftType) return false;
-
-                    return true;
-                });
-
-                result = operation.Function.Run(left);
             }
+
+            result = operation.Function.Run(new[] { left, right });
 
             return result;
         }
 
-        public override BaseObject VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
-            //var function = (Delegate)Visit(context.expression(0));
+        public override BaseObject VisitMemberAccessExp(SandBoxScriptParser.MemberAccessExpContext context) {
+            var obj = Visit(context.expression());
+            var memberName = context.NAME().GetText();
 
-            var arguments = new object[context.expression().Length - 1];
+            return obj.Members[memberName].Value;
+        }
+
+        public override BaseObject VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
+            var function = Visit(context.expression(0));
+
+            if (function.GetType() != typeof(FunctionObject)) {
+                throw new Exception("Called object is not a function!");
+            }
+
+            var arguments = new BaseObject[context.expression().Length - 1];
 
             for (var i = 1; i < context.expression().Length; i++) {
                 arguments[i - 1] = Visit(context.expression(i));
             }
 
-            return null;
+            return ((FunctionObject)function).Function.Run(arguments);
         }
     }
 }

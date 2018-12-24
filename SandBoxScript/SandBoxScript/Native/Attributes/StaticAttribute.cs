@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public interface IFunction {
-        BaseObject Run(BaseObject[] args);
+    internal class StaticAttribute : Attribute{
     }
 }

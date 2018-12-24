@@ -1,12 +1,12 @@
 grammar SandBoxScript;
 
 expression          : '(' expression ')'										#parenthesisExp
-					| expression DOT expression									#memberAccessExp
+					| expression DOT NAME										#memberAccessExp
 					| expression '[' expression ']'								#computedMemberAccessExp
-                    | expression '(' expression (',' expression)* ')'			#functionCallExp
-                    | expression Operation=(ASTERISK|SLASH) expression			#operationExp
-                    | expression Operation=(PLUS|MINUS) expression				#operationExp
-					| <assoc=right>  expression Operation='^' expression		#operationExp
+                    | expression '(' expression* (',' expression)* ')'			#functionCallExp
+                    | expression Operation=(ASTERISK|SLASH) expression			#binaryOperationExp
+                    | expression Operation=(PLUS|MINUS) expression				#binaryoperationExp
+					| <assoc=right>  expression Operation='^' expression		#binaryoperationExp
 					| NAME														#nameExp
                     | NUMBER													#numericAtomExp
                     ;

@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public class DelegateFunction : IFunction {
-        public Delegate Function;
+    public delegate BaseObject BaseDelegate(BaseObject[] input);
 
-        public BaseObject Run(params BaseObject[] args) {
-            return (BaseObject)Function.DynamicInvoke(args);
+    public class DelegateFunction : IFunction {
+        public BaseDelegate Function;
+
+        public BaseObject Run(BaseObject[] args) {
+            return Function.Invoke(args);
         }
     }
 }

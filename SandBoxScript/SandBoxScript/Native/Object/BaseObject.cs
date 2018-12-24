@@ -11,10 +11,20 @@ namespace SandBoxScript {
         public BaseObject StaticObject { get; set; }
         public Engine Engine { get; set; }
         public IOperation[] Operations { get; set; }
-        public Dictionary<string, Member> Members;
+        public Dictionary<string, Member> Members = new Dictionary<string, Member>();
 
         public virtual void Initialise(Engine engine, params object[] args) {
             Engine = engine;
+        }
+
+        public override string ToString() {
+            var str = $"{Name}\n";
+
+            foreach (var kv in Members) {
+                str += $"{kv.Key}: {kv.Value}\n";
+            }
+
+            return str;
         }
     }
 }

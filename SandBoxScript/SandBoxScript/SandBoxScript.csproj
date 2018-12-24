@@ -56,6 +56,8 @@
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine.cs" />
+    <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
+    <Compile Include="Native\Attributes\StaticAttribute.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
     <Compile Include="Native\Function\DelegateFunction.cs" />
     <Compile Include="Native\Object\Member.cs" />
