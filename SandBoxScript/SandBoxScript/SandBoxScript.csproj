@@ -65,6 +65,9 @@
       <CustomToolNamespace>SandBoxScript.ANTLR</CustomToolNamespace>
     </Antlr4>
     <None Include="App.config" />
+    <None Include="Grammar\Grammar.md">
+      <SubType>Component</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

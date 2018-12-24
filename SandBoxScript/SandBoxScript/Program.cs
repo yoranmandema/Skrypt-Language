@@ -10,7 +10,7 @@ using SandBoxScript.ANTLR;
 namespace SandBoxScript {
     class Program {
         static void Main(string[] args) {
-            string input = "log(10 + A1 * 35 + (5.4 - 7.4))";
+            string input = "a(1,)";
 
             var inputStream = new AntlrInputStream(input);
             var sandBoxScriptLexer = new SandBoxScriptLexer(inputStream);
@@ -21,6 +21,8 @@ namespace SandBoxScript {
             var visitor = new SandBoxScriptVisitor();
 
             Console.WriteLine(visitor.Visit(expressionContext));
+
+            Console.ReadKey();
         }
     }
 }
