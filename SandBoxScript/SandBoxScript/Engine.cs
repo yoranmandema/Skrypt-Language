@@ -8,81 +8,29 @@ using Antlr4;
 using SandBoxScript.ANTLR;
 using System.Reflection;
 using SandBoxScript.MethodInfoExtensions;
+using SandBoxScript.Runtime;
 
 namespace SandBoxScript {
     public class Engine {
         internal Scope Scope = new Scope();
+        internal ExpressionInterpreter expressionInterpreter;
+        internal TemplateMaker templateMaker;
 
-        public void GenerateType(Type type) {
-            var instanceObj = new BaseObject ();
-            var staticObj = new BaseObject();
+        internal NumberObject Number;
+        internal NumberConstructor NumberConstructor;
+        internal Template NumberTemplate;
 
-            var instance = (BaseObject)Activator.CreateInstance(type);
+        public Engine() {
+            expressionInterpreter = new ExpressionInterpreter(this);
+            templateMaker = new TemplateMaker(this);
 
-            var methods = type.GetRuntimeMethods();
-
-            foreach (var m in methods) {
-                if (!typeof(BaseObject).IsAssignableFrom(m.ReturnType)) continue;
-                if (m.GetParameters().Length != 3) continue;
-                if (m.GetParameters()[0].ParameterType != typeof(Engine)) continue;
-                if (m.GetParameters()[1].ParameterType != typeof(BaseObject)) continue;
-                if (m.GetParameters()[2].ParameterType != typeof(BaseObject[])) continue;
-
-                var del = (BaseDelegate)m.CreateDelegate(typeof(BaseDelegate), instance);
-
-                var binaryOp = (BinaryOperationAttribute)m.GetCustomAttribute(typeof(BinaryOperationAttribute));
-                var unaryOp = (UnaryOperationAttribute)m.GetCustomAttribute(typeof(UnaryOperationAttribute));
-
-                if (binaryOp != null) {
-                    var operation = new BinaryOperation {
-                        Name = binaryOp.Name,
-                        LeftType = binaryOp.LeftType,
-                        RightType = binaryOp.RightType,
-                        Function = new DelegateFunction {
-                            Function = del
-                        }
-                    };
-
-                    instanceObj.Operations.Add(operation);
-                }
-                else if (unaryOp != null) {
-                    var operation = new UnaryOperation {
-                        Name = binaryOp.Name,
-                        Type = binaryOp.LeftType,
-                        Function = new DelegateFunction {
-                            Function = del
-                        }
-                    };
-
-                    instanceObj.Operations.Add(operation);
-                }
-                else {
-                    var function = new FunctionObject {
-                        Function = new DelegateFunction {
-                            Function = del
-                        }
-                    };
-
-                    if (m.GetCustomAttributes(typeof(StaticAttribute)).Any()) {
-                        staticObj.Members[m.Name] = new Member {
-                            Value = function
-                        };
-                    }
-                    else {
-                        instanceObj.Members[m.Name] = new Member {
-                            Value = function
-                        };
-                    }
-                }
-            }
-
-            Scope.Variables[instance.Name]  = staticObj;
-            Scope.Types[instance.Name]      = instanceObj;
+            NumberConstructor   = new NumberConstructor(this);
+            Number              = new NumberObject(this);
+            Scope.Variables["Number"] = Number;
+            NumberTemplate      = templateMaker.CreateTemplate(typeof(NumberInstance));
         }
 
-        public BaseObject Run (string code) {
-            GenerateType(typeof(NumberObject));
-
+        public BaseValue Run (string code) {
             var inputStream         = new AntlrInputStream(code);
             var sandBoxScriptLexer  = new SandBoxScriptLexer(inputStream);
             var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
@@ -94,17 +42,8 @@ namespace SandBoxScript {
             return visitor.Visit(expressionContext);
         }
 
-        public T Create<T> (params object[] args) where T : BaseObject {
-            var newObject = (BaseObject)Activator.CreateInstance(typeof(T), args);
-            newObject.Engine = this;
-
-            var staticObject = Scope.GetType(newObject.Name);
-
-            newObject.Members = new Dictionary<string, Member>(staticObject.Members);
-            newObject.Operations = staticObject.Operations;
-            newObject.StaticObject = staticObject;
-
-            return (T)newObject;
+        public NumberInstance CreateNumber(double value) {
+            return NumberConstructor.Construct(value);
         }
     }
 }

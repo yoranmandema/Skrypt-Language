@@ -6,41 +6,12 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public class NumberObject : BaseObject {
-        public override string Name => "Number";
+        public NumberObject (Engine engine) : base (engine) { }
 
-        public double Value { get; set; }
-
-        public NumberObject() {}
-
-        public NumberObject (double value) {
-            Value = value;
-        }
-
-        [BinaryOperation("+", "Number", "Number")]
-        public BaseObject AddNumberNumber(Engine engine, BaseObject self, BaseObject[] input) {
-            var left = TypeConverter.ToNumber(input[0]);
-            var right = TypeConverter.ToNumber(input[1]);
-
-            return engine.Create<NumberObject>(left.Value + right.Value);
-        }
-
-        [BinaryOperation("*", "Number", "Number")]
-        public BaseObject MulNumberNumber(Engine engine, BaseObject self, BaseObject[] input) {
-            var left = TypeConverter.ToNumber(input[0]);
-            var right = TypeConverter.ToNumber(input[1]);
-
-            return engine.Create<NumberObject>(left.Value * right.Value);
-        }
-
-        [Static]
-        public BaseObject Parse(Engine engine, BaseObject self, BaseObject[] input) {
+        public static BaseValue Parse(Engine engine, BaseValue self, BaseValue[] input) {
             var value = double.Parse(input.ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
-            return Engine.Create<NumberObject>(value);
-        }
-
-        public override string ToString() {
-            return Value.ToString();
+            return engine.CreateNumber(value);
         }
     }
 }

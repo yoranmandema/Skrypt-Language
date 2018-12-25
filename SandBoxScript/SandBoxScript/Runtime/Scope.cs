@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     internal class Scope {
-        public Dictionary<string, BaseObject> Types = new Dictionary<string, BaseObject>();
+        public Dictionary<string, Template> Templates = new Dictionary<string, Template>();
         public Dictionary<string, BaseObject> Variables = new Dictionary<string, BaseObject>();
 
-        public BaseObject GetType (string name) {
-            return Types[name];
+        public Template GetTemplate (string name) {
+            return Templates[name];
         }
     }
 }
