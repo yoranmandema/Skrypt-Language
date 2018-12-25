@@ -28,9 +28,7 @@ namespace SandBoxScript {
                 if (parameters[1].ParameterType != typeof(BaseValue)) continue;
                 if (parameters[2].ParameterType != typeof(BaseValue[])) continue;
 
-                Console.WriteLine(m);
-
-                var del = Delegate.CreateDelegate(typeof(BaseDelegate), m);
+                var del = m.CreateDelegate(typeof(BaseDelegate), null);
 
                 var function = new FunctionObject(_engine) {
                     Function = new DelegateFunction {

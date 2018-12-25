@@ -10,7 +10,7 @@ using SandBoxScript.ANTLR;
 namespace SandBoxScript {
     class Program {
         static void Main(string[] args){
-            string input = "Number.Parse";
+            string input = "Number.Parse(1)";
             var engine = new Engine();
 
             Console.WriteLine(engine.Run(input));

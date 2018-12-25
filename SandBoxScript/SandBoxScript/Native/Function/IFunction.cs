@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public interface IFunction {
-        BaseObject Run(Engine engine, BaseValue self, BaseValue[] args);
+        BaseValue Run(Engine engine, BaseValue self, BaseValue[] args);
     }
 }
