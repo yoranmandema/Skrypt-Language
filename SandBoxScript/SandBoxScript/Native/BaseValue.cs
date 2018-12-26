@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public class BaseValue {
-        public virtual string Name { get; }
+        public virtual string Name { get; set; }
 
         public Engine Engine { get; set; }
         public Dictionary<string, Member> Members = new Dictionary<string, Member>();
@@ -17,6 +17,11 @@ namespace SandBoxScript {
 
         public void GetProperties (Dictionary<string, Member> properties) {
             Members = Members.Concat(properties).ToDictionary(d => d.Key, d => d.Value);
+        }
+
+        public void GetProperties(Template template) {
+            Members = Members.Concat(template.Members).ToDictionary(d => d.Key, d => d.Value);
+            Name = template.Name;
         }
 
         public T AsType<T>() where T : BaseValue {

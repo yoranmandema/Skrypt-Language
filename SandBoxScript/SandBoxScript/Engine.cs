@@ -18,16 +18,13 @@ namespace SandBoxScript {
 
         internal NumberObject Number;
         internal NumberConstructor NumberConstructor;
-        internal Template NumberTemplate;
 
         public Engine() {
             expressionInterpreter = new ExpressionInterpreter(this);
             templateMaker = new TemplateMaker(this);
 
             NumberConstructor   = new NumberConstructor(this);
-            Number              = new NumberObject(this);
-            Scope.Variables["Number"] = Number;
-            NumberTemplate      = templateMaker.CreateTemplate(typeof(NumberInstance));
+            Number              = new NumberObject(this);          
         }
 
         public BaseValue Run (string code) {

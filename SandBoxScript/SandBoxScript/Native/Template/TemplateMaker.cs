@@ -16,19 +16,24 @@ namespace SandBoxScript {
         public Template CreateTemplate(Type t) {
             var methods = t.GetMethods();
             var template = new Template();
+            var name = t.Name;
+
+            if (typeof(BaseInstance).IsAssignableFrom(t)) {
+
+            } else if (typeof(BaseObject).IsAssignableFrom(t)) {
+
+            } else {
+                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance or BaseObject.");
+            }
+
+            template.Name = System.Text.RegularExpressions.Regex.Replace(name, "(Object|Instance)$", "");
 
             foreach (var m in methods) {
-                if (m.ReturnType != typeof(BaseValue)) continue;
                 if (!m.IsStatic) continue;
 
-                var parameters = m.GetParameters();
+                var del = (BaseDelegate)Delegate.CreateDelegate(typeof(BaseDelegate),m,false);
 
-                if (parameters.Length != 3) continue;
-                if (parameters[0].ParameterType != typeof(Engine)) continue;
-                if (parameters[1].ParameterType != typeof(BaseValue)) continue;
-                if (parameters[2].ParameterType != typeof(BaseValue[])) continue;
-
-                var del = m.CreateDelegate(typeof(BaseDelegate), null);
+                if (del == null) continue; 
 
                 var function = new FunctionObject(_engine) {
                     Function = new DelegateFunction {
@@ -40,6 +45,7 @@ namespace SandBoxScript {
                     Value = function
                 };
             }
+
 
             return template;
         }

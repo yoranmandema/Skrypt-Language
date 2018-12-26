@@ -10,6 +10,8 @@ namespace SandBoxScript {
             var template = engine.templateMaker.CreateTemplate(this.GetType());
 
             GetProperties(template.Members);
+
+            engine.Scope.Variables[template.Name] = this;
         }
     }
 }
