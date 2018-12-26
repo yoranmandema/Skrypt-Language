@@ -14,10 +14,6 @@ namespace SandBoxScript {
             Value = value;
         }
 
-        public static BaseValue SomeFunction (Engine engine, BaseValue self, BaseValue[] arguments) {
-            return null;
-        }
-
         public override string ToString() {
             return Value.ToString();
         }

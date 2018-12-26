@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    internal class Scope {
+    public class Scope {
         public Dictionary<string, Template> Templates = new Dictionary<string, Template>();
         public Dictionary<string, BaseObject> Variables = new Dictionary<string, BaseObject>();
 

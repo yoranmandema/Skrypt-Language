@@ -12,7 +12,8 @@ using SandBoxScript.Runtime;
 
 namespace SandBoxScript {
     public class Engine {
-        internal Scope Scope = new Scope();
+        public Scope Scope { get; internal set; } = new Scope();
+
         internal ExpressionInterpreter expressionInterpreter;
         internal TemplateMaker templateMaker;
 

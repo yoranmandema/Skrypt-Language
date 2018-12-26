@@ -13,7 +13,7 @@ namespace SandBoxScript.Runtime {
         }
 
         public object EvaluatePlusExpression (BaseValue left, BaseValue right) {
-            if (left.GetType() == typeof(NumberInstance) && left.GetType() == typeof(NumberInstance)) {
+            if (left.GetType() == typeof(NumberInstance) && right.GetType() == typeof(NumberInstance)) {
                 return _engine.CreateNumber(
                         left.AsType<NumberInstance>().Value + right.AsType<NumberInstance>().Value
                     );
@@ -23,7 +23,7 @@ namespace SandBoxScript.Runtime {
         }
 
         public object EvaluateMultiplyExpression(BaseValue left, BaseValue right) {
-            if (left.GetType() == typeof(NumberInstance) && left.GetType() == typeof(NumberInstance)) {
+            if (left.GetType() == typeof(NumberInstance) && right.GetType() == typeof(NumberInstance)) {
                 return _engine.CreateNumber(
                         left.AsType<NumberInstance>().Value * right.AsType<NumberInstance>().Value
                     );
@@ -33,7 +33,7 @@ namespace SandBoxScript.Runtime {
         }
 
         public object EvaluateExponentExpression(BaseValue left, BaseValue right) {
-            if (left.GetType() == typeof(NumberInstance) && left.GetType() == typeof(NumberInstance)) {
+            if (left.GetType() == typeof(NumberInstance) && right.GetType() == typeof(NumberInstance)) {
                 return _engine.CreateNumber(
                         Math.Pow(left.AsType<NumberInstance>().Value,right.AsType<NumberInstance>().Value)
                     );
