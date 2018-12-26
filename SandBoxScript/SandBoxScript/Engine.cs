@@ -20,11 +20,11 @@ namespace SandBoxScript {
         internal NumberConstructor NumberConstructor;
 
         public Engine() {
-            expressionInterpreter = new ExpressionInterpreter(this);
-            templateMaker = new TemplateMaker(this);
+            expressionInterpreter   = new ExpressionInterpreter(this);
+            templateMaker           = new TemplateMaker(this);
 
-            NumberConstructor   = new NumberConstructor(this);
-            Number              = new NumberObject(this);          
+            NumberConstructor       = new NumberConstructor(this);
+            Number                  = new NumberObject(this);          
         }
 
         public BaseValue Run (string code) {

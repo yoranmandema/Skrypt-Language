@@ -8,7 +8,13 @@ namespace SandBoxScript {
     public class FunctionObject : BaseObject {
         public override string Name => "Function";
 
-        public FunctionObject(Engine engine) : base(engine) { }
+        public FunctionObject(Engine engine, DelegateFunction function) : base(engine) {
+            Function = function;
+        }
+
+        public FunctionObject(Engine engine, BaseDelegate function) : base(engine) {
+            Function = new DelegateFunction(function);
+        }
 
         public IFunction Function { get; set; }
     }

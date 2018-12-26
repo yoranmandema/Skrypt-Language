@@ -18,11 +18,7 @@ namespace SandBoxScript {
             var template = new Template();
             var name = t.Name;
 
-            if (typeof(BaseInstance).IsAssignableFrom(t)) {
-
-            } else if (typeof(BaseObject).IsAssignableFrom(t)) {
-
-            } else {
+            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseObject).IsAssignableFrom(t)) {
                 throw new InvalidTemplateTargetException("Target type must derive from BaseInstance or BaseObject.");
             }
 
@@ -35,11 +31,7 @@ namespace SandBoxScript {
 
                 if (del == null) continue; 
 
-                var function = new FunctionObject(_engine) {
-                    Function = new DelegateFunction {
-                        Function = (BaseDelegate)del
-                    }
-                };
+                var function = new FunctionObject(_engine, del);
 
                 template.Members[m.Name] = new Member {
                     Value = function

@@ -10,6 +10,10 @@ namespace SandBoxScript {
     public class DelegateFunction : IFunction {
         public BaseDelegate Function;
 
+        public DelegateFunction (BaseDelegate function) {
+            Function = function;
+        }
+
         public BaseValue Run(Engine engine, BaseValue self, BaseValue[] args) {
             return Function.Invoke(engine, self, args);
         }
