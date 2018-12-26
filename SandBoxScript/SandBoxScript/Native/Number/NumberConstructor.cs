@@ -5,15 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    sealed class NumberConstructor : IConstructor<NumberInstance> {
-        private readonly Engine _engine;
-        private readonly Template _template;
-
-        public NumberConstructor(Engine engine) {
-            _engine = engine;
-
-            _template = _engine.templateMaker.CreateTemplate(typeof(NumberInstance));
-        }
+    public class NumberConstructor : Constructor<NumberInstance> {
+        public NumberConstructor(Engine engine) : base (engine) { }
 
         public NumberInstance Construct(double val) {
             var obj = new NumberInstance(_engine, val);
@@ -23,7 +16,7 @@ namespace SandBoxScript {
             return obj;
         }
 
-        public NumberInstance Construct(BaseValue[] arguments) {
+        public override NumberInstance Construct(BaseValue[] arguments) {
             return Construct(((NumberInstance)arguments[0]).Value);
         }
     }
