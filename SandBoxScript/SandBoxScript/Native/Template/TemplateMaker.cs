@@ -38,7 +38,6 @@ namespace SandBoxScript {
                 };
             }
 
-
             return template;
         }
     }
