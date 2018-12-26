@@ -16,13 +16,11 @@ namespace SandBoxScript {
         public Template CreateTemplate(Type t) {
             var methods = t.GetMethods();
             var template = new Template();
-            var name = t.Name;
 
-            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseObject).IsAssignableFrom(t)) {
+            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseObject).IsAssignableFrom(t))
                 throw new InvalidTemplateTargetException("Target type must derive from BaseInstance or BaseObject.");
-            }
 
-            template.Name = System.Text.RegularExpressions.Regex.Replace(name, "(Object|Instance)$", "");
+            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Object|Instance)$", "");
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;
