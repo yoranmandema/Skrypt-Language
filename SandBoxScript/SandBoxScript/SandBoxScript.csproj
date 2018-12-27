@@ -95,8 +95,6 @@
       <SubType>Component</SubType>
     </None>
     <None Include="packages.config" />
-    <Compile Include="TypeGeneration\MethodInfoExtensions.cs" />
-    <Compile Include="TypeGeneration\TypeGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
