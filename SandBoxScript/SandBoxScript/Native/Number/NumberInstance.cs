@@ -14,6 +14,10 @@ namespace SandBoxScript {
             Value = value;
         }
 
+        public static implicit operator double(NumberInstance d) {
+            return d.Value;
+        }
+
         public override string ToString() {
             return Value.ToString();
         }
