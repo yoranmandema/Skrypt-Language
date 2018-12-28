@@ -14,21 +14,15 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluatePlusExpression (BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber(
-                        (NumberInstance)left + (NumberInstance)right
-                    );
+                return _engine.CreateNumber((NumberInstance)left + (NumberInstance)right);
             }
 
             if (left is StringInstance) {
-                return _engine.CreateString(
-                        ((StringInstance)left).Value + right.ToString()
-                    );
+                return _engine.CreateString(((StringInstance)left).Value + right.ToString());
             }
 
             if (right is StringInstance) {
-                return _engine.CreateString(
-                        left.ToString() + ((StringInstance)right).Value
-                    );
+                return _engine.CreateString(left.ToString() + ((StringInstance)right).Value);
             }
 
             return new InvalidOperation();
@@ -36,9 +30,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateMultiplyExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber(
-                         (NumberInstance)left * (NumberInstance)right
-                    );
+                return _engine.CreateNumber((NumberInstance)left * (NumberInstance)right);
             }
 
             return new InvalidOperation();
@@ -46,9 +38,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateExponentExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber(
-                        Math.Pow((NumberInstance)left, (NumberInstance)right)
-                    );
+                return _engine.CreateNumber(Math.Pow((NumberInstance)left, (NumberInstance)right));
             }
 
             return new InvalidOperation();

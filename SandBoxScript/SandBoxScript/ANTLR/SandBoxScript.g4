@@ -7,6 +7,8 @@ block				: expression ';'											#expressionExp
 importStatement		: IMPORT expression	
 					;
 
+
+
 expression          : '(' expression ')'										#parenthesisExp
 					| expression DOT NAME										#memberAccessExp
 					| expression '[' expression ']'								#computedMemberAccessExp
@@ -34,7 +36,6 @@ SLASH               : '/' ;
 PLUS                : '+' ;
 MINUS               : '-' ;
 EXPONENT            : '**';
-
 
 INCREMENT			: '++';
 DECREMENT			: '--';

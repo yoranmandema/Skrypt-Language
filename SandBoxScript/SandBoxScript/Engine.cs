@@ -39,7 +39,7 @@ namespace SandBoxScript {
             var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
             var sandBoxScriptParser = new SandBoxScriptParser(commonTokenStream);
 
-            var expressionContext = sandBoxScriptParser.expression();
+            var expressionContext = sandBoxScriptParser.block();
             var visitor = new SandBoxScriptVisitor(this);
 
             return visitor.Visit(expressionContext);
