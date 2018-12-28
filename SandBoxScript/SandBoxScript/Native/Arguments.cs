@@ -14,7 +14,7 @@ namespace SandBoxScript {
 
         public BaseValue this[int key] {
             get {
-                if (key > 0 && key < Values.Length) {
+                if (key >= 0 && key < Values.Length) {
                     return Values[key];
                 } else {
                     return null;

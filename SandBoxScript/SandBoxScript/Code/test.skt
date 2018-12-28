@@ -1,3 +1,5 @@
 ﻿import Number
 
 b = 3
+
+print(b)

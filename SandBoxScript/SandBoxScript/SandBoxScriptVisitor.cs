@@ -58,10 +58,6 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
-            Console.WriteLine("get name");
-
-            //throw new Exception("Name not found!");
-
             return _engine.Scope.Variables[context.NAME().GetText()];
         }
 
@@ -100,8 +96,6 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
-            Console.WriteLine("function call");
-
             var function = Visit(context.Function);
 
             if (function.GetType() != typeof(FunctionInstance)) {

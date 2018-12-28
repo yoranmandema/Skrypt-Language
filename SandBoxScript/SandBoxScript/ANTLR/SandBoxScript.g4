@@ -1,5 +1,7 @@
 grammar SandBoxScript;
 
+program				: block* ;
+
 block				: importStmnt
 					| assignStmnt
 					| expression										
