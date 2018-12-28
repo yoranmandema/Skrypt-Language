@@ -15,6 +15,7 @@ namespace SandBoxScript {
 
             engine.SetValue("print", (e, s, i) => {
                 Console.WriteLine(i[0]);
+                Console.WriteLine("print");
 
                 return null;
             });

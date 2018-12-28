@@ -26,6 +26,20 @@ namespace SandBoxScript {
             return null;
         }
 
+        public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {
+            _engine.Scope.SetVariable(context.NAME().GetText(), Visit(context.expression()));
+
+            return null;
+        }
+
+        public override BaseValue VisitAssignMemberStatement(SandBoxScriptParser.AssignMemberStatementContext context) {
+            var member = Visit(context.memberAccess());
+
+            member = Visit(context.expression());
+
+            return default(BaseValue);
+        }
+
         public override BaseValue VisitNumberLiteral(SandBoxScriptParser.NumberLiteralContext context) {
             var value = double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
             var num = _engine.CreateNumber(value);
@@ -44,6 +58,8 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
+            Console.WriteLine("get name");
+
             //throw new Exception("Name not found!");
 
             return _engine.Scope.Variables[context.NAME().GetText()];
@@ -84,6 +100,8 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
+            Console.WriteLine("function call");
+
             var function = Visit(context.Function);
 
             if (function.GetType() != typeof(FunctionInstance)) {

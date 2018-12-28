@@ -1,15 +1,16 @@
 grammar SandBoxScript;
 
-block				: expression										
-					| importStmnt										
+block				: importStmnt
+					| assignStmnt
+					| expression										
 					;
 
 importStmnt			: IMPORT Target=expression																#importStatement
 					;
 
-assignStmnt			: NAME ASSIGN expression																#assignNameStatement
-					| expression DOT NAME ASSIGN expression													#assignMemberStatement
-					| expression '[' expression ']' ASSIGN expression										#assignComputedMemberStatement
+assignStmnt			: NAME								ASSIGN expression									#assignNameStatement
+					| memberAccess						ASSIGN expression									#assignMemberStatement
+					| memberAccessComp					ASSIGN expression									#assignComputedMemberStatement
 					;
 
 expression          : '(' expression ')'																	#parenthesisExp
@@ -25,6 +26,9 @@ expression          : '(' expression ')'																	#parenthesisExp
                     | NUMBER																				#numberLiteral
 					| string																				#stringLiteral
                     ;
+
+memberAccess		: expression DOT NAME ;
+memberAccessComp	: expression '[' expression ']' ;
 
 string				: '"' Content=stringContent '"';
 stringContent		: ( ESCAPED_QUOTE | ~('\n'|'\r') )*? ;
