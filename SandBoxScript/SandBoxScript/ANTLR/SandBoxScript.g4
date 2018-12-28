@@ -7,6 +7,11 @@ block				: expression
 importStmnt			: IMPORT Target=expression																#importStatement
 					;
 
+assignStmnt			: NAME ASSIGN expression																#assignNameStatement
+					| expression DOT NAME ASSIGN expression													#assignMemberStatement
+					| expression '[' expression ']' ASSIGN expression										#assignComputedMemberStatement
+					;
+
 expression          : '(' expression ')'																	#parenthesisExp
 					| expression DOT NAME																	#memberAccessExp
 					| expression '[' expression ']'															#computedMemberAccessExp
