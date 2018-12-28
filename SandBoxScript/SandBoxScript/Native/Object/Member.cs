@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public class Member {
-        public BaseObject Value;
+        public BaseValue Value;
     }
 }

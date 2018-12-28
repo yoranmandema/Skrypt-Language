@@ -29,7 +29,7 @@ namespace SandBoxScript {
 
                 if (del == null) continue; 
 
-                var function = new FunctionObject(_engine, del);
+                var function = new FunctionInstance(_engine, del);
 
                 template.Members[m.Name] = new Member {
                     Value = function

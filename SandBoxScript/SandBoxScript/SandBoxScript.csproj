@@ -56,6 +56,7 @@
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine.cs" />
+    <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
     <Compile Include="Native\BaseValue.cs" />
@@ -94,6 +95,9 @@
       <CustomToolNamespace>SandBoxScript.ANTLR</CustomToolNamespace>
     </Antlr4>
     <None Include="App.config" />
+    <None Include="Code\test.skt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Grammar\Grammar.md">
       <SubType>Component</SubType>
     </None>

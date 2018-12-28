@@ -1,31 +1,36 @@
 grammar SandBoxScript;
 
-block				: expression ';'											#expressionExp
-					| importStatement											#importStat
+block				: expression										
+					| importStmnt										
 					;
 
-importStatement		: IMPORT expression	
+importStmnt			: IMPORT Target=expression																#importStatement
 					;
 
-
-
-expression          : '(' expression ')'										#parenthesisExp
-					| expression DOT NAME										#memberAccessExp
-					| expression '[' expression ']'								#computedMemberAccessExp
-                    | expression '(' expression* (',' expression)* ')'			#functionCallExp
+expression          : '(' expression ')'																	#parenthesisExp
+					| expression DOT NAME																	#memberAccessExp
+					| expression '[' expression ']'															#computedMemberAccessExp
+                    | Function=expression '(' Arguments=expressionGroup ')'									#functionCallExp
 					
 					| <assoc=right>		Left=expression Operation=EXPONENT			Right=expression		#binaryOperationExp
                     |					Left=expression Operation=(ASTERISK|SLASH)	Right=expression		#binaryOperationExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression		#binaryOperationExp
 
-					| NAME														#nameExp
-                    | NUMBER													#numericAtomExp
-					| STRING													#stringExp
+					| NAME																					#nameExp
+                    | NUMBER																				#numberLiteral
+					| string																				#stringLiteral
                     ;
+
+string				: '"' Content=stringContent '"';
+stringContent		: ( ESCAPED_QUOTE | ~('\n'|'\r') )*? ;
+
+expressionGroup		: (expression (',' expression)*)? ;
 
 fragment LETTER			: [a-zA-Z] ;
 fragment DIGIT			: [0-9] ;
 fragment ESCAPED_QUOTE	: '\\"';
+fragment DOT		    : '.' ;
+IMPORT					: 'import' ;
 
 STRING :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 
@@ -40,14 +45,10 @@ EXPONENT            : '**';
 INCREMENT			: '++';
 DECREMENT			: '--';
 
-DOT		            : '.' ;
-
 NAME				: LETTER (LETTER | DIGIT)* ;
 
 NUMBER              : DIGIT+ ('.' DIGIT+)? ;
 
-IMPORT				: 'import' ;
-
-WHITESPACE : ' ' -> channel(HIDDEN);
+WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
 
 

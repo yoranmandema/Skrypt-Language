@@ -14,16 +14,28 @@ namespace SandBoxScript {
             _engine = engine;
         }
 
-        public override BaseValue VisitNumericAtomExp(SandBoxScriptParser.NumericAtomExpContext context) {
+        public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) {
+            var obj = Visit(context.Target);
+
+            foreach (var m in obj.Members) {
+                var v = m.Value;
+
+                _engine.Scope.SetVariable(m.Key, v.Value);
+            }
+
+            return null;
+        }
+
+        public override BaseValue VisitNumberLiteral(SandBoxScriptParser.NumberLiteralContext context) {
             var value = double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
             var num = _engine.CreateNumber(value);
             return num;
         }
 
-        public override BaseValue VisitStringExp(SandBoxScriptParser.StringExpContext context) {
-            var str = (context.STRING().GetText());
+        public override BaseValue VisitStringLiteral(SandBoxScriptParser.StringLiteralContext context) {
+            var str = context.@string().Content.GetText();
 
-            var instance = _engine.CreateString(str.Substring(1, str.Length - 2));
+            var instance = _engine.CreateString(str);
             return instance;
         }
 
@@ -72,19 +84,19 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
-            var function = Visit(context.expression(0));
+            var function = Visit(context.Function);
 
-            if (function.GetType() != typeof(FunctionObject)) {
+            if (function.GetType() != typeof(FunctionInstance)) {
                 throw new Exception("Called object is not a function!");
             }
 
-            var arguments = new BaseValue[context.expression().Length - 1];
+            var arguments = new BaseValue[context.Arguments.expression().Length];
 
-            for (var i = 1; i < context.expression().Length; i++) {
-                arguments[i - 1] = Visit(context.expression(i));
+            for (var i = 0; i < context.Arguments.expression().Length; i++) {
+                arguments[i] = Visit(context.Arguments.expression(i));
             }
 
-            return ((FunctionObject)function).Function.Run(_engine, null, arguments);
+            return ((FunctionInstance)function).Function.Run(_engine, null, new Arguments(arguments));
         }
     }
 }

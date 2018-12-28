@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public class FunctionObject : BaseObject {
+    public class FunctionInstance : BaseInstance {
         public override string Name => "Function";
 
-        public FunctionObject(Engine engine, BaseDelegate function) : base(engine) {
+        public FunctionInstance(Engine engine, BaseDelegate function) : base(engine) {
             Function = new DelegateFunction(function);
         }
 

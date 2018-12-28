@@ -39,12 +39,19 @@ namespace SandBoxScript {
             var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
             var sandBoxScriptParser = new SandBoxScriptParser(commonTokenStream);
 
-            var expressionContext = sandBoxScriptParser.block();
+            var context = sandBoxScriptParser.block();
             var visitor = new SandBoxScriptVisitor(this);
 
-            return visitor.Visit(expressionContext);
+            return visitor.Visit(context);
         }
 
+        public BaseValue SetValue (string name, BaseDelegate value) {
+            var val = new FunctionInstance(this, value);
+
+            Scope.SetVariable(name, val);
+
+            return val;
+        }
 
         public NumberInstance CreateNumber(double value) {
             return NumberConstructor.Construct(value);

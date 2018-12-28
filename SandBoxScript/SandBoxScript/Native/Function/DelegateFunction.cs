@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public delegate BaseValue BaseDelegate(Engine engine, BaseValue self, BaseValue[] input);
+    public delegate BaseValue BaseDelegate(Engine engine, BaseValue self, Arguments input);
 
     public class DelegateFunction : IFunction {
         public BaseDelegate Function;
@@ -14,7 +14,7 @@ namespace SandBoxScript {
             Function = function;
         }
 
-        public BaseValue Run(Engine engine, BaseValue self, BaseValue[] args) {
+        public BaseValue Run(Engine engine, BaseValue self, Arguments args) {
             return Function.Invoke(engine, self, args);
         }
     }
