@@ -17,7 +17,14 @@ namespace SandBoxScript {
         public override BaseValue VisitNumericAtomExp(SandBoxScriptParser.NumericAtomExpContext context) {
             var value = double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
             var num = _engine.CreateNumber(value);
-            return (BaseValue)num;
+            return num;
+        }
+
+        public override BaseValue VisitStringExp(SandBoxScriptParser.StringExpContext context) {
+            var str = (context.STRING().GetText());
+
+            var instance = _engine.CreateString(str.Substring(1, str.Length - 2));
+            return instance;
         }
 
         public override BaseValue VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {

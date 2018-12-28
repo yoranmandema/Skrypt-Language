@@ -19,12 +19,18 @@ namespace SandBoxScript {
         internal NumberObject Number;
         internal NumberConstructor NumberConstructor;
 
+        internal StringObject String;
+        internal StringConstructor StringConstructor;
+
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
 
             NumberConstructor       = new NumberConstructor(this);
-            Number                  = new NumberObject(this);          
+            Number                  = new NumberObject(this);
+
+            StringConstructor       = new StringConstructor(this);
+            String                  = new StringObject(this);
         }
 
         public BaseValue Run (string code) {
@@ -40,9 +46,12 @@ namespace SandBoxScript {
         }
 
 
-
         public NumberInstance CreateNumber(double value) {
             return NumberConstructor.Construct(value);
+        }
+
+        public StringInstance CreateString(string value) {
+            return StringConstructor.Construct(value);
         }
     }
 }

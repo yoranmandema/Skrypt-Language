@@ -18,10 +18,14 @@ expression          : '(' expression ')'										#parenthesisExp
 
 					| NAME														#nameExp
                     | NUMBER													#numericAtomExp
+					| STRING													#stringExp
                     ;
 
-fragment LETTER     : [a-zA-Z] ;
-fragment DIGIT      : [0-9] ;
+fragment LETTER			: [a-zA-Z] ;
+fragment DIGIT			: [0-9] ;
+fragment ESCAPED_QUOTE	: '\\"';
+
+STRING :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 
 ASSIGN	            : '=' ;
 

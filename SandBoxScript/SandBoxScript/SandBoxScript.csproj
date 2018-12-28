@@ -62,6 +62,9 @@
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
     <Compile Include="Native\Function\DelegateFunction.cs" />
     <Compile Include="Native\Constructor.cs" />
+    <Compile Include="Native\String\StringConstructor.cs" />
+    <Compile Include="Native\String\StringInstance.cs" />
+    <Compile Include="Native\String\StringObject.cs" />
     <Compile Include="Native\Template\Template.cs" />
     <Compile Include="Native\Number\NumberConstructor.cs" />
     <Compile Include="Native\Number\NumberInstance.cs" />

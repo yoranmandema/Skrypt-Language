@@ -13,9 +13,21 @@ namespace SandBoxScript.Runtime {
         }
 
         public object EvaluatePlusExpression (BaseValue left, BaseValue right) {
-            if (left is NumberInstance _left && right is NumberInstance _right) {
+            if (left is NumberInstance && right is NumberInstance) {
                 return _engine.CreateNumber(
-                        _left.Value + _right.Value
+                        ((NumberInstance)left).Value + ((NumberInstance)right).Value
+                    );
+            }
+
+            if (left is StringInstance) {
+                return _engine.CreateString(
+                        ((StringInstance)left).Value + right.ToString()
+                    );
+            }
+
+            if (right is StringInstance) {
+                return _engine.CreateString(
+                        left.ToString() + ((StringInstance)right).Value
                     );
             }
 
@@ -23,9 +35,9 @@ namespace SandBoxScript.Runtime {
         }
 
         public object EvaluateMultiplyExpression(BaseValue left, BaseValue right) {
-            if (left is NumberInstance _left && right is NumberInstance _right) {
+            if (left is NumberInstance && right is NumberInstance) {
                 return _engine.CreateNumber(
-                        _left.Value * _right.Value
+                         ((NumberInstance)left).Value * ((NumberInstance)right).Value
                     );
             }
 
