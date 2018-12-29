@@ -1,1 +1,7 @@
-﻿1 + Vector(1,2,3)
+﻿a = 0
+
+if (a) {
+	print("is one")
+} else {
+	print("is not one")
+}

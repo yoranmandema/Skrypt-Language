@@ -38,6 +38,10 @@ namespace SandBoxScript {
             return (T)this;
         }
 
+        public virtual bool IsTrue () {
+            return true;
+        }
+
         public override string ToString() {
             var str = $"{Name}\n";
 

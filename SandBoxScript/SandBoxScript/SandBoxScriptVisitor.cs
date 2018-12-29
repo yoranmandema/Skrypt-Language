@@ -26,6 +26,32 @@ namespace SandBoxScript {
             return null;
         }
 
+        public override BaseValue VisitIfStatement(SandBoxScriptParser.IfStatementContext context) {
+            var isTrue = false;
+
+            isTrue = Visit(context.Condition).IsTrue();
+
+            if (isTrue) {
+                Visit(context.stmntBlock());
+
+                return null;
+            } else if (context.elseifStmnt().Length > 0) {
+                foreach (var stmnt in context.elseifStmnt()) {
+                    isTrue = Visit(stmnt.Condition).IsTrue();
+
+                    if (isTrue) {
+                        Visit(stmnt.stmntBlock());
+
+                        return null;
+                    }
+                }
+            }
+
+            Visit(context.elseStmnt());
+
+            return null;
+        }
+
         public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {
             _engine.Scope.SetVariable(context.NAME().GetText(), Visit(context.expression()));
 
@@ -78,6 +104,9 @@ namespace SandBoxScript {
                     result = _engine.expressionInterpreter.EvaluateMultiplyExpression(left, right);
                     break;
                 case "**":
+                    result = _engine.expressionInterpreter.EvaluateExponentExpression(left, right);
+                    break;
+                case "==":
                     result = _engine.expressionInterpreter.EvaluateExponentExpression(left, right);
                     break;
             }

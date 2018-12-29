@@ -43,5 +43,9 @@ namespace SandBoxScript.Runtime {
 
             return new InvalidOperation();
         }
+
+        public object EvaluateEqualExpression(BaseValue left, BaseValue right) {
+            return new InvalidOperation();
+        }
     }
 }

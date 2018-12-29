@@ -18,6 +18,10 @@ namespace SandBoxScript {
             return d.Value;
         }
 
+        public override bool IsTrue() {
+            return Value != 0;
+        }
+
         public override string ToString() {
             return Value.ToString();
         }
