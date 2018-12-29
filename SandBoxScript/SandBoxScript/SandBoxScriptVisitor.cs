@@ -33,11 +33,12 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitAssignMemberStatement(SandBoxScriptParser.AssignMemberStatementContext context) {
-            var member = Visit(context.memberAccess());
+            var target      = Visit(context.memberAccess().expression());
+            var memberName  = context.memberAccess().NAME().GetText();
 
-            member = Visit(context.expression());
+            target.Members[memberName].Value = Visit(context.expression());
 
-            return default(BaseValue);
+            return null;
         }
 
         public override BaseValue VisitNumberLiteral(SandBoxScriptParser.NumberLiteralContext context) {

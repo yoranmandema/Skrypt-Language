@@ -40,7 +40,7 @@ expressionGroup		: (expression (',' expression)*)? ;
 fragment LETTER			: [a-zA-Z] ;
 fragment DIGIT			: [0-9] ;
 fragment ESCAPED_QUOTE	: '\\"';
-fragment DOT		    : '.' ;
+DOT						: '.' ;
 IMPORT					: 'import' ;
 
 STRING :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
@@ -62,4 +62,5 @@ NUMBER              : DIGIT+ ('.' DIGIT+)? ;
 
 WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
 
-
+// handle characters which failed to match any other token
+ErrorCharacter : . ;
