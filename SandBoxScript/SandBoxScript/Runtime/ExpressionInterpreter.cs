@@ -28,9 +28,33 @@ namespace SandBoxScript.Runtime {
             return new InvalidOperation();
         }
 
+        public object EvaluateSubtractExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return _engine.CreateNumber((NumberInstance)left - (NumberInstance)right);
+            }
+
+            return new InvalidOperation();
+        }
+
         public object EvaluateMultiplyExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return _engine.CreateNumber((NumberInstance)left * (NumberInstance)right);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateDivideExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return _engine.CreateNumber((NumberInstance)left / (NumberInstance)right);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateRemainderExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return _engine.CreateNumber((NumberInstance)left % (NumberInstance)right);
             }
 
             return new InvalidOperation();

@@ -102,8 +102,17 @@ namespace SandBoxScript {
                 case "+":
                     result = _engine.expressionInterpreter.EvaluatePlusExpression(left, right);
                     break;
+                case "-":
+                    result = _engine.expressionInterpreter.EvaluateSubtractExpression(left, right);
+                    break;
                 case "*":
                     result = _engine.expressionInterpreter.EvaluateMultiplyExpression(left, right);
+                    break;
+                case "/":
+                    result = _engine.expressionInterpreter.EvaluateDivideExpression(left, right);
+                    break;
+                case "%":
+                    result = _engine.expressionInterpreter.EvaluateRemainderExpression(left, right);
                     break;
                 case "**":
                     result = _engine.expressionInterpreter.EvaluateExponentExpression(left, right);
