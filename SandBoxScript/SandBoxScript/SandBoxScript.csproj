@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANTLR\LexingErrorListener.cs" />
+    <Compile Include="ANTLR\ParsingErrorListener.cs" />
     <Compile Include="ANTLR\SandBoxScript.g4.lexer.cs">
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>

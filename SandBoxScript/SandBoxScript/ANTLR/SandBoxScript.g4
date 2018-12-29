@@ -52,7 +52,7 @@ fragment ESCAPED_QUOTE	: '\\"';
 DOT						: '.' ;
 IMPORT					: 'import' ;
 
-STRING : '"' ~('"')* ('"') ;
+STRING : '"' ~('"')* ('"' | {throw new RecognitionException("Unterminated string detected.", this, this.InputStream, (ParserRuleContext)_localctx);}) ;
 
 ASSIGN	            : '=' ;
 

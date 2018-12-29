@@ -36,6 +36,8 @@ namespace SandBoxScript {
         public BaseValue Run (string code) {
             var inputStream         = new AntlrInputStream(code);
             var sandBoxScriptLexer  = new SandBoxScriptLexer(inputStream);
+            sandBoxScriptLexer.AddErrorListener(new LexingErrorListener());
+
             var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
             var sandBoxScriptParser = new SandBoxScriptParser(commonTokenStream);
 
