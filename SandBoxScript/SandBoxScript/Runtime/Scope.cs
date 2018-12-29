@@ -16,5 +16,13 @@ namespace SandBoxScript {
         public void SetVariable (string name, BaseValue value) {
             Variables[name] = value;
         }
+
+        public BaseValue GetVariable (string name) {
+            if (!Variables.ContainsKey(name)) {
+                throw new VariableNotFoundException($"Variable {name} not found in current context.");
+            }
+
+            return Variables[name];
+        }
     }
 }

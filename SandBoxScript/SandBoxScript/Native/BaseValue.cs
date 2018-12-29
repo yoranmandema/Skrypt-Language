@@ -24,6 +24,16 @@ namespace SandBoxScript {
             Name = template.Name;
         }
 
+        public Member SetProperty (string name, BaseValue value) {
+            if (!Members.ContainsKey(name)) {
+                throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
+            }
+
+            Members[name].Value = value;
+
+            return Members[name];
+        }
+
         public T AsType<T>() where T : BaseValue {
             return (T)this;
         }

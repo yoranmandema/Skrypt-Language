@@ -36,7 +36,7 @@ namespace SandBoxScript {
             var target      = Visit(context.memberAccess().expression());
             var memberName  = context.memberAccess().NAME().GetText();
 
-            target.Members[memberName].Value = Visit(context.expression());
+            target.SetProperty(memberName, Visit(context.expression()));
 
             return null;
         }
@@ -48,10 +48,10 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitStringLiteral(SandBoxScriptParser.StringLiteralContext context) {
-            var str = context.@string().value;
+            var value = context.@string().value;
 
-            var instance = _engine.CreateString(str);
-            return instance;
+            var str = _engine.CreateString(value);
+            return str;
         }
 
         public override BaseValue VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
@@ -59,11 +59,7 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
-            if (!_engine.Scope.Variables.ContainsKey(context.NAME().GetText())) {
-                throw new Exception($"Variable {context.NAME().GetText()} not found!");
-            }
-
-            return _engine.Scope.Variables[context.NAME().GetText()];
+            return _engine.Scope.GetVariable(context.NAME().GetText());
         }
 
         public override BaseValue VisitBinaryOperationExp(SandBoxScriptParser.BinaryOperationExpContext context) {

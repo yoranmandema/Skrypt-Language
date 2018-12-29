@@ -63,6 +63,8 @@
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
     <Compile Include="Native\BaseValue.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
+    <Compile Include="Native\Exceptions\NonExistingMemberException.cs" />
+    <Compile Include="Native\Exceptions\VariableNotFoundException.cs" />
     <Compile Include="Native\Function\DelegateFunction.cs" />
     <Compile Include="Native\Constructor.cs" />
     <Compile Include="Native\String\StringConstructor.cs" />
