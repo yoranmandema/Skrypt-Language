@@ -22,6 +22,9 @@ namespace SandBoxScript {
         internal StringObject String;
         internal StringConstructor StringConstructor;
 
+        internal BooleanObject Boolean;
+        internal BooleanConstructor BooleanConstructor;
+
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
@@ -31,6 +34,9 @@ namespace SandBoxScript {
 
             StringConstructor       = new StringConstructor(this);
             String                  = new StringObject(this);
+
+            BooleanConstructor      = new BooleanConstructor(this);
+            Boolean                 = new BooleanObject(this);
         }
 
         public BaseValue Run (string code) {
@@ -64,5 +70,10 @@ namespace SandBoxScript {
         public StringInstance CreateString(string value) {
             return StringConstructor.Construct(value);
         }
+
+        public BooleanInstance CreateBoolean(bool value) {
+            return BooleanConstructor.Construct(value);
+        }
+
     }
 }

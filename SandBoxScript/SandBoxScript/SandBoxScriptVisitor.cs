@@ -108,9 +108,28 @@ namespace SandBoxScript {
                 case "**":
                     result = _engine.expressionInterpreter.EvaluateExponentExpression(left, right);
                     break;
-                case "==":
-                    result = _engine.expressionInterpreter.EvaluateExponentExpression(left, right);
+                case "<":
+                    result = _engine.expressionInterpreter.EvaluateLessExpression(left, right);
                     break;
+                case "<=":
+                    result = _engine.expressionInterpreter.EvaluateLessEqualExpression(left, right);
+                    break;
+                case ">":
+                    result = _engine.expressionInterpreter.EvaluateGreaterExpression(left, right);
+                    break;
+                case ">=":
+                    result = _engine.expressionInterpreter.EvaluateGreaterEqualExpression(left, right);
+                    break;
+                case "==":
+                    result = _engine.expressionInterpreter.EvaluateEqualExpression(left, right);
+                    break;
+                case "!=":
+                    result = _engine.expressionInterpreter.EvaluateNotEqualExpression(left, right);
+                    break;
+            }
+
+            if (result is bool) {
+                result = _engine.CreateBoolean((bool)result);
             }
 
             if (result is InvalidOperation) {

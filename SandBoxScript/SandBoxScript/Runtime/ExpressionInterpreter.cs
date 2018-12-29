@@ -44,8 +44,66 @@ namespace SandBoxScript.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateEqualExpression(BaseValue left, BaseValue right) {
+        public object EvaluateLessExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return ((NumberInstance)left).Value < ((NumberInstance)right).Value;
+            }
+
             return new InvalidOperation();
+        }
+
+        public object EvaluateLessEqualExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return ((NumberInstance)left).Value <= ((NumberInstance)right).Value;
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateGreaterExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return ((NumberInstance)left).Value > ((NumberInstance)right).Value;
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateGreaterEqualExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return ((NumberInstance)left).Value >= ((NumberInstance)right).Value;
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateEqualExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return ((NumberInstance)left).Value == ((NumberInstance)right).Value;
+            }
+            else if (left is StringInstance && right is StringInstance) {
+                return ((StringInstance)left).Value == ((StringInstance)right).Value;
+            }
+            else if (left is BooleanInstance && right is BooleanInstance) {
+                return ((BooleanInstance)left).Value == ((BooleanInstance)right).Value;
+            }
+            else {
+                return left == right;
+            }
+        }
+
+        public object EvaluateNotEqualExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return ((NumberInstance)left).Value != ((NumberInstance)right).Value;
+            }
+            else if (left is StringInstance && right is StringInstance) {
+                return ((StringInstance)left).Value != ((StringInstance)right).Value;
+            }
+            else if (left is BooleanInstance && right is BooleanInstance) {
+                return ((BooleanInstance)left).Value != ((BooleanInstance)right).Value;
+            }
+            else {
+                return left != right;
+            }
         }
     }
 }

@@ -60,6 +60,9 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
+    <Compile Include="Native\Boolean\BooleanConstructor.cs" />
+    <Compile Include="Native\Boolean\BooleanInstance.cs" />
+    <Compile Include="Native\Boolean\BooleanObject.cs" />
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
     <Compile Include="Native\BaseValue.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />

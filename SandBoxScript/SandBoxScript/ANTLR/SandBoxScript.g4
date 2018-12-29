@@ -27,24 +27,26 @@ stmntBlock			: '{' Block=block '}'
 					| expression
 					;
 
-assignStmnt			: NAME								ASSIGN expression									#assignNameStatement
-					| memberAccess						ASSIGN expression									#assignMemberStatement
-					| memberAccessComp					ASSIGN expression									#assignComputedMemberStatement
+assignStmnt			: NAME								ASSIGN expression														#assignNameStatement
+					| memberAccess						ASSIGN expression														#assignMemberStatement
+					| memberAccessComp					ASSIGN expression														#assignComputedMemberStatement
 					;
 
-expression          : '(' expression ')'																	#parenthesisExp
-					| expression DOT NAME																	#memberAccessExp
-					| expression '[' expression ']'															#computedMemberAccessExp
-                    | Function=expression '(' Arguments=expressionGroup ')'									#functionCallExp
+expression          : '(' expression ')'																						#parenthesisExp
+					| expression DOT NAME																						#memberAccessExp
+					| expression '[' expression ']'																				#computedMemberAccessExp
+                    | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
 					
-					| <assoc=right>		Left=expression Operation=EXPONENT			Right=expression		#binaryOperationExp
-                    |					Left=expression Operation=(ASTERISK|SLASH)	Right=expression		#binaryOperationExp
-                    |					Left=expression Operation=(PLUS|MINUS)		Right=expression		#binaryOperationExp
-                    |					Left=expression Operation=EQUAL				Right=expression		#binaryOperationExp
+					| <assoc=right>		Left=expression Operation=EXPONENT			Right=expression							#binaryOperationExp
+                    |					Left=expression Operation=(ASTERISK|SLASH)	Right=expression							#binaryOperationExp
+                    |					Left=expression Operation=(PLUS|MINUS)		Right=expression							#binaryOperationExp
 
-					| NAME																					#nameExp
-                    | number																				#numberLiteral
-					| string																				#stringLiteral
+                    |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
+                    |					Left=expression Operation=(EQUAL|NOTEQUAL)					Right=expression			#binaryOperationExp
+
+					| NAME																										#nameExp
+                    | number																									#numberLiteral
+					| string																									#stringLiteral
                     ;
 
 memberAccess		: expression DOT NAME ;
@@ -72,18 +74,23 @@ ELSE					: 'else' ;
 
 STRING : '"' ~('"')* ('"' | {throw new RecognitionException("Unterminated string detected.", this, this.InputStream, (ParserRuleContext)_localctx);}) ;
 
-EQUAL				: '==' ;
+LESS				: '<'	;
+LESSEQ				: '<='	;
+GREATER				: '>'	;
+GREATEREQ			: '>='	;
+EQUAL				: '=='	;
+NOTEQUAL			: '!='	;
 
-ASSIGN	            : '=' ;
+ASSIGN	            : '='	;
 
-ASTERISK            : '*' ;
-SLASH               : '/' ;
-PLUS                : '+' ;
-MINUS               : '-' ;
-EXPONENT            : '**';
+ASTERISK            : '*'	;
+SLASH               : '/'	;
+PLUS                : '+'	;
+MINUS               : '-'	;
+EXPONENT            : '**'	;
 
-INCREMENT			: '++';
-DECREMENT			: '--';
+INCREMENT			: '++'	;
+DECREMENT			: '--'	;
 
 NAME				: LETTER (LETTER | DIGIT)* ;
 
