@@ -32,12 +32,17 @@ expression          : '(' expression ')'																	#parenthesisExp
 memberAccess		: expression DOT NAME ;
 memberAccessComp	: expression '[' expression ']' ;
 
-string				: '"' Content=stringContent '"';
-stringContent		: ( ESCAPED_QUOTE | ~('\n'|'\r') )*? ;
+string returns [string value] : STRING { 
 
-number returns [double value]
-					: NUMBER { $value = double.Parse($NUMBER.text); } 
-					;
+var content = $STRING.text.Substring(1,  $STRING.text.Length - 2);
+
+$value = System.Text.RegularExpressions.Regex.Unescape(content);
+
+} ;
+
+number returns [double value] : NUMBER { 
+$value = double.Parse($NUMBER.text); 
+} ;
 
 expressionGroup		: (expression (',' expression)*)? ;
 
@@ -47,7 +52,7 @@ fragment ESCAPED_QUOTE	: '\\"';
 DOT						: '.' ;
 IMPORT					: 'import' ;
 
-STRING :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
+STRING : '"' ~('"')* ('"') ;
 
 ASSIGN	            : '=' ;
 

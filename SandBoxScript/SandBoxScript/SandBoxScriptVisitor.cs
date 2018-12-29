@@ -48,7 +48,7 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitStringLiteral(SandBoxScriptParser.StringLiteralContext context) {
-            var str = context.@string().Content.GetText();
+            var str = context.@string().value;
 
             var instance = _engine.CreateString(str);
             return instance;
@@ -59,6 +59,10 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
+            if (!_engine.Scope.Variables.ContainsKey(context.NAME().GetText())) {
+                throw new Exception($"Variable {context.NAME().GetText()} not found!");
+            }
+
             return _engine.Scope.Variables[context.NAME().GetText()];
         }
 

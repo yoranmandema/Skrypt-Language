@@ -1,5 +1,3 @@
-﻿print(Number.Parse)
+﻿a = "Hello world! \n"
 
-Number.Parse = 2
-
-print(Number.Parse)
+print(a)
