@@ -42,7 +42,7 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNumberLiteral(SandBoxScriptParser.NumberLiteralContext context) {
-            var value = double.Parse(context.NUMBER().GetText(), System.Globalization.CultureInfo.InvariantCulture);
+            var value = context.number().value;
             var num = _engine.CreateNumber(value);
             return num;
         }

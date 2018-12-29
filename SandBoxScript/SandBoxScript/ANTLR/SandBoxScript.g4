@@ -25,7 +25,7 @@ expression          : '(' expression ')'																	#parenthesisExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression		#binaryOperationExp
 
 					| NAME																					#nameExp
-                    | NUMBER																				#numberLiteral
+                    | number																				#numberLiteral
 					| string																				#stringLiteral
                     ;
 
@@ -34,6 +34,10 @@ memberAccessComp	: expression '[' expression ']' ;
 
 string				: '"' Content=stringContent '"';
 stringContent		: ( ESCAPED_QUOTE | ~('\n'|'\r') )*? ;
+
+number returns [double value]
+					: NUMBER { $value = double.Parse($NUMBER.text); } 
+					;
 
 expressionGroup		: (expression (',' expression)*)? ;
 
