@@ -1,3 +1,1 @@
-﻿a = "Hello world! \n"
-
-print(a)
+﻿1 + 2

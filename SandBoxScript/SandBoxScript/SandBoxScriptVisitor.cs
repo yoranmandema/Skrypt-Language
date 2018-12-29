@@ -86,7 +86,7 @@ namespace SandBoxScript {
                     break;
             }
 
-            if (result.GetType() == typeof(InvalidOperation)) {
+            if (result is InvalidOperation) {
                 throw new InvalidOperationException($"No such operation: {left.Name} {operationName} {right.Name}");
             }
 

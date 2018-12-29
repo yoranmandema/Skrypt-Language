@@ -33,11 +33,9 @@ memberAccess		: expression DOT NAME ;
 memberAccessComp	: expression '[' expression ']' ;
 
 string returns [string value] : STRING { 
-
 var content = $STRING.text.Substring(1,  $STRING.text.Length - 2);
 
 $value = System.Text.RegularExpressions.Regex.Unescape(content);
-
 } ;
 
 number returns [double value] : NUMBER { 
