@@ -41,6 +41,8 @@ namespace SandBoxScript {
             var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
             var sandBoxScriptParser = new SandBoxScriptParser(commonTokenStream);
 
+            sandBoxScriptParser.ErrorHandler = new BailErrorStrategy();
+
             var context = sandBoxScriptParser.block();
             var visitor = new SandBoxScriptVisitor(this);
 

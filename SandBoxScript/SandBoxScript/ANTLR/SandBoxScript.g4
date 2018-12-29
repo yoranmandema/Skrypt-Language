@@ -5,19 +5,22 @@ block				: command* ;
 command				: importStmnt
 					| ifStmnt
 					| assignStmnt
-					| expression										
+					| expression
 					;
 
 importStmnt			: IMPORT Target=expression																#importStatement
 					;
 
-ifStmnt				: IF '(' Condition=expression ')' stmntBlock elseifStmnt* elseStmnt?					#ifStatement			
+ifStmnt				: if (elseif)* else?																	#ifStatement			
 					;
 
-elseifStmnt			: ELSE IF '(' Condition=expression ')' stmntBlock
+if					: IF '(' Condition=expression ')' stmntBlock 
 					;
 
-elseStmnt			: ELSE stmntBlock																			
+elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
+					;
+
+else				: ELSE stmntBlock																			
 					;
 
 stmntBlock			: '{' Block=block '}'

@@ -1,7 +1,8 @@
-﻿a = 0
+﻿
+if (1) {
+	if (1) {
+		print(1)
+	}
 
-if (a) {
-	print("is one")
-} else {
-	print("is not one")
+	print(1)
 }

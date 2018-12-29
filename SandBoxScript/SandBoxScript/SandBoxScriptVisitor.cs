@@ -29,14 +29,14 @@ namespace SandBoxScript {
         public override BaseValue VisitIfStatement(SandBoxScriptParser.IfStatementContext context) {
             var isTrue = false;
 
-            isTrue = Visit(context.Condition).IsTrue();
+            isTrue = Visit(context.@if().Condition).IsTrue();
 
             if (isTrue) {
-                Visit(context.stmntBlock());
+                Visit(context.@if().stmntBlock());
 
                 return null;
-            } else if (context.elseifStmnt().Length > 0) {
-                foreach (var stmnt in context.elseifStmnt()) {
+            } else if (context.elseif().Length > 0) {
+                foreach (var stmnt in context.elseif()) {
                     isTrue = Visit(stmnt.Condition).IsTrue();
 
                     if (isTrue) {
@@ -47,7 +47,9 @@ namespace SandBoxScript {
                 }
             }
 
-            Visit(context.elseStmnt());
+            if (context.@else() != null) {
+                Visit(context.@else().stmntBlock());
+            }
 
             return null;
         }
