@@ -26,21 +26,15 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is VectorInstance && right is VectorInstance) {
-                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
-                    return x + y;
-                });
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) =>x + y);
             }
 
             if (left is NumberInstance && right is VectorInstance) {
-                return VectorInstance.ComponentMathNumeric(_engine, right as VectorInstance, (x) => {
-                    return (left as NumberInstance) + x;
-                });
+                return VectorInstance.ComponentMathNumeric(_engine, right as VectorInstance, (x) =>(left as NumberInstance) + x);
             }
 
             if (left is VectorInstance && right is NumberInstance) {
-                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
-                    return x + (right as NumberInstance);
-                });
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) =>x + (right as NumberInstance));
             }
 
             return new InvalidOperation();
@@ -52,15 +46,11 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is VectorInstance && right is VectorInstance) {
-                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x,y) => {
-                    return x - y;
-                });
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x,y) => x - y);
             }
 
             if (left is VectorInstance && right is NumberInstance) {
-                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
-                    return x - (right as NumberInstance);
-                });
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => x - (right as NumberInstance));
             }
 
             return new InvalidOperation();
@@ -72,9 +62,7 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is VectorInstance && right is VectorInstance) {
-                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
-                    return x * y;
-                });
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => x * y);
             }
 
             if (left is NumberInstance && right is VectorInstance) {
@@ -84,9 +72,7 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is VectorInstance && right is NumberInstance) {
-                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
-                    return x * (right as NumberInstance);
-                });
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => x * (right as NumberInstance));
             }
 
             return new InvalidOperation();
@@ -98,15 +84,11 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is VectorInstance && right is VectorInstance) {
-                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
-                    return x / y;
-                });
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => x / y);
             }
 
             if (left is VectorInstance && right is NumberInstance) {
-                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
-                    return x / (right as NumberInstance);
-                });
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => x / (right as NumberInstance));
             }
     
             return new InvalidOperation();
@@ -118,15 +100,11 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is VectorInstance && right is VectorInstance) {
-                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
-                    return x % y;
-                });
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => x % y);
             }
 
             if (left is VectorInstance && right is NumberInstance) {
-                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
-                    return x % (right as NumberInstance);
-                });
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => x % (right as NumberInstance));
             }
 
             return new InvalidOperation();
