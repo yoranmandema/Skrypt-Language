@@ -25,6 +25,12 @@ namespace SandBoxScript {
             return engine.CreateNumber(Math.Sqrt((NumberInstance)Length2(engine, self)));
         }
 
+        public static BaseValue Normalized(Engine engine, BaseValue self) {
+            var length = (NumberInstance)Length(engine, self);
+
+            return ComponentMathNumeric(engine, self as VectorInstance, (x) => x / length) as VectorInstance;
+        }
+
         internal static object ComponentMath (Engine engine, VectorInstance left, VectorInstance right, Func<double, double, double> func) {
             var dimension = left.Components.Length;
 
