@@ -25,12 +25,42 @@ namespace SandBoxScript.Runtime {
                 return _engine.CreateString(left.ToString() + ((StringInstance)right).Value);
             }
 
+            if (left is VectorInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
+                    return x + y;
+                });
+            }
+
+            if (left is NumberInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, right as VectorInstance, (x) => {
+                    return (left as NumberInstance) + x;
+                });
+            }
+
+            if (left is VectorInstance && right is NumberInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
+                    return x + (right as NumberInstance);
+                });
+            }
+
             return new InvalidOperation();
         }
 
         public object EvaluateSubtractExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return _engine.CreateNumber((NumberInstance)left - (NumberInstance)right);
+            }
+
+            if (left is VectorInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x,y) => {
+                    return x - y;
+                });
+            }
+
+            if (left is VectorInstance && right is NumberInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
+                    return x - (right as NumberInstance);
+                });
             }
 
             return new InvalidOperation();
@@ -41,6 +71,24 @@ namespace SandBoxScript.Runtime {
                 return _engine.CreateNumber((NumberInstance)left * (NumberInstance)right);
             }
 
+            if (left is VectorInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
+                    return x * y;
+                });
+            }
+
+            if (left is NumberInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, right as VectorInstance, (x) => {
+                    return (left as NumberInstance) * x;
+                });
+            }
+
+            if (left is VectorInstance && right is NumberInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
+                    return x * (right as NumberInstance);
+                });
+            }
+
             return new InvalidOperation();
         }
 
@@ -49,12 +97,36 @@ namespace SandBoxScript.Runtime {
                 return _engine.CreateNumber((NumberInstance)left / (NumberInstance)right);
             }
 
+            if (left is VectorInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
+                    return x / y;
+                });
+            }
+
+            if (left is VectorInstance && right is NumberInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
+                    return x / (right as NumberInstance);
+                });
+            }
+    
             return new InvalidOperation();
         }
 
         public object EvaluateRemainderExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return _engine.CreateNumber((NumberInstance)left % (NumberInstance)right);
+            }
+
+            if (left is VectorInstance && right is VectorInstance) {
+                return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => {
+                    return x % y;
+                });
+            }
+
+            if (left is VectorInstance && right is NumberInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => {
+                    return x % (right as NumberInstance);
+                });
             }
 
             return new InvalidOperation();

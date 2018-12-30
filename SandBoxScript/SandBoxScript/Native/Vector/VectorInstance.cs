@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public class VectorInstance : BaseInstance {
-        protected double[] components;
+        internal double[] Components;
 
         public VectorInstance(Engine engine) : base(engine) { }
 
@@ -14,22 +14,54 @@ namespace SandBoxScript {
             double val = 0;
             var vector = self as VectorInstance;
 
-            for (var i = 0; i < vector.components.Length; i++) {
-                val += Math.Pow(vector.components[i],2);
+            for (var i = 0; i < vector.Components.Length; i++) {
+                val += Math.Pow(vector.Components[i],2);
             }
 
             return engine.CreateNumber(val);
         }
 
-        public static  BaseValue Length(Engine engine, BaseValue self) {
+        public static BaseValue Length(Engine engine, BaseValue self) {
             return engine.CreateNumber(Math.Sqrt((NumberInstance)Length2(engine, self)));
+        }
+
+        internal static object ComponentMath (Engine engine, VectorInstance left, VectorInstance right, Func<double, double, double> func) {
+            var dimension = left.Components.Length;
+
+            if (dimension == right.Components.Length) {
+                var args = new double[dimension];
+
+                for (var i = 0; i < dimension; i++) {
+                    var newVal = func(left.Components[i],right.Components[i]);
+
+                    args[i] = newVal;
+                }
+
+                return engine.VectorConstructor.Construct(args);
+            }
+
+            return new InvalidOperation();
+        }
+
+        internal static object ComponentMathNumeric(Engine engine, VectorInstance left, Func<double, double> func) {
+            var dimension = left.Components.Length;
+
+            var args = new double[dimension];
+
+            for (var i = 0; i < dimension; i++) {
+                var newVal = func(left.Components[i]);
+
+                args[i] = newVal;
+            }
+
+            return engine.VectorConstructor.Construct(args);
         }
 
         public override string ToString() {
             var str = "<";
 
-            for (var i = 0; i < components.Length; i++) {
-                str += (i > 0 ? "," : "") + components[i];
+            for (var i = 0; i < Components.Length; i++) {
+                str += (i > 0 ? "," : "") + Components[i];
             }
 
             str += ">";

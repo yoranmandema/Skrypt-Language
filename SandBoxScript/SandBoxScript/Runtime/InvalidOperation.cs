@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SandBoxScript.Runtime {
-    class InvalidOperation {
+namespace SandBoxScript {
+    internal class InvalidOperation {
     }
 }
