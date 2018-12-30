@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public delegate BaseValue MethodDelegate(Engine engine, BaseValue self, Arguments input);
 
-    public class DelegateFunction : IFunction {
+    public class NativeFunction : IFunction {
         public MethodDelegate Function;
 
-        public DelegateFunction (MethodDelegate function) {
+        public NativeFunction (MethodDelegate function) {
             Function = function;
         }
 

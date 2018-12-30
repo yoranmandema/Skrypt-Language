@@ -13,6 +13,9 @@ namespace SandBoxScript {
     public class Engine {
         public Scope Scope { get; internal set; } = new Scope();
 
+        internal SandBoxScriptParser Parser;
+        internal SandBoxScriptVisitor Visitor;
+
         internal ExpressionInterpreter expressionInterpreter;
         internal TemplateMaker templateMaker;
 
@@ -51,14 +54,16 @@ namespace SandBoxScript {
             sandBoxScriptLexer.AddErrorListener(new LexingErrorListener());
 
             var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
-            var sandBoxScriptParser = new SandBoxScriptParser(commonTokenStream);
 
-            sandBoxScriptParser.ErrorHandler = new BailErrorStrategy();
+            Parser = new SandBoxScriptParser(commonTokenStream) {
+                ErrorHandler = new BailErrorStrategy()
+            }
+            ;
 
-            var context = sandBoxScriptParser.block();
-            var visitor = new SandBoxScriptVisitor(this);
+            var context = Parser.program();
+            Visitor = new SandBoxScriptVisitor(this);
 
-            return visitor.Visit(context);
+            return Visitor.Visit(context);
         }
 
         public BaseValue SetValue (string name, MethodDelegate value) {
@@ -92,14 +97,5 @@ namespace SandBoxScript {
         public Vector4Instance CreateVector4(double x, double y, double z, double w) {
             return (Vector4Instance)VectorConstructor.Construct(x, y, z, w);
         }
-
-
-        //public BooleanInstance CreateVector3(bool value) {
-        //    return VectorConstructor.Construct(value);
-        //}
-
-        //public BooleanInstance CreateVector4(bool value) {
-        //    return VectorConstructor.Construct(value);
-        //}
     }
 }

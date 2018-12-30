@@ -10,7 +10,7 @@ namespace SandBoxScript {
         public IFunction Function { get; set; }
 
         public FunctionInstance(Engine engine, MethodDelegate function) : base(engine) {
-            Function = new DelegateFunction(function);
+            Function = new NativeFunction(function);
         }
     }
 }

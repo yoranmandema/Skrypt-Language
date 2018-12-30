@@ -1,17 +1,48 @@
 grammar SandBoxScript;
 
-block				: command* ;
+program				: block EOF ;
 
-command				: importStmnt
+block				: (
+					importStmnt
 					| ifStmnt
+					| fnStmnt 
 					| assignStmnt
+					| expression
+					)*
+					;
+
+stmntBlock			: '{' Block=block '}'
 					| expression
 					;
 
-importStmnt			: IMPORT Target=expression																#importStatement
+fnBlock				: (
+					importStmnt
+					| ifStmnt
+					| fnStmnt 
+					| returnStmnt
+					| assignStmnt
+					| expression
+					)*
 					;
 
-ifStmnt				: if (elseif)* else?																	#ifStatement			
+fnStmntBlock		: '{' Block=fnBlock '}'
+					| expression
+					;
+
+importStmnt			: IMPORT Target=expression																					#importStatement
+					;
+
+fnStmnt				: FN NAME '(' parameterGroup ')' fnStmntBlock																#functionStatement
+					;											
+
+returnStmnt			: RETURN expression?																						#returnStatement
+					;
+
+parameterGroup		: (parameter (',' parameter)*)? ;							
+
+parameter			: NAME ;
+
+ifStmnt				: if (elseif)* else?																						#ifStatement			
 					;
 
 if					: IF '(' Condition=expression ')' stmntBlock 
@@ -21,10 +52,6 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 					;
 
 else				: ELSE stmntBlock																			
-					;
-
-stmntBlock			: '{' Block=block '}'
-					| expression
 					;
 
 assignStmnt			: NAME								ASSIGN expression														#assignNameStatement
@@ -74,10 +101,18 @@ expressionGroup		: (expression (',' expression)*)? ;
 fragment LETTER			: [a-zA-Z] ;
 fragment DIGIT			: [0-9] ;
 fragment ESCAPED_QUOTE	: '\\"';
+
 DOT						: '.' ;
+
 IMPORT					: 'import' ;
 IF						: 'if' ;
 ELSE					: 'else' ;
+FN						: 'fn' ;
+RETURN					: 'return' ;
+BREAK					: 'break' ;
+CONTINUE				: 'continue' ;
+
+KEYWORD					: (IMPORT | IF | ELSE | FN | RETURN | BREAK | CONTINUE) ;
 
 STRING : '"' ~('"')* ('"' | {throw new RecognitionException("Unterminated string detected.", this, this.InputStream, (ParserRuleContext)_localctx);}) ;
 
@@ -99,9 +134,9 @@ EXPONENT            : '**'	;
 INCREMENT			: '++'	;
 DECREMENT			: '--'	;
 
-NAME				: LETTER (LETTER | DIGIT)* ;
+NAME				: LETTER (LETTER | DIGIT)*;
 
-NUMBER              : DIGIT+ ('.' DIGIT+)? ;
+NUMBER              : DIGIT+ ('.' DIGIT+)?;
 
 WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
 

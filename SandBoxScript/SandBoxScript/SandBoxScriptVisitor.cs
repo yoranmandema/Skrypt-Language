@@ -54,6 +54,12 @@ namespace SandBoxScript {
             return null;
         }
 
+        public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) {
+            Console.WriteLine(context.ToStringTree());
+
+            return base.VisitFunctionStatement(context);
+        }
+
         public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {
             _engine.Scope.SetVariable(context.NAME().GetText(), Visit(context.expression()));
 
@@ -124,7 +130,7 @@ namespace SandBoxScript {
             var x = (NumberInstance)Visit(v.X);
             var y = (NumberInstance)Visit(v.Y);
             var z = (NumberInstance)Visit(v.Z);
-            var w = (NumberInstance)Visit(v.Z);
+            var w = (NumberInstance)Visit(v.W);
 
             var vec = _engine.CreateVector4(x, y, z, w);
             return vec;
