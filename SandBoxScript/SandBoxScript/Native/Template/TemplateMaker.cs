@@ -24,12 +24,19 @@ namespace SandBoxScript {
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;
+                var function = default(BaseValue);
 
-                var del = (BaseDelegate)Delegate.CreateDelegate(typeof(BaseDelegate),m,false);
+                var methodDelegate = (MethodDelegate)Delegate.CreateDelegate(typeof(MethodDelegate),m,false);
 
-                if (del == null) continue; 
+                if (methodDelegate != null) {
+                    function = new FunctionInstance(_engine, methodDelegate);
+                }
 
-                var function = new FunctionInstance(_engine, del);
+                var getPropertyDelegate = (GetPropertyDelegate)Delegate.CreateDelegate(typeof(GetPropertyDelegate), m, false);
+
+                if (getPropertyDelegate != null) {
+                    function = new GetPropertyInstance(_engine, getPropertyDelegate);
+                }
 
                 template.Members[m.Name] = new Member {
                     Value = function

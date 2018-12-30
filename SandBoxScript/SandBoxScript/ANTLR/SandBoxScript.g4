@@ -47,6 +47,9 @@ expression          : '(' expression ')'																						#parenthesisExp
 					| NAME																										#nameExp
                     | number																									#numberLiteral
 					| string																									#stringLiteral
+					| vector2																									#vector2Literal
+					| vector3																									#vector3Literal
+					| vector4																									#vector4Literal
                     ;
 
 memberAccess		: expression DOT NAME ;
@@ -61,6 +64,10 @@ $value = System.Text.RegularExpressions.Regex.Unescape(content);
 number returns [double value] : NUMBER { 
 $value = double.Parse($NUMBER.text); 
 } ;
+
+vector2				:	'<' X=expression ',' Y=expression '>' ;
+vector3				:	'<' X=expression ',' Y=expression ',' Z=expression '>' ;
+vector4				:	'<' X=expression ',' Y=expression ',' Z=expression ',' W=expression'>' ;
 
 expressionGroup		: (expression (',' expression)*)? ;
 

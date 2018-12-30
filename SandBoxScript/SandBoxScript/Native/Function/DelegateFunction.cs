@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public delegate BaseValue BaseDelegate(Engine engine, BaseValue self, Arguments input);
+    public delegate BaseValue MethodDelegate(Engine engine, BaseValue self, Arguments input);
 
     public class DelegateFunction : IFunction {
-        public BaseDelegate Function;
+        public MethodDelegate Function;
 
-        public DelegateFunction (BaseDelegate function) {
+        public DelegateFunction (MethodDelegate function) {
             Function = function;
         }
 

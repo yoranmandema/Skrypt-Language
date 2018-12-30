@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public class FunctionInstance : BaseInstance {
         public override string Name => "Function";
+        public IFunction Function { get; set; }
 
-        public FunctionInstance(Engine engine, BaseDelegate function) : base(engine) {
+        public FunctionInstance(Engine engine, MethodDelegate function) : base(engine) {
             Function = new DelegateFunction(function);
         }
-
-        public IFunction Function { get; set; }
     }
 }

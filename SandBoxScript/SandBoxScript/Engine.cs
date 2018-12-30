@@ -25,6 +25,9 @@ namespace SandBoxScript {
         internal BooleanObject Boolean;
         internal BooleanConstructor BooleanConstructor;
 
+        internal VectorObject Vector;
+        internal VectorConstructor VectorConstructor;
+
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
@@ -37,6 +40,9 @@ namespace SandBoxScript {
 
             BooleanConstructor      = new BooleanConstructor(this);
             Boolean                 = new BooleanObject(this);
+
+            VectorConstructor       = new VectorConstructor(this);
+            Vector                  = new VectorObject(this);
         }
 
         public BaseValue Run (string code) {
@@ -55,7 +61,7 @@ namespace SandBoxScript {
             return visitor.Visit(context);
         }
 
-        public BaseValue SetValue (string name, BaseDelegate value) {
+        public BaseValue SetValue (string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 
             Scope.SetVariable(name, val);
@@ -75,5 +81,16 @@ namespace SandBoxScript {
             return BooleanConstructor.Construct(value);
         }
 
+        public Vector3Instance CreateVector3(double x, double y, double z) {
+            return (Vector3Instance)VectorConstructor.Construct(x, y, z);
+        }
+
+        //public BooleanInstance CreateVector3(bool value) {
+        //    return VectorConstructor.Construct(value);
+        //}
+
+        //public BooleanInstance CreateVector4(bool value) {
+        //    return VectorConstructor.Construct(value);
+        //}
     }
 }

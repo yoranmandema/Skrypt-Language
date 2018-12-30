@@ -69,6 +69,21 @@ namespace SandBoxScript {
             return null;
         }
 
+        public override BaseValue VisitMemberAccessExp(SandBoxScriptParser.MemberAccessExpContext context) {
+            var obj = Visit(context.expression());
+            var memberName = context.NAME().GetText();
+
+            var val = obj.Members[memberName].Value;
+
+            if (val is GetPropertyInstance) {
+                var newVal = (val as GetPropertyInstance).Property.Run(_engine, obj);
+
+                return newVal;
+            } else {
+                return val;
+            }
+        }
+
         public override BaseValue VisitNumberLiteral(SandBoxScriptParser.NumberLiteralContext context) {
             var value = context.number().value;
             var num = _engine.CreateNumber(value);
@@ -80,6 +95,17 @@ namespace SandBoxScript {
 
             var str = _engine.CreateString(value);
             return str;
+        }
+
+        public override BaseValue VisitVector3Literal(SandBoxScriptParser.Vector3LiteralContext context) {
+            var v = context.vector3();
+
+            var x = (NumberInstance)Visit(v.X);
+            var y = (NumberInstance)Visit(v.Y);
+            var z = (NumberInstance)Visit(v.Z);
+
+            var vec = _engine.CreateVector3(x, y, z);
+            return vec;
         }
 
         public override BaseValue VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
@@ -146,13 +172,6 @@ namespace SandBoxScript {
             }
 
             return (BaseValue)result;
-        }
-
-        public override BaseValue VisitMemberAccessExp(SandBoxScriptParser.MemberAccessExpContext context) {
-            var obj = Visit(context.expression());
-            var memberName = context.NAME().GetText();
-
-            return obj.Members[memberName].Value;
         }
 
         public override BaseValue VisitFunctionCallExp(SandBoxScriptParser.FunctionCallExpContext context) {
