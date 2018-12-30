@@ -83,6 +83,8 @@
     <Compile Include="Native\Object\Member.cs" />
     <Compile Include="Native\Template\TemplateMaker.cs" />
     <Compile Include="Native\TypeConverter.cs" />
+    <Compile Include="Native\Vector\Vector2Instance.cs" />
+    <Compile Include="Native\Vector\Vector4Instance.cs" />
     <Compile Include="Native\Vector\Vector3Instance.cs" />
     <Compile Include="Native\Vector\VectorConstructor.cs" />
     <Compile Include="Native\Vector\VectorInstance.cs" />

@@ -81,9 +81,18 @@ namespace SandBoxScript {
             return BooleanConstructor.Construct(value);
         }
 
+        public Vector2Instance CreateVector2(double x, double y) {
+            return (Vector2Instance)VectorConstructor.Construct(x, y);
+        }
+
         public Vector3Instance CreateVector3(double x, double y, double z) {
             return (Vector3Instance)VectorConstructor.Construct(x, y, z);
         }
+
+        public Vector4Instance CreateVector4(double x, double y, double z, double w) {
+            return (Vector4Instance)VectorConstructor.Construct(x, y, z, w);
+        }
+
 
         //public BooleanInstance CreateVector3(bool value) {
         //    return VectorConstructor.Construct(value);

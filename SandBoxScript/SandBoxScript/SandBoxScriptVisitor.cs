@@ -97,6 +97,16 @@ namespace SandBoxScript {
             return str;
         }
 
+        public override BaseValue VisitVector2Literal(SandBoxScriptParser.Vector2LiteralContext context) {
+            var v = context.vector2();
+
+            var x = (NumberInstance)Visit(v.X);
+            var y = (NumberInstance)Visit(v.Y);
+
+            var vec = _engine.CreateVector2(x, y);
+            return vec;
+        }
+
         public override BaseValue VisitVector3Literal(SandBoxScriptParser.Vector3LiteralContext context) {
             var v = context.vector3();
 
@@ -105,6 +115,18 @@ namespace SandBoxScript {
             var z = (NumberInstance)Visit(v.Z);
 
             var vec = _engine.CreateVector3(x, y, z);
+            return vec;
+        }
+
+        public override BaseValue VisitVector4Literal(SandBoxScriptParser.Vector4LiteralContext context) {
+            var v = context.vector4();
+
+            var x = (NumberInstance)Visit(v.X);
+            var y = (NumberInstance)Visit(v.Y);
+            var z = (NumberInstance)Visit(v.Z);
+            var w = (NumberInstance)Visit(v.Z);
+
+            var vec = _engine.CreateVector4(x, y, z, w);
             return vec;
         }
 

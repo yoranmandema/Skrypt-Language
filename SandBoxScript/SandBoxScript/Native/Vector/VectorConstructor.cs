@@ -12,14 +12,18 @@ namespace SandBoxScript {
             var obj = default(VectorInstance);
 
             switch (args.Length) {
+                case 2:
+                    obj = new Vector2Instance(_engine, args[0], args[1]);
+                    break;
                 case 3:
                     obj = new Vector3Instance(_engine, args[0], args[1], args[2]);
+                    break;
+                case 4:
+                    obj = new Vector4Instance(_engine, args[0], args[1], args[2], args[3]);
                     break;
             }
            
             obj.GetProperties(_template);
-
-
 
             return obj;
         }
