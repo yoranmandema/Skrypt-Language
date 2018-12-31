@@ -11,6 +11,8 @@ using SandBoxScript.Runtime;
 namespace SandBoxScript {
     internal class ParsingErrorListener : BaseErrorListener {
         public override void SyntaxError([NotNull] IRecognizer recognizer, [Nullable] IToken offendingSymbol, int line, int charPositionInLine, [NotNull] string msg, [Nullable] RecognitionException e) {
+            Console.WriteLine("HEJEJE");
+
             base.SyntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
         }
     }

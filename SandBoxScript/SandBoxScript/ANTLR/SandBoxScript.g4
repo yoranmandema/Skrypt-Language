@@ -3,7 +3,7 @@ grammar SandBoxScript;
 program				: block EOF ;
 
 block				locals [
-					List<string> symbols = new List<string>()
+					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>()
 					]
 					: (
 					importStmnt
@@ -43,7 +43,12 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 else				: ELSE stmntBlock																			
 					;
 
-assignStmnt			: NAME	{$block::symbols.Add($NAME.text);}			ASSIGN expression										#assignNameStatement
+assignStmnt			: NAME	{
+if (!$block::Variables.ContainsKey($NAME.text)) {
+	$block::Variables[$NAME.text] = new SandBoxScript.Variable($NAME.text);
+}
+}			
+																		ASSIGN expression										#assignNameStatement
 					| memberAccess										ASSIGN expression										#assignMemberStatement
 					| memberAccessComp									ASSIGN expression										#assignComputedMemberStatement					
 					;
@@ -68,18 +73,17 @@ expression          : '(' expression ')'																						#parenthesisExp
 					| vector4																									#vector4Literal
                     ;
 
-name				: NAME	{
+name returns [SandBoxScript.Variable variable] : NAME 	{
 RuleContext currentContext = $ctx;
 bool exists = false;
 
 while (currentContext.Parent != null) {
-	System.Console.WriteLine(currentContext.GetType());	
 
 	if (currentContext is BlockContext blockCtx) {
-		System.Console.WriteLine(blockCtx.symbols);	
-
-		if (blockCtx.symbols.Contains($NAME.text)) {
+		if (blockCtx.Variables.ContainsKey($NAME.text)) {
 			exists = true;
+
+			$variable = blockCtx.Variables[$NAME.text];
 			break;
 		}
 	}
@@ -88,7 +92,7 @@ while (currentContext.Parent != null) {
 }
 											  
 if (!exists) {
-	System.Console.WriteLine("undefined variable: "+$NAME.text);
+	throw new RecognitionException("Undefined variable: " + $NAME.text, this, this._input, $ctx);
 }
 } ;
 
@@ -127,7 +131,7 @@ CONTINUE				: 'continue' ;
 
 KEYWORD					: (IMPORT | IF | ELSE | FN | RETURN | BREAK | CONTINUE) ;
 
-STRING : '"' ~('"')* ('"' | {throw new RecognitionException("Unterminated string detected.", this, this.InputStream, (ParserRuleContext)_localctx);}) ;
+STRING : '"' ~('"')* ('"' | {throw new Antlr4.Runtime.Misc.ParseCanceledException("Unterminated string detected");}) ;
 
 LESS				: '<'	;
 LESSEQ				: '<='	;
