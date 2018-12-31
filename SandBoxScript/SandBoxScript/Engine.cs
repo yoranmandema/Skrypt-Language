@@ -34,6 +34,8 @@ namespace SandBoxScript {
         internal SandBoxScriptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
 
+
+
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
@@ -59,6 +61,7 @@ namespace SandBoxScript {
             var commonTokenStream = new CommonTokenStream(sandBoxScriptLexer);
 
             Parser = new SandBoxScriptParser(commonTokenStream) {
+                Engine = this,
                 ErrorHandler = new BailErrorStrategy()
             }
             ;

@@ -9,17 +9,46 @@ using Antlr4.Runtime.Tree;
 
 namespace SandBoxScript {
     public class ScriptFunction : IFunction {
-        public IParseTree Block;
+        internal SandBoxScriptParser.FunctionStatementContext Context;
+        internal Parameter[] Parameters;
 
-        public ScriptFunction(IParseTree block) {
-            Block = block;
+        internal bool wasCalled = false;
+
+        public ScriptFunction(SandBoxScriptParser.FunctionStatementContext block) {
+            Context = block;
         }
 
         public BaseValue Run(Engine engine, BaseValue self, Arguments args) {
+            var blockStmnt = Context.stmntBlock();
+            var block = blockStmnt.block();
+            var expr = blockStmnt.expression();
 
-            engine.Visitor.Visit(Block);
+            for (int i = 0; i < Parameters.Length; i++) {
+                var parameter = Parameters[i];
+                var input = args[i];
 
-            return null;
+                if (i < args.Values.Length) {
+                    Context.ParameterVariables[parameter.Name].Value = input;
+                }
+                else {
+                    Context.ParameterVariables[parameter.Name].Value = parameter.Default == null ? engine.CreateNumber(1) : engine.Visitor.Visit(parameter.Default);
+                }
+            }
+
+            var returnValue = default(BaseValue);
+                    
+            if (block != null) {
+                engine.Visitor.Visit(block);
+
+                returnValue = Context.ReturnValue;
+            }
+            else if (expr != null) {
+                returnValue = engine.Visitor.Visit(expr);
+            }
+
+            wasCalled = true;
+
+            return returnValue;
         }
     }
 }

@@ -12,5 +12,9 @@ namespace SandBoxScript {
         public FunctionInstance(Engine engine, MethodDelegate function) : base(engine) {
             Function = new NativeFunction(function);
         }
+
+        public FunctionInstance(Engine engine, ScriptFunction function) : base(engine) {
+            Function = function;
+        }
     }
 }

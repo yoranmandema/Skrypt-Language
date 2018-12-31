@@ -3,33 +3,90 @@ grammar SandBoxScript;
 program				: block EOF ;
 
 block				locals [
-					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>()
+					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>(),
 					]
 					: (
 					importStmnt
 					| ifStmnt
 					| fnStmnt 
+					| returnStmnt
 					| assignStmnt
 					| expression
 					)*
 					;
 
 stmntBlock			: '{' Block=block '}'
+					| returnStmnt
+					| assignStmnt
 					| expression
 					;
 
 importStmnt			: IMPORT Target=expression																					#importStatement
 					;
 
-fnStmnt				: FN NAME '(' parameterGroup ')' stmntBlock																	#functionStatement
+fnStmnt				locals [
+					Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
+					BaseValue ReturnValue = null
+					]
+					: FN name '(' parameterGroup ')' {
+var fnCtx = ($ctx as FunctionStatementContext);
+var nameCtx = fnCtx.name();
+
+var newVar = new SandBoxScript.Variable(nameCtx.GetText());
+
+$block::Variables[nameCtx.GetText()] = newVar;
+nameCtx.variable = newVar;		
+
+var parameters = fnCtx.parameterGroup().parameter();
+var processedParameters = new SandBoxScript.Parameter[parameters.Length];
+
+for (var i = 0; i < parameters.Length; i++) {
+	var p = parameters[i];
+	var name = p.NAME().GetText();
+
+	processedParameters[i] = new SandBoxScript.Parameter(name, p.expression()); 
+
+	var parameterVar = new SandBoxScript.Variable(name);
+
+	$fnStmnt::ParameterVariables[name] = parameterVar;
+}
+
+} stmntBlock {
+	var function = new SandBoxScript.ScriptFunction(fnCtx) { 
+		Parameters = processedParameters
+	}; 
+	var functionVar = new SandBoxScript.FunctionInstance(this.Engine, function); 
+
+	newVar.Value = functionVar;													
+}																																#functionStatement
 					;											
 
-returnStmnt			: RETURN expression?																						#returnStatement
+returnStmnt			locals [
+					FunctionStatementContext Statement
+					]
+					: RETURN expression? {
+RuleContext currentContext = $ctx;
+RuleContext functionStatementCtx = null;
+
+while (currentContext.Parent != null) {
+	if (currentContext is FunctionStatementContext fnCtx) {
+		functionStatementCtx = currentContext;
+		$Statement = fnCtx;
+		break;
+	}
+
+	currentContext = currentContext.Parent;
+}	
+
+if (functionStatementCtx == null) {
+	throw new RecognitionException("Return statement must be inside a function", this, this._input, $ctx);
+}
+}																																#returnStatement
 					;
 
 parameterGroup		: (parameter (',' parameter)*)? ;							
 
-parameter			: NAME ;
+parameter			: NAME ('=' expression)?;
 
 ifStmnt				: if (elseif)* else?																						#ifStatement			
 					;
@@ -74,11 +131,7 @@ expression          : '(' expression ')'																						#parenthesisExp
 var nameCtx = ($ctx as NameExpContext).name();
 
 if (nameCtx.variable == null) {
-	if (this.Globals.ContainsKey(nameCtx.GetText())) {
-		nameCtx.variable = this.Globals[nameCtx.GetText()];
-	} else {
-		throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
-	}
+	throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
 }																								
 }																																#nameExp
                     | number																									#numberLiteral
@@ -100,9 +153,19 @@ while (currentContext.Parent != null) {
 		}
 	}
 
+	if (currentContext is FunctionStatementContext fnCtx) {		
+		if (fnCtx.ParameterVariables.ContainsKey($NAME.text)) {
+			$variable = fnCtx.ParameterVariables[$NAME.text];
+			break;
+		}
+	}
+
 	currentContext = currentContext.Parent;
 }
 
+if ($variable == null && this.Globals.ContainsKey($NAME.text)) {
+	$variable = this.Globals[$NAME.text];
+}
 } ;
 
 memberAccess		: expression DOT NAME ;
@@ -165,6 +228,9 @@ NAME				: LETTER (LETTER | DIGIT)*;
 NUMBER              : DIGIT+ ('.' DIGIT+)?;
 
 WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
+
+COMMENT : '//' .* '\n' -> channel(HIDDEN);
+COMMENTMULTILINE : '/*' .* '*/' -> channel(HIDDEN);
 
 // handle characters which failed to match any other token
 ErrorCharacter : . ;

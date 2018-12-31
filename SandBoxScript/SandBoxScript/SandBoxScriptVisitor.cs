@@ -55,9 +55,20 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) {
-            Console.WriteLine(context.ToStringTree());
+            return null;
+        }
 
-            return base.VisitFunctionStatement(context);
+        public override BaseValue VisitReturnStatement(SandBoxScriptParser.ReturnStatementContext context) {
+            var fnCtx = context.Statement;
+            var expression = context.expression();
+
+            if (expression != null) {
+                var returnValue = Visit(context.expression());
+
+                fnCtx.ReturnValue = returnValue;
+            }
+
+            return null;
         }
 
         public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {
@@ -91,6 +102,10 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
+            //Console.WriteLine(context.name().GetText() + " " + context.name().variable.Value + " " + context.name().variable.GetHashCode());
+
+            //System.Console.WriteLine($"Value of {context.GetText()}: {context.name().variable.Value}");
+
             return context.name().variable.Value;
         }
 
@@ -196,7 +211,7 @@ namespace SandBoxScript {
             }
 
             if (result is InvalidOperation) {
-                throw new InvalidOperationException($"No such operation: {left.Name} {operationName} {right.Name}");
+                throw new InvalidOperationException($"No such operation: {left?.Name ?? "null"} {operationName} {right?.Name ?? "null"}");
             }
 
             return (BaseValue)result;
@@ -215,7 +230,11 @@ namespace SandBoxScript {
                 arguments[i] = Visit(context.Arguments.expression(i));
             }
 
-            return ((FunctionInstance)function).Function.Run(_engine, null, new Arguments(arguments));
+            var args = new Arguments(arguments);
+
+            var returnValue = (function as FunctionInstance).Function.Run(_engine, null, args);
+
+            return returnValue;
         }
     }
 }

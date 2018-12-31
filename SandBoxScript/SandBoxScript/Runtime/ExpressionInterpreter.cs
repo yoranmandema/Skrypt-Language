@@ -18,11 +18,11 @@ namespace SandBoxScript.Runtime {
             }
 
             if (left is StringInstance) {
-                return _engine.CreateString(((StringInstance)left).Value + right.ToString());
+                return _engine.CreateString(((StringInstance)left).Value + right);
             }
 
             if (right is StringInstance) {
-                return _engine.CreateString(left.ToString() + ((StringInstance)right).Value);
+                return _engine.CreateString(left + ((StringInstance)right).Value);
             }
 
             if (left is VectorInstance && right is VectorInstance) {

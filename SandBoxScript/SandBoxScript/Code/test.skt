@@ -1,7 +1,10 @@
-﻿a = 1
+﻿fn factorial(n, x = 2) {
+	print(x)
 
-print(a)
+	if (n <= 1)
+		return n
+	else
+		return n * factorial(n - 1)
+}
 
-a = 3
-
-print(a)
+print(factorial(6))
