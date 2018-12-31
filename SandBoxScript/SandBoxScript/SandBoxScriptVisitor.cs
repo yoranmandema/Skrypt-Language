@@ -141,7 +141,7 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
-            return _engine.Scope.GetVariable(context.NAME().GetText());
+            return _engine.Scope.GetVariable(context.name().GetText());
         }
 
         public override BaseValue VisitBinaryOperationExp(SandBoxScriptParser.BinaryOperationExpContext context) {

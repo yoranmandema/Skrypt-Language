@@ -2,7 +2,10 @@ grammar SandBoxScript;
 
 program				: block EOF ;
 
-block				: (
+block				locals [
+					List<string> symbols = new List<string>()
+					]
+					: (
 					importStmnt
 					| ifStmnt
 					| fnStmnt 
@@ -15,24 +18,10 @@ stmntBlock			: '{' Block=block '}'
 					| expression
 					;
 
-fnBlock				: (
-					importStmnt
-					| ifStmnt
-					| fnStmnt 
-					| returnStmnt
-					| assignStmnt
-					| expression
-					)*
-					;
-
-fnStmntBlock		: '{' Block=fnBlock '}'
-					| expression
-					;
-
 importStmnt			: IMPORT Target=expression																					#importStatement
 					;
 
-fnStmnt				: FN NAME '(' parameterGroup ')' fnStmntBlock																#functionStatement
+fnStmnt				: FN NAME '(' parameterGroup ')' stmntBlock																	#functionStatement
 					;											
 
 returnStmnt			: RETURN expression?																						#returnStatement
@@ -54,9 +43,9 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 else				: ELSE stmntBlock																			
 					;
 
-assignStmnt			: NAME								ASSIGN expression														#assignNameStatement
-					| memberAccess						ASSIGN expression														#assignMemberStatement
-					| memberAccessComp					ASSIGN expression														#assignComputedMemberStatement
+assignStmnt			: NAME	{$block::symbols.Add($NAME.text);}			ASSIGN expression										#assignNameStatement
+					| memberAccess										ASSIGN expression										#assignMemberStatement
+					| memberAccessComp									ASSIGN expression										#assignComputedMemberStatement					
 					;
 
 expression          : '(' expression ')'																						#parenthesisExp
@@ -71,13 +60,37 @@ expression          : '(' expression ')'																						#parenthesisExp
                     |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
                     |					Left=expression Operation=(EQUAL|NOTEQUAL)					Right=expression			#binaryOperationExp
 
-					| NAME																										#nameExp
+					| name																										#nameExp
                     | number																									#numberLiteral
 					| string																									#stringLiteral
 					| vector2																									#vector2Literal
 					| vector3																									#vector3Literal
 					| vector4																									#vector4Literal
                     ;
+
+name				: NAME	{
+RuleContext currentContext = $ctx;
+bool exists = false;
+
+while (currentContext.Parent != null) {
+	System.Console.WriteLine(currentContext.GetType());	
+
+	if (currentContext is BlockContext blockCtx) {
+		System.Console.WriteLine(blockCtx.symbols);	
+
+		if (blockCtx.symbols.Contains($NAME.text)) {
+			exists = true;
+			break;
+		}
+	}
+
+	currentContext = currentContext.Parent;
+}
+											  
+if (!exists) {
+	System.Console.WriteLine("undefined variable: "+$NAME.text);
+}
+} ;
 
 memberAccess		: expression DOT NAME ;
 memberAccessComp	: expression '[' expression ']' ;

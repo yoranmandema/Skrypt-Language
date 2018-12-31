@@ -1,6 +1,3 @@
 ﻿
-return
 
-fn a () {
-	return 1
-}
+a = b
