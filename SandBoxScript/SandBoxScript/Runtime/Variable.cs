@@ -13,5 +13,10 @@ namespace SandBoxScript {
             Name = name;
             Value = default(BaseValue);
         }
+
+        public Variable(string name, BaseValue value) : this(name){
+            Name = name;
+            Value = value;
+        }
     }
 }

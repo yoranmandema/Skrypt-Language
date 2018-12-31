@@ -43,9 +43,14 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 else				: ELSE stmntBlock																			
 					;
 
-assignStmnt			: NAME	{
-if (!$block::Variables.ContainsKey($NAME.text)) {
-	$block::Variables[$NAME.text] = new SandBoxScript.Variable($NAME.text);
+assignStmnt			: name	{
+var nameCtx = ($ctx as AssignNameStatementContext).name();
+
+if (nameCtx.variable == null) {
+	var newVar = new SandBoxScript.Variable(nameCtx.GetText());
+
+	$block::Variables[nameCtx.GetText()] = newVar;
+	nameCtx.variable = newVar;
 }
 }			
 																		ASSIGN expression										#assignNameStatement
@@ -65,7 +70,17 @@ expression          : '(' expression ')'																						#parenthesisExp
                     |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
                     |					Left=expression Operation=(EQUAL|NOTEQUAL)					Right=expression			#binaryOperationExp
 
-					| name																										#nameExp
+					| name {
+var nameCtx = ($ctx as NameExpContext).name();
+
+if (nameCtx.variable == null) {
+	if (this.Globals.ContainsKey(nameCtx.GetText())) {
+		nameCtx.variable = this.Globals[nameCtx.GetText()];
+	} else {
+		throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
+	}
+}																								
+}																																#nameExp
                     | number																									#numberLiteral
 					| string																									#stringLiteral
 					| vector2																									#vector2Literal
@@ -75,14 +90,11 @@ expression          : '(' expression ')'																						#parenthesisExp
 
 name returns [SandBoxScript.Variable variable] : NAME 	{
 RuleContext currentContext = $ctx;
-bool exists = false;
 
 while (currentContext.Parent != null) {
 
 	if (currentContext is BlockContext blockCtx) {
 		if (blockCtx.Variables.ContainsKey($NAME.text)) {
-			exists = true;
-
 			$variable = blockCtx.Variables[$NAME.text];
 			break;
 		}
@@ -90,10 +102,7 @@ while (currentContext.Parent != null) {
 
 	currentContext = currentContext.Parent;
 }
-											  
-if (!exists) {
-	throw new RecognitionException("Undefined variable: " + $NAME.text, this, this._input, $ctx);
-}
+
 } ;
 
 memberAccess		: expression DOT NAME ;

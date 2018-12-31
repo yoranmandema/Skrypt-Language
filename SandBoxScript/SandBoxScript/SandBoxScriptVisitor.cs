@@ -61,7 +61,7 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {
-            _engine.Scope.SetVariable(context.NAME().GetText(), Visit(context.expression()));
+            context.name().variable.Value = Visit(context.expression());
 
             return null;
         }
@@ -88,6 +88,10 @@ namespace SandBoxScript {
             } else {
                 return val;
             }
+        }
+
+        public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
+            return context.name().variable.Value;
         }
 
         public override BaseValue VisitNumberLiteral(SandBoxScriptParser.NumberLiteralContext context) {
@@ -138,10 +142,6 @@ namespace SandBoxScript {
 
         public override BaseValue VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
             return Visit(context.expression());
-        }
-
-        public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
-            return _engine.Scope.GetVariable(context.name().GetText());
         }
 
         public override BaseValue VisitBinaryOperationExp(SandBoxScriptParser.BinaryOperationExpContext context) {

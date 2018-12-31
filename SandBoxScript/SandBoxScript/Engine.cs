@@ -31,6 +31,9 @@ namespace SandBoxScript {
         internal VectorObject Vector;
         internal VectorConstructor VectorConstructor;
 
+        internal SandBoxScriptParser.ProgramContext ProgramContext;
+        internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
+
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
@@ -48,28 +51,39 @@ namespace SandBoxScript {
             Vector                  = new VectorObject(this);
         }
 
-        public BaseValue Run (string code) {
-            var inputStream         = new AntlrInputStream(code);
-            var sandBoxScriptLexer  = new SandBoxScriptLexer(inputStream);
+        public BaseValue Run(string code) {
+            var inputStream = new AntlrInputStream(code);
+            var sandBoxScriptLexer = new SandBoxScriptLexer(inputStream);
             sandBoxScriptLexer.AddErrorListener(new LexingErrorListener());
 
-            var commonTokenStream   = new CommonTokenStream(sandBoxScriptLexer);
+            var commonTokenStream = new CommonTokenStream(sandBoxScriptLexer);
 
             Parser = new SandBoxScriptParser(commonTokenStream) {
                 ErrorHandler = new BailErrorStrategy()
             }
             ;
 
-            var context = Parser.program();
+            Parser.Globals = Globals;
+
+            ProgramContext = Parser.program();
+
             Visitor = new SandBoxScriptVisitor(this);
 
-            return Visitor.Visit(context);
+            return Visitor.Visit(ProgramContext);
+        }
+
+        internal void SetGlobal (string name, BaseValue value) {
+            if (Globals.ContainsKey(name)) {
+                Globals[name].Value = value;
+            } else {
+                Globals[name] = new Variable(name, value);
+            }
         }
 
         public BaseValue SetValue (string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 
-            Scope.SetVariable(name, val);
+            SetGlobal(name,val);
 
             return val;
         }

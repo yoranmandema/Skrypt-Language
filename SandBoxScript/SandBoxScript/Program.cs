@@ -11,6 +11,10 @@ using System.IO;
 namespace SandBoxScript {
     class Program {
         static void Main(string[] args){
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Code\\test.skt");
+
+            string input = File.ReadAllText(path);
+
             var engine = new Engine();
 
             engine.SetValue("print", (e, s, i) => {
@@ -18,10 +22,6 @@ namespace SandBoxScript {
 
                 return null;
             });
-
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Code\\test.skt");
-
-            string input = File.ReadAllText(path);
 
             Console.WriteLine(engine.Run(input));
 
