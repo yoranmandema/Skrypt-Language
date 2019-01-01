@@ -62,10 +62,10 @@ namespace SandBoxScript {
         }
 
         public override string ToString() {
-            var str = $"{Name}\n";
+            var str = $"{Name}";
 
             foreach (var kv in Members) {
-                str += $"{kv.Key}:\t{kv.Value.Value}\n";
+                str += $"\n{kv.Key}:\t{kv.Value.Value}";
             }
 
             return str;

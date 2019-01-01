@@ -16,9 +16,5 @@ namespace SandBoxScript {
         public FunctionInstance(Engine engine, ScriptFunction function) : base(engine) {
             Function = function;
         }
-
-        public override string ToString() {
-            return $"{Name}";
-        }
     }
 }
