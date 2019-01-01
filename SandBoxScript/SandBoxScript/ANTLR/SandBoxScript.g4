@@ -50,7 +50,8 @@ foreach (var m in target.Members) {
 
 fnStmnt				locals [
 					Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
-					BaseValue ReturnValue = null
+					BaseValue ReturnValue = null,
+					bool Returned = false
 					]
 					: FN name '(' parameterGroup ')' {
 var fnCtx = ($ctx as FunctionStatementContext);
@@ -103,7 +104,7 @@ while (currentContext.Parent != null) {
 }	
 
 if (functionStatementCtx == null) {
-	throw new RecognitionException("Return statement must be inside a function", this, this._input, $ctx);
+	throw new RecognitionException("Return statement must be inside a function.", this, this._input, $ctx);
 }
 }																																#returnStatement
 					;
@@ -111,6 +112,32 @@ if (functionStatementCtx == null) {
 parameterGroup		: (parameter (',' parameter)*)? ;								
 
 parameter			: NAME ('=' expression)?;
+
+whileStmnt			: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
+					;
+
+continueStmnt		locals [
+					RuleContext Statement
+					]
+					: RETURN expression? {
+RuleContext currentContext = $ctx;
+RuleContext loopCtx = null;
+
+while (currentContext.Parent != null) {
+	if (currentContext is WhileStatementContext whileCtx) {
+		loopCtx = currentContext;
+		$Statement = whileCtx;
+		break;
+	}
+
+	currentContext = currentContext.Parent;
+}	
+
+if (loopCtx == null) {
+	throw new RecognitionException("Continue statement must be inside a loop.", this, this._input, $ctx);
+}
+}																																#continueStatement
+					;
 
 ifStmnt				: if (elseif)* else?																						#ifStatement			
 					;
@@ -231,11 +258,12 @@ IMPORT					: 'import' ;
 IF						: 'if' ;
 ELSE					: 'else' ;
 FN						: 'fn' ;
+WHILE					: 'while' ;
 RETURN					: 'return' ;
 BREAK					: 'break' ;
 CONTINUE				: 'continue' ;
 
-KEYWORD					: (IMPORT | IF | ELSE | FN | RETURN | BREAK | CONTINUE) ;
+KEYWORD					: (IMPORT | IF | ELSE | FN | WHILE | RETURN | BREAK | CONTINUE) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;

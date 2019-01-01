@@ -64,8 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANTLR\ShouldVisitChildrenOverride.cs" />
     <Compile Include="ANTLR\LexingErrorListener.cs" />
-    <Compile Include="ANTLR\Parser.cs" />
+    <Compile Include="ANTLR\AdditionalParserFields.cs" />
     <Compile Include="ANTLR\ParsingErrorListener.cs" />
     <Compile Include="ANTLR\SandBoxScript.g4.lexer.cs">
       <DependentUpon>SandBoxScript.g4</DependentUpon>
@@ -93,6 +94,7 @@
     <Compile Include="Native\Function\Parameter.cs" />
     <Compile Include="Native\Function\ScriptFunction.cs" />
     <Compile Include="Native\Math\MathObject.cs" />
+    <Compile Include="Native\SkipValue.cs" />
     <Compile Include="Native\String\StringConstructor.cs" />
     <Compile Include="Native\String\StringInstance.cs" />
     <Compile Include="Native\String\StringObject.cs" />

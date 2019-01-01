@@ -16,14 +16,6 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) {
-            //var obj = Visit(context.Target);
-
-            //foreach (var m in obj.Members) {
-            //    var v = m.Value;
-
-            //    _engine.Scope.SetVariable(m.Key, v.Value);
-            //}
-
             return null;
         }
 
@@ -64,12 +56,14 @@ namespace SandBoxScript {
             var expression = context.expression();
 
             if (expression != null) {
-                var returnValue = Visit(context.expression());
+                var returnValue = Visit(expression);
 
                 fnCtx.ReturnValue = returnValue;
             }
 
-            return null;
+            fnCtx.Returned = true;
+
+            return new SkipValue(_engine);
         }
 
         public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {

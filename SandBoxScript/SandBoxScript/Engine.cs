@@ -57,7 +57,7 @@ namespace SandBoxScript {
             Visitor = new SandBoxScriptVisitor(this);
         }
 
-        public BaseValue Run(string code) {
+        public Engine Run(string code) {
             var inputStream = new AntlrInputStream(code);
             var sandBoxScriptLexer = new SandBoxScriptLexer(inputStream);
             sandBoxScriptLexer.AddErrorListener(new LexingErrorListener());
@@ -74,7 +74,9 @@ namespace SandBoxScript {
 
             ProgramContext = Parser.program();
 
-            return Visitor.Visit(ProgramContext);
+            Visitor.Visit(ProgramContext);
+
+            return this;
         }
 
         internal void SetGlobal (string name, BaseValue value) {
@@ -91,6 +93,16 @@ namespace SandBoxScript {
             SetGlobal(name,val);
 
             return val;
+        }
+
+        public BaseValue GetValue(string name) {
+            var block = ProgramContext.block();
+
+            if (block.Variables.ContainsKey(name)) {
+                return block.Variables[name].Value;
+            } else {
+                throw new VariableNotFoundException($"A variable with the name {name} was not found.");
+            }
         }
 
         public NumberInstance CreateNumber(double value) {

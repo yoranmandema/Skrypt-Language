@@ -39,7 +39,16 @@ namespace SandBoxScript {
             var returnValue = default(BaseValue);
                     
             if (block != null) {
-                engine.Visitor.Visit(block);
+                for (int i = 0; i < block.ChildCount; i++) {
+                    var c = block.GetChild(i);
+
+                    engine.Visitor.Visit(c);
+
+                    if (Context.Returned) {
+                        Context.Returned = false;
+                        break;
+                    }
+                }
 
                 returnValue = Context.ReturnValue;
             }
