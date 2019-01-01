@@ -240,6 +240,10 @@ namespace SandBoxScript {
                 result = _engine.CreateNumber((int)result);
             }
 
+            if (result is string) {
+                result = _engine.CreateString((string)result);
+            }
+
             if (result is InvalidOperation) {
                 throw new InvalidOperationException($"No such operation: {left?.Name ?? "null"} {operationName} {right?.Name ?? "null"}");
             }
