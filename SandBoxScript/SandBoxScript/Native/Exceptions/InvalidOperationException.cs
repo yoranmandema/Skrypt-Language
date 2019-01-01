@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
+    [Serializable]
     public class InvalidOperationException : Exception {
         public InvalidOperationException() : base() { }
         public InvalidOperationException(string message) : base(message) { }

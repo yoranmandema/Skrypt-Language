@@ -1,10 +1,9 @@
 ﻿fn factorial(n, x = 2) {
-	print(x)
-
 	if (n <= 1)
 		return n
 	else
 		return n * factorial(n - 1)
 }
 
+// this is a comment
 print(factorial(6))

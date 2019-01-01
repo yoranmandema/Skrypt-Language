@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
+    [Serializable]
     class InvalidTemplateTargetException : Exception {
         public InvalidTemplateTargetException() : base() { }
         public InvalidTemplateTargetException(string message) : base(message) { }

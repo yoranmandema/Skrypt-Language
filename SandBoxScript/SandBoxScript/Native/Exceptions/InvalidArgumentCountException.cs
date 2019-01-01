@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
+    [Serializable]
     public class InvalidArgumentCountException : Exception {
         public InvalidArgumentCountException() : base() { }
         public InvalidArgumentCountException(string message) : base(message) { }

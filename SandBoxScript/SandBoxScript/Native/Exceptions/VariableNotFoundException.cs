@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
+    [Serializable]
     internal class VariableNotFoundException : Exception {
         public VariableNotFoundException() : base() { }
         public VariableNotFoundException(string message) : base(message) { }

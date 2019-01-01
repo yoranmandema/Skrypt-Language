@@ -229,8 +229,11 @@ NUMBER              : DIGIT+ ('.' DIGIT+)?;
 
 WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
 
-COMMENT : '//' .* '\n' -> channel(HIDDEN);
-COMMENTMULTILINE : '/*' .* '*/' -> channel(HIDDEN);
-
+COMMENT
+: '/*' .*? '*/' -> skip
+;
+LINE_COMMENT
+: '//' ~[\r\n]* -> skip
+;
 // handle characters which failed to match any other token
 ErrorCharacter : . ;
