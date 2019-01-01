@@ -11,7 +11,7 @@ using SandBoxScript.Runtime;
 
 namespace SandBoxScript {
     public class Engine {
-        public Scope Scope { get; internal set; } = new Scope();
+        //public Scope Scope { get; internal set; } = new Scope();
 
         internal SandBoxScriptParser Parser;
         internal SandBoxScriptVisitor Visitor;
@@ -51,6 +51,8 @@ namespace SandBoxScript {
 
             VectorConstructor       = new VectorConstructor(this);
             Vector                  = new VectorObject(this);
+
+            Visitor = new SandBoxScriptVisitor(this);
         }
 
         public BaseValue Run(string code) {
@@ -69,8 +71,6 @@ namespace SandBoxScript {
             Parser.Globals = Globals;
 
             ProgramContext = Parser.program();
-
-            Visitor = new SandBoxScriptVisitor(this);
 
             return Visitor.Visit(ProgramContext);
         }

@@ -35,6 +35,14 @@ namespace SandBoxScript {
             return Members[name];
         }
 
+        public Member GetProperty(string name) {
+            if (!Members.ContainsKey(name)) {
+                throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
+            }
+
+            return Members[name];
+        }
+
         public T AsType<T>() where T : BaseValue {
             return (T)this;
         }

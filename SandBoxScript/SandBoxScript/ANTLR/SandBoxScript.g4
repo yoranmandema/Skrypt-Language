@@ -21,7 +21,31 @@ stmntBlock			: '{' Block=block '}'
 					| expression
 					;
 
-importStmnt			: IMPORT Target=expression																					#importStatement
+importStmnt			: IMPORT name (DOT NAME)*?	{
+
+var nameCtx = ($ctx as ImportStatementContext).name();
+var root = nameCtx.variable.Value;
+var target = root;
+
+var members = ($ctx as ImportStatementContext).NAME();
+
+foreach (var m in members) {
+	System.Console.WriteLine(m);
+
+	try {
+		target = target.GetProperty(m.GetText()).Value;
+	} catch (System.Exception e) {
+		throw new RecognitionException(e.Message, this, this._input, $ctx);
+	}
+}
+
+foreach (var m in target.Members) {
+    var v = m.Value;
+
+    $block::Variables[m.Key] = new SandBoxScript.Variable(m.Key,v.Value);
+}
+
+}																																#importStatement
 					;
 
 fnStmnt				locals [
@@ -84,7 +108,7 @@ if (functionStatementCtx == null) {
 }																																#returnStatement
 					;
 
-parameterGroup		: (parameter (',' parameter)*)? ;							
+parameterGroup		: (parameter (',' parameter)*)? ;								
 
 parameter			: NAME ('=' expression)?;
 
@@ -213,46 +237,44 @@ CONTINUE				: 'continue' ;
 
 KEYWORD					: (IMPORT | IF | ELSE | FN | RETURN | BREAK | CONTINUE) ;
 
-LESS				: '<'	;
-LESSEQ				: '<='	;
-GREATER				: '>'	;
-GREATEREQ			: '>='	;
-EQUAL				: '=='	;
-NOTEQUAL			: '!='	;
+LESS					: '<'	;
+LESSEQ					: '<='	;
+GREATER					: '>'	;
+GREATEREQ				: '>='	;
+EQUAL					: '=='	;
+NOTEQUAL				: '!='	;
 
-AND					: 'and' ;
-OR					: 'or' ;
+AND						: 'and' ;
+OR						: 'or' ;
 
-ASSIGN	            : '='	;
+ASSIGN					: '='	;
 
-ASTERISK            : '*'	;
-SLASH               : '/'	;
-PLUS                : '+'	;
-MINUS               : '-'	;
-EXPONENT            : '**'	;
+ASTERISK				: '*'	;
+SLASH					: '/'	;
+PLUS					: '+'	;
+MINUS					: '-'	;
+EXPONENT				: '**'	;
 
-BITAND				: '&' ;
-BITOR				: '^' ;
-BITXOR				: '|' ; 
+BITAND					: '&' ;
+BITOR					: '^' ;
+BITXOR					: '|' ; 
 
-INCREMENT			: '++'	;
-DECREMENT			: '--'	;
+INCREMENT				: '++'	;
+DECREMENT				: '--'	;
 
-BOOLEAN				: TRUE | FALSE ;
+BOOLEAN					: TRUE | FALSE ;
 
-NAME				: LETTER (LETTER | DIGIT)*;
+NAME					: LETTER (LETTER | DIGIT)*;
 
-NUMBER              : DIGIT+ ('.' DIGIT+)?;
+NUMBER					: DIGIT+ ('.' DIGIT+)?;
 
-STRING : '"' ~('"')* ('"' | {throw new Antlr4.Runtime.Misc.ParseCanceledException("Unterminated string detected");}) ;
+STRING					: '"' ~('"')* ('"' | {throw new Antlr4.Runtime.Misc.ParseCanceledException("Unterminated string detected");}) ;
 
-WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
+WHITESPACE				: [ \n\t\r]+ -> channel(HIDDEN);
 
-COMMENT
-: '/*' .*? '*/' -> skip
-;
-LINE_COMMENT
-: '//' ~[\r\n]* -> skip
-;
+COMMENT					: '/*' .*? '*/' -> skip ;
+
+LINE_COMMENT			: '//' ~[\r\n]* -> skip ;
+
 // handle characters which failed to match any other token
 ErrorCharacter : . ;

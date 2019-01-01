@@ -11,7 +11,7 @@ namespace SandBoxScript {
 
             GetProperties(template.Members);
 
-            engine.Scope.Variables[template.Name] = this;
+            engine.SetGlobal(template.Name,this);
         }
     }
 }

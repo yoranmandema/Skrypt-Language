@@ -15,13 +15,13 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) {
-            var obj = Visit(context.Target);
+            //var obj = Visit(context.Target);
 
-            foreach (var m in obj.Members) {
-                var v = m.Value;
+            //foreach (var m in obj.Members) {
+            //    var v = m.Value;
 
-                _engine.Scope.SetVariable(m.Key, v.Value);
-            }
+            //    _engine.Scope.SetVariable(m.Key, v.Value);
+            //}
 
             return null;
         }
