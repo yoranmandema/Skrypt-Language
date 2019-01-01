@@ -118,7 +118,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateLessExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return ((NumberInstance)left).Value < ((NumberInstance)right).Value;
+                return _engine.CreateBoolean(((NumberInstance)left).Value < ((NumberInstance)right).Value);
             }
 
             return new InvalidOperation();
@@ -126,7 +126,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateLessEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return ((NumberInstance)left).Value <= ((NumberInstance)right).Value;
+                return _engine.CreateBoolean(((NumberInstance)left).Value <= ((NumberInstance)right).Value);
             }
 
             return new InvalidOperation();
@@ -134,7 +134,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateGreaterExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return ((NumberInstance)left).Value > ((NumberInstance)right).Value;
+                return _engine.CreateBoolean(((NumberInstance)left).Value > ((NumberInstance)right).Value);
             }
 
             return new InvalidOperation();
@@ -142,7 +142,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateGreaterEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return ((NumberInstance)left).Value >= ((NumberInstance)right).Value;
+                return _engine.CreateBoolean(((NumberInstance)left).Value >= ((NumberInstance)right).Value);
             }
 
             return new InvalidOperation();
@@ -150,13 +150,13 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return ((NumberInstance)left).Value == ((NumberInstance)right).Value;
+                return _engine.CreateBoolean(((NumberInstance)left).Value == ((NumberInstance)right).Value);
             }
             else if (left is StringInstance && right is StringInstance) {
-                return ((StringInstance)left).Value == ((StringInstance)right).Value;
+                return _engine.CreateBoolean(((StringInstance)left).Value == ((StringInstance)right).Value);
             }
             else if (left is BooleanInstance && right is BooleanInstance) {
-                return ((BooleanInstance)left).Value == ((BooleanInstance)right).Value;
+                return _engine.CreateBoolean(((BooleanInstance)left).Value == ((BooleanInstance)right).Value);
             }
             else {
                 return left == right;
@@ -165,17 +165,57 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateNotEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return ((NumberInstance)left).Value != ((NumberInstance)right).Value;
+                return _engine.CreateBoolean(((NumberInstance)left).Value != ((NumberInstance)right).Value);
             }
             else if (left is StringInstance && right is StringInstance) {
-                return ((StringInstance)left).Value != ((StringInstance)right).Value;
+                return _engine.CreateBoolean(((StringInstance)left).Value != ((StringInstance)right).Value);
             }
             else if (left is BooleanInstance && right is BooleanInstance) {
-                return ((BooleanInstance)left).Value != ((BooleanInstance)right).Value;
+                return _engine.CreateBoolean(((BooleanInstance)left).Value != ((BooleanInstance)right).Value);
             }
             else {
                 return left != right;
             }
+        }
+
+        public object EvaluateAndExpression(BaseValue left, BaseValue right) {
+            if (left is BooleanInstance && right is BooleanInstance) {
+                return _engine.CreateBoolean(((BooleanInstance)left).Value && ((BooleanInstance)right).Value);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateOrExpression(BaseValue left, BaseValue right) {
+            if (left is BooleanInstance && right is BooleanInstance) {
+                return _engine.CreateBoolean(((BooleanInstance)left).Value && ((BooleanInstance)right).Value);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateBitAndExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return _engine.CreateNumber((int)((NumberInstance)left).Value & (int)((NumberInstance)right).Value);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateBitXOrExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return _engine.CreateNumber((int)((NumberInstance)left).Value ^ (int)((NumberInstance)right).Value);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateBitOrExpression(BaseValue left, BaseValue right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return _engine.CreateNumber((int)((NumberInstance)left).Value | (int)((NumberInstance)right).Value);
+            }
+
+            return new InvalidOperation();
         }
     }
 }

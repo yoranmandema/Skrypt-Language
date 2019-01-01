@@ -102,10 +102,6 @@ namespace SandBoxScript {
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
-            //Console.WriteLine(context.name().GetText() + " " + context.name().variable.Value + " " + context.name().variable.GetHashCode());
-
-            //System.Console.WriteLine($"Value of {context.GetText()}: {context.name().variable.Value}");
-
             return context.name().variable.Value;
         }
 
@@ -113,6 +109,13 @@ namespace SandBoxScript {
             var value = context.number().value;
             var num = _engine.CreateNumber(value);
             return num;
+        }
+
+        public override BaseValue VisitBooleanLiteral(SandBoxScriptParser.BooleanLiteralContext context) {
+            var value = context.boolean().value;
+
+            var boolean = _engine.CreateBoolean(value);
+            return boolean;
         }
 
         public override BaseValue VisitStringLiteral(SandBoxScriptParser.StringLiteralContext context) {
@@ -203,6 +206,21 @@ namespace SandBoxScript {
                     break;
                 case "!=":
                     result = _engine.expressionInterpreter.EvaluateNotEqualExpression(left, right);
+                    break;
+                case "and":
+                    result = _engine.expressionInterpreter.EvaluateAndExpression(left, right);
+                    break;
+                case "or":
+                    result = _engine.expressionInterpreter.EvaluateOrExpression(left, right);
+                    break;
+                case "&":
+                    result = _engine.expressionInterpreter.EvaluateBitAndExpression(left, right);
+                    break;
+                case "^":
+                    result = _engine.expressionInterpreter.EvaluateBitXOrExpression(left, right);
+                    break;
+                case "|":
+                    result = _engine.expressionInterpreter.EvaluateBitOrExpression(left, right);
                     break;
             }
 

@@ -10,4 +10,4 @@
 	print("After: " + n)
 }
 
-print(factorial(6))
+print(true and false)

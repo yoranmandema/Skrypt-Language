@@ -127,6 +127,15 @@ expression          : '(' expression ')'																						#parenthesisExp
                     |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
                     |					Left=expression Operation=(EQUAL|NOTEQUAL)					Right=expression			#binaryOperationExp
 
+					|					Left=expression Operation=AND	Right=expression										#binaryOperationExp
+                    |					Left=expression Operation=OR	Right=expression										#binaryOperationExp
+
+                    | number																									#numberLiteral
+					| string																									#stringLiteral
+					| boolean																									#booleanLiteral
+					| vector2																									#vector2Literal
+					| vector3																									#vector3Literal
+					| vector4																									#vector4Literal
 					| name {
 var nameCtx = ($ctx as NameExpContext).name();
 
@@ -134,11 +143,6 @@ if (nameCtx.variable == null) {
 	throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
 }																								
 }																																#nameExp
-                    | number																									#numberLiteral
-					| string																									#stringLiteral
-					| vector2																									#vector2Literal
-					| vector3																									#vector3Literal
-					| vector4																									#vector4Literal
                     ;
 
 name returns [SandBoxScript.Variable variable] : NAME 	{
@@ -181,6 +185,10 @@ number returns [double value] : NUMBER {
 $value = double.Parse($NUMBER.text); 
 } ;
 
+boolean returns [bool value] : BOOLEAN { 
+$value = $BOOLEAN.text == "true" ? true : false; 
+} ;
+
 vector2				:	'<' X=expression ',' Y=expression '>' ;
 vector3				:	'<' X=expression ',' Y=expression ',' Z=expression '>' ;
 vector4				:	'<' X=expression ',' Y=expression ',' Z=expression ',' W=expression'>' ;
@@ -190,6 +198,8 @@ expressionGroup		: (expression (',' expression)*)? ;
 fragment LETTER			: [a-zA-Z] ;
 fragment DIGIT			: [0-9] ;
 fragment ESCAPED_QUOTE	: '\\"';
+fragment TRUE			: 'true';
+fragment FALSE			: 'false';
 
 DOT						: '.' ;
 
@@ -203,14 +213,15 @@ CONTINUE				: 'continue' ;
 
 KEYWORD					: (IMPORT | IF | ELSE | FN | RETURN | BREAK | CONTINUE) ;
 
-STRING : '"' ~('"')* ('"' | {throw new Antlr4.Runtime.Misc.ParseCanceledException("Unterminated string detected");}) ;
-
 LESS				: '<'	;
 LESSEQ				: '<='	;
 GREATER				: '>'	;
 GREATEREQ			: '>='	;
 EQUAL				: '=='	;
 NOTEQUAL			: '!='	;
+
+AND					: 'and' ;
+OR					: 'or' ;
 
 ASSIGN	            : '='	;
 
@@ -220,12 +231,20 @@ PLUS                : '+'	;
 MINUS               : '-'	;
 EXPONENT            : '**'	;
 
+BITAND				: '&' ;
+BITOR				: '^' ;
+BITXOR				: '|' ; 
+
 INCREMENT			: '++'	;
 DECREMENT			: '--'	;
+
+BOOLEAN				: TRUE | FALSE ;
 
 NAME				: LETTER (LETTER | DIGIT)*;
 
 NUMBER              : DIGIT+ ('.' DIGIT+)?;
+
+STRING : '"' ~('"')* ('"' | {throw new Antlr4.Runtime.Misc.ParseCanceledException("Unterminated string detected");}) ;
 
 WHITESPACE : [ \n\t\r]+ -> channel(HIDDEN);
 
