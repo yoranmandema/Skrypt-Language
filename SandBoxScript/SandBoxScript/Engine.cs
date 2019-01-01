@@ -31,10 +31,10 @@ namespace SandBoxScript {
         internal VectorObject Vector;
         internal VectorConstructor VectorConstructor;
 
+        internal MathObject Math;
+
         internal SandBoxScriptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
-
-
 
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
@@ -51,6 +51,8 @@ namespace SandBoxScript {
 
             VectorConstructor       = new VectorConstructor(this);
             Vector                  = new VectorObject(this);
+
+            Math                    = new MathObject(this);
 
             Visitor = new SandBoxScriptVisitor(this);
         }

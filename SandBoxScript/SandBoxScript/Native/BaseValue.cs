@@ -35,6 +35,12 @@ namespace SandBoxScript {
             return Members[name];
         }
 
+        public Member CreateProperty(string name, BaseValue value) {
+            Members[name] = new Member(value);
+
+            return Members[name];
+        }
+
         public Member GetProperty(string name) {
             if (!Members.ContainsKey(name)) {
                 throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");

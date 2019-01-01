@@ -79,6 +79,7 @@
     <Compile Include="Native\Boolean\BooleanConstructor.cs" />
     <Compile Include="Native\Boolean\BooleanInstance.cs" />
     <Compile Include="Native\Boolean\BooleanObject.cs" />
+    <Compile Include="Native\Exceptions\InvalidArgumentTypeException.cs" />
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
     <Compile Include="Native\BaseValue.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Native\Folder\GetPropertyInstance.cs" />
     <Compile Include="Native\Function\Parameter.cs" />
     <Compile Include="Native\Function\ScriptFunction.cs" />
+    <Compile Include="Native\Math\MathObject.cs" />
     <Compile Include="Native\String\StringConstructor.cs" />
     <Compile Include="Native\String\StringInstance.cs" />
     <Compile Include="Native\String\StringObject.cs" />

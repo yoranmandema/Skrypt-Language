@@ -21,5 +21,15 @@ namespace SandBoxScript {
                 }
             }
         }
+
+        public T GetAs<T> (int i) where T : BaseValue {
+            var value = this[i];
+
+            if (value is T) {
+                return value as T;
+            } else {
+                throw new InvalidArgumentTypeException($"Expected argument with type {value.GetType()}, expected {typeof(T).Name}");
+            }
+        }
     }
 }

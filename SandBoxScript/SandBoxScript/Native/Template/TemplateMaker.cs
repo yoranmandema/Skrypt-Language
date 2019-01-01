@@ -38,9 +38,7 @@ namespace SandBoxScript {
                     function = new GetPropertyInstance(_engine, getPropertyDelegate);
                 }
 
-                template.Members[m.Name] = new Member {
-                    Value = function
-                };
+                template.Members[m.Name] = new Member(function);
             }
 
             return template;

@@ -7,5 +7,9 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public class Member {
         public BaseValue Value;
+
+        public Member (BaseValue v) {
+            Value = v;
+        }
     }
 }
