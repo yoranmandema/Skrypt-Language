@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public class BooleanInstance : BaseInstance {
         public override string Name => "Boolean";
+        public override bool CopyOnAssignment => true;
 
         public bool Value { get; set; }
 

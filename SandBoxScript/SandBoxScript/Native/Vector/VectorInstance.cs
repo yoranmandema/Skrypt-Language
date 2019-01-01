@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public class VectorInstance : BaseInstance {
+        public override bool CopyOnAssignment => true;
+
         internal double[] Components;
 
         public VectorInstance(Engine engine) : base(engine) { }

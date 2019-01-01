@@ -224,9 +224,11 @@ namespace SandBoxScript {
                 throw new Exception("Called object is not a function!");
             }
 
-            var arguments = new BaseValue[context.Arguments.expression().Length];
+            var length = context.Arguments.expression().Length;
 
-            for (var i = 0; i < context.Arguments.expression().Length; i++) {
+            var arguments = new BaseValue[length];
+
+            for (var i = 0; i < length; i++) {
                 arguments[i] = Visit(context.Arguments.expression(i));
             }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public class StringInstance : BaseInstance {
         public override string Name => "String";
+        public override bool CopyOnAssignment => true;
 
         public string Value { get; set; }
 

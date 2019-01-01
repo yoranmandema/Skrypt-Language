@@ -12,8 +12,6 @@ namespace SandBoxScript {
         internal SandBoxScriptParser.FunctionStatementContext Context;
         internal Parameter[] Parameters;
 
-        internal bool wasCalled = false;
-
         public ScriptFunction(SandBoxScriptParser.FunctionStatementContext block) {
             Context = block;
         }
@@ -22,6 +20,7 @@ namespace SandBoxScript {
             var blockStmnt = Context.stmntBlock();
             var block = blockStmnt.block();
             var expr = blockStmnt.expression();
+            var preCallValues = new Dictionary<string, BaseValue>();
 
             for (int i = 0; i < Parameters.Length; i++) {
                 var parameter = Parameters[i];
@@ -31,8 +30,10 @@ namespace SandBoxScript {
                     Context.ParameterVariables[parameter.Name].Value = input;
                 }
                 else {
-                    Context.ParameterVariables[parameter.Name].Value = parameter.Default == null ? engine.CreateNumber(1) : engine.Visitor.Visit(parameter.Default);
+                    Context.ParameterVariables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
                 }
+
+                preCallValues[parameter.Name] = Context.ParameterVariables[parameter.Name].Value.Clone();
             }
 
             var returnValue = default(BaseValue);
@@ -46,7 +47,11 @@ namespace SandBoxScript {
                 returnValue = engine.Visitor.Visit(expr);
             }
 
-            wasCalled = true;
+            foreach (var v in Context.ParameterVariables) {
+                if (preCallValues[v.Key].CopyOnAssignment) {
+                    Context.ParameterVariables[v.Key].Value = preCallValues[v.Key];
+                }
+            }
 
             return returnValue;
         }

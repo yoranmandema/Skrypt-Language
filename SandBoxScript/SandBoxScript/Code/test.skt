@@ -1,9 +1,13 @@
-﻿fn factorial(n, x = 2) {
-	if (n <= 1)
-		return n
-	else
-		return n * factorial(n - 1)
+﻿fn factorial(n, x = 0) {
+	print("Before: " + n)
+
+	if (x == 0) {
+		factorial(n, 1)
+	} else {
+		n = 1
+	}
+
+	print("After: " + n)
 }
 
-// this is a comment
 print(factorial(6))

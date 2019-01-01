@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public class BaseValue {
         public virtual string Name { get; set; }
+        public virtual bool CopyOnAssignment { get; set; }
 
         public Engine Engine { get; set; }
         public Dictionary<string, Member> Members = new Dictionary<string, Member>();
@@ -40,6 +41,10 @@ namespace SandBoxScript {
 
         public virtual bool IsTrue () {
             return true;
+        }
+
+        public BaseValue Clone() {
+            return (BaseValue)MemberwiseClone();
         }
 
         public override string ToString() {
