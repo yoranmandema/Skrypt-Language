@@ -65,7 +65,7 @@ namespace SandBoxScript {
             var str = $"{Name}\n";
 
             foreach (var kv in Members) {
-                str += $"{kv.Key}: {kv.Value}\n";
+                str += $"{kv.Key}:\t{kv.Value.Value}\n";
             }
 
             return str;

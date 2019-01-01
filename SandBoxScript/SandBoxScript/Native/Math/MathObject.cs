@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace SandBoxScript {
     public class MathObject : BaseObject {
+        public override string Name => "Math";
+
         public MathObject(Engine engine) : base(engine) {
             CreateProperty("PI", engine.CreateNumber(Math.PI));
             CreateProperty("E", engine.CreateNumber(Math.E));
