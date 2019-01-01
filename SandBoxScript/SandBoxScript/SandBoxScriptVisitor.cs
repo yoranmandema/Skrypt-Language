@@ -9,6 +9,7 @@ using SandBoxScript.Runtime;
 namespace SandBoxScript {
     public partial class SandBoxScriptVisitor : SandBoxScriptBaseVisitor<BaseValue> {
         private readonly Engine _engine;
+        private BaseValue accessed;
 
         public SandBoxScriptVisitor (Engine engine) {
             _engine = engine;
@@ -91,14 +92,17 @@ namespace SandBoxScript {
             var memberName = context.NAME().GetText();
 
             var val = obj.Members[memberName].Value;
+            
 
             if (val is GetPropertyInstance) {
                 var newVal = (val as GetPropertyInstance).Property.Run(_engine, obj);
 
-                return newVal;
+                accessed = newVal;
             } else {
-                return val;
+                accessed = val;
             }
+
+            return accessed;
         }
 
         public override BaseValue VisitNameExp(SandBoxScriptParser.NameExpContext context) {
@@ -228,6 +232,14 @@ namespace SandBoxScript {
                 result = _engine.CreateBoolean((bool)result);
             }
 
+            if (result is double) {
+                result = _engine.CreateNumber((double)result);
+            }
+
+            if (result is int) {
+                result = _engine.CreateNumber((int)result);
+            }
+
             if (result is InvalidOperation) {
                 throw new InvalidOperationException($"No such operation: {left?.Name ?? "null"} {operationName} {right?.Name ?? "null"}");
             }
@@ -252,7 +264,7 @@ namespace SandBoxScript {
 
             var args = new Arguments(arguments);
 
-            var returnValue = (function as FunctionInstance).Function.Run(_engine, null, args);
+            var returnValue = (function as FunctionInstance).Function.Run(_engine, accessed, args);
 
             return returnValue;
         }

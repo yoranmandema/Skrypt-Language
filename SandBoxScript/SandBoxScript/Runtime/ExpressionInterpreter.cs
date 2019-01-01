@@ -14,7 +14,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluatePlusExpression (BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((NumberInstance)left + (NumberInstance)right);
+                return (left as NumberInstance) + (right as NumberInstance);
             }
 
             if (left is StringInstance) {
@@ -42,7 +42,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateSubtractExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((NumberInstance)left - (NumberInstance)right);
+                return (left as NumberInstance) - (right as NumberInstance);
             }
 
             if (left is VectorInstance && right is VectorInstance) {
@@ -58,7 +58,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateMultiplyExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((NumberInstance)left * (NumberInstance)right);
+                return (left as NumberInstance) * (right as NumberInstance);
             }
 
             if (left is VectorInstance && right is VectorInstance) {
@@ -78,7 +78,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateDivideExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((NumberInstance)left / (NumberInstance)right);
+                return (left as NumberInstance) / (right as NumberInstance);
             }
 
             if (left is VectorInstance && right is VectorInstance) {
@@ -94,7 +94,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateRemainderExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((NumberInstance)left % (NumberInstance)right);
+                return (left as NumberInstance) % (right as NumberInstance);
             }
 
             if (left is VectorInstance && right is VectorInstance) {
@@ -110,7 +110,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateExponentExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber(Math.Pow((NumberInstance)left, (NumberInstance)right));
+                return Math.Pow(left as NumberInstance, right as NumberInstance);
             }
 
             return new InvalidOperation();
@@ -118,7 +118,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateLessExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateBoolean(((NumberInstance)left).Value < ((NumberInstance)right).Value);
+                return (left as NumberInstance).Value < (right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
@@ -126,7 +126,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateLessEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateBoolean(((NumberInstance)left).Value <= ((NumberInstance)right).Value);
+                return (left as NumberInstance).Value <= (right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
@@ -134,7 +134,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateGreaterExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateBoolean(((NumberInstance)left).Value > ((NumberInstance)right).Value);
+                return (left as NumberInstance).Value > (right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
@@ -142,7 +142,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateGreaterEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateBoolean(((NumberInstance)left).Value >= ((NumberInstance)right).Value);
+                return (left as NumberInstance).Value >= (right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
@@ -150,13 +150,13 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateBoolean(((NumberInstance)left).Value == ((NumberInstance)right).Value);
+                return (left as NumberInstance).Value == (right as NumberInstance).Value;
             }
             else if (left is StringInstance && right is StringInstance) {
-                return _engine.CreateBoolean(((StringInstance)left).Value == ((StringInstance)right).Value);
+                return (left as StringInstance).Value == (right as StringInstance).Value;
             }
             else if (left is BooleanInstance && right is BooleanInstance) {
-                return _engine.CreateBoolean(((BooleanInstance)left).Value == ((BooleanInstance)right).Value);
+                return (left as BooleanInstance).Value == (right as BooleanInstance).Value;
             }
             else {
                 return left == right;
@@ -165,13 +165,13 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateNotEqualExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateBoolean(((NumberInstance)left).Value != ((NumberInstance)right).Value);
+                return (left as NumberInstance).Value != (right as NumberInstance).Value;
             }
             else if (left is StringInstance && right is StringInstance) {
-                return _engine.CreateBoolean(((StringInstance)left).Value != ((StringInstance)right).Value);
+                return (left as StringInstance).Value != (right as StringInstance).Value;
             }
             else if (left is BooleanInstance && right is BooleanInstance) {
-                return _engine.CreateBoolean(((BooleanInstance)left).Value != ((BooleanInstance)right).Value);
+                return (left as BooleanInstance).Value != (right as BooleanInstance).Value;
             }
             else {
                 return left != right;
@@ -180,7 +180,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateAndExpression(BaseValue left, BaseValue right) {
             if (left is BooleanInstance && right is BooleanInstance) {
-                return _engine.CreateBoolean(((BooleanInstance)left).Value && ((BooleanInstance)right).Value);
+                return (left as BooleanInstance).Value && (right as BooleanInstance).Value;
             }
 
             return new InvalidOperation();
@@ -188,7 +188,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateOrExpression(BaseValue left, BaseValue right) {
             if (left is BooleanInstance && right is BooleanInstance) {
-                return _engine.CreateBoolean(((BooleanInstance)left).Value && ((BooleanInstance)right).Value);
+                return (left as BooleanInstance).Value && (right as BooleanInstance).Value;
             }
 
             return new InvalidOperation();
@@ -196,7 +196,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateBitAndExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((int)((NumberInstance)left).Value & (int)((NumberInstance)right).Value);
+                return (int)(left as NumberInstance).Value & (int)(right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
@@ -204,7 +204,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateBitXOrExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((int)((NumberInstance)left).Value ^ (int)((NumberInstance)right).Value);
+                return (int)(left as NumberInstance).Value ^ (int)(right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
@@ -212,7 +212,7 @@ namespace SandBoxScript.Runtime {
 
         public object EvaluateBitOrExpression(BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
-                return _engine.CreateNumber((int)((NumberInstance)left).Value | (int)((NumberInstance)right).Value);
+                return (int)(left as NumberInstance).Value | (int)(right as NumberInstance).Value;
             }
 
             return new InvalidOperation();
