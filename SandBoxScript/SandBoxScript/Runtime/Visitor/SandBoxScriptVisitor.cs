@@ -15,8 +15,19 @@ namespace SandBoxScript {
             _engine = engine;
         }
 
-        public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) => null;
-        public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) => null;
+        public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) => DefaultResult;
+        public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) => DefaultResult;
+
+        public override BaseValue VisitModuleStatement(SandBoxScriptParser.ModuleStatementContext context) {
+
+            VisitChildren(context);
+
+            foreach (var kv in context.Variables) {
+                context.Module.Value.CreateProperty(kv.Key, kv.Value.Value);
+            }
+
+            return DefaultResult;
+        }
 
         public override BaseValue VisitWhileStatement(SandBoxScriptParser.WhileStatementContext context) {
             var block = context.stmntBlock().block();
@@ -109,7 +120,7 @@ namespace SandBoxScript {
                 Visit(context.@else().stmntBlock());
             }
 
-            return null;
+            return DefaultResult;
         }
 
         public override BaseValue VisitReturnStatement(SandBoxScriptParser.ReturnStatementContext context) {

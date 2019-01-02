@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public class BaseObject : BaseValue {
-        public BaseObject(Engine engine) : base(engine) {
+    public class BaseModule : BaseValue {
+        public BaseModule(Engine engine) : base(engine) {
             var template = engine.templateMaker.CreateTemplate(this.GetType());
 
             GetProperties(template.Members);

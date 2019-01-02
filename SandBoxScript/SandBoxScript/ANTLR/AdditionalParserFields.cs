@@ -9,6 +9,5 @@ namespace SandBoxScript.ANTLR {
         public Engine Engine { get; internal set; }
 
         public Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
-        public Dictionary<string, Variable> ParameterBuffer = new Dictionary<string, Variable>();
     }
 }

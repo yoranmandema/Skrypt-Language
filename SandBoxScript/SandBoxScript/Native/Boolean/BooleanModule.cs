@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public class TypeConverter {
-        public static NumberModule ToNumber (BaseModule val) {
-            return (NumberModule)val;
-        }
+    public class BooleanModule : BaseModule {
+        public BooleanModule(Engine engine) : base(engine) { } 
     }
 }

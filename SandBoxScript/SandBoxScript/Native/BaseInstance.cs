@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace SandBoxScript {
     public class BaseInstance : BaseValue {
         public BaseInstance(Engine engine) : base (engine) { }
-        public BaseObject StaticObject { get; set; }
+        public BaseModule StaticObject { get; set; }
     }
 }

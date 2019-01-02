@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public class BooleanObject : BaseObject {
-        public BooleanObject(Engine engine) : base(engine) { } 
+    class StringModule : BaseModule {
+        public StringModule(Engine engine) : base(engine) { }
     }
 }

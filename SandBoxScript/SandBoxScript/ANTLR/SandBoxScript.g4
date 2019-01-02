@@ -7,6 +7,7 @@ block				locals [
 					]
 					: (
 					importStmnt
+					| moduleStmnt
 					| ifStmnt
 					| whileStmnt
 					| fnStmnt 
@@ -34,8 +35,6 @@ var target = root;
 var members = ($ctx as ImportStatementContext).NAME();
 
 foreach (var m in members) {
-	System.Console.WriteLine(m);
-
 	try {
 		target = target.GetProperty(m.GetText()).Value;
 	} catch (System.Exception e) {
@@ -51,6 +50,39 @@ foreach (var m in target.Members) {
 
 }																																#importStatement
 					;
+
+moduleStmnt			locals [
+					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>(),
+					SandBoxScript.Variable Module
+					]
+					: MODULE name  {
+var Ctx = ($ctx as ModuleStatementContext);
+var nameCtx = Ctx.name();
+
+$Module = new SandBoxScript.Variable(nameCtx.GetText(), new ScriptModule(this.Engine));
+
+$block::Variables[nameCtx.GetText()] = $Module;
+nameCtx.variable = $Module;
+
+var variablesBefore = new Dictionary<string,Variable>($block::Variables);
+
+} '{' moduleProperty+ '}' {
+
+var variablesAfter = new Dictionary<string,Variable>($block::Variables);
+
+foreach (var kv in variablesAfter) {
+	if (variablesBefore.ContainsKey(kv.Key)) continue;
+
+	$Variables[kv.Key] = kv.Value;
+
+	$block::Variables.Remove(kv.Key);
+}
+
+}
+																																#moduleStatement
+					;
+
+moduleProperty		: (assignStmnt | fnStmnt) ;
 
 fnStmnt				locals [
 					Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
@@ -286,6 +318,7 @@ fragment FALSE			: 'false';
 DOT						: '.' ;
 
 IMPORT					: 'import' ;
+MODULE					: 'module' ;
 IF						: 'if' ;
 ELSE					: 'else' ;
 FN						: 'fn' ;
@@ -294,7 +327,7 @@ RETURN					: 'return' ;
 BREAK					: 'break' ;
 CONTINUE				: 'continue' ;
 
-KEYWORD					: (IMPORT | IF | ELSE | FN | WHILE | RETURN | BREAK | CONTINUE) ;
+KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | RETURN | BREAK | CONTINUE) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;

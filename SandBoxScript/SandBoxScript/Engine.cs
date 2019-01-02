@@ -19,19 +19,19 @@ namespace SandBoxScript {
         internal ExpressionInterpreter expressionInterpreter;
         internal TemplateMaker templateMaker;
 
-        internal NumberObject Number;
+        internal NumberModule Number;
         internal NumberConstructor NumberConstructor;
 
-        internal StringObject String;
+        internal StringModule String;
         internal StringConstructor StringConstructor;
 
-        internal BooleanObject Boolean;
+        internal BooleanModule Boolean;
         internal BooleanConstructor BooleanConstructor;
 
-        internal VectorObject Vector;
+        internal VectorModule Vector;
         internal VectorConstructor VectorConstructor;
 
-        internal MathObject Math;
+        internal MathModule Math;
 
         internal SandBoxScriptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
@@ -41,18 +41,18 @@ namespace SandBoxScript {
             templateMaker           = new TemplateMaker(this);
 
             NumberConstructor       = new NumberConstructor(this);
-            Number                  = new NumberObject(this);
+            Number                  = new NumberModule(this);
 
             StringConstructor       = new StringConstructor(this);
-            String                  = new StringObject(this);
+            String                  = new StringModule(this);
 
             BooleanConstructor      = new BooleanConstructor(this);
-            Boolean                 = new BooleanObject(this);
+            Boolean                 = new BooleanModule(this);
 
             VectorConstructor       = new VectorConstructor(this);
-            Vector                  = new VectorObject(this);
+            Vector                  = new VectorModule(this);
 
-            Math                    = new MathObject(this);
+            Math                    = new MathModule(this);
 
             Visitor = new SandBoxScriptVisitor(this);
         }

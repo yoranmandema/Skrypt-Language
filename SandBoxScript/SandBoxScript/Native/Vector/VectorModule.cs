@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBoxScript {
-    public class VectorObject : BaseObject {
-        public VectorObject(Engine engine) : base(engine) { }
+    public class VectorModule : BaseModule {
+        public VectorModule(Engine engine) : base(engine) { }
     }
 }
