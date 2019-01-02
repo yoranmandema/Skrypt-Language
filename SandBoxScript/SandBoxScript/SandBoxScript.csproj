@@ -117,6 +117,7 @@
     <Compile Include="Native\Number\NumberObject.cs" />
     <Compile Include="Runtime\ExpressionInterpreter.cs" />
     <Compile Include="Runtime\InvalidOperation.cs" />
+    <Compile Include="Runtime\JumpState.cs" />
     <Compile Include="Runtime\Scope.cs" />
     <Compile Include="Native\Object\BaseObject.cs" />
     <Compile Include="Program.cs" />

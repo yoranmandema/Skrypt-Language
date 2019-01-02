@@ -15,8 +15,73 @@ namespace SandBoxScript {
             _engine = engine;
         }
 
-        public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) {
-            return null;
+        public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) => null;
+        public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) => null;
+
+        public override BaseValue VisitWhileStatement(SandBoxScriptParser.WhileStatementContext context) {
+            var block = context.stmntBlock().block();
+            var expression = context.stmntBlock().expression();
+
+            if (block != null) {
+                while (Visit(context.Condition).IsTrue()) {
+                    for (int i = 0; i < block.ChildCount; i++) {
+                        var c = block.GetChild(i);
+
+                        Visit(c);
+
+                        if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Continue || context.JumpState == JumpState.Return) {
+                            break;
+                        }
+                    }
+
+                    if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Return) {
+                        context.JumpState = JumpState.None;
+                        break;
+                    }
+                    else if (context.JumpState == JumpState.Continue) {
+                        context.JumpState = JumpState.None;
+                        continue;
+                    }
+                }
+            }
+            else if (expression != null) {
+                while (Visit(context.Condition).IsTrue()) {
+                    Visit(expression);
+
+                    if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Continue || context.JumpState == JumpState.Return) {
+                        break;
+                    }
+
+                    if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Return) {
+                        context.JumpState = JumpState.None;
+                        break;
+                    }
+                    else if (context.JumpState == JumpState.Continue) {
+                        context.JumpState = JumpState.None;
+                        continue;
+                    }
+                }
+            }
+
+            return DefaultResult;
+        }
+
+        public override BaseValue VisitContinueStatement([NotNull] SandBoxScriptParser.ContinueStatementContext context) {
+            var loopCtx = context.Statement;
+
+            if (loopCtx is SandBoxScriptParser.WhileStatementContext whileCtx)
+                whileCtx.JumpState = JumpState.Continue;
+            
+            return DefaultResult;
+        }
+
+        public override BaseValue VisitBreakStatement([NotNull] SandBoxScriptParser.BreakStatementContext context) {
+            var loopCtx = context.Statement;
+
+            if (loopCtx is SandBoxScriptParser.WhileStatementContext whileCtx)
+                whileCtx.JumpState = JumpState.Break;
+
+            return DefaultResult;
         }
 
         public override BaseValue VisitIfStatement(SandBoxScriptParser.IfStatementContext context) {
@@ -47,10 +112,6 @@ namespace SandBoxScript {
             return null;
         }
 
-        public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) {
-            return null;
-        }
-
         public override BaseValue VisitReturnStatement(SandBoxScriptParser.ReturnStatementContext context) {
             var fnCtx = context.Statement;
             var expression = context.expression();
@@ -61,15 +122,15 @@ namespace SandBoxScript {
                 fnCtx.ReturnValue = returnValue;
             }
 
-            fnCtx.Returned = true;
+            fnCtx.JumpState = JumpState.Return;
 
-            return new SkipValue(_engine);
+            return DefaultResult;
         }
 
         public override BaseValue VisitAssignNameStatement(SandBoxScriptParser.AssignNameStatementContext context) {
             context.name().variable.Value = Visit(context.expression());
 
-            return null;
+            return DefaultResult;
         }
 
         public override BaseValue VisitAssignMemberStatement(SandBoxScriptParser.AssignMemberStatementContext context) {
@@ -78,7 +139,7 @@ namespace SandBoxScript {
 
             target.SetProperty(memberName, Visit(context.expression()));
 
-            return null;
+            return DefaultResult;
         }
 
         public override BaseValue VisitMemberAccessExp(SandBoxScriptParser.MemberAccessExpContext context) {

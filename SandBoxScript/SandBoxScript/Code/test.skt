@@ -1,22 +1,16 @@
 ﻿
-fn factorial (n) {
-	if (n <= 1) {
-		return 1
-	} else {
-		return n * factorial(n-1)
+x = 0
+
+while (x < 100) {
+	if (x > 5) {
+		continue
 	}
 
-	print(1)
+	while (x % 2) {
+		break
+	}
+
+	print(x)
+
+	x = x + 1
 }
-
-print(factorial(10))
-
-/*fn Update () {
-	import Math
-
-	a = Round(12.1231) * PI
-
-	b = a ** 3
-
-	a = b
-}*/

@@ -44,8 +44,8 @@ namespace SandBoxScript {
 
                     engine.Visitor.Visit(c);
 
-                    if (Context.Returned) {
-                        Context.Returned = false;
+                    if (Context.JumpState == JumpState.Return) {
+                        Context.JumpState = JumpState.None;
                         break;
                     }
                 }

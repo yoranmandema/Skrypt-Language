@@ -8,8 +8,11 @@ block				locals [
 					: (
 					importStmnt
 					| ifStmnt
+					| whileStmnt
 					| fnStmnt 
 					| returnStmnt
+					| breakStmnt
+					| continueStmnt
 					| assignStmnt
 					| expression
 					)*
@@ -17,6 +20,7 @@ block				locals [
 
 stmntBlock			: '{' Block=block '}'
 					| returnStmnt
+					| continueStmnt
 					| assignStmnt
 					| expression
 					;
@@ -51,7 +55,7 @@ foreach (var m in target.Members) {
 fnStmnt				locals [
 					Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
 					BaseValue ReturnValue = null,
-					bool Returned = false
+					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
 					]
 					: FN name '(' parameterGroup ')' {
 var fnCtx = ($ctx as FunctionStatementContext);
@@ -113,13 +117,16 @@ parameterGroup		: (parameter (',' parameter)*)? ;
 
 parameter			: NAME ('=' expression)?;
 
-whileStmnt			: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
+whileStmnt			locals [
+					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
+					]: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
 					;
 
 continueStmnt		locals [
-					RuleContext Statement
+					RuleContext Statement,
+					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
 					]
-					: RETURN expression? {
+					: CONTINUE {
 RuleContext currentContext = $ctx;
 RuleContext loopCtx = null;
 
@@ -137,6 +144,30 @@ if (loopCtx == null) {
 	throw new RecognitionException("Continue statement must be inside a loop.", this, this._input, $ctx);
 }
 }																																#continueStatement
+					;
+
+breakStmnt			locals [
+					RuleContext Statement,
+					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
+					]
+					: BREAK {
+RuleContext currentContext = $ctx;
+RuleContext loopCtx = null;
+
+while (currentContext.Parent != null) {
+	if (currentContext is WhileStatementContext whileCtx) {
+		loopCtx = currentContext;
+		$Statement = whileCtx;
+		break;
+	}
+
+	currentContext = currentContext.Parent;
+}	
+
+if (loopCtx == null) {
+	throw new RecognitionException("Break statement must be inside a loop.", this, this._input, $ctx);
+}
+}																																#breakStatement
 					;
 
 ifStmnt				: if (elseif)* else?																						#ifStatement			
@@ -172,7 +203,7 @@ expression          : '(' expression ')'																						#parenthesisExp
                     | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
 					
 					| <assoc=right>		Left=expression Operation=EXPONENT			Right=expression							#binaryOperationExp
-                    |					Left=expression Operation=(ASTERISK|SLASH)	Right=expression							#binaryOperationExp
+                    |					Left=expression Operation=(ASTERISK|SLASH|REMAINDER)	Right=expression				#binaryOperationExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression							#binaryOperationExp
 
                     |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
@@ -281,6 +312,7 @@ ASTERISK				: '*'	;
 SLASH					: '/'	;
 PLUS					: '+'	;
 MINUS					: '-'	;
+REMAINDER				: '%'	;
 EXPONENT				: '**'	;
 
 BITAND					: '&' ;
