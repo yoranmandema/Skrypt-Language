@@ -1,4 +1,7 @@
 ﻿
-for (x = 0, x < 10, x + 1) {
-	print(x)
-}
+i = 10
+print(i)
+j = ++i
+print(j)
+k = i++
+print(k)

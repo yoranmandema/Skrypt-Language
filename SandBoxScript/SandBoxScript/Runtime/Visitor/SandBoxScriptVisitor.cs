@@ -27,11 +27,11 @@ namespace SandBoxScript {
             }
 
             return context.Module.Value;
-        }    
+        }
 
-        void DoLoop (SandBoxScriptParser.BlockContext block, SandBoxScriptParser.ExpressionContext expression, ILoop context, Func<bool> func) {
+        void DoLoop(SandBoxScriptParser.BlockContext block, SandBoxScriptParser.ExpressionContext expression, ILoop context, Func<bool> cond, Action callback = null) {
             if (block != null) {
-                while (func()) {
+                while (cond()) {
                     for (int i = 0; i < block.ChildCount; i++) {
                         var c = block.GetChild(i);
 
@@ -41,6 +41,8 @@ namespace SandBoxScript {
                             break;
                         }
                     }
+
+                    callback?.Invoke();
 
                     if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Return) {
                         context.JumpState = JumpState.None;
@@ -53,8 +55,10 @@ namespace SandBoxScript {
                 }
             }
             else if (expression != null) {
-                while (func()) {
+                while (cond()) {
                     Visit(expression);
+
+                    callback?.Invoke();
 
                     if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Return) {
                         context.JumpState = JumpState.None;
@@ -85,12 +89,14 @@ namespace SandBoxScript {
 
             Visit(context.Instantiator);
 
-            DoLoop(block, expression, context, () => {
+            DoLoop(block, expression, context, 
+            () => {
                 var result = Visit(context.Condition).IsTrue();
 
-                Visit(context.Modifier);
-
                 return result;
+            }, 
+            () => {
+                Visit(context.Modifier);
             });
 
             return DefaultResult;
@@ -249,6 +255,76 @@ namespace SandBoxScript {
 
         public override BaseValue VisitParenthesisExp(SandBoxScriptParser.ParenthesisExpContext context) {
             return Visit(context.expression());
+        }
+
+        public override BaseValue VisitPostfixOperationExp(SandBoxScriptParser.PostfixOperationExpContext context) {
+            var operationName = context.Operation.Text;
+
+            var target = Visit(context.Target);
+            var value = target;
+            object result = value;
+
+            switch (operationName) {
+                case "++":
+                    if (value is NumberInstance) {
+                        var number = value as NumberInstance;
+                        result = number.Value;
+                        number.Value = (double)result + 1d;
+                    }
+                    break;
+                case "--":
+                    if (value is NumberInstance) {
+                        var number = value as NumberInstance;
+                        result = number.Value;
+                        number.Value = (double)result - 1d;
+                    }
+                    break;
+            }
+
+            if (result is double) {
+                result = _engine.CreateNumber((double)result);
+            }
+
+            if (result is InvalidOperation) {
+                throw new InvalidOperationException($"No such operation: {value?.Name ?? "null"} {operationName}");
+            }
+
+            return (BaseValue)result;
+        }
+
+        public override BaseValue VisitPrefixOperationExp(SandBoxScriptParser.PrefixOperationExpContext context) {
+            var operationName = context.Operation.Text;
+
+            var target = Visit(context.Target);
+            var value = target;
+            object result = value;
+
+            switch (operationName) {
+                case "++":
+                    if (value is NumberInstance) {
+                        var number = value as NumberInstance;
+                        result = number + 1d;
+                        number.Value = (double)result;
+                    }
+                    break;
+                case "--":
+                    if (value is NumberInstance) {
+                        var number = value as NumberInstance;
+                        result = number - 1d;
+                        number.Value = (double)result;
+                    }
+                    break;
+            }
+
+            if (result is double) {
+                result = _engine.CreateNumber((double)result);
+            }
+
+            if (result is InvalidOperation) {
+                throw new InvalidOperationException($"No such operation: {value?.Name ?? "null"} {operationName}");
+            }
+
+            return (BaseValue)result;
         }
 
         public override BaseValue VisitBinaryOperationExp(SandBoxScriptParser.BinaryOperationExpContext context) {

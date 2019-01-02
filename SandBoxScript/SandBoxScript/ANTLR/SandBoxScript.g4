@@ -199,6 +199,9 @@ expression          : '(' expression ')'																						#parenthesisExp
 					| expression '[' expression ']'																				#computedMemberAccessExp
                     | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
 					
+					| Target=expression Operation=(INCREMENT|DECREMENT) 														#postfixOperationExp		
+					| Operation=(INCREMENT|DECREMENT) Target=expression															#prefixOperationExp
+			
 					| <assoc=right>		Left=expression Operation=EXPONENT			Right=expression							#binaryOperationExp
                     |					Left=expression Operation=(ASTERISK|SLASH|REMAINDER)	Right=expression				#binaryOperationExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression							#binaryOperationExp
