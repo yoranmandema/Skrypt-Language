@@ -1,8 +1,4 @@
 ﻿
-module Library {
-	a = 2
+import Math
 
-	fn DoSomething () {}
-}
-
-print(Library)
+print(Round(1.23))

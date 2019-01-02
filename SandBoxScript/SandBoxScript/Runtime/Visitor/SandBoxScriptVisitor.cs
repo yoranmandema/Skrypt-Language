@@ -22,11 +22,13 @@ namespace SandBoxScript {
 
             VisitChildren(context);
 
+            Console.WriteLine(context.GetText());
+
             foreach (var kv in context.Variables) {
                 context.Module.Value.CreateProperty(kv.Key, kv.Value.Value);
             }
 
-            return DefaultResult;
+            return context.Module.Value;
         }
 
         public override BaseValue VisitWhileStatement(SandBoxScriptParser.WhileStatementContext context) {

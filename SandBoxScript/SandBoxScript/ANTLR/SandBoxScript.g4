@@ -2,9 +2,9 @@ grammar SandBoxScript;
 
 program				: block EOF ;
 
-block				locals [
+block				/*locals [
 					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>(),
-					]
+					]*/
 					: (
 					importStmnt
 					| moduleStmnt
@@ -29,6 +29,12 @@ stmntBlock			: '{' Block=block '}'
 importStmnt			: IMPORT name (DOT NAME)*?	{
 
 var nameCtx = ($ctx as ImportStatementContext).name();
+var scope = GetDefinitionBlock($ctx);
+
+if (nameCtx.variable == null) {
+	throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
+}		
+
 var root = nameCtx.variable.Value;
 var target = root;
 
@@ -45,44 +51,30 @@ foreach (var m in members) {
 foreach (var m in target.Members) {
     var v = m.Value;
 
-    $block::Variables[m.Key] = new SandBoxScript.Variable(m.Key,v.Value);
+    scope.Variables[m.Key] = new SandBoxScript.Variable(m.Key,v.Value);
 }
 
 }																																#importStatement
 					;
 
 moduleStmnt			locals [
-					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>(),
 					SandBoxScript.Variable Module
 					]
 					: MODULE name  {
 var Ctx = ($ctx as ModuleStatementContext);
 var nameCtx = Ctx.name();
+var scope = GetDefinitionBlock($ctx);
 
-$Module = new SandBoxScript.Variable(nameCtx.GetText(), new ScriptModule(this.Engine));
-
-$block::Variables[nameCtx.GetText()] = $Module;
-nameCtx.variable = $Module;
-
-var variablesBefore = new Dictionary<string,Variable>($block::Variables);
+$Module = new SandBoxScript.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
 
 } '{' moduleProperty+ '}' {
 
-var variablesAfter = new Dictionary<string,Variable>($block::Variables);
-
-foreach (var kv in variablesAfter) {
-	if (variablesBefore.ContainsKey(kv.Key)) continue;
-
-	$Variables[kv.Key] = kv.Value;
-
-	$block::Variables.Remove(kv.Key);
-}
 
 }
 																																#moduleStatement
 					;
 
-moduleProperty		: (assignStmnt | fnStmnt) ;
+moduleProperty		: (assignStmnt | fnStmnt | moduleStmnt) ;
 
 fnStmnt				locals [
 					Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
@@ -95,7 +87,9 @@ var nameCtx = fnCtx.name();
 
 var newVar = new SandBoxScript.Variable(nameCtx.GetText());
 
-$block::Variables[nameCtx.GetText()] = newVar;
+var scope = GetDefinitionBlock($ctx);
+
+scope.Variables[nameCtx.GetText()] = newVar;
 nameCtx.variable = newVar;		
 
 var parameters = fnCtx.parameterGroup().parameter();
@@ -126,20 +120,9 @@ returnStmnt			locals [
 					FunctionStatementContext Statement
 					]
 					: RETURN expression? {
-RuleContext currentContext = $ctx;
-RuleContext functionStatementCtx = null;
+$Statement = GetFirstOfType<FunctionStatementContext>($ctx);
 
-while (currentContext.Parent != null) {
-	if (currentContext is FunctionStatementContext fnCtx) {
-		functionStatementCtx = currentContext;
-		$Statement = fnCtx;
-		break;
-	}
-
-	currentContext = currentContext.Parent;
-}	
-
-if (functionStatementCtx == null) {
+if ($Statement == null) {
 	throw new RecognitionException("Return statement must be inside a function.", this, this._input, $ctx);
 }
 }																																#returnStatement
@@ -159,20 +142,9 @@ continueStmnt		locals [
 					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
 					]
 					: CONTINUE {
-RuleContext currentContext = $ctx;
-RuleContext loopCtx = null;
+$Statement = GetFirstOfType<WhileStatementContext>($ctx);
 
-while (currentContext.Parent != null) {
-	if (currentContext is WhileStatementContext whileCtx) {
-		loopCtx = currentContext;
-		$Statement = whileCtx;
-		break;
-	}
-
-	currentContext = currentContext.Parent;
-}	
-
-if (loopCtx == null) {
+if ($Statement == null) {
 	throw new RecognitionException("Continue statement must be inside a loop.", this, this._input, $ctx);
 }
 }																																#continueStatement
@@ -183,20 +155,9 @@ breakStmnt			locals [
 					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
 					]
 					: BREAK {
-RuleContext currentContext = $ctx;
-RuleContext loopCtx = null;
+$Statement = GetFirstOfType<WhileStatementContext>($ctx);
 
-while (currentContext.Parent != null) {
-	if (currentContext is WhileStatementContext whileCtx) {
-		loopCtx = currentContext;
-		$Statement = whileCtx;
-		break;
-	}
-
-	currentContext = currentContext.Parent;
-}	
-
-if (loopCtx == null) {
+if ($Statement == null) {
 	throw new RecognitionException("Break statement must be inside a loop.", this, this._input, $ctx);
 }
 }																																#breakStatement
@@ -219,8 +180,9 @@ var nameCtx = ($ctx as AssignNameStatementContext).name();
 
 if (nameCtx.variable == null) {
 	var newVar = new SandBoxScript.Variable(nameCtx.GetText());
+	var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
 
-	$block::Variables[nameCtx.GetText()] = newVar;
+	block.Variables[nameCtx.GetText()] = newVar;
 	nameCtx.variable = newVar;
 }
 }			
@@ -260,30 +222,9 @@ if (nameCtx.variable == null) {
                     ;
 
 name returns [SandBoxScript.Variable variable] : NAME 	{
-RuleContext currentContext = $ctx;
+var scope = GetDefinitionBlock($NAME.text, $ctx);
 
-while (currentContext.Parent != null) {
-
-	if (currentContext is BlockContext blockCtx) {
-		if (blockCtx.Variables.ContainsKey($NAME.text)) {
-			$variable = blockCtx.Variables[$NAME.text];
-			break;
-		}
-	}
-
-	if (currentContext is FunctionStatementContext fnCtx) {		
-		if (fnCtx.ParameterVariables.ContainsKey($NAME.text)) {
-			$variable = fnCtx.ParameterVariables[$NAME.text];
-			break;
-		}
-	}
-
-	currentContext = currentContext.Parent;
-}
-
-if ($variable == null && this.Globals.ContainsKey($NAME.text)) {
-	$variable = this.Globals[$NAME.text];
-}
+$variable = GetReference($NAME.text, scope);
 } ;
 
 memberAccess		: expression DOT NAME ;

@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANTLR\IScoped.cs" />
     <Compile Include="ANTLR\ShouldVisitChildrenOverride.cs" />
     <Compile Include="ANTLR\LexingErrorListener.cs" />
     <Compile Include="ANTLR\AdditionalParserFields.cs" />

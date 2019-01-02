@@ -18,9 +18,9 @@ namespace SandBoxScript {
             var template = new Template();
 
             if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseModule).IsAssignableFrom(t))
-                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance or BaseObject.");
+                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance or BaseModule.");
 
-            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Object|Instance)$", "");
+            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Module|Instance)$", "");
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;
