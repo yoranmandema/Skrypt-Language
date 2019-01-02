@@ -14,14 +14,17 @@ namespace SandBoxScript.ANTLR {
 
         public partial class ModuleStmntContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
         }
 
         public partial class BlockContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
         }
 
         public partial class FunctionStatementContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
         }
 
         public partial class WhileStatementContext : ILoop {

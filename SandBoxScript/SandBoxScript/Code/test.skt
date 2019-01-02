@@ -1,13 +1,13 @@
-﻿a = 2
+﻿b = 2
+
+module VectorExtensions {
+	a = b
+
+	fn Average (v1, v2) {
+		return (v1 + v2) / 2
+	}
+}
 
 fn Update () {
-	module varargs {
-		b = a
-
-		fn varargs () {
-			return "varargs"
-		}
-	}
-
-	print(varargs)
+	//print(VectorExtensions.Average( <1,3,6> , <5,1,4> ))
 }

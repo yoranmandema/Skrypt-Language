@@ -186,16 +186,20 @@ else				: ELSE stmntBlock
 assignStmnt			: name				ASSIGN expression	{
 var assignNameCtx = ($ctx as AssignNameStatementContext);
 var nameCtx = assignNameCtx.name();
+var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
 
 if (nameCtx.variable == null) {
 	var newVar = new SandBoxScript.Variable(nameCtx.GetText());
-	var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
 
 	block.Variables[nameCtx.GetText()] = newVar;
 	nameCtx.variable = newVar;
 }
 
-nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
+var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
+
+if (!isInFunction) {
+	nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
+}
 }																																#assignNameStatement
 					| memberAccess		ASSIGN expression																		#assignMemberStatement
 					| memberAccessComp	ASSIGN expression																		#assignComputedMemberStatement					

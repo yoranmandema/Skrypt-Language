@@ -25,7 +25,7 @@ namespace SandBoxScript {
 
             engine.Run(input);
 
-            engine.SetValue("print", (e, s, i) => null);
+            //engine.SetValue("print", (e, s, i) => null);
 
             var update = engine.GetValue("Update") as FunctionInstance;
 
