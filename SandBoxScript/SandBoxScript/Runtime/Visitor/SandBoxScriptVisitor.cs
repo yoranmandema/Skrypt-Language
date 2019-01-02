@@ -22,8 +22,6 @@ namespace SandBoxScript {
 
             VisitChildren(context);
 
-            Console.WriteLine(context.GetText());
-
             foreach (var kv in context.Variables) {
                 context.Module.Value.CreateProperty(kv.Key, kv.Value.Value);
             }

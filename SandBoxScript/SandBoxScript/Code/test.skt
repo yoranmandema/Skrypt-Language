@@ -1,4 +1,10 @@
 ﻿
-import Math
+module Library {
+	a = 2
 
-print(Round(1.23))
+	module Nested {
+		b = 2
+	}
+}
+
+print(Library.Nested.b)

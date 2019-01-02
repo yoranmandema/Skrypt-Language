@@ -60,18 +60,19 @@ foreach (var m in target.Members) {
 moduleStmnt			locals [
 					SandBoxScript.Variable Module
 					]
-					: MODULE name  {
+					: MODULE name  '{' moduleProperty+ '}' {
+
 var Ctx = ($ctx as ModuleStatementContext);
 var nameCtx = Ctx.name();
-var scope = GetDefinitionBlock($ctx);
+var block = GetDefinitionBlock($ctx.Parent);
+
+//System.Console.WriteLine(block);
 
 $Module = new SandBoxScript.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
 
-} '{' moduleProperty+ '}' {
+block.Variables[nameCtx.GetText()] = $Module;
 
-
-}
-																																#moduleStatement
+}																																#moduleStatement
 					;
 
 moduleProperty		: (assignStmnt | fnStmnt | moduleStmnt) ;

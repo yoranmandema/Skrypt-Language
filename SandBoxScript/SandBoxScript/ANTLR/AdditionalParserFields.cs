@@ -81,9 +81,7 @@ namespace SandBoxScript.ANTLR {
 
             if (scope.Variables.ContainsKey(name)) {
                 variable = scope.Variables[name];
-            }
-
-            if (variable == null && this.Globals.ContainsKey(name)) {
+            } else if (this.Globals.ContainsKey(name)) {
                 variable = this.Globals[name];
             }
 
