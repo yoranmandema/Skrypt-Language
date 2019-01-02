@@ -27,14 +27,11 @@ namespace SandBoxScript {
             }
 
             return context.Module.Value;
-        }
+        }    
 
-        public override BaseValue VisitWhileStatement(SandBoxScriptParser.WhileStatementContext context) {
-            var block = context.stmntBlock().block();
-            var expression = context.stmntBlock().expression();
-
+        void DoLoop (SandBoxScriptParser.BlockContext block, SandBoxScriptParser.ExpressionContext expression, ILoop context, Func<bool> func) {
             if (block != null) {
-                while (Visit(context.Condition).IsTrue()) {
+                while (func()) {
                     for (int i = 0; i < block.ChildCount; i++) {
                         var c = block.GetChild(i);
 
@@ -56,12 +53,8 @@ namespace SandBoxScript {
                 }
             }
             else if (expression != null) {
-                while (Visit(context.Condition).IsTrue()) {
+                while (func()) {
                     Visit(expression);
-
-                    if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Continue || context.JumpState == JumpState.Return) {
-                        break;
-                    }
 
                     if (context.JumpState == JumpState.Break || context.JumpState == JumpState.Return) {
                         context.JumpState = JumpState.None;
@@ -73,6 +66,32 @@ namespace SandBoxScript {
                     }
                 }
             }
+        }
+
+        public override BaseValue VisitWhileStatement(SandBoxScriptParser.WhileStatementContext context) {
+            var block = context.stmntBlock().block();
+            var expression = context.stmntBlock().expression();
+
+            DoLoop(block, expression, context, () => {
+                return Visit(context.Condition).IsTrue();
+            });
+
+            return DefaultResult;
+        }
+
+        public override BaseValue VisitForStatement(SandBoxScriptParser.ForStatementContext context) {
+            var block = context.stmntBlock().block();
+            var expression = context.stmntBlock().expression();
+
+            Visit(context.Instantiator);
+
+            DoLoop(block, expression, context, () => {
+                var result = Visit(context.Condition).IsTrue();
+
+                Visit(context.Modifier);
+
+                return result;
+            });
 
             return DefaultResult;
         }

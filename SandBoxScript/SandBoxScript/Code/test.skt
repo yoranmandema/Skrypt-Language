@@ -1,15 +1,4 @@
 ﻿
-fn factorial (n) {
-	if (true) {
-		b = 3
-	}
-
-	print(b)
-
-	if (n <= 1) 
-		return 1
-	else
-		return n * factorial(n-1)
+for (x = 0, x < 10, x + 1) {
+	print(x)
 }
-
-print(factorial(6))

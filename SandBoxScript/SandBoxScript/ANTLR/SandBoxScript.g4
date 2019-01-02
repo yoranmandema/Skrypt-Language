@@ -9,6 +9,7 @@ block				/*locals [
 					importStmnt
 					| moduleStmnt
 					| ifStmnt
+					| forStmnt
 					| whileStmnt
 					| fnStmnt 
 					| returnStmnt
@@ -133,9 +134,10 @@ parameterGroup		: (parameter (',' parameter)*)? ;
 
 parameter			: NAME ('=' expression)?;
 
-whileStmnt			locals [
-					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
-					]: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
+forStmnt			: FOR '(' Instantiator=assignStmnt ',' Condition=expression ',' Modifier=expression ')' stmntBlock			#forStatement
+					;
+
+whileStmnt			: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
 					;
 
 continueStmnt		locals [
@@ -265,6 +267,7 @@ IF						: 'if' ;
 ELSE					: 'else' ;
 FN						: 'fn' ;
 WHILE					: 'while' ;
+FOR						: 'for' ;
 RETURN					: 'return' ;
 BREAK					: 'break' ;
 CONTINUE				: 'continue' ;

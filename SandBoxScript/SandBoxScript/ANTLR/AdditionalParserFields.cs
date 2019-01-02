@@ -24,6 +24,14 @@ namespace SandBoxScript.ANTLR {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
         }
 
+        public partial class WhileStatementContext : ILoop {
+            public JumpState JumpState { get; set; } = JumpState.None;
+        }
+
+        public partial class ForStatementContext : ILoop {
+            public JumpState JumpState { get; set; } = JumpState.None;
+        }
+
         IScoped GetDefinitionBlock (string name, RuleContext ctx) {
             IScoped scope = null;
             IScoped first = null;
