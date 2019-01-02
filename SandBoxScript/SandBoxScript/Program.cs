@@ -30,7 +30,7 @@ namespace SandBoxScript {
             var update = engine.GetValue("Update") as FunctionInstance;
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            var amnt = 10000;
+            var amnt = 10;
 
             for (int i = 0; i < amnt; i++) {
                 update.Function.Run(engine, null, null);
@@ -40,7 +40,7 @@ namespace SandBoxScript {
 
             Console.WriteLine($"Executed function {amnt} times in {sw.Elapsed.TotalMilliseconds}ms");
             Console.WriteLine($"Equals {1 / sw.Elapsed.TotalSeconds * amnt} times per second");
-            Console.WriteLine($"Average {(sw.Elapsed.TotalSeconds / amnt).ToString(".####################")}ms");
+            Console.WriteLine($"Average {(sw.Elapsed.TotalMilliseconds / amnt).ToString(".####################")}ms");
 
             Console.ReadKey();
         }

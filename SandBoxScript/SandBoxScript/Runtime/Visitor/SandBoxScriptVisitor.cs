@@ -172,8 +172,7 @@ namespace SandBoxScript {
             var obj = Visit(context.expression());
             var memberName = context.NAME().GetText();
 
-            var val = obj.Members[memberName].Value;
-            
+            var val = obj.GetProperty(memberName).Value;        
 
             if (val is GetPropertyInstance) {
                 var newVal = (val as GetPropertyInstance).Property.Run(_engine, obj);

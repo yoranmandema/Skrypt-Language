@@ -1,13 +1,9 @@
-﻿b = 2
+﻿fn Update () {
+	str = ""
 
-module VectorExtensions {
-	a = b
+	for (x = 0, x < 10000, x++) {
+		str = str + "x"
+	} 
 
-	fn Average (v1, v2) {
-		return (v1 + v2) / 2
-	}
-}
-
-fn Update () {
-	//print(VectorExtensions.Average( <1,3,6> , <5,1,4> ))
+	print(str.Length)
 }

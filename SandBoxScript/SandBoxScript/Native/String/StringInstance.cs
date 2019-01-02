@@ -15,6 +15,10 @@ namespace SandBoxScript {
             Value = value;
         }
 
+        public static BaseValue Length(Engine engine, BaseValue self) {
+            return engine.CreateNumber((self as StringInstance).Value.Length);
+        }
+
         public static implicit operator string(StringInstance s) {
             return s.Value;
         }

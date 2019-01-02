@@ -84,7 +84,6 @@ foreach (var kv in Ctx.Variables) {
 moduleProperty		: (assignStmnt | fnStmnt | moduleStmnt) ;
 
 fnStmnt				locals [
-					//Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
 					BaseValue ReturnValue = null,
 					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
 					]
