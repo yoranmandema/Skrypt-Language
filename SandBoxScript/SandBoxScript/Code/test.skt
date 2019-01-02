@@ -1,7 +1,13 @@
-﻿
-i = 10
-print(i)
-j = ++i
-print(j)
-k = i++
-print(k)
+﻿a = 2
+
+fn Update () {
+	module varargs {
+		b = a
+
+		fn varargs () {
+			return "varargs"
+		}
+	}
+
+	print(varargs)
+}

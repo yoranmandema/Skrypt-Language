@@ -17,17 +17,7 @@ namespace SandBoxScript {
 
         public override BaseValue VisitImportStatement(SandBoxScriptParser.ImportStatementContext context) => DefaultResult;
         public override BaseValue VisitFunctionStatement(SandBoxScriptParser.FunctionStatementContext context) => DefaultResult;
-
-        public override BaseValue VisitModuleStatement(SandBoxScriptParser.ModuleStatementContext context) {
-
-            VisitChildren(context);
-
-            foreach (var kv in context.Variables) {
-                context.Module.Value.CreateProperty(kv.Key, kv.Value.Value);
-            }
-
-            return context.Module.Value;
-        }
+        public override BaseValue VisitModuleStatement(SandBoxScriptParser.ModuleStatementContext context) => null;
 
         void DoLoop(SandBoxScriptParser.BlockContext block, SandBoxScriptParser.ExpressionContext expression, ILoop context, Func<bool> cond, Action callback = null) {
             if (block != null) {

@@ -12,6 +12,34 @@ namespace SandBoxScript.Runtime {
             _engine = engine;
         }
 
+        public object EvaluateNotExpression (BaseValue value) {
+            if (value is BooleanInstance) {
+                return !(value as BooleanInstance);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateMinusExpression(BaseValue value) {
+            if (value is NumberInstance) {
+                return -(value as NumberInstance);
+            }
+
+            if (value is VectorInstance) {
+                return VectorInstance.ComponentMathNumeric(_engine, value as VectorInstance, (x) => -x);
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateBitNotExpression(BaseValue value) {
+            if (value is NumberInstance) {
+                return ~(int)(value as NumberInstance);
+            }
+
+            return new InvalidOperation();
+        }
+
         public object EvaluatePlusExpression (BaseValue left, BaseValue right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance) + (right as NumberInstance);

@@ -87,6 +87,20 @@ namespace SandBoxScript {
             }
         }
 
+        public BaseValue SetValue(string name, BaseValue value) {
+            SetGlobal(name, value);
+
+            return value;
+        }
+
+        public BaseValue SetValue(string name, bool value) {
+            var val = CreateBoolean(value);
+
+            SetGlobal(name, val);
+
+            return val;
+        }
+
         public BaseValue SetValue (string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 

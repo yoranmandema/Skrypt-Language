@@ -2,10 +2,7 @@ grammar SandBoxScript;
 
 program				: block EOF ;
 
-block				/*locals [
-					Dictionary<string, SandBoxScript.Variable> Variables = new Dictionary<string, SandBoxScript.Variable>(),
-					]*/
-					: (
+block				: (
 					importStmnt
 					| moduleStmnt
 					| ifStmnt
@@ -58,21 +55,29 @@ foreach (var m in target.Members) {
 }																																#importStatement
 					;
 
-moduleStmnt			locals [
-					SandBoxScript.Variable Module
-					]
-					: MODULE name  '{' moduleProperty+ '}' {
+moduleStmnt			: MODULE name  '{' moduleProperty+ '}' {
 
 var Ctx = ($ctx as ModuleStatementContext);
 var nameCtx = Ctx.name();
 var block = GetDefinitionBlock($ctx.Parent);
 
-//System.Console.WriteLine(block);
+var module = new SandBoxScript.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
 
-$Module = new SandBoxScript.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
+block.Variables[nameCtx.GetText()] = module;
 
-block.Variables[nameCtx.GetText()] = $Module;
+foreach (var c in Ctx.moduleProperty()) {
+	this.Engine.Visitor.Visit(c);
+}
 
+foreach (var kv in Ctx.Variables) {
+    var v = kv.Value;
+
+	if (v.Value == null) {
+		throw new RecognitionException("Module field can't be set to an undefined value.", this, this._input, $ctx);
+	}	
+
+    module.Value.CreateProperty(kv.Key, v.Value);
+}
 }																																#moduleStatement
 					;
 
@@ -178,8 +183,9 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 else				: ELSE stmntBlock																			
 					;
 
-assignStmnt			: name	{
-var nameCtx = ($ctx as AssignNameStatementContext).name();
+assignStmnt			: name				ASSIGN expression	{
+var assignNameCtx = ($ctx as AssignNameStatementContext);
+var nameCtx = assignNameCtx.name();
 
 if (nameCtx.variable == null) {
 	var newVar = new SandBoxScript.Variable(nameCtx.GetText());
@@ -188,10 +194,11 @@ if (nameCtx.variable == null) {
 	block.Variables[nameCtx.GetText()] = newVar;
 	nameCtx.variable = newVar;
 }
-}			
-																		ASSIGN expression										#assignNameStatement
-					| memberAccess										ASSIGN expression										#assignMemberStatement
-					| memberAccessComp									ASSIGN expression										#assignComputedMemberStatement					
+
+nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
+}																																#assignNameStatement
+					| memberAccess		ASSIGN expression																		#assignMemberStatement
+					| memberAccessComp	ASSIGN expression																		#assignComputedMemberStatement					
 					;
 
 expression          : '(' expression ')'																						#parenthesisExp
@@ -200,8 +207,10 @@ expression          : '(' expression ')'																						#parenthesisExp
                     | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
 					
 					| Target=expression Operation=(INCREMENT|DECREMENT) 														#postfixOperationExp		
-					| Operation=(INCREMENT|DECREMENT) Target=expression															#prefixOperationExp
+					| Operation=(MINUS|NOT|BITNOT|INCREMENT|DECREMENT) Target=expression										#prefixOperationExp
 			
+
+
 					| <assoc=right>		Left=expression Operation=EXPONENT			Right=expression							#binaryOperationExp
                     |					Left=expression Operation=(ASTERISK|SLASH|REMAINDER)	Right=expression				#binaryOperationExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression							#binaryOperationExp
@@ -302,6 +311,8 @@ BITXOR					: '|' ;
 
 INCREMENT				: '++'	;
 DECREMENT				: '--'	;
+NOT						: '!' ;
+BITNOT					: '~' ;
 
 BOOLEAN					: TRUE | FALSE ;
 
