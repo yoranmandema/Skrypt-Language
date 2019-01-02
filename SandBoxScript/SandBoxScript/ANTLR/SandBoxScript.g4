@@ -78,7 +78,7 @@ block.Variables[nameCtx.GetText()] = $Module;
 moduleProperty		: (assignStmnt | fnStmnt | moduleStmnt) ;
 
 fnStmnt				locals [
-					Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
+					//Dictionary<string, SandBoxScript.Variable> ParameterVariables = new Dictionary<string, SandBoxScript.Variable>(),
 					BaseValue ReturnValue = null,
 					SandBoxScript.JumpState JumpState = SandBoxScript.JumpState.None
 					]
@@ -88,7 +88,7 @@ var nameCtx = fnCtx.name();
 
 var newVar = new SandBoxScript.Variable(nameCtx.GetText());
 
-var scope = GetDefinitionBlock($ctx);
+var scope = GetDefinitionBlock($ctx.Parent);
 
 scope.Variables[nameCtx.GetText()] = newVar;
 nameCtx.variable = newVar;		
@@ -104,7 +104,7 @@ for (var i = 0; i < parameters.Length; i++) {
 
 	var parameterVar = new SandBoxScript.Variable(name);
 
-	$fnStmnt::ParameterVariables[name] = parameterVar;
+	fnCtx.Variables[name] = parameterVar;
 }
 
 } stmntBlock {

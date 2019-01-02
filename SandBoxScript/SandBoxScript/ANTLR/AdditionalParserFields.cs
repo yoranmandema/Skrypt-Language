@@ -20,7 +20,7 @@ namespace SandBoxScript.ANTLR {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
         }
 
-        public partial class FunctionStmntContext : IScoped {
+        public partial class FunctionStatementContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
         }
 

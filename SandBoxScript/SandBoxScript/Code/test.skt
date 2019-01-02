@@ -1,10 +1,15 @@
 ﻿
-module Library {
-	a = 2
-
-	module Nested {
-		b = 2
+fn factorial (n) {
+	if (true) {
+		b = 3
 	}
+
+	print(b)
+
+	if (n <= 1) 
+		return 1
+	else
+		return n * factorial(n-1)
 }
 
-print(Library.Nested.b)
+print(factorial(6))

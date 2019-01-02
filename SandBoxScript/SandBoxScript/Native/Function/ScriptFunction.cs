@@ -27,13 +27,13 @@ namespace SandBoxScript {
                 var input = args[i];
 
                 if (i < args.Values.Length) {
-                    Context.ParameterVariables[parameter.Name].Value = input;
+                    Context.Variables[parameter.Name].Value = input;
                 }
                 else {
-                    Context.ParameterVariables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
+                    Context.Variables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
                 }
 
-                preCallValues[parameter.Name] = Context.ParameterVariables[parameter.Name].Value.Clone();
+                preCallValues[parameter.Name] = Context.Variables[parameter.Name].Value.Clone();
             }
 
             var returnValue = default(BaseValue);
@@ -56,9 +56,9 @@ namespace SandBoxScript {
                 returnValue = engine.Visitor.Visit(expr);
             }
 
-            foreach (var v in Context.ParameterVariables) {
+            foreach (var v in Context.Variables) {
                 if (preCallValues[v.Key].CopyOnAssignment) {
-                    Context.ParameterVariables[v.Key].Value = preCallValues[v.Key];
+                    Context.Variables[v.Key].Value = preCallValues[v.Key];
                 }
             }
 
