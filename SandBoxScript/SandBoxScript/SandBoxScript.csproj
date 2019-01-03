@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANTLR\AdditionalLexerFields.cs" />
+    <Compile Include="ErrorHandling\CodeError.cs" />
     <Compile Include="ANTLR\ILoop.cs" />
     <Compile Include="ANTLR\IScoped.cs" />
     <Compile Include="ANTLR\ShouldVisitChildrenOverride.cs" />
@@ -77,11 +79,13 @@
       <DependentUpon>SandBoxScript.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine.cs" />
+    <Compile Include="ErrorHandling\ErrorHandler.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\Boolean\BooleanConstructor.cs" />
     <Compile Include="Native\Boolean\BooleanInstance.cs" />
     <Compile Include="Native\Boolean\BooleanModule.cs" />
+    <Compile Include="Native\Exceptions\FatalErrorException.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentTypeException.cs" />
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
     <Compile Include="Native\BaseValue.cs" />

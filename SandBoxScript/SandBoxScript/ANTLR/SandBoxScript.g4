@@ -67,17 +67,32 @@ block.Variables[nameCtx.GetText()] = module;
 
 foreach (var c in Ctx.moduleProperty()) {
 	this.Engine.Visitor.Visit(c);
+
+	IToken nameToken = null;
+	bool isValid = false;
+
+	if (c.GetChild(0) is AssignNameStatementContext assignCtx) {
+		nameToken = assignCtx.name().NAME().Symbol;
+	}
+
+	var value = Ctx.Variables[nameToken.Text].Value;
+
+	if (value == null) {
+		Engine.ErrorHandler.AddError(nameToken, "Module field can't be set to an undefined value.");
+	}
+
+    module.Value.CreateProperty(nameToken.Text, value);
 }
 
-foreach (var kv in Ctx.Variables) {
-    var v = kv.Value;
+//foreach (var kv in Ctx.Variables) {
+//    var v = kv.Value;
 
-	if (v.Value == null) {
-		throw new RecognitionException("Module field can't be set to an undefined value.", this, this._input, $ctx);
-	}	
+//	if (v.Value == null) {
+//		Engine.ErrorHandler.AddError(nameCtx.NAME().Symbol, "Module field can't be set to an undefined value.");
+//	}	
 
-    module.Value.CreateProperty(kv.Key, v.Value);
-}
+//    module.Value.CreateProperty(kv.Key, v.Value);
+//}
 }																																#moduleStatement
 					;
 
@@ -129,7 +144,7 @@ returnStmnt			locals [
 $Statement = GetFirstOfType<FunctionStatementContext>($ctx);
 
 if ($Statement == null) {
-	throw new RecognitionException("Return statement must be inside a function.", this, this._input, $ctx);
+	Engine.ErrorHandler.AddError((_localctx as ReturnStatementContext).RETURN().Symbol, "Return statement must be inside a function.");
 }
 }																																#returnStatement
 					;
@@ -152,7 +167,7 @@ continueStmnt		locals [
 $Statement = GetFirstOfType<WhileStatementContext>($ctx);
 
 if ($Statement == null) {
-	throw new RecognitionException("Continue statement must be inside a loop.", this, this._input, $ctx);
+	Engine.ErrorHandler.AddError((_localctx as ContinueStatementContext).CONTINUE().Symbol, "Continue statement must be inside a loop.");
 }
 }																																#continueStatement
 					;
@@ -165,7 +180,7 @@ breakStmnt			locals [
 $Statement = GetFirstOfType<WhileStatementContext>($ctx);
 
 if ($Statement == null) {
-	throw new RecognitionException("Break statement must be inside a loop.", this, this._input, $ctx);
+	Engine.ErrorHandler.AddError((_localctx as BreakStatementContext).BREAK().Symbol, "Break statement must be inside a loop.");
 }
 }																																#breakStatement
 					;
@@ -197,7 +212,11 @@ if (nameCtx.variable == null) {
 var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
 
 if (!isInFunction) {
-	nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
+	try {
+		nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
+	} catch (System.Exception e) {
+		
+	}
 }
 }																																#assignNameStatement
 					| memberAccess		ASSIGN expression																		#assignMemberStatement
@@ -234,7 +253,7 @@ expression          : '(' expression ')'																						#parenthesisExp
 var nameCtx = ($ctx as NameExpContext).name();
 
 if (nameCtx.variable == null) {
-	throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
+	Engine.ErrorHandler.AddError(nameCtx.NAME().Symbol, "Undefined variable: " + nameCtx.GetText());
 }																								
 }																																#nameExp
                     ;
@@ -323,7 +342,13 @@ NAME					: LETTER (LETTER | DIGIT)*;
 
 NUMBER					: DIGIT+ ('.' DIGIT+)?;
 
-STRING					: '"' ~('"')* ('"' | {throw new Antlr4.Runtime.Misc.ParseCanceledException("Unterminated string detected");}) ;
+STRING					: '"' ~('"')* ('"' | {
+
+System.Console.WriteLine(Token);
+
+Engine.ErrorHandler.FatalError(Token, "Unterminated string.");
+
+}) ;
 
 WHITESPACE				: [ \n\t\r]+ -> channel(HIDDEN);
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4;
 using SandBoxScript.ANTLR;
-using System.Reflection;
 using SandBoxScript.Runtime;
 
 namespace SandBoxScript {
@@ -36,6 +35,8 @@ namespace SandBoxScript {
         internal SandBoxScriptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
 
+        public ErrorHandler ErrorHandler = new ErrorHandler(); 
+
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
@@ -59,7 +60,9 @@ namespace SandBoxScript {
 
         public Engine Run(string code) {
             var inputStream = new AntlrInputStream(code);
-            var sandBoxScriptLexer = new SandBoxScriptLexer(inputStream);
+            var sandBoxScriptLexer = new SandBoxScriptLexer(inputStream) {
+                Engine = this
+            };
             sandBoxScriptLexer.AddErrorListener(new LexingErrorListener());
 
             var commonTokenStream = new CommonTokenStream(sandBoxScriptLexer);
@@ -70,11 +73,17 @@ namespace SandBoxScript {
             }
             ;
 
+            Parser.AddErrorListener(new ParsingErrorListener());
+
             Parser.Globals = Globals;
 
             ProgramContext = Parser.program();
 
-            Visitor.Visit(ProgramContext);
+            if (ErrorHandler.HasErrors) {
+                ErrorHandler.ReportAllErrors();
+            } else {
+                Visitor.Visit(ProgramContext);
+            }
 
             return this;
         }

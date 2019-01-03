@@ -1,9 +1,6 @@
-﻿fn Update () {
-	str = ""
-
-	for (x = 0, x < 10000, x++) {
-		str = str + "x"
-	} 
-
-	print(str.Length)
+﻿
+module Test {
+	a = 2
 }
+
+print(Test)
