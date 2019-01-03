@@ -85,16 +85,6 @@ foreach (var c in Ctx.moduleProperty()) {
 
     module.Value.CreateProperty(nameToken.Text, value);
 }
-
-//foreach (var kv in Ctx.Variables) {
-//    var v = kv.Value;
-
-//	if (v.Value == null) {
-//		Engine.ErrorHandler.AddError(nameCtx.NAME().Symbol, "Module field can't be set to an undefined value.");
-//	}	
-
-//    module.Value.CreateProperty(kv.Key, v.Value);
-//}
 }																																#moduleStatement
 					;
 
