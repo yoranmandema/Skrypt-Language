@@ -30,26 +30,28 @@ var nameCtx = ($ctx as ImportStatementContext).name();
 var scope = GetDefinitionBlock($ctx);
 
 if (nameCtx.variable == null) {
-	throw new RecognitionException("Undefined variable: " + nameCtx.GetText(), this, this._input, $ctx);
-}		
+	Engine.ErrorHandler.AddError(nameCtx.NAME().Symbol, "Undefined variable: " + nameCtx.GetText());
+} else {
 
-var root = nameCtx.variable.Value;
-var target = root;
+	var root = nameCtx.variable.Value;
+	var target = root;
 
-var members = ($ctx as ImportStatementContext).NAME();
+	var members = ($ctx as ImportStatementContext).NAME();
 
-foreach (var m in members) {
-	try {
-		target = target.GetProperty(m.GetText()).Value;
-	} catch (System.Exception e) {
-		throw new RecognitionException(e.Message, this, this._input, $ctx);
+	foreach (var m in members) {
+		try {
+			target = target.GetProperty(m.GetText()).Value;
+		} catch (System.Exception e) {
+			Engine.ErrorHandler.AddError(nameCtx.NAME().Symbol, e.Message);
+		}
 	}
-}
 
-foreach (var m in target.Members) {
-    var v = m.Value;
+	foreach (var m in target.Members) {
+		var v = m.Value;
 
-    scope.Variables[m.Key] = new SandBoxScript.Variable(m.Key,v.Value);
+		scope.Variables[m.Key] = new SandBoxScript.Variable(m.Key,v.Value);
+	}
+
 }
 
 }																																#importStatement

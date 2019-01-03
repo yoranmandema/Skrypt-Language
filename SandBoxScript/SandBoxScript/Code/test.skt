@@ -1,6 +1,4 @@
 ﻿
-module Test {
-	a = 2
-}
+import A
 
-print(Test)
+a = Round(1.2)
