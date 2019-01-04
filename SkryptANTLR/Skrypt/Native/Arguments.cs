@@ -8,6 +8,8 @@ namespace Skrypt {
     public class Arguments {
         public BaseValue[] Values;
 
+        public static Arguments Empty => new Arguments(new BaseValue[0]);
+
         public Arguments(BaseValue[] values) {
             Values = values;
         }

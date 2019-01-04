@@ -23,26 +23,40 @@ namespace Skrypt {
                 return null;
             });
 
-            engine.Run(input);
+            engine.SetValue("benchmark", (e, s, i) => {
+                var function = i.GetAs<FunctionInstance>(0);
+                var amount = i.GetAs<NumberInstance>(1).Value;
 
-            //engine.SetValue("print", (e, s, i) => null);
+                var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            var update = engine.GetValue("Update") as FunctionInstance;
+                for (int x = 0; x < amount; x++) {
+                    function.Function.Run(engine, null, Arguments.Empty);
+                }
 
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            var amnt = 10;
+                sw.Stop();
 
-            for (int i = 0; i < amnt; i++) {
-                update.Function.Run(engine, null, null);
+                Console.WriteLine($"Executed function {amount} times in {sw.Elapsed.TotalMilliseconds}ms");
+                Console.WriteLine($"Equals {1 / sw.Elapsed.TotalSeconds * amount} times per second");
+                Console.WriteLine($"Average {(sw.Elapsed.TotalMilliseconds / amount).ToString(".####################")}ms");
+
+                return null;
+            });
+
+            engine.Run(input).CreateGlobals();
+            
+            while (true) {
+                string line = Console.ReadLine();
+
+                if (line == "exit") break;
+
+                try {
+                    var ctx = engine.ProgramContext;
+
+                    Console.WriteLine(engine.Run(line).CreateGlobals().CompletionValue);
+                } catch (Exception e) {
+                    Console.WriteLine(e);
+                }
             }
-
-            sw.Stop();
-
-            Console.WriteLine($"Executed function {amnt} times in {sw.Elapsed.TotalMilliseconds}ms");
-            Console.WriteLine($"Equals {1 / sw.Elapsed.TotalSeconds * amnt} times per second");
-            Console.WriteLine($"Average {(sw.Elapsed.TotalMilliseconds / amnt).ToString(".####################")}ms");
-
-            Console.ReadKey();
         }
     }
 }

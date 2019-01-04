@@ -8,6 +8,8 @@ using Skrypt.Runtime;
 
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<BaseValue> {
+        public BaseValue LastResult { get; private set; }
+
         private readonly Engine _engine;
         private BaseValue accessed;
 
@@ -182,30 +184,43 @@ namespace Skrypt {
                 accessed = val;
             }
 
+            LastResult = accessed;
+
             return accessed;
         }
 
         public override BaseValue VisitNameExp(SkryptParser.NameExpContext context) {
+            var value = context.name().variable.Value;
+
+            LastResult = value;
+
             return context.name().variable.Value;
         }
 
         public override BaseValue VisitNumberLiteral(SkryptParser.NumberLiteralContext context) {
             var value = context.number().value;
             var num = _engine.CreateNumber(value);
+
+            LastResult = num;
+
             return num;
         }
 
         public override BaseValue VisitBooleanLiteral(SkryptParser.BooleanLiteralContext context) {
             var value = context.boolean().value;
-
             var boolean = _engine.CreateBoolean(value);
+
+            LastResult = boolean;
+
             return boolean;
         }
 
         public override BaseValue VisitStringLiteral(SkryptParser.StringLiteralContext context) {
             var value = context.@string().value;
-
             var str = _engine.CreateString(value);
+
+            LastResult = str;
+
             return str;
         }
 
@@ -216,6 +231,9 @@ namespace Skrypt {
             var y = (NumberInstance)Visit(v.Y);
 
             var vec = _engine.CreateVector2(x, y);
+
+            LastResult = vec;
+
             return vec;
         }
 
@@ -227,6 +245,9 @@ namespace Skrypt {
             var z = (NumberInstance)Visit(v.Z);
 
             var vec = _engine.CreateVector3(x, y, z);
+
+            LastResult = vec;
+
             return vec;
         }
 
@@ -239,6 +260,9 @@ namespace Skrypt {
             var w = (NumberInstance)Visit(v.W);
 
             var vec = _engine.CreateVector4(x, y, z, w);
+
+            LastResult = vec;
+
             return vec;
         }
 
@@ -278,6 +302,8 @@ namespace Skrypt {
                 throw new InvalidOperationException($"No such operation: {value?.Name ?? "null"} {operationName}");
             }
 
+            LastResult = (BaseValue)result;
+
             return (BaseValue)result;
         }
 
@@ -312,6 +338,8 @@ namespace Skrypt {
             if (result is InvalidOperation) {
                 throw new InvalidOperationException($"No such operation: {value?.Name ?? "null"} {operationName}");
             }
+
+            LastResult = (BaseValue)result;
 
             return (BaseValue)result;
         }
@@ -398,6 +426,8 @@ namespace Skrypt {
                 throw new InvalidOperationException($"No such operation: {left?.Name ?? "null"} {operationName} {right?.Name ?? "null"}");
             }
 
+            LastResult = (BaseValue)result;
+
             return (BaseValue)result;
         }
 
@@ -419,6 +449,8 @@ namespace Skrypt {
             var args = new Arguments(arguments);
 
             var returnValue = (function as FunctionInstance).Function.Run(_engine, accessed, args);
+
+            LastResult = returnValue;
 
             return returnValue;
         }

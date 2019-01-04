@@ -10,7 +10,7 @@ using Skrypt.Runtime;
 
 namespace Skrypt {
     public class Engine {
-        //public Scope Scope { get; internal set; } = new Scope();
+        public BaseValue CompletionValue => Visitor.LastResult;
 
         internal SkryptParser Parser;
         internal SkryptVisitor Visitor;
@@ -55,7 +55,7 @@ namespace Skrypt {
 
             Math                    = new MathModule(this);
 
-            Visitor = new SkryptVisitor(this);
+            Visitor                 = new SkryptVisitor(this);
         }
 
         public Engine Run(string code) {
@@ -63,6 +63,7 @@ namespace Skrypt {
             var skryptLexer = new SkryptLexer(inputStream) {
                 Engine = this
             };
+
             skryptLexer.AddErrorListener(new LexingErrorListener());
 
             var commonTokenStream = new CommonTokenStream(skryptLexer);
@@ -70,8 +71,7 @@ namespace Skrypt {
             Parser = new SkryptParser(commonTokenStream) {
                 Engine = this,
                 ErrorHandler = new BailErrorStrategy()
-            }
-            ;
+            };
 
             Parser.AddErrorListener(new ParsingErrorListener());
 
@@ -81,8 +81,20 @@ namespace Skrypt {
 
             if (ErrorHandler.HasErrors) {
                 ErrorHandler.ReportAllErrors();
+
+                ErrorHandler.Errors.Clear();
             } else {
                 Visitor.Visit(ProgramContext);
+            }
+
+            return this;
+        }
+
+        public Engine CreateGlobals () {
+            var block = ProgramContext.block();
+
+            foreach (var v in block.Variables) {
+                Globals[v.Key] = v.Value;
             }
 
             return this;
@@ -123,6 +135,8 @@ namespace Skrypt {
 
             if (block.Variables.ContainsKey(name)) {
                 return block.Variables[name].Value;
+            } else if (Globals.ContainsKey(name)) {
+                return Globals[name].Value;
             } else {
                 throw new VariableNotFoundException($"A variable with the name {name} was not found.");
             }
