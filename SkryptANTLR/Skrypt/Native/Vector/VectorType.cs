@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class VectorType : BaseType {
-        private readonly Template _template;
-
         public VectorType(Engine engine) : base(engine) {
-            _template = engine.templateMaker.CreateTemplate(typeof(NumberInstance));
+            Template = engine.templateMaker.CreateTemplate(typeof(NumberInstance));
         }
 
         public BaseInstance Construct(params double[] args) {
@@ -27,7 +25,7 @@ namespace Skrypt {
                     break;
             }
 
-            obj.GetProperties(_template);
+            obj.GetProperties(Template);
             obj.TypeObject = this;
 
             return obj;

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class NumberType : BaseType {
-        private readonly Template _template;
-
         public NumberType(Engine engine) : base(engine) {
-            _template = engine.templateMaker.CreateTemplate(typeof(NumberInstance));
+            Template = engine.templateMaker.CreateTemplate(typeof(NumberInstance));
         }
 
         public static BaseValue Parse(Engine engine, BaseValue self, Arguments input) {
@@ -21,7 +19,7 @@ namespace Skrypt {
         public BaseInstance Construct(double val) {
             var obj = new NumberInstance(Engine, val);
 
-            obj.GetProperties(_template);
+            obj.GetProperties(Template);
             obj.TypeObject = this;
 
             return obj;

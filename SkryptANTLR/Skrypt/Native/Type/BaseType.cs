@@ -16,7 +16,8 @@ namespace Skrypt {
             Name = template.Name;
         }
 
-        public List<Trait> Traits = new List<Trait>();
+        public Template Template;
+        public List<BaseTrait> Traits = new List<BaseTrait>();
         public abstract BaseInstance Construct(Arguments arguments);
     }
 }

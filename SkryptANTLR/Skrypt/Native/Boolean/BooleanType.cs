@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     class BooleanType : BaseType {
-        private readonly Template _template;
-
         public BooleanType(Engine engine) : base(engine) {
-            _template = engine.templateMaker.CreateTemplate(typeof(BooleanInstance));
+            Template = engine.templateMaker.CreateTemplate(typeof(BooleanInstance));
         }
 
         public BaseInstance Construct(bool val) {
             var obj = new BooleanInstance(Engine, val);
 
-            obj.GetProperties(_template);
+            obj.GetProperties(Template);
             obj.TypeObject = this;
 
             return obj;

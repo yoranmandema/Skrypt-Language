@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class ScriptType : BaseType {
         public ScriptFunction Constructor;
-        public Template Template;
 
         public ScriptType(string name, Engine engine) : base(engine) {
             Name = name;

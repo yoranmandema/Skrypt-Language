@@ -6,6 +6,8 @@ block				: (
 					importStmnt
 					| moduleStmnt
 					| structStmnt
+					| traitStmnt
+					| traitImplStmnt
 					| ifStmnt
 					| forStmnt
 					| whileStmnt
@@ -98,7 +100,7 @@ foreach (var c in Ctx.structProperty()) {
 	if (isStatic) {
 		CreateProperty(type.Value, Ctx, c.Property);
 	} else {
-		var nameToken = GetPropertyNameToken(type.Value, c.Property);
+		var nameToken = GetPropertyNameToken(c.Property);
 		var value = Ctx.Variables[nameToken.Text].Value;
 
         if (value == null) {
@@ -114,6 +116,78 @@ foreach (var c in Ctx.structProperty()) {
 }																																#structStatement
 					;
 
+traitStmnt			: TRAIT name '{' traitProperty* '}' {
+
+var Ctx = ($ctx as TraitStatementContext);
+var nameCtx = Ctx.name();
+var block = GetDefinitionBlock($ctx.Parent);
+var traitName = nameCtx.GetText();
+
+var trait = new ScriptTrait(traitName, this.Engine);
+var traitVariable = new Skrypt.Variable(traitName, trait);
+
+block.Variables[nameCtx.GetText()] = traitVariable;
+
+foreach (var c in Ctx.traitProperty()) {
+	this.Engine.Visitor.Visit(c.Property);
+
+	var nameToken = GetPropertyNameToken(c.Property);
+	var value = Ctx.Variables[nameToken.Text].Value;
+
+    if (value == null) {
+        Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
+    }
+
+	trait.TraitMembers[nameToken.Text] = new Member(value);
+}
+
+}																																#traitStatement
+					;
+
+traitImplStmnt		: IMPL name FOR name ('{' property+ '}')? {
+	var Ctx = ($ctx as TraitImplStatementContext);
+	var traitNameCtx = Ctx.name(0);
+	var typeNameCtx = Ctx.name(1);
+
+	var trait = traitNameCtx.variable.Value as BaseTrait;
+	var type = typeNameCtx.variable.Value as BaseType;
+
+	if (!typeof(BaseTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
+		Engine.ErrorHandler.AddError(traitNameCtx.NAME().Symbol, "Trait expected.");
+	}
+
+	if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
+		Engine.ErrorHandler.AddError(typeNameCtx.NAME().Symbol, "Type expected.");
+	}
+
+	type.Traits.Add(trait);
+
+	foreach (var kv in trait.TraitMembers) {
+		type.Template.Members[kv.Key] = kv.Value;
+	}
+
+	foreach (var c in Ctx.property()) {
+		this.Engine.Visitor.Visit(c);
+
+		var nameToken = GetPropertyNameToken(c);
+		var value = Ctx.Variables[nameToken.Text].Value;
+
+		if (!trait.TraitMembers.ContainsKey(nameToken.Text)) {
+			Engine.ErrorHandler.AddError(nameToken, $"Trait does not contain property {nameToken.Text}.");
+			continue;
+		}
+
+		if (value == null) {
+			Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
+		}
+
+		type.Template.Members[nameToken.Text].Value = value;
+	}
+
+}																																#traitImplStatement
+					;
+
+traitProperty		: Property=property ;
 structProperty		: STATIC? Property=property ;
 property			: (assignStmnt | fnStmnt | moduleStmnt) ;
 
@@ -316,6 +390,7 @@ IMPORT					: 'import' ;
 MODULE					: 'module' ;
 STRUCT					: 'struct' ;
 TRAIT					: 'trait' ;
+IMPL					: 'impl' ;
 IF						: 'if' ;
 ELSE					: 'else' ;
 FN						: 'fn' ;

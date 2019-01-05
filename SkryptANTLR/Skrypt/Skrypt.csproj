@@ -82,6 +82,7 @@
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
+    <Compile Include="Native\Trait\ScriptTrait.cs" />
     <Compile Include="Native\Type\BaseType.cs" />
     <Compile Include="Native\Boolean\BooleanInstance.cs" />
     <Compile Include="Native\Boolean\BooleanType.cs" />
@@ -107,7 +108,7 @@
     <Compile Include="Native\BaseInstance.cs" />
     <Compile Include="Native\Member.cs" />
     <Compile Include="Native\Template\TemplateMaker.cs" />
-    <Compile Include="Native\Trait.cs" />
+    <Compile Include="Native\Trait\BaseTrait.cs" />
     <Compile Include="Native\Type\ScriptType.cs" />
     <Compile Include="Native\Vector\Vector2Instance.cs" />
     <Compile Include="Native\Vector\Vector4Instance.cs" />

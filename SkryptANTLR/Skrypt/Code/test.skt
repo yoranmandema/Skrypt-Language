@@ -3,4 +3,10 @@ struct CustomType {
 	a = 2
 }
 
-print(CustomType())
+trait CustomTrait {
+	b = 2
+}
+
+impl CustomTrait for Number
+
+print(1.b)

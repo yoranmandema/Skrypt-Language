@@ -22,6 +22,16 @@ namespace Skrypt.ANTLR {
             public RuleContext Context => this;
         }
 
+        public partial class TraitStmntContext : IScoped {
+            public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
+        }
+
+        public partial class TraitImplStmntContext : IScoped {
+            public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
+        }
+
         public partial class BlockContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
@@ -56,7 +66,7 @@ namespace Skrypt.ANTLR {
             target.CreateProperty(nameToken.Text, value);
         }
 
-        IToken GetPropertyNameToken(BaseValue target, ParserRuleContext propertyTree) {
+        IToken GetPropertyNameToken(ParserRuleContext propertyTree) {
             IToken nameToken = null;
 
             if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {
