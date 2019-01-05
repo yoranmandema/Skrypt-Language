@@ -17,10 +17,10 @@ namespace Skrypt {
             var methods = t.GetMethods();
             var template = new Template();
 
-            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseModule).IsAssignableFrom(t))
-                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance or BaseModule.");
+            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseModule).IsAssignableFrom(t) && !typeof(BaseType).IsAssignableFrom(t))
+                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance, BaseModule or BaseType.");
 
-            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Module|Instance)$", "");
+            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Module|Instance|Type)$", "");
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;

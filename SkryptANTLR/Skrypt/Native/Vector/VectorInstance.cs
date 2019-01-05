@@ -45,7 +45,7 @@ namespace Skrypt {
                     args[i] = newVal;
                 }
 
-                return engine.VectorConstructor.Construct(args);
+                return engine.Vector.Construct(args);
             }
 
             return new InvalidOperation();
@@ -62,7 +62,7 @@ namespace Skrypt {
                 args[i] = newVal;
             }
 
-            return engine.VectorConstructor.Construct(args);
+            return engine.Vector.Construct(args);
         }
 
         public override string ToString() {

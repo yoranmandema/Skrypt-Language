@@ -50,8 +50,6 @@ namespace Skrypt {
                 if (line == "exit") break;
 
                 try {
-                    var ctx = engine.ProgramContext;
-
                     Console.WriteLine(engine.Run(line).CreateGlobals().CompletionValue);
                 } catch (Exception e) {
                     Console.WriteLine(e);

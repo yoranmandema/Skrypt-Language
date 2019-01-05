@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class Arguments {
         public BaseValue[] Values;
+        public int Length => Values.Length;
 
         public static Arguments Empty => new Arguments(new BaseValue[0]);
 
@@ -30,7 +31,7 @@ namespace Skrypt {
             if (value is T) {
                 return value as T;
             } else {
-                throw new InvalidArgumentTypeException($"Expected argument with type {value.GetType()}, expected {typeof(T).Name}");
+                throw new InvalidArgumentTypeException($"Expected argument of type {typeof(T).Name}.");
             }
         }
     }

@@ -18,17 +18,13 @@ namespace Skrypt {
         internal ExpressionInterpreter expressionInterpreter;
         internal TemplateMaker templateMaker;
 
-        internal NumberModule Number;
-        internal NumberConstructor NumberConstructor;
+        internal NumberType Number;
 
-        internal StringModule String;
-        internal StringConstructor StringConstructor;
+        internal StringType String;
 
-        internal BooleanModule Boolean;
-        internal BooleanConstructor BooleanConstructor;
+        internal BooleanType Boolean;
 
-        internal VectorModule Vector;
-        internal VectorConstructor VectorConstructor;
+        internal VectorType Vector;
 
         internal MathModule Math;
 
@@ -41,17 +37,13 @@ namespace Skrypt {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
 
-            NumberConstructor       = new NumberConstructor(this);
-            Number                  = new NumberModule(this);
+            Number                  = new NumberType(this);
 
-            StringConstructor       = new StringConstructor(this);
-            String                  = new StringModule(this);
+            String                  = new StringType(this);
 
-            BooleanConstructor      = new BooleanConstructor(this);
-            Boolean                 = new BooleanModule(this);
+            Boolean                 = new BooleanType(this);
 
-            VectorConstructor       = new VectorConstructor(this);
-            Vector                  = new VectorModule(this);
+            Vector                  = new VectorType(this);
 
             Math                    = new MathModule(this);
 
@@ -143,27 +135,27 @@ namespace Skrypt {
         }
 
         public NumberInstance CreateNumber(double value) {
-            return NumberConstructor.Construct(value);
+            return (NumberInstance)Number.Construct(value);
         }
 
         public StringInstance CreateString(string value) {
-            return StringConstructor.Construct(value);
+            return (StringInstance)String.Construct(value);
         }
 
         public BooleanInstance CreateBoolean(bool value) {
-            return BooleanConstructor.Construct(value);
+            return (BooleanInstance)Boolean.Construct(value);
         }
 
         public Vector2Instance CreateVector2(double x, double y) {
-            return (Vector2Instance)VectorConstructor.Construct(x, y);
+            return (Vector2Instance)Vector.Construct(x, y);
         }
 
         public Vector3Instance CreateVector3(double x, double y, double z) {
-            return (Vector3Instance)VectorConstructor.Construct(x, y, z);
+            return (Vector3Instance)Vector.Construct(x, y, z);
         }
 
         public Vector4Instance CreateVector4(double x, double y, double z, double w) {
-            return (Vector4Instance)VectorConstructor.Construct(x, y, z, w);
+            return (Vector4Instance)Vector.Construct(x, y, z, w);
         }
     }
 }
