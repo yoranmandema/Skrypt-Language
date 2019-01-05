@@ -433,8 +433,13 @@ namespace Skrypt {
 
         public override BaseValue VisitFunctionCallExp(SkryptParser.FunctionCallExpContext context) {
             var function = Visit(context.Function);
+            var isConstructor = false;
+            var returnValue = DefaultResult;
 
-            if (function.GetType() != typeof(FunctionInstance)) {
+            if (typeof(BaseType).IsAssignableFrom(function.GetType())) {
+                isConstructor = true;
+            }
+            else if (!(function is FunctionInstance)) {
                 throw new Exception("Called object is not a function!");
             }
 
@@ -448,7 +453,11 @@ namespace Skrypt {
 
             var args = new Arguments(arguments);
 
-            var returnValue = (function as FunctionInstance).Function.Run(_engine, accessed, args);
+            if (isConstructor) {
+                returnValue = (function as BaseType).Construct(args);
+            } else {
+                returnValue = (function as FunctionInstance).Function.Run(_engine, accessed, args);
+            }
 
             LastResult = returnValue;
 

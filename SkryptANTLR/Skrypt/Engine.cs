@@ -38,11 +38,8 @@ namespace Skrypt {
             templateMaker           = new TemplateMaker(this);
 
             Number                  = new NumberType(this);
-
             String                  = new StringType(this);
-
             Boolean                 = new BooleanType(this);
-
             Vector                  = new VectorType(this);
 
             Math                    = new MathModule(this);

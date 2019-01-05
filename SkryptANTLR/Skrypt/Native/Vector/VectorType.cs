@@ -33,17 +33,11 @@ namespace Skrypt {
         }
 
         public override BaseInstance Construct(Arguments arguments) {
-            var args = new double[arguments.Length];
+            var length = Math.Max(arguments.Length, 2);
+            var args = new double[length];
 
-            for (var i = 0; i < arguments.Length; i++) {
-                var arg = arguments[i];
-
-                if (arg is NumberInstance) {
-                    args[i] = (NumberInstance)arg;
-                }
-                else {
-                    throw new Exception("Vector components can only be made from numbers!");
-                }
+            for (var i = 0; i < length; i++) {
+                args[i] = arguments.GetAs<NumberInstance>(i);
             }
 
             return Construct(args);
