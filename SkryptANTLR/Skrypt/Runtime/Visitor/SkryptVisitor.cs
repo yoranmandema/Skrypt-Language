@@ -20,6 +20,9 @@ namespace Skrypt {
         public override BaseValue VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
         public override BaseValue VisitFunctionStatement(SkryptParser.FunctionStatementContext context) => DefaultResult;
         public override BaseValue VisitModuleStatement(SkryptParser.ModuleStatementContext context) => null;
+        public override BaseValue VisitStructStatement(SkryptParser.StructStatementContext context) => null;
+        public override BaseValue VisitTraitStatement(SkryptParser.TraitStatementContext context) => null;
+        public override BaseValue VisitTraitImplStatement(SkryptParser.TraitImplStatementContext context) => null;
 
         void DoLoop(SkryptParser.BlockContext block, SkryptParser.ExpressionContext expression, ILoop context, Func<bool> cond, Action callback = null) {
             if (block != null) {

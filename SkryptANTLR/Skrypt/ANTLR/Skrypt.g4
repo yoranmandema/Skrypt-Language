@@ -116,7 +116,7 @@ foreach (var c in Ctx.structProperty()) {
 }																																#structStatement
 					;
 
-traitStmnt			: TRAIT name '{' traitProperty* '}' {
+traitStmnt			: TRAIT name propertiesBlock {
 
 var Ctx = ($ctx as TraitStatementContext);
 var nameCtx = Ctx.name();
@@ -128,10 +128,10 @@ var traitVariable = new Skrypt.Variable(traitName, trait);
 
 block.Variables[nameCtx.GetText()] = traitVariable;
 
-foreach (var c in Ctx.traitProperty()) {
-	this.Engine.Visitor.Visit(c.Property);
+foreach (var child in Ctx.propertiesBlock().property()) {
+	this.Engine.Visitor.Visit(child);
 
-	var nameToken = GetPropertyNameToken(c.Property);
+	var nameToken = GetPropertyNameToken(child);
 	var value = Ctx.Variables[nameToken.Text].Value;
 
     if (value == null) {
@@ -144,32 +144,36 @@ foreach (var c in Ctx.traitProperty()) {
 }																																#traitStatement
 					;
 
-traitImplStmnt		: IMPL name FOR name ('{' property+ '}')? {
-	var Ctx = ($ctx as TraitImplStatementContext);
-	var traitNameCtx = Ctx.name(0);
-	var typeNameCtx = Ctx.name(1);
+traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 
-	var trait = traitNameCtx.variable.Value as BaseTrait;
-	var type = typeNameCtx.variable.Value as BaseType;
+var Ctx = ($ctx as TraitImplStatementContext);
+var traitNameCtx = Ctx.name(0);
+var typeNameCtx = Ctx.name(1);
 
-	if (!typeof(BaseTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
-		Engine.ErrorHandler.AddError(traitNameCtx.NAME().Symbol, "Trait expected.");
-	}
+var trait = traitNameCtx.variable.Value as BaseTrait;
+var type = typeNameCtx.variable.Value as BaseType;
 
-	if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
-		Engine.ErrorHandler.AddError(typeNameCtx.NAME().Symbol, "Type expected.");
-	}
+if (!typeof(BaseTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
+	Engine.ErrorHandler.AddError(traitNameCtx.NAME().Symbol, "Trait expected.");
+}
 
-	type.Traits.Add(trait);
+if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
+	Engine.ErrorHandler.AddError(typeNameCtx.NAME().Symbol, "Type expected.");
+}
 
-	foreach (var kv in trait.TraitMembers) {
-		type.Template.Members[kv.Key] = kv.Value;
-	}
+type.Traits.Add(trait);
 
-	foreach (var c in Ctx.property()) {
-		this.Engine.Visitor.Visit(c);
+foreach (var kv in trait.TraitMembers) {
+	type.Template.Members[kv.Key] = kv.Value;
+}
 
-		var nameToken = GetPropertyNameToken(c);
+var modifiesProperties = Ctx.propertiesBlock() != null;
+
+if (modifiesProperties) {
+	foreach (var child in Ctx.propertiesBlock().property()) {
+		this.Engine.Visitor.Visit(child);
+
+		var nameToken = GetPropertyNameToken(child);	
 		var value = Ctx.Variables[nameToken.Text].Value;
 
 		if (!trait.TraitMembers.ContainsKey(nameToken.Text)) {
@@ -183,11 +187,12 @@ traitImplStmnt		: IMPL name FOR name ('{' property+ '}')? {
 
 		type.Template.Members[nameToken.Text].Value = value;
 	}
-
+}
 }																																#traitImplStatement
 					;
 
-traitProperty		: Property=property ;
+propertiesBlock		: '{' property+ '}' ;
+traitProperty		: property ;
 structProperty		: STATIC? Property=property ;
 property			: (assignStmnt | fnStmnt | moduleStmnt) ;
 

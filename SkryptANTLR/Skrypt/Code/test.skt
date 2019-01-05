@@ -4,9 +4,11 @@ struct CustomType {
 }
 
 trait CustomTrait {
-	b = 2
+	fn HasCoolFunction () {
+		print("Hello")
+	}
 }
 
-impl CustomTrait for Number
+impl CustomTrait for CustomType
 
-print(1.b)
+print(CustomType())

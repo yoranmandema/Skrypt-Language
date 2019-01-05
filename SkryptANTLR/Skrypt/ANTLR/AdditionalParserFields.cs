@@ -72,6 +72,9 @@ namespace Skrypt.ANTLR {
             if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {
                 nameToken = assignCtx.name().NAME().Symbol;
             }
+            else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
+                nameToken = fnCtx.name().NAME().Symbol;
+            }
 
             return nameToken;
         }
