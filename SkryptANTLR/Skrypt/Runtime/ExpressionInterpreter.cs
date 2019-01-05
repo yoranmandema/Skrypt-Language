@@ -206,6 +206,35 @@ namespace Skrypt.Runtime {
             }
         }
 
+        public object EvaluateIsExpression(BaseValue left, BaseValue right) {
+            if (
+                (typeof(BaseInstance).IsAssignableFrom(left.GetType()) || typeof(BaseType).IsAssignableFrom(left.GetType())) && 
+                (typeof(BaseType).IsAssignableFrom(right.GetType()) || typeof(BaseTrait).IsAssignableFrom(right.GetType()))
+                ) {
+                var leftType = default(BaseType);
+
+                if (typeof(BaseInstance).IsAssignableFrom(left.GetType())) {
+                    var leftInstance = left as BaseInstance;
+                    leftType = leftInstance.TypeObject;
+                } else {
+                    leftType = left as BaseType;
+                }
+
+                if (right is BaseType rightType) {
+                    return leftType.Equals(rightType);
+                } else if (right is BaseTrait rightTrait) {
+                    return leftType.Traits.Contains(rightTrait);
+                }
+            }
+
+            if (!typeof(BaseInstance).IsAssignableFrom(left.GetType())) 
+                throw new InvalidOperationException("Expected instance on left-hand side.");
+            if (!(typeof(BaseType).IsAssignableFrom(right.GetType()) || typeof(BaseTrait).IsAssignableFrom(right.GetType())))
+                throw new InvalidOperationException("Expected type or trait on right-hand side.");
+
+            return new InvalidOperation();
+        }
+
         public object EvaluateAndExpression(BaseValue left, BaseValue right) {
             if (left is BooleanInstance && right is BooleanInstance) {
                 return (left as BooleanInstance).Value && (right as BooleanInstance).Value;

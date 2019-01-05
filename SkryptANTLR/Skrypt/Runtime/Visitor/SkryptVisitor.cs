@@ -392,6 +392,9 @@ namespace Skrypt {
                 case "!=":
                     result = _engine.expressionInterpreter.EvaluateNotEqualExpression(left, right);
                     break;
+                case "is":
+                    result = _engine.expressionInterpreter.EvaluateIsExpression(left, right);
+                    break;
                 case "and":
                     result = _engine.expressionInterpreter.EvaluateAndExpression(left, right);
                     break;

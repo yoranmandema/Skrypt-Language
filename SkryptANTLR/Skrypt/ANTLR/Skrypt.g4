@@ -334,7 +334,7 @@ expression          : '(' expression ')'																						#parenthesisExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression							#binaryOperationExp
 
                     |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
-                    |					Left=expression Operation=(EQUAL|NOTEQUAL)					Right=expression			#binaryOperationExp
+                    |					Left=expression Operation=(EQUAL|NOTEQUAL|IS)				Right=expression			#binaryOperationExp
 
 					|					Left=expression Operation=AND	Right=expression										#binaryOperationExp
                     |					Left=expression Operation=OR	Right=expression										#binaryOperationExp
@@ -414,6 +414,7 @@ GREATER					: '>'	;
 GREATEREQ				: '>='	;
 EQUAL					: '=='	;
 NOTEQUAL				: '!='	;
+IS						: 'is' ;
 
 AND						: 'and' ;
 OR						: 'or' ;

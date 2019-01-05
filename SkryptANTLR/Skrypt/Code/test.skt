@@ -1,14 +1,10 @@
 ﻿
-struct CustomType {
-	a = 2
-}
-
 trait CustomTrait {
 	fn HasCoolFunction () {
 		print("Hello")
 	}
 }
 
-impl CustomTrait for CustomType
+impl CustomTrait for Number
 
-print(CustomType())
+1234.HasCoolFunction()

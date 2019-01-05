@@ -19,5 +19,24 @@ namespace Skrypt {
         public Template Template;
         public List<BaseTrait> Traits = new List<BaseTrait>();
         public abstract BaseInstance Construct(Arguments arguments);
+
+        public override string ToString() {
+            var str = $"{Name}";
+            str += "\nTraits: ";
+
+            if (Traits.Any()) {
+                foreach (var t in Traits) {
+                    str += $"{t.Name} ";
+                }
+            } else {
+                str += "none";
+            }
+
+            foreach (var kv in Members) {
+                str += $"\n{kv.Key}:\t{kv.Value.Value}";
+            }
+
+            return str;
+        }
     }
 }
