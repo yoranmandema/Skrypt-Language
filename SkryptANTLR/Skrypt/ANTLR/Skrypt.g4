@@ -5,6 +5,7 @@ program				: block EOF ;
 block				: (
 					importStmnt
 					| moduleStmnt
+					| structStmnt
 					| ifStmnt
 					| forStmnt
 					| whileStmnt
@@ -57,7 +58,7 @@ if (nameCtx.variable == null) {
 }																																#importStatement
 					;
 
-moduleStmnt			: MODULE name  '{' moduleProperty+ '}' {
+moduleStmnt			: MODULE name  '{' property* '}' {
 
 var Ctx = ($ctx as ModuleStatementContext);
 var nameCtx = Ctx.name();
@@ -67,28 +68,54 @@ var module = new Skrypt.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.Get
 
 block.Variables[nameCtx.GetText()] = module;
 
-foreach (var c in Ctx.moduleProperty()) {
+foreach (var c in Ctx.property()) {
 	this.Engine.Visitor.Visit(c);
 
-	IToken nameToken = null;
-	bool isValid = false;
-
-	if (c.GetChild(0) is AssignNameStatementContext assignCtx) {
-		nameToken = assignCtx.name().NAME().Symbol;
-	}
-
-	var value = Ctx.Variables[nameToken.Text].Value;
-
-	if (value == null) {
-		Engine.ErrorHandler.AddError(nameToken, "Module field can't be set to an undefined value.");
-	}
-
-    module.Value.CreateProperty(nameToken.Text, value);
+	CreateProperty(module.Value, Ctx, c);
 }
+
 }																																#moduleStatement
 					;
 
-moduleProperty		: (assignStmnt | fnStmnt | moduleStmnt) ;
+
+structStmnt			: STRUCT name  '{' structProperty* '}' {
+
+var Ctx = ($ctx as StructStatementContext);
+var nameCtx = Ctx.name();
+var block = GetDefinitionBlock($ctx.Parent);
+var typeName = nameCtx.GetText();
+
+var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine));
+var template = new Template {Name = typeName};
+
+block.Variables[nameCtx.GetText()] = type;
+
+foreach (var c in Ctx.structProperty()) {
+	var isStatic = c.STATIC() != null;
+
+	this.Engine.Visitor.Visit(c.Property);
+
+	if (isStatic) {
+		CreateProperty(type.Value, Ctx, c.Property);
+	} else {
+		var nameToken = GetPropertyNameToken(type.Value, c.Property);
+		var value = Ctx.Variables[nameToken.Text].Value;
+
+        if (value == null) {
+            Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
+        }
+
+		template.Members[nameToken.Text] = new Member(value);
+	}
+}
+
+(type.Value as ScriptType).Template = template;
+
+}																																#structStatement
+					;
+
+structProperty		: STATIC? Property=property ;
+property			: (assignStmnt | fnStmnt | moduleStmnt) ;
 
 fnStmnt				locals [
 					BaseValue ReturnValue = null,
@@ -206,9 +233,7 @@ var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBl
 if (!isInFunction) {
 	try {
 		nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
-	} catch (System.Exception e) {
-		
-	}
+	} finally {}
 }
 }																																#assignNameStatement
 					| memberAccess		ASSIGN expression																		#assignMemberStatement
@@ -289,6 +314,8 @@ DOT						: '.' ;
 
 IMPORT					: 'import' ;
 MODULE					: 'module' ;
+STRUCT					: 'struct' ;
+TRAIT					: 'trait' ;
 IF						: 'if' ;
 ELSE					: 'else' ;
 FN						: 'fn' ;
@@ -297,8 +324,9 @@ FOR						: 'for' ;
 RETURN					: 'return' ;
 BREAK					: 'break' ;
 CONTINUE				: 'continue' ;
+STATIC					: 'static' ;
 
-KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | RETURN | BREAK | CONTINUE) ;
+KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;

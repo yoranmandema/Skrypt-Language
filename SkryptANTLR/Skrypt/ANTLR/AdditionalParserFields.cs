@@ -17,6 +17,11 @@ namespace Skrypt.ANTLR {
             public RuleContext Context => this;
         }
 
+        public partial class StructStmntContext : IScoped {
+            public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
+        }
+
         public partial class BlockContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
@@ -33,6 +38,32 @@ namespace Skrypt.ANTLR {
 
         public partial class ForStatementContext : ILoop {
             public JumpState JumpState { get; set; } = JumpState.None;
+        }
+
+        void CreateProperty(BaseValue target, IScoped ctx, ParserRuleContext propertyTree) {
+            IToken nameToken = null;
+
+            if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {
+                nameToken = assignCtx.name().NAME().Symbol;
+            }
+
+            var value = ctx.Variables[nameToken.Text].Value;
+
+            if (value == null) {
+                Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
+            }
+
+            target.CreateProperty(nameToken.Text, value);
+        }
+
+        IToken GetPropertyNameToken(BaseValue target, ParserRuleContext propertyTree) {
+            IToken nameToken = null;
+
+            if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {
+                nameToken = assignCtx.name().NAME().Symbol;
+            }
+
+            return nameToken;
         }
 
         IScoped GetDefinitionBlock (string name, RuleContext ctx) {

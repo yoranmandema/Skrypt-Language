@@ -19,11 +19,8 @@ namespace Skrypt {
         internal TemplateMaker templateMaker;
 
         internal NumberType Number;
-
         internal StringType String;
-
         internal BooleanType Boolean;
-
         internal VectorType Vector;
 
         internal MathModule Math;

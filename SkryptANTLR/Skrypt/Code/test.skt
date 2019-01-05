@@ -1,13 +1,6 @@
-﻿c = <1,2,3>
-
-fn Update () {
-	a = <1,2,3>
-
-	b = <3,4,5>
-
-	c = (c + (a * b)) / 2
-
-	d = c.Length
-
-	//print(c)
+﻿
+struct CustomType {
+	a = 2
 }
+
+print(CustomType())

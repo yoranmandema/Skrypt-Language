@@ -22,6 +22,7 @@ namespace Skrypt {
             var obj = new NumberInstance(Engine, val);
 
             obj.GetProperties(_template);
+            obj.TypeObject = this;
 
             return obj;
         }

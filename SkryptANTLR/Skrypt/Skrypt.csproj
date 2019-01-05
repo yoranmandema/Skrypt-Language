@@ -81,7 +81,8 @@
     <Compile Include="ErrorHandling\ErrorHandler.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
-    <Compile Include="Native\BaseType.cs" />
+    <Compile Include="Native\ScriptInstance.cs" />
+    <Compile Include="Native\Type\BaseType.cs" />
     <Compile Include="Native\Boolean\BooleanInstance.cs" />
     <Compile Include="Native\Boolean\BooleanType.cs" />
     <Compile Include="Native\Exceptions\FatalErrorException.cs" />
@@ -95,7 +96,6 @@
     <Compile Include="Native\Property\IProperty.cs" />
     <Compile Include="Native\Property\PropertyFunction.cs" />
     <Compile Include="Native\Function\NativeFunction.cs" />
-    <Compile Include="Native\Constructor.cs" />
     <Compile Include="Native\Property\GetPropertyInstance.cs" />
     <Compile Include="Native\Function\Parameter.cs" />
     <Compile Include="Native\Function\ScriptFunction.cs" />
@@ -108,6 +108,7 @@
     <Compile Include="Native\Member.cs" />
     <Compile Include="Native\Template\TemplateMaker.cs" />
     <Compile Include="Native\Trait.cs" />
+    <Compile Include="Native\Type\ScriptType.cs" />
     <Compile Include="Native\Vector\Vector2Instance.cs" />
     <Compile Include="Native\Vector\Vector4Instance.cs" />
     <Compile Include="Native\Vector\Vector3Instance.cs" />

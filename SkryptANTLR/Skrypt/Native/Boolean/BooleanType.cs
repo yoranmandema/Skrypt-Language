@@ -16,6 +16,7 @@ namespace Skrypt {
             var obj = new BooleanInstance(Engine, val);
 
             obj.GetProperties(_template);
+            obj.TypeObject = this;
 
             return obj;
         }

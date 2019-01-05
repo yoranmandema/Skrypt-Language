@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class BaseInstance : BaseValue {
         public BaseInstance(Engine engine) : base (engine) { }
-        public BaseType StaticObject { get; set; }
+        public BaseType TypeObject { get; set; }
     }
 }

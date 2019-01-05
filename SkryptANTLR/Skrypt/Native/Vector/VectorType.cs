@@ -28,6 +28,7 @@ namespace Skrypt {
             }
 
             obj.GetProperties(_template);
+            obj.TypeObject = this;
 
             return obj;
         }
