@@ -173,6 +173,22 @@ namespace Skrypt {
             return DefaultResult;
         }
 
+        public override BaseValue VisitAssignComputedMemberStatement([NotNull] SkryptParser.AssignComputedMemberStatementContext context) {
+            var lhs = context.memberAccessComp();
+
+            var obj = Visit(lhs.expression(0));
+            var index = Visit(lhs.expression(1));
+            var value = Visit(context.expression());
+
+            if (obj is ArrayInstance arrayInstance) {
+                return arrayInstance.Set(index, value);
+            }
+
+            _engine.ErrorHandler.FatalError(lhs.expression(0).Start, "Expected array instance.");
+
+            return null;
+        }
+
         public override BaseValue VisitMemberAccessExp(SkryptParser.MemberAccessExpContext context) {
             var obj = Visit(context.expression());
             var memberName = context.NAME().GetText();
@@ -202,7 +218,7 @@ namespace Skrypt {
                 return arrayInstance.Get(index);
             }
 
-            _engine.ErrorHandler.FatalError(context.expression(1).Start, "Expected string or array instance.");
+            _engine.ErrorHandler.FatalError(context.expression(0).Start, "Expected string or array instance.");
 
             return null;
         }

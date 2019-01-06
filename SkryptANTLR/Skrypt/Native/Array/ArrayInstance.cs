@@ -33,6 +33,28 @@ namespace Skrypt {
             }
         }
 
+        public BaseValue Set(BaseValue index, BaseValue value) {
+            if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
+                if (number >= 0 && number < SequenceValues.Count) {
+                    SequenceValues[(int)number] = value;
+                }
+                else if (number >= SequenceValues.Count) {
+                    var diff = number - SequenceValues.Count + 1;
+
+                    for (int i = 0; i < diff; i++) {
+                        SequenceValues.Add(null);
+                    }
+
+                    SequenceValues[(int)number] = value;
+                }
+            }
+            else {
+                Dictionary[index] = value;
+            }
+
+            return this;
+        }
+
         public override string ToString() {
             return $"[{string.Join(",", SequenceValues)}]";
         }

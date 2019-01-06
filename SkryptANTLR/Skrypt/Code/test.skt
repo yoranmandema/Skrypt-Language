@@ -1,4 +1,8 @@
 ﻿
 a = [1,2,3]
 
-print("23233"[4])
+print(a)
+
+a[1] = true
+
+print(a)
