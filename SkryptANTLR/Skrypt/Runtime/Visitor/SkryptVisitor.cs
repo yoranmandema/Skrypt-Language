@@ -198,14 +198,14 @@ namespace Skrypt {
             if (val is GetPropertyInstance) {
                 var newVal = (val as GetPropertyInstance).Property.Run(_engine, obj);
 
-                accessed = newVal;
-            } else {
-                accessed = val;
-            }
+                val = newVal;
+            } 
+
+            accessed = obj;
 
             LastResult = accessed;
 
-            return accessed;
+            return val;
         }
 
         public override BaseValue VisitComputedMemberAccessExp([NotNull] SkryptParser.ComputedMemberAccessExpContext context) {

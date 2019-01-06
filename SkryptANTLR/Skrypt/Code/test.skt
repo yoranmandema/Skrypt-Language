@@ -1,8 +1,6 @@
 ﻿
 a = [1,2,3]
 
-print(a)
-
-a[1] = true
+a.Insert(4)
 
 print(a)
