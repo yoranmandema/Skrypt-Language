@@ -15,6 +15,24 @@ namespace Skrypt {
             Value = value;
         }
 
+        public BaseValue Get(int index) {
+            if (index >= 0 && index < Value.Length) {
+                return Engine.CreateString(Value[index].ToString());
+            }
+            else {
+                return Engine.CreateString(string.Empty);
+            }
+        }
+
+        public BaseValue Get(BaseValue index) {
+            if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
+                return Get((int)number);
+            }
+            else {
+                return Engine.CreateString(string.Empty);
+            }
+        }
+
         public static BaseValue Length(Engine engine, BaseValue self) {
             return engine.CreateNumber((self as StringInstance).Value.Length);
         }

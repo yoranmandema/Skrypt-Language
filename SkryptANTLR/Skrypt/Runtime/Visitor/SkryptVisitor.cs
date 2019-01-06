@@ -192,6 +192,21 @@ namespace Skrypt {
             return accessed;
         }
 
+        public override BaseValue VisitComputedMemberAccessExp([NotNull] SkryptParser.ComputedMemberAccessExpContext context) {
+            var obj = Visit(context.expression(0));
+            var index = Visit(context.expression(1));
+
+            if (obj is StringInstance stringInstance) {
+                return stringInstance.Get(index);
+            } else if (obj is ArrayInstance arrayInstance) {
+                return arrayInstance.Get(index);
+            }
+
+            _engine.ErrorHandler.FatalError(context.expression(1).Start, "Expected string or array instance.");
+
+            return null;
+        }
+
         public override BaseValue VisitNameExp(SkryptParser.NameExpContext context) {
             var value = context.name().variable.Value;
 
@@ -446,7 +461,7 @@ namespace Skrypt {
             }
 
             if (result is InvalidOperation) {
-                throw new InvalidOperationException($"No such operation: {left?.Name ?? "null"} {operationName} {right?.Name ?? "null"}");
+                _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {left?.Name ?? "null"} {operationName} {right?.Name ?? "null"}.");
             }
 
             LastResult = (BaseValue)result;
@@ -463,7 +478,7 @@ namespace Skrypt {
                 isConstructor = true;
             }
             else if (!(function is FunctionInstance)) {
-                throw new Exception("Called object is not a function!");
+                _engine.ErrorHandler.FatalError(context.Function.Start, "Called object is not a function.");
             }
 
             var length = context.Arguments.expression().Length;
