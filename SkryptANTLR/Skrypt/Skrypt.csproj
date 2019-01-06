@@ -80,6 +80,8 @@
     <Compile Include="Engine.cs" />
     <Compile Include="ErrorHandling\ErrorHandler.cs" />
     <Compile Include="Native\Arguments.cs" />
+    <Compile Include="Native\Array\ArrayInstance.cs" />
+    <Compile Include="Native\Array\ArrayType.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
     <Compile Include="Native\Trait\ScriptTrait.cs" />

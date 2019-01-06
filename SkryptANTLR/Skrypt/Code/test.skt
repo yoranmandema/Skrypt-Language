@@ -1,10 +1,2 @@
 ﻿
-trait CustomTrait {
-	fn HasCoolFunction () {
-		print("Hello")
-	}
-}
-
-impl CustomTrait for Number
-
-1234.HasCoolFunction()
+[1,2,3]

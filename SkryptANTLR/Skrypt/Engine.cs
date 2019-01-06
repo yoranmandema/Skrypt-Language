@@ -22,6 +22,7 @@ namespace Skrypt {
         internal StringType String;
         internal BooleanType Boolean;
         internal VectorType Vector;
+        internal ArrayType Array;
 
         internal MathModule Math;
 
@@ -38,6 +39,7 @@ namespace Skrypt {
             String                  = new StringType(this);
             Boolean                 = new BooleanType(this);
             Vector                  = new VectorType(this);
+            Array                   = new ArrayType(this);
 
             Math                    = new MathModule(this);
 
@@ -150,6 +152,10 @@ namespace Skrypt {
 
         public Vector4Instance CreateVector4(double x, double y, double z, double w) {
             return (Vector4Instance)Vector.Construct(x, y, z, w);
+        }
+
+        public ArrayInstance CreateArray(BaseValue[] values) {
+            return (ArrayInstance)Array.Construct(values);
         }
     }
 }

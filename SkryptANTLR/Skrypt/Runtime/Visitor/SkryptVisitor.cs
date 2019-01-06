@@ -269,6 +269,23 @@ namespace Skrypt {
             return vec;
         }
 
+        public override BaseValue VisitArrayLiteral([NotNull] SkryptParser.ArrayLiteralContext context) {
+            var a = context.array();
+
+            var expressions = a.expressionGroup().expression();
+            var values = new BaseValue[expressions.Length];
+
+            for (int i = 0; i < values.Length; i++) {
+                values[i] = Visit(expressions[i]);
+            }
+
+            var array = _engine.CreateArray(values);
+
+            LastResult = array;
+             
+            return array;
+        }
+
         public override BaseValue VisitParenthesisExp(SkryptParser.ParenthesisExpContext context) {
             return Visit(context.expression());
         }
