@@ -62,6 +62,12 @@ if (nameCtx.variable == null) {
 
 moduleStmnt			: MODULE name  '{' property* '}' {
 
+var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
+
+if (!isInValidContext) {
+	Engine.ErrorHandler.AddError($ctx.Start, "Module has to be in global scope or module block.");
+}
+
 var Ctx = ($ctx as ModuleStatementContext);
 var nameCtx = Ctx.name();
 var block = GetDefinitionBlock($ctx.Parent);
@@ -81,6 +87,12 @@ foreach (var c in Ctx.property()) {
 
 
 structStmnt			: STRUCT name  '{' structProperty* '}' {
+
+var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
+
+if (!isInValidContext) {
+	Engine.ErrorHandler.AddError($ctx.Start, "Struct has to be in global scope, module block or struct block.");
+}
 
 var Ctx = ($ctx as StructStatementContext);
 var nameCtx = Ctx.name();
@@ -104,7 +116,7 @@ foreach (var c in Ctx.structProperty()) {
 		var value = Ctx.Variables[nameToken.Text].Value;
 
         if (value == null) {
-            Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
+            Engine.ErrorHandler.AddError(c.Property.Start, "Field can't be set to an undefined value.");
         }
 
 		template.Members[nameToken.Text] = new Member(value);
@@ -117,6 +129,11 @@ foreach (var c in Ctx.structProperty()) {
 					;
 
 traitStmnt			: TRAIT name propertiesBlock {
+var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
+
+if (!isInValidContext) {
+	Engine.ErrorHandler.AddError($ctx.Start, "Trait has to be in global scope or module block.");
+}
 
 var Ctx = ($ctx as TraitStatementContext);
 var nameCtx = Ctx.name();
@@ -194,7 +211,8 @@ if (modifiesProperties) {
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
 structProperty		: STATIC? Property=property ;
-property			: (assignStmnt | fnStmnt | moduleStmnt) ;
+moduleProperty		: property | moduleStmnt ;
+property			: assignStmnt | fnStmnt ;
 
 fnStmnt				locals [
 					BaseValue ReturnValue = null,

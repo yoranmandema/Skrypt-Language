@@ -66,6 +66,17 @@ namespace Skrypt.ANTLR {
             target.CreateProperty(nameToken.Text, value);
         }
 
+        bool ContextIsIn(RuleContext context, Type[] types) {
+
+            foreach (var t in types) {
+                if (context.parent.parent.GetType() == t) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         IToken GetPropertyNameToken(ParserRuleContext propertyTree) {
             IToken nameToken = null;
 
