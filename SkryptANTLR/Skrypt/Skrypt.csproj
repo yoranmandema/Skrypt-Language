@@ -137,6 +137,9 @@
       <CustomToolNamespace>Skrypt.ANTLR</CustomToolNamespace>
     </Antlr4>
     <None Include="App.config" />
+    <None Include="Code\library.skt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Code\test.skt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

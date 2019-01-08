@@ -1,6 +1,4 @@
 ﻿
-if (1) {
-	struct test {
+import a from "library.skt"
 
-	}
-}
+print(a)

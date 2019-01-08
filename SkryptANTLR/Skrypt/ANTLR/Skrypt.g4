@@ -4,6 +4,8 @@ program				: block EOF ;
 
 block				: (
 					importStmnt
+					| importAllFromStmnt
+					| importFromStmnt
 					| moduleStmnt
 					| structStmnt
 					| traitStmnt
@@ -58,6 +60,39 @@ if (nameCtx.variable == null) {
 }
 
 }																																#importStatement
+					;
+
+importAllFromStmnt	: IMPORT ASTERISK FROM string {
+var Ctx = ($ctx as ImportAllFromStatementContext);
+
+var relativePath = Ctx.@string().value;
+var path = System.IO.Path.Combine(Engine.RootFolder, relativePath);
+
+var input = System.IO.File.ReadAllText(path);
+
+Engine.Run(input).CreateGlobals();
+
+}																																#importAllFromStatement
+					;
+
+importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
+var Ctx = ($ctx as ImportFromStatementContext);
+var scope = GetDefinitionBlock($ctx);
+
+var relativePath = Ctx.@string().value;
+var path = System.IO.Path.Combine(Engine.RootFolder, relativePath);
+
+var input = System.IO.File.ReadAllText(path);
+
+Engine.Run(input);
+
+foreach (var n in Ctx.NAME()) {
+	var name = n.GetText();
+
+	scope.Variables[name] = new Skrypt.Variable(name, Engine.GetValue(name));
+}
+
+}																																#importFromStatement
 					;
 
 moduleStmnt			: MODULE name  '{' property* '}' {
@@ -418,6 +453,7 @@ fragment FALSE			: 'false';
 DOT						: '.' ;
 
 IMPORT					: 'import' ;
+FROM					: 'from' ;
 MODULE					: 'module' ;
 STRUCT					: 'struct' ;
 TRAIT					: 'trait' ;
@@ -476,6 +512,8 @@ System.Console.WriteLine(Token);
 Engine.ErrorHandler.FatalError(Token, "Unterminated string.");
 
 }) ;
+
+PATH					: [-.a-zA-Z0-9:/\\]+;
 
 WHITESPACE				: [ \n\t\r]+ -> channel(HIDDEN);
 
