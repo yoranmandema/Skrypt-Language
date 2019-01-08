@@ -162,6 +162,11 @@ foreach (var child in Ctx.propertiesBlock().property()) {
 					;
 
 traitImplStmnt		: IMPL name FOR name propertiesBlock? {
+var isInValidContext = ContextIsIn($ctx, new [] {typeof(ProgramContext)});
+
+if (!isInValidContext) {
+	Engine.ErrorHandler.AddError($ctx.Start, "Implementation has to be in global scope.");
+}
 
 var Ctx = ($ctx as TraitImplStatementContext);
 var traitNameCtx = Ctx.name(0);
