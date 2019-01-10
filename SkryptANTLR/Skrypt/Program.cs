@@ -13,9 +13,7 @@ namespace Skrypt {
         static void Main(string[] args){
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Code\\test.skt");
 
-            string input = File.ReadAllText(path);
-
-            var engine = new Engine(path);
+            var engine = new Engine();
 
             engine.SetValue("print", (e, s, i) => {
                 Console.WriteLine(i[0]);
@@ -42,7 +40,7 @@ namespace Skrypt {
                 return null;
             });
 
-            engine.Run(input).CreateGlobals();
+            engine.DoFile(path).CreateGlobals();
             
             while (true) {
                 string line = Console.ReadLine();

@@ -32,10 +32,7 @@ namespace Skrypt {
         public ErrorHandler ErrorHandler = new ErrorHandler();
         public IIOHandler IOHandler = new DefaultIOHandler();
 
-        public Engine(string file) {
-            IOHandler.File = file;
-            IOHandler.Directory = System.IO.Path.GetDirectoryName(file);
-
+        public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
 
@@ -48,6 +45,15 @@ namespace Skrypt {
             Math                    = new MathModule(this);
 
             Visitor                 = new SkryptVisitor(this);
+        }
+
+        public Engine DoFile(string file) {
+            IOHandler.File = file;
+            IOHandler.Directory = System.IO.Path.GetDirectoryName(file);
+
+            var code = IOHandler.Read(file);
+
+            return Run(code);
         }
 
         public Engine Run(string code) {
