@@ -30,7 +30,7 @@ namespace Skrypt {
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
 
         public ErrorHandler ErrorHandler = new ErrorHandler();
-        public IIOHandler IOHandler = new DefaultIOHandler();
+        public IFileHandler IOHandler = new DefaultIOHandler();
 
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);

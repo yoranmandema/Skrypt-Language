@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class DefaultIOHandler : IIOHandler {
+    public class DefaultIOHandler : IFileHandler {
         public string File { get; set; }
         public string Directory { get; set; }
 

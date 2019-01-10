@@ -1,4 +1,4 @@
 ﻿
-import a from "library.skt"
+import test from "library.skt"
 
-print(a)
+benchmark(test,1000)
