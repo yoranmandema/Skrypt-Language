@@ -12,9 +12,6 @@ namespace Skrypt {
     public class Engine {
         public BaseValue CompletionValue => Visitor.LastResult;
 
-        public string RootFile { get; internal set; }
-        public string RootFolder { get; internal set; }
-
         internal SkryptParser Parser;
         internal SkryptVisitor Visitor;
 
@@ -32,11 +29,12 @@ namespace Skrypt {
         internal SkryptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
 
-        public ErrorHandler ErrorHandler = new ErrorHandler(); 
+        public ErrorHandler ErrorHandler = new ErrorHandler();
+        public IIOHandler IOHandler = new DefaultIOHandler();
 
         public Engine(string file) {
-            RootFile = file;
-            RootFolder = System.IO.Path.GetDirectoryName(RootFile);
+            IOHandler.File = file;
+            IOHandler.Directory = System.IO.Path.GetDirectoryName(file);
 
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);

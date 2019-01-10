@@ -66,9 +66,7 @@ importAllFromStmnt	: IMPORT ASTERISK FROM string {
 var Ctx = ($ctx as ImportAllFromStatementContext);
 
 var relativePath = Ctx.@string().value;
-var path = System.IO.Path.Combine(Engine.RootFolder, relativePath);
-
-var input = System.IO.File.ReadAllText(path);
+var input = Engine.IOHandler.Read(relativePath);
 
 Engine.Run(input).CreateGlobals();
 
@@ -80,9 +78,7 @@ var Ctx = ($ctx as ImportFromStatementContext);
 var scope = GetDefinitionBlock($ctx);
 
 var relativePath = Ctx.@string().value;
-var path = System.IO.Path.Combine(Engine.RootFolder, relativePath);
-
-var input = System.IO.File.ReadAllText(path);
+var input = Engine.IOHandler.Read(relativePath);
 
 Engine.Run(input);
 

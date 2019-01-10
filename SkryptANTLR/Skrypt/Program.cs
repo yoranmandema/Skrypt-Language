@@ -15,9 +15,7 @@ namespace Skrypt {
 
             string input = File.ReadAllText(path);
 
-            var engine = new Engine(path) {
-                RootFile = path
-            };
+            var engine = new Engine(path);
 
             engine.SetValue("print", (e, s, i) => {
                 Console.WriteLine(i[0]);
