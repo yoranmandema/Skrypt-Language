@@ -21,7 +21,7 @@ namespace Skrypt {
         }
 
         public void GetProperties(Template template) {
-            Members = Members.Concat(template.Members).ToDictionary(d => d.Key, d => d.Value);
+            Members = Members.Concat(template.Members).ToDictionary(d => d.Key, d => { Console.WriteLine(d.Value.GetHashCode());  return d.Value; });
             Name = template.Name;
         }
 
@@ -35,8 +35,8 @@ namespace Skrypt {
             return Members[name];
         }
 
-        public Member CreateProperty(string name, BaseValue value) {
-            Members[name] = new Member(value);
+        public Member CreateProperty(string name, BaseValue value, bool isPrivate = false) {
+            Members[name] = new Member(value, isPrivate) { Owner = this };
 
             return Members[name];
         }
