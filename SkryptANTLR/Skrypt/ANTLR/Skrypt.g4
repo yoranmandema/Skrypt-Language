@@ -103,6 +103,8 @@ var Ctx = ($ctx as ModuleStatementContext);
 var nameCtx = Ctx.name();
 var block = GetDefinitionBlock($ctx.Parent);
 
+if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddError(nameCtx.Start, "Constant cannot be redefined.");
+
 var module = new Skrypt.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
 
 block.Variables[nameCtx.GetText()] = module;
@@ -129,6 +131,8 @@ var Ctx = ($ctx as StructStatementContext);
 var nameCtx = Ctx.name();
 var block = GetDefinitionBlock($ctx.Parent);
 var typeName = nameCtx.GetText();
+
+if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddError(nameCtx.Start, "Constant cannot be redefined.");
 
 var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine));
 var template = new Template {Name = typeName};
@@ -170,6 +174,8 @@ var Ctx = ($ctx as TraitStatementContext);
 var nameCtx = Ctx.name();
 var block = GetDefinitionBlock($ctx.Parent);
 var traitName = nameCtx.GetText();
+
+if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddError(nameCtx.Start, "Constant cannot be redefined.");
 
 var trait = new ScriptTrait(traitName, this.Engine);
 var traitVariable = new Skrypt.Variable(traitName, trait);
@@ -254,9 +260,12 @@ fnStmnt				locals [
 					BaseValue ReturnValue = null,
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
-					: FN name '(' parameterGroup ')' {
+					: CONST? FN name '(' parameterGroup ')' {
 var fnCtx = ($ctx as FunctionStatementContext);
 var nameCtx = fnCtx.name();
+var isConstant = fnCtx.CONST() != null;
+
+if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddError(nameCtx.Start, "Constant cannot be redefined.");
 
 var newVar = new Skrypt.Variable(nameCtx.GetText());
 
@@ -264,6 +273,7 @@ var scope = GetDefinitionBlock($ctx.Parent);
 
 scope.Variables[nameCtx.GetText()] = newVar;
 nameCtx.variable = newVar;		
+
 
 var parameters = fnCtx.parameterGroup().parameter();
 var processedParameters = new Skrypt.Parameter[parameters.Length];
@@ -349,17 +359,22 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 else				: ELSE stmntBlock																			
 					;
 
-assignStmnt			: name				ASSIGN expression	{
+assignStmnt			: CONST? name ASSIGN expression	{
 var assignNameCtx = ($ctx as AssignNameStatementContext);
 var nameCtx = assignNameCtx.name();
 var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
+var isConstant = assignNameCtx.CONST() != null;
+
+if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddError(nameCtx.Start, "Constant cannot be redefined.");
 
 if (nameCtx.variable == null) {
-	var newVar = new Skrypt.Variable(nameCtx.GetText());
+	var newVar = new Skrypt.Variable(nameCtx.GetText()) {
+		IsConstant = isConstant
+	};
 
 	block.Variables[nameCtx.GetText()] = newVar;
 	nameCtx.variable = newVar;
-}
+} 	
 
 var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
 
@@ -463,8 +478,9 @@ RETURN					: 'return' ;
 BREAK					: 'break' ;
 CONTINUE				: 'continue' ;
 STATIC					: 'static' ;
+CONST					: 'const' ;
 
-KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC) ;
+KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | CONST) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;

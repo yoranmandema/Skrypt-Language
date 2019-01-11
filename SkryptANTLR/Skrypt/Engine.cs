@@ -30,7 +30,7 @@ namespace Skrypt {
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
 
         public ErrorHandler ErrorHandler = new ErrorHandler();
-        public IFileHandler IOHandler = new DefaultIOHandler();
+        public IFileHandler FileHandler = new DefaultFileHandler();
 
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
@@ -48,10 +48,10 @@ namespace Skrypt {
         }
 
         public Engine DoFile(string file) {
-            IOHandler.File = file;
-            IOHandler.Directory = System.IO.Path.GetDirectoryName(file);
+            FileHandler.File = file;
+            FileHandler.Directory = System.IO.Path.GetDirectoryName(file);
 
-            var code = IOHandler.Read(file);
+            var code = FileHandler.Read(file);
 
             return Run(code);
         }

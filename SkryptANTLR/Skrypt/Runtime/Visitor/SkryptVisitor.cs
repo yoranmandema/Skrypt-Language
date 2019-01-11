@@ -159,8 +159,12 @@ namespace Skrypt {
         }
 
         public override BaseValue VisitAssignNameStatement(SkryptParser.AssignNameStatementContext context) {
-            context.name().variable.Value = Visit(context.expression());
+            if (context.name().variable.IsConstant) {
+                _engine.ErrorHandler.FatalError(context.Start, "Constant cannot be redefined.");
+            }
 
+            context.name().variable.Value = Visit(context.expression());
+            
             return DefaultResult;
         }
 
