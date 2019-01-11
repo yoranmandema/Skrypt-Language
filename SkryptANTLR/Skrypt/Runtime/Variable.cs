@@ -8,6 +8,7 @@ namespace Skrypt {
     public class Variable {
         public string Name { get; set; }
         public BaseValue Value { get; set; }
+        public bool IsConstant { get; set; }
 
         public Variable (string name) {
             Name = name;
