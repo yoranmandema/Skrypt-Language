@@ -1,14 +1,29 @@
 {
 	"name": "skrypt-language",
 	"displayName": "Skrypt Language Support",
-	"description": "Support for the Skrypt language by KrypteK",
-	"version": "0.0.1",
-	"author": "WYVERN",
+	"description": "Snippits and syntax support for the Skrypt language by KrypteK",
+	"version": "0.1.0",
+	"publisher": "WYVERN",
+	"author": {
+		"name": "WYVERN"
+	},
+	"license": "MIT",
+	"icon": "icon.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/KrispyteK/SkryptANTLR"
+	},
+	"homepage": "https://github.com/KrispyteK/SkryptANTLR/blob/master/Skrypt-language/vscode/README.md",
+	"bugs": {
+		"url": "https://github.com/KrispyteK/SkryptANTLR/issues"
+	},
+	"preview": true,
+	"galleryBanner":{
+		"color": "#A0AF00",
+		"theme": "dark"
+	},
 	"engines": {
 		"vscode": "^1.30.1"
-	},
-	"dependencies": {
-		"vscode": "^1.1.26"
 	},
 	"categories": [
 		"Programming Languages",
