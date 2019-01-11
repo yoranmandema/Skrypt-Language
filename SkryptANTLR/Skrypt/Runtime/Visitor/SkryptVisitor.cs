@@ -172,6 +172,25 @@ namespace Skrypt {
             var target      = Visit(context.memberAccess().expression());
             var memberName  = context.memberAccess().NAME().GetText();
 
+            var property = target.GetProperty(memberName);
+
+            if (property.IsPrivate && property.DefinitionBlock != null) {
+                var parent = context.Parent;
+                var canAccess = false;
+
+                while (parent != null) {
+                    if (parent == property.DefinitionBlock) {
+                        canAccess = true;
+                    }
+
+                    parent = parent.Parent;
+                }
+
+                if (!canAccess) {
+                    _engine.ErrorHandler.FatalError(context.memberAccess().Start, $"Private property {memberName} is not accessible in the current context.");
+                }
+            }
+
             target.SetProperty(memberName, Visit(context.expression()));
 
             return DefaultResult;

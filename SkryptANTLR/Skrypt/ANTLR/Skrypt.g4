@@ -280,6 +280,7 @@ var scope = GetDefinitionBlock($ctx.Parent);
 scope.Variables[nameCtx.GetText()] = newVar;
 nameCtx.variable = newVar;		
 
+fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
 
 var parameters = fnCtx.parameterGroup().parameter();
 var processedParameters = new Skrypt.Parameter[parameters.Length];
@@ -384,11 +385,11 @@ if (nameCtx.variable == null) {
 
 var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
 
-if (!isInFunction) {
-	try {
-		nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
-	} finally {}
-}
+//if (!isInFunction) {
+//	try {
+//		nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
+//	} finally {}
+//}
 }																																#assignNameStatement
 					| memberAccess		ASSIGN expression																		#assignMemberStatement
 					| memberAccessComp	ASSIGN expression																		#assignComputedMemberStatement					

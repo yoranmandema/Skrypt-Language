@@ -1,7 +1,13 @@
 ﻿struct Thing {	
+	a = 2
+
 	fn init () {
-		print("I have been created")
+
 	}
 }
 
-Thing()
+fn CreateThing() {
+	Thing()
+}
+
+benchmark(CreateThing,1000)

@@ -22,6 +22,8 @@ namespace Skrypt {
             var expr = blockStmnt.expression();
             var preCallValues = new Dictionary<string, BaseValue>();
 
+            Context.Variables["self"].Value = self;
+
             for (int i = 0; i < Parameters.Length; i++) {
                 var parameter = Parameters[i];
                 var input = args[i];
@@ -56,7 +58,7 @@ namespace Skrypt {
                 returnValue = engine.Visitor.Visit(expr);
             }
 
-            foreach (var v in Context.Variables) {
+            foreach (var v in preCallValues) {
                 if (preCallValues[v.Key].CopyOnAssignment) {
                     Context.Variables[v.Key].Value = preCallValues[v.Key];
                 }
