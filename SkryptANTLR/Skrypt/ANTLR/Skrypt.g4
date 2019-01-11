@@ -155,6 +155,11 @@ foreach (var c in Ctx.structProperty()) {
             Engine.ErrorHandler.AddError(c.Property.Start, "Field can't be set to an undefined value.");
         }
 
+		if (nameToken.Text == "init" && value is FunctionInstance function) {
+			(type.Value as ScriptType).Constructor = function.Function as ScriptFunction;
+			continue;
+		}
+
 		template.Members[nameToken.Text] = new Member(value, isPrivate, Ctx);
 	}
 }

@@ -1,6 +1,7 @@
-﻿struct Thing {
-	private a = 2
+﻿struct Thing {	
+	fn init () {
+		print("I have been created")
+	}
 }
 
-Thing().a
-
+Thing()
