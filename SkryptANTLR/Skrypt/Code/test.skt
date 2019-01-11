@@ -1,10 +1,6 @@
-﻿
-import test from "library.skt"
+﻿struct Thing {
+	private a = 2
+}
 
-benchmark(test,1000)
+Thing().a
 
-b = 2
-
-b = 3
-
-print(b)
