@@ -1,1 +1,6 @@
-﻿Math.PI
+﻿struct Thing {
+	private a = 2
+}
+
+Thing().a
+

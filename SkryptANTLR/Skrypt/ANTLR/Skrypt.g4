@@ -527,8 +527,6 @@ Engine.ErrorHandler.FatalError(Token, "Unterminated string.");
 
 }) ;
 
-PATH					: [-.a-zA-Z0-9:/\\]+;
-
 WHITESPACE				: [ \n\t\r]+ -> channel(HIDDEN);
 
 COMMENT					: '/*' .*? '*/' -> skip ;
