@@ -1,0 +1,52 @@
+{
+	"name": "Skrypt Language",
+	"scopeName": "source.skrypt",
+	"fileTypes": [
+		"skt"
+	],
+	"patterns": [
+		{
+			"match": "\/\/.*",
+			"name": "comment.line",
+			"comment": "Single Line Comment"
+		},
+		{
+			"name": "comment.block",
+			"begin": "/\\*",
+			"end": "\\*\/",
+			"comment": "Block Comment"
+		},
+		{
+			"name": "constant.numeric",
+			"match": "[0-9]",
+			"comment": "Numeric constants"
+		},
+		{
+			"name": "keyword",
+			"match": "(import|module|if|else|fn|while|for|return|break|continue|from|struct|impl|trait|and|or)",
+			"comment": "Language keywords"
+		},
+		{
+			"name": "support.class",
+			"match": "[A-Z][a-z]*(?!\\()",
+			"comment": "Classes"
+		},
+		{
+			"name": "constant.language",
+			"match": "((t|T)rue|(f|F)alse)",
+			"comment": "Boolean values"
+		},
+		{
+			"name": "string",
+			"begin": "\"",
+			"end": "\"",
+			"comment": "String constant"
+		},
+		{
+			"name": "support.function",
+			"match": "(\\s|\\.|^)[A-z]*(?=\\()",
+			"comment": "All Functions"
+		}
+	],
+	"uuid": "ca03e751-04ef-4330-9a6b-9b99aae1c418"
+}

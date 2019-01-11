@@ -1,0 +1,69 @@
+// Singleline
+
+/*
+Multiline
+*/
+
+a = 2
+
+b = 2 / 4 * (a - 3)
+
+import Math
+
+fn SomeVeryCoolFunction(a, b = 2) {
+	c = b * a
+
+	return c + " is very cool!"
+}
+
+if (true and false or true) {
+	...
+} else if (true and false or true) {
+	...
+} else {
+	...
+}
+
+if (true and false or true)
+	...
+else if (true and false or true)
+	...
+else
+	...
+
+module SomeLibrary {
+	a = 3
+	b = "Very cool!"
+
+	fn CoolFunction(a) {
+		return a + " is very cool!"
+	}
+}
+
+print("Hello world")
+
+print(SomeLibrary.CoolFunction("Skrypt"))
+
+while (true) {
+	...
+	break
+	...
+	continue
+}
+
+for (x = 0, x < 10, x++) {
+	...
+	break
+	...
+	continue
+}
+
+trait CustomTrait {
+	fn HasCoolFunction() {
+		print("Hello")
+	}
+}
+
+impl CustomTrait for Number
+
+Number.HasCoolFunction()

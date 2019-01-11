@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>name</key>
+    <string>Skrypt Language</string>
+    <key>scopeName</key>
+    <string>source.skrypt</string>
+    <key>fileTypes</key>
+    <array>
+      <string>skt</string>
+    </array>
+    <key>patterns</key>
+    <array>
+      <dict>
+        <key>match</key>
+        <string>//.*</string>
+        <key>name</key>
+        <string>comment.line</string>
+        <key>comment</key>
+        <string>Single Line Comment</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>comment.block</string>
+        <key>begin</key>
+        <string>/\*</string>
+        <key>end</key>
+        <string>\*/</string>
+        <key>comment</key>
+        <string>Block Comment</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>constant.numeric</string>
+        <key>match</key>
+        <string>[0-9]</string>
+        <key>comment</key>
+        <string>Numeric constants</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>keyword</string>
+        <key>match</key>
+        <string>(import|module|if|else|fn|while|for|return|break|continue|from|struct|impl|trait|and|or)</string>
+        <key>comment</key>
+        <string>Language keywords</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>support.class</string>
+        <key>match</key>
+        <string>[A-Z][a-z]*(?!\()</string>
+        <key>comment</key>
+        <string>Classes</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>constant.language</string>
+        <key>match</key>
+        <string>((t|T)rue|(f|F)alse)</string>
+        <key>comment</key>
+        <string>Boolean values</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>string</string>
+        <key>begin</key>
+        <string>"</string>
+        <key>end</key>
+        <string>"</string>
+        <key>comment</key>
+        <string>String constant</string>
+      </dict>
+      <dict>
+        <key>name</key>
+        <string>support.function</string>
+        <key>match</key>
+        <string>(\s|\.|^)[A-z]*(?=\()</string>
+        <key>comment</key>
+        <string>All Functions</string>
+      </dict>
+    </array>
+    <key>uuid</key>
+    <string>ca03e751-04ef-4330-9a6b-9b99aae1c418</string>
+  </dict>
+</plist>
