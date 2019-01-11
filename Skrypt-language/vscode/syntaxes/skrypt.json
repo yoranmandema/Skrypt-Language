@@ -44,7 +44,7 @@
 		},
 		{
 			"name": "support.function",
-			"match": "(\\s|\\.|^)[A-z]*(?=\\()",
+			"match": "(\\s|\\.|^)[A-z]* ?(?=\\()",
 			"comment": "All Functions"
 		}
 	],

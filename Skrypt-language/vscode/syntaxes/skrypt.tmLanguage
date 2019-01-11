@@ -76,7 +76,7 @@
         <key>name</key>
         <string>support.function</string>
         <key>match</key>
-        <string>(\s|\.|^)[A-z]*(?=\()</string>
+        <string>(\s|\.|^)[A-z]* ?(?=\()</string>
         <key>comment</key>
         <string>All Functions</string>
       </dict>
