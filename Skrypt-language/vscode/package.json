@@ -1,9 +1,9 @@
 {
 	"name": "skrypt-language",
 	"displayName": "Skrypt Language Support",
-	"description": "Snippits and syntax support for the Skrypt language by KrypteK",
+	"description": "Snippets and syntax support for the Skrypt language by KrypteK",
 	"version": "0.1.0",
-	"publisher": "WYVERN",
+	"publisher": "Skrypt",
 	"author": {
 		"name": "WYVERN"
 	},
@@ -56,11 +56,5 @@
 				"path": "./snippets.code-snippets"
 			}
 		]
-	},
-	"devDependencies": {
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
-		"tslint": "^5.8.0",
-		"@types/node": "^8.10.25"
 	}
 }
