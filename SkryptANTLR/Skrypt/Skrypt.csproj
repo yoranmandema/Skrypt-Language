@@ -78,9 +78,9 @@
     <Compile Include="ANTLR\AdditionalParserFields.cs" />
     <Compile Include="ANTLR\ParsingErrorListener.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Engine\DefaultIOHandler.cs" />
+    <Compile Include="Engine\DefaultFileHandler.cs" />
     <Compile Include="Engine\ErrorHandler.cs" />
-    <Compile Include="Engine\IIOHandler.cs" />
+    <Compile Include="Engine\IFileHandler.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\Array\ArrayInstance.cs" />
     <Compile Include="Native\Array\ArrayType.cs" />

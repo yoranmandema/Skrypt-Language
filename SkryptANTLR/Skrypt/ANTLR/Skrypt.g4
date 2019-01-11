@@ -66,7 +66,7 @@ importAllFromStmnt	: IMPORT ASTERISK FROM string {
 var Ctx = ($ctx as ImportAllFromStatementContext);
 
 var relativePath = Ctx.@string().value;
-var input = Engine.IOHandler.Read(relativePath);
+var input = Engine.FileHandler.Read(relativePath);
 
 Engine.Run(input).CreateGlobals();
 
@@ -78,7 +78,7 @@ var Ctx = ($ctx as ImportFromStatementContext);
 var scope = GetDefinitionBlock($ctx);
 
 var relativePath = Ctx.@string().value;
-var input = Engine.IOHandler.Read(relativePath);
+var input = Engine.FileHandler.Read(relativePath);
 
 Engine.Run(input);
 
@@ -112,7 +112,7 @@ block.Variables[nameCtx.GetText()] = module;
 foreach (var c in Ctx.property()) {
 	this.Engine.Visitor.Visit(c);
 
-	CreateProperty(module.Value, Ctx, c);
+	CreateProperty(module.Value, Ctx, c, false);
 }
 
 }																																#moduleStatement
@@ -140,12 +140,13 @@ var template = new Template {Name = typeName};
 block.Variables[nameCtx.GetText()] = type;
 
 foreach (var c in Ctx.structProperty()) {
+	var isPrivate = c.PRIVATE() != null;	
 	var isStatic = c.STATIC() != null;
 
 	this.Engine.Visitor.Visit(c.Property);
 
 	if (isStatic) {
-		CreateProperty(type.Value, Ctx, c.Property);
+		CreateProperty(type.Value, Ctx, c.Property, isPrivate);
 	} else {
 		var nameToken = GetPropertyNameToken(c.Property);
 		var value = Ctx.Variables[nameToken.Text].Value;
@@ -154,7 +155,7 @@ foreach (var c in Ctx.structProperty()) {
             Engine.ErrorHandler.AddError(c.Property.Start, "Field can't be set to an undefined value.");
         }
 
-		template.Members[nameToken.Text] = new Member(value);
+		template.Members[nameToken.Text] = new Member(value, isPrivate);
 	}
 }
 
@@ -192,7 +193,7 @@ foreach (var child in Ctx.propertiesBlock().property()) {
         Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
     }
 
-	trait.TraitMembers[nameToken.Text] = new Member(value);
+	trait.TraitMembers[nameToken.Text] = new Member(value, false);
 }
 
 }																																#traitStatement
@@ -252,7 +253,7 @@ if (modifiesProperties) {
 
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
-structProperty		: STATIC? Property=property ;
+structProperty		: PRIVATE? STATIC? Property=property ;
 moduleProperty		: property | moduleStmnt ;
 property			: assignStmnt | fnStmnt ;
 
@@ -478,9 +479,10 @@ RETURN					: 'return' ;
 BREAK					: 'break' ;
 CONTINUE				: 'continue' ;
 STATIC					: 'static' ;
+PRIVATE					: 'private' ;
 CONST					: 'const' ;
 
-KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | CONST) ;
+KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | PRIVATE | CONST) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;

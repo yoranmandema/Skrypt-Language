@@ -38,7 +38,7 @@ namespace Skrypt {
                     function = new GetPropertyInstance(_engine, getPropertyDelegate);
                 }
 
-                template.Members[m.Name] = new Member(function);
+                template.Members[m.Name] = new Member(function, m.IsPrivate);
             }
 
             return template;
