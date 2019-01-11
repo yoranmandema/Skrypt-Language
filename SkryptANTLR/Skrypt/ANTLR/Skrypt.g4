@@ -155,7 +155,7 @@ foreach (var c in Ctx.structProperty()) {
             Engine.ErrorHandler.AddError(c.Property.Start, "Field can't be set to an undefined value.");
         }
 
-		template.Members[nameToken.Text] = new Member(value, isPrivate);
+		template.Members[nameToken.Text] = new Member(value, isPrivate, Ctx);
 	}
 }
 
@@ -193,7 +193,7 @@ foreach (var child in Ctx.propertiesBlock().property()) {
         Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
     }
 
-	trait.TraitMembers[nameToken.Text] = new Member(value, false);
+	trait.TraitMembers[nameToken.Text] = new Member(value, false, Ctx);
 }
 
 }																																#traitStatement
@@ -390,7 +390,7 @@ if (!isInFunction) {
 					;
 
 expression          : '(' expression ')'																						#parenthesisExp
-					| expression DOT NAME																						#memberAccessExp
+					| expression DOT NAME	 																					#memberAccessExp
 					| expression '[' expression ']'																				#computedMemberAccessExp
                     | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
 					
