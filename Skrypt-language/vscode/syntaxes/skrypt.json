@@ -23,12 +23,12 @@
 		},
 		{
 			"name": "keyword",
-			"match": "(import|module|if|else|fn|while|for|return|break|continue|from|struct|impl|trait|and|or)",
+			"match": "(import|module|if|else|fn|while|for|return|break|continue|from|struct|impl|trait|and|or|private)",
 			"comment": "Language keywords"
 		},
 		{
 			"name": "support.class",
-			"match": "[A-Z][a-z]*(?!\\()",
+			"match": "[A-Z][A-z]*(?!\\()[A-z]",
 			"comment": "Classes"
 		},
 		{
@@ -44,7 +44,7 @@
 		},
 		{
 			"name": "support.function",
-			"match": "(\\s|\\.|^)[A-z]*(?=\\()",
+			"match": "(\\s|\\.|^)[A-z]* ?(?=\\()",
 			"comment": "All Functions"
 		}
 	],

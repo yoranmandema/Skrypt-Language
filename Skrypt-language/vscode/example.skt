@@ -67,3 +67,11 @@ trait CustomTrait {
 impl CustomTrait for Number
 
 Number.HasCoolFunction()
+
+struct Thing {
+	private a = 2
+}
+
+Thing().a
+thing().a
+ Thing().a
