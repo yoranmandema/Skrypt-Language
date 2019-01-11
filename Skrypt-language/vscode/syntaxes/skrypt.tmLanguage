@@ -42,7 +42,7 @@
         <key>name</key>
         <string>keyword</string>
         <key>match</key>
-        <string>(import|module|if|else|fn|while|for|return|break|continue|from|struct|impl|trait|and|or)</string>
+        <string>(import|module|if|else|fn|while|for|return|break|continue|from|struct|impl|trait|and|or|private)</string>
         <key>comment</key>
         <string>Language keywords</string>
       </dict>
@@ -50,7 +50,7 @@
         <key>name</key>
         <string>support.class</string>
         <key>match</key>
-        <string>[A-Z][a-z]*(?!\()</string>
+        <string>[A-Z][A-z]*(?!\()[A-z]</string>
         <key>comment</key>
         <string>Classes</string>
       </dict>

@@ -1,5 +1,9 @@
 # Release Notes
 
-## 1.0.0
+## 0.1.1
 
-Initial commit
+[*] Fix class bracket highlighting
+
+## 0.1.0
+
+Initial release
