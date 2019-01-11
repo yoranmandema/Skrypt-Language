@@ -2,7 +2,7 @@
 	"name": "skrypt-language",
 	"displayName": "Skrypt Language Support",
 	"description": "Snippets and syntax support for the Skrypt language by KrypteK",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"publisher": "Skrypt",
 	"author": {
 		"name": "WYVERN"
