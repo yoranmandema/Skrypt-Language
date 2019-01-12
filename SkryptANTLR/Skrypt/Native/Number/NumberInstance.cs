@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class NumberInstance : BaseInstance {
+    public class NumberInstance : BaseInstance, INoReference {
         public override string Name => "Number";
-        public override bool CopyOnAssignment => true;
 
         public double Value { get; set; }
 
@@ -25,6 +24,10 @@ namespace Skrypt {
 
         public override string ToString() {
             return Value.ToString();
+        }
+
+        public BaseValue Copy() {
+            return Engine.CreateNumber(Value);
         }
     }
 }

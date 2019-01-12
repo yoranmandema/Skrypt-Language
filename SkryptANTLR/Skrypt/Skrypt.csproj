@@ -85,6 +85,7 @@
     <Compile Include="Native\Array\ArrayInstance.cs" />
     <Compile Include="Native\Array\ArrayType.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
+    <Compile Include="Native\INoReference.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
     <Compile Include="Native\Trait\ScriptTrait.cs" />
     <Compile Include="Native\Type\BaseType.cs" />

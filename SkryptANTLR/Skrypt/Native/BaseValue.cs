@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class BaseValue {
         public virtual string Name { get; set; }
-        public virtual bool CopyOnAssignment { get; set; }
 
         public Engine Engine { get; set; }
         public Dictionary<string, Member> Members = new Dictionary<string, Member>();

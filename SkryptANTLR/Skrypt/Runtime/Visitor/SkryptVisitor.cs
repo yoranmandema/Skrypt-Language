@@ -163,7 +163,11 @@ namespace Skrypt {
                 _engine.ErrorHandler.FatalError(context.Start, "Constant cannot be redefined.");
             }
 
-            context.name().variable.Value = Visit(context.expression());
+            var value = Visit(context.expression());
+
+            if (value is INoReference noref) value = noref.Copy();
+
+            context.name().variable.Value = value;
             
             return DefaultResult;
         }
@@ -191,7 +195,11 @@ namespace Skrypt {
                 }
             }
 
-            target.SetProperty(memberName, Visit(context.expression()));
+            var value = Visit(context.expression());
+
+            if (value is INoReference noref) value = noref.Copy();
+
+            target.SetProperty(memberName, value);
 
             return DefaultResult;
         }
@@ -202,6 +210,8 @@ namespace Skrypt {
             var obj = Visit(lhs.expression(0));
             var index = Visit(lhs.expression(1));
             var value = Visit(context.expression());
+
+            if (value is INoReference noref) value = noref.Copy();
 
             if (obj is ArrayInstance arrayInstance) {
                 return arrayInstance.Set(index, value);
@@ -235,19 +245,21 @@ namespace Skrypt {
                 }
             }
 
-            var val = property.Value;        
+            var value = property.Value;        
 
-            if (val is GetPropertyInstance) {
-                var newVal = (val as GetPropertyInstance).Property.Run(_engine, obj);
+            if (value is GetPropertyInstance) {
+                var newVal = (value as GetPropertyInstance).Property.Run(_engine, obj);
 
-                val = newVal;
-            }             
+                value = newVal;
+            }
+
+            if (value is INoReference noref) value = noref.Copy();
 
             accessed = obj;
 
             LastResult = accessed;
 
-            return val;
+            return value;
         }
 
         public override BaseValue VisitComputedMemberAccessExp([NotNull] SkryptParser.ComputedMemberAccessExpContext context) {
@@ -255,9 +267,17 @@ namespace Skrypt {
             var index = Visit(context.expression(1));
 
             if (obj is StringInstance stringInstance) {
-                return stringInstance.Get(index);
+                var value = stringInstance.Get(index);
+
+                if (value is INoReference noref) value = noref.Copy();
+
+                return value;
             } else if (obj is ArrayInstance arrayInstance) {
-                return arrayInstance.Get(index);
+                var value = arrayInstance.Get(index);
+
+                if (value is INoReference noref) value = noref.Copy();
+
+                return value;
             }
 
             _engine.ErrorHandler.FatalError(context.expression(0).Start, "Expected string or array instance.");
@@ -526,6 +546,7 @@ namespace Skrypt {
 
                 _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {lname ?? "null"} {operationName} {rname ?? "null"}.");
             }
+
 
             LastResult = (BaseValue)result;
 

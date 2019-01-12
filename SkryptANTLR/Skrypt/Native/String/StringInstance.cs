@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class StringInstance : BaseInstance {
+    public class StringInstance : BaseInstance, INoReference {
         public override string Name => "String";
-        public override bool CopyOnAssignment => true;
 
         public string Value { get; set; }
 
@@ -41,6 +40,10 @@ namespace Skrypt {
 
         public override string ToString() {
             return Value.ToString();
+        }
+
+        public BaseValue Copy() {
+            return Engine.CreateString(Value);
         }
     }
 }

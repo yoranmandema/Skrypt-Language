@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BooleanInstance : BaseInstance {
+    public class BooleanInstance : BaseInstance, INoReference {
         public override string Name => "Boolean";
-        public override bool CopyOnAssignment => true;
 
         public bool Value { get; set; }
 
@@ -25,6 +24,10 @@ namespace Skrypt {
 
         public override string ToString() {
             return Value.ToString();
+        }
+
+        public BaseValue Copy() {
+            return Engine.CreateBoolean(Value);
         }
     }
 }

@@ -28,6 +28,8 @@ namespace Skrypt {
                 var parameter = Parameters[i];
                 var input = args[i];
 
+                if (input is INoReference noref) input = noref.Copy();
+
                 if (i < args.Values.Length) {
                     Context.Variables[parameter.Name].Value = input;
                 }
@@ -59,7 +61,7 @@ namespace Skrypt {
             }
 
             foreach (var v in preCallValues) {
-                if (preCallValues[v.Key].CopyOnAssignment) {
+                if (preCallValues[v.Key] is INoReference noref) {
                     Context.Variables[v.Key].Value = preCallValues[v.Key];
                 }
             }

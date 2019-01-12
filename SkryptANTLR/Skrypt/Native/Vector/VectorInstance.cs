@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class VectorInstance : BaseInstance {
-        public override bool CopyOnAssignment => true;
-
         internal double[] Components;
 
         public VectorInstance(Engine engine) : base(engine) { }
