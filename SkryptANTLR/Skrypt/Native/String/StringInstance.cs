@@ -127,6 +127,15 @@ namespace Skrypt {
             return engine.CreateString(newStr);
         }
 
+        public static BaseObject Reverse(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            char[] charArray = str.Value.ToCharArray();
+            Array.Reverse(charArray);
+
+            return engine.CreateString(new string(charArray));
+        }
+
         public static BaseObject ToUpper(Engine engine, BaseObject self, Arguments arguments) {
             var str = self as StringInstance;
 
