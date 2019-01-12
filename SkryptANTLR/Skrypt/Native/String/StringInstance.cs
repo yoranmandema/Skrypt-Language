@@ -118,6 +118,27 @@ namespace Skrypt {
             return engine.CreateString(str.Value.TrimEnd());
         }
 
+        public static BaseObject Split(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+            var input = new List<string>();
+
+            for (int i = 0; i < arguments.Values.Length; i++) {
+                var s = arguments.GetAs<StringInstance>(i);
+
+                input.Add(s.Value);
+            }
+
+            var split = str.Value.Split(input.ToArray(), StringSplitOptions.None);
+
+            var stringArray = new StringInstance[split.Length];
+
+            for (int i = 0; i < split.Length; i++) {
+                stringArray[i] = engine.CreateString(split[i]);
+            }
+
+            return engine.CreateArray(stringArray);
+        }
+
         public static implicit operator string(StringInstance s) {
             return s.Value;
         }

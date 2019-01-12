@@ -1,2 +1,2 @@
 ﻿
-print("Hello world!".Substring(6,true))
+print("Hello world!".Split(""))
