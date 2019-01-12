@@ -1,2 +1,2 @@
 ﻿
-print("Hello world!".Split(""))
+print("Hello world!".Split("H","l"))

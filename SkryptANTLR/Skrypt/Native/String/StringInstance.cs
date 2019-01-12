@@ -100,6 +100,18 @@ namespace Skrypt {
             return engine.CreateString(newStr);
         }
 
+        public static BaseObject ToUpper(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            return engine.CreateString(str.Value.ToUpper());
+        }
+
+        public static BaseObject ToLower(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            return engine.CreateString(str.Value.ToLower());
+        }
+
         public static BaseObject Trim(Engine engine, BaseObject self, Arguments arguments) {
             var str = self as StringInstance;
 
