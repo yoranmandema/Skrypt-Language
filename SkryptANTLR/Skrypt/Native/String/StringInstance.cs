@@ -34,6 +34,24 @@ namespace Skrypt {
             return engine.CreateNumber((self as StringInstance).Value.Length);
         }
 
+        public static BaseObject Substring (Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+            var start = arguments.GetAs<NumberInstance>(0);
+            var end = arguments[1];
+            
+            if (end == null) {
+                return engine.CreateString(str.Value.Substring((int)start));
+            } else {
+                if (end is NumberInstance) {
+                    var length = Math.Max(Math.Min((int)(NumberInstance)end, str.Value.Length - 1) - (int)start, 0);
+
+                    return engine.CreateString(str.Value.Substring((int)start, length));
+                } else {
+                    throw new InvalidArgumentTypeException($"Expected argument of type Number.");
+                }
+            }
+        }
+
         public static implicit operator string(StringInstance s) {
             return s.Value;
         }

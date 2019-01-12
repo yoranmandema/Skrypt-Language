@@ -1,11 +1,2 @@
 ﻿
-
-fn modify(a) {
-	a++
-}
-
-b = 1
-
-modify(b)
-
-print(b)
+print("Hello world!".Substring(6,true))

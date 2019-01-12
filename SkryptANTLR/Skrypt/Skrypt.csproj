@@ -85,7 +85,7 @@
     <Compile Include="Native\Array\ArrayInstance.cs" />
     <Compile Include="Native\Array\ArrayType.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
-    <Compile Include="Native\INoReference.cs" />
+    <Compile Include="Native\IValue.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
     <Compile Include="Native\Trait\ScriptTrait.cs" />
     <Compile Include="Native\Type\BaseType.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="Native\Exceptions\FatalErrorException.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentTypeException.cs" />
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
-    <Compile Include="Native\BaseValue.cs" />
+    <Compile Include="Native\BaseObject.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
     <Compile Include="Native\Exceptions\NonExistingMemberException.cs" />
     <Compile Include="Native\Exceptions\VariableNotFoundException.cs" />
