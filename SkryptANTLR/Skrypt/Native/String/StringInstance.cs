@@ -100,6 +100,24 @@ namespace Skrypt {
             return engine.CreateString(newStr);
         }
 
+        public static BaseObject Trim(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            return engine.CreateString(str.Value.Trim());
+        }
+
+        public static BaseObject TrimStart(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            return engine.CreateString(str.Value.TrimStart());
+        }
+
+        public static BaseObject TrimEnd(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            return engine.CreateString(str.Value.TrimEnd());
+        }
+
         public static implicit operator string(StringInstance s) {
             return s.Value;
         }
