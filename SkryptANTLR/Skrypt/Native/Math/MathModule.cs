@@ -19,7 +19,6 @@ namespace Skrypt {
             CreateProperty("LOG10E", engine.CreateNumber(Math.Log(Math.E,10)));
             CreateProperty("SQRT1_2", engine.CreateNumber(Math.Sqrt(0.5)));
             CreateProperty("SQRT2", engine.CreateNumber(Math.Sqrt(2)));
-
         }
 
         public static BaseObject Abs(Engine engine, BaseObject self, Arguments arguments) {

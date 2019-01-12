@@ -442,10 +442,27 @@ namespace Skrypt {
                         number.Value = (double)result;
                     }
                     break;
+                case "-":
+                    result = _engine.expressionInterpreter.EvaluateMinusExpression(value);
+                    break;
+                case "~":
+                    result = _engine.expressionInterpreter.EvaluateBitNotExpression(value);
+                    break;
+                case "!":
+                    result = _engine.expressionInterpreter.EvaluateNotExpression(value);
+                    break;
+            }
+
+            if (result is bool) {
+                result = _engine.CreateBoolean((bool)result);
             }
 
             if (result is double) {
                 result = _engine.CreateNumber((double)result);
+            }
+
+            if (result is int) {
+                result = _engine.CreateNumber((int)result);
             }
 
             if (result is InvalidOperation) {
