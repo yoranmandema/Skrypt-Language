@@ -16,11 +16,11 @@ namespace Skrypt {
             Context = block;
         }
 
-        public BaseValue Run(Engine engine, BaseValue self, Arguments args) {
+        public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
             var blockStmnt = Context.stmntBlock();
             var block = blockStmnt.block();
             var expr = blockStmnt.expression();
-            var preCallValues = new Dictionary<string, BaseValue>();
+            var preCallValues = new Dictionary<string, BaseObject>();
 
             Context.Variables["self"].Value = self;
 
@@ -28,7 +28,7 @@ namespace Skrypt {
                 var parameter = Parameters[i];
                 var input = args[i];
 
-                if (input is INoReference noref) input = noref.Copy();
+                if (input is IValue noref) input = noref.Copy();
 
                 if (i < args.Values.Length) {
                     Context.Variables[parameter.Name].Value = input;
@@ -40,7 +40,7 @@ namespace Skrypt {
                 preCallValues[parameter.Name] = Context.Variables[parameter.Name].Value.Clone();
             }
 
-            var returnValue = default(BaseValue);
+            var returnValue = default(BaseObject);
                     
             if (block != null) {
                 for (int i = 0; i < block.ChildCount; i++) {
@@ -61,7 +61,7 @@ namespace Skrypt {
             }
 
             foreach (var v in preCallValues) {
-                if (preCallValues[v.Key] is INoReference noref) {
+                if (preCallValues[v.Key] is IValue noref) {
                     Context.Variables[v.Key].Value = preCallValues[v.Key];
                 }
             }

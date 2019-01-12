@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class Arguments {
-        public BaseValue[] Values;
+        public BaseObject[] Values;
         public int Length => Values.Length;
 
-        public static Arguments Empty => new Arguments(new BaseValue[0]);
+        public static Arguments Empty => new Arguments(new BaseObject[0]);
 
-        public Arguments(BaseValue[] values) {
+        public Arguments(BaseObject[] values) {
             Values = values;
         }
 
-        public BaseValue this[int key] {
+        public BaseObject this[int key] {
             get {
                 if (key >= 0 && key < Values.Length) {
                     return Values[key];
@@ -25,7 +25,7 @@ namespace Skrypt {
             }
         }
 
-        public T GetAs<T> (int i) where T : BaseValue {
+        public T GetAs<T> (int i) where T : BaseObject {
             var value = this[i];
 
             if (value is T) {

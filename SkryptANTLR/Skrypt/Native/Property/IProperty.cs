@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public interface IGetProperty {
-        BaseValue Run(Engine engine, BaseValue self); 
+        BaseObject Run(Engine engine, BaseObject self); 
     }
 }

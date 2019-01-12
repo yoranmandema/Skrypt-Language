@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BaseValue {
+    public class BaseObject {
         public virtual string Name { get; set; }
 
         public Engine Engine { get; set; }
         public Dictionary<string, Member> Members = new Dictionary<string, Member>();
 
-        public BaseValue(Engine engine) {
+        public BaseObject(Engine engine) {
             Engine = engine;
         }
 
@@ -24,7 +24,7 @@ namespace Skrypt {
             Name = template.Name;
         }
 
-        public Member SetProperty (string name, BaseValue value) {
+        public Member SetProperty (string name, BaseObject value) {
             if (!Members.ContainsKey(name)) {
                 throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
             }
@@ -34,7 +34,7 @@ namespace Skrypt {
             return Members[name];
         }
 
-        public Member CreateProperty(string name, BaseValue value, bool isPrivate = false) {
+        public Member CreateProperty(string name, BaseObject value, bool isPrivate = false) {
             Members[name] = new Member(value, isPrivate, null);
 
             return Members[name];
@@ -48,7 +48,7 @@ namespace Skrypt {
             return Members[name];
         }
 
-        public T AsType<T>() where T : BaseValue {
+        public T AsType<T>() where T : BaseObject {
             return (T)this;
         }
 
@@ -56,8 +56,8 @@ namespace Skrypt {
             return true;
         }
 
-        public BaseValue Clone() {
-            return (BaseValue)MemberwiseClone();
+        public BaseObject Clone() {
+            return (BaseObject)MemberwiseClone();
         }
 
         public override string ToString() {

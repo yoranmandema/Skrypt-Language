@@ -10,7 +10,7 @@ namespace Skrypt {
             Template = engine.templateMaker.CreateTemplate(typeof(NumberInstance));
         }
 
-        public static BaseValue Parse(Engine engine, BaseValue self, Arguments input) {
+        public static BaseObject Parse(Engine engine, BaseObject self, Arguments input) {
             var value = double.Parse(input.ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
             return engine.CreateNumber(value);

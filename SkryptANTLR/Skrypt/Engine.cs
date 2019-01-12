@@ -10,7 +10,7 @@ using Skrypt.Runtime;
 
 namespace Skrypt {
     public class Engine {
-        public BaseValue CompletionValue => Visitor.LastResult;
+        public BaseObject CompletionValue => Visitor.LastResult;
 
         internal SkryptParser Parser;
         internal SkryptVisitor Visitor;
@@ -98,7 +98,7 @@ namespace Skrypt {
             return this;
         }
 
-        internal void SetGlobal (string name, BaseValue value) {
+        internal void SetGlobal (string name, BaseObject value) {
             if (Globals.ContainsKey(name)) {
                 Globals[name].Value = value;
             } else {
@@ -106,13 +106,13 @@ namespace Skrypt {
             }
         }
 
-        public BaseValue SetValue(string name, BaseValue value) {
+        public BaseObject SetValue(string name, BaseObject value) {
             SetGlobal(name, value);
 
             return value;
         }
 
-        public BaseValue SetValue(string name, bool value) {
+        public BaseObject SetValue(string name, bool value) {
             var val = CreateBoolean(value);
 
             SetGlobal(name, val);
@@ -120,7 +120,7 @@ namespace Skrypt {
             return val;
         }
 
-        public BaseValue SetValue (string name, MethodDelegate value) {
+        public BaseObject SetValue (string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 
             SetGlobal(name,val);
@@ -128,7 +128,7 @@ namespace Skrypt {
             return val;
         }
 
-        public BaseValue GetValue(string name) {
+        public BaseObject GetValue(string name) {
             var block = ProgramContext.block();
 
             if (block.Variables.ContainsKey(name)) {
@@ -164,7 +164,7 @@ namespace Skrypt {
             return (Vector4Instance)Vector.Construct(x, y, z, w);
         }
 
-        public ArrayInstance CreateArray(BaseValue[] values) {
+        public ArrayInstance CreateArray(BaseObject[] values) {
             return (ArrayInstance)Array.Construct(values);
         }
     }

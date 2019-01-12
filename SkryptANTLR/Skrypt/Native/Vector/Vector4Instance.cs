@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class Vector4Instance : VectorInstance, INoReference {
+    public class Vector4Instance : VectorInstance, IValue {
         public override string Name => "Vector4";
 
         public Vector4Instance(Engine engine, double x, double y, double z, double w) : base(engine) {
@@ -16,31 +16,31 @@ namespace Skrypt {
             Components[3] = w;
         }
 
-        public static BaseValue X(Engine engine, BaseValue self) {
+        public static BaseObject X(Engine engine, BaseObject self) {
             var vector = self as Vector4Instance;
 
             return engine.CreateNumber(vector.Components[0]);
         }
 
-        public static BaseValue Y(Engine engine, BaseValue self) {
+        public static BaseObject Y(Engine engine, BaseObject self) {
             var vector = self as Vector4Instance;
 
             return engine.CreateNumber(vector.Components[1]);
         }
 
-        public static BaseValue Z(Engine engine, BaseValue self) {
+        public static BaseObject Z(Engine engine, BaseObject self) {
             var vector = self as Vector4Instance;
 
             return engine.CreateNumber(vector.Components[2]);
         }
 
-        public static BaseValue W(Engine engine, BaseValue self) {
+        public static BaseObject W(Engine engine, BaseObject self) {
             var vector = self as Vector4Instance;
 
             return engine.CreateNumber(vector.Components[2]);
         }
 
-        public BaseValue Copy() {
+        public BaseObject Copy() {
             return Engine.CreateVector4(Components[0], Components[1], Components[2], Components[3]);
         }
     }

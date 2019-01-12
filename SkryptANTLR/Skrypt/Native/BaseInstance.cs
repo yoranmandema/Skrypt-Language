@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BaseInstance : BaseValue {
+    public class BaseInstance : BaseObject {
         public BaseInstance(Engine engine) : base (engine) { }
         public BaseType TypeObject { get; set; }
     }

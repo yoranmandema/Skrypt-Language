@@ -10,7 +10,7 @@ namespace Skrypt{
             Template = engine.templateMaker.CreateTemplate(typeof(ArrayInstance));
         }
 
-        public BaseInstance Construct(BaseValue[] values) {
+        public BaseInstance Construct(BaseObject[] values) {
             var obj = new ArrayInstance(Engine);
 
             for (int i = 0; i < values.Length; i++) {

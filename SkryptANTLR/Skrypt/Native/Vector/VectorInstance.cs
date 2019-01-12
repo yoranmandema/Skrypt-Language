@@ -10,7 +10,7 @@ namespace Skrypt {
 
         public VectorInstance(Engine engine) : base(engine) { }
 
-        public static BaseValue Length2 (Engine engine, BaseValue self) {
+        public static BaseObject Length2 (Engine engine, BaseObject self) {
             double val = 0;
             var vector = self as VectorInstance;
 
@@ -21,11 +21,11 @@ namespace Skrypt {
             return engine.CreateNumber(val);
         }
 
-        public static BaseValue Length(Engine engine, BaseValue self) {
+        public static BaseObject Length(Engine engine, BaseObject self) {
             return engine.CreateNumber(Math.Sqrt((NumberInstance)Length2(engine, self)));
         }
 
-        public static BaseValue Normalized(Engine engine, BaseValue self) {
+        public static BaseObject Normalized(Engine engine, BaseObject self) {
             var length = (NumberInstance)Length(engine, self);
 
             return ComponentMathNumeric(engine, self as VectorInstance, (x) => x / length) as VectorInstance;

@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public interface IFunction {
-        BaseValue Run(Engine engine, BaseValue self, Arguments args);
+        BaseObject Run(Engine engine, BaseObject self, Arguments args);
     }
 }

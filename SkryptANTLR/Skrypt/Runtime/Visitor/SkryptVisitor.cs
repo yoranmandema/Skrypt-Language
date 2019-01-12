@@ -7,22 +7,22 @@ using System.Linq;
 using Skrypt.Runtime;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseValue> {
-        public BaseValue LastResult { get; private set; }
+    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
+        public BaseObject LastResult { get; private set; }
 
         private readonly Engine _engine;
-        private BaseValue accessed;
+        private BaseObject accessed;
 
         public SkryptVisitor (Engine engine) {
             _engine = engine;
         }
 
-        public override BaseValue VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
-        public override BaseValue VisitFunctionStatement(SkryptParser.FunctionStatementContext context) => DefaultResult;
-        public override BaseValue VisitModuleStatement(SkryptParser.ModuleStatementContext context) => null;
-        public override BaseValue VisitStructStatement(SkryptParser.StructStatementContext context) => null;
-        public override BaseValue VisitTraitStatement(SkryptParser.TraitStatementContext context) => null;
-        public override BaseValue VisitTraitImplStatement(SkryptParser.TraitImplStatementContext context) => null;
+        public override BaseObject VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
+        public override BaseObject VisitFunctionStatement(SkryptParser.FunctionStatementContext context) => DefaultResult;
+        public override BaseObject VisitModuleStatement(SkryptParser.ModuleStatementContext context) => null;
+        public override BaseObject VisitStructStatement(SkryptParser.StructStatementContext context) => null;
+        public override BaseObject VisitTraitStatement(SkryptParser.TraitStatementContext context) => null;
+        public override BaseObject VisitTraitImplStatement(SkryptParser.TraitImplStatementContext context) => null;
 
         void DoLoop(SkryptParser.BlockContext block, SkryptParser.ExpressionContext expression, ILoop context, Func<bool> cond, Action callback = null) {
             if (block != null) {
@@ -67,7 +67,7 @@ namespace Skrypt {
             }
         }
 
-        public override BaseValue VisitWhileStatement(SkryptParser.WhileStatementContext context) {
+        public override BaseObject VisitWhileStatement(SkryptParser.WhileStatementContext context) {
             var block = context.stmntBlock().block();
             var expression = context.stmntBlock().expression();
 
@@ -78,7 +78,7 @@ namespace Skrypt {
             return DefaultResult;
         }
 
-        public override BaseValue VisitForStatement(SkryptParser.ForStatementContext context) {
+        public override BaseObject VisitForStatement(SkryptParser.ForStatementContext context) {
             var block = context.stmntBlock().block();
             var expression = context.stmntBlock().expression();
 
@@ -97,7 +97,7 @@ namespace Skrypt {
             return DefaultResult;
         }
 
-        public override BaseValue VisitContinueStatement([NotNull] SkryptParser.ContinueStatementContext context) {
+        public override BaseObject VisitContinueStatement([NotNull] SkryptParser.ContinueStatementContext context) {
             var loopCtx = context.Statement;
 
             if (loopCtx is SkryptParser.WhileStatementContext whileCtx)
@@ -106,7 +106,7 @@ namespace Skrypt {
             return DefaultResult;
         }
 
-        public override BaseValue VisitBreakStatement([NotNull] SkryptParser.BreakStatementContext context) {
+        public override BaseObject VisitBreakStatement([NotNull] SkryptParser.BreakStatementContext context) {
             var loopCtx = context.Statement;
 
             if (loopCtx is SkryptParser.WhileStatementContext whileCtx)
@@ -115,7 +115,7 @@ namespace Skrypt {
             return DefaultResult;
         }
 
-        public override BaseValue VisitIfStatement(SkryptParser.IfStatementContext context) {
+        public override BaseObject VisitIfStatement(SkryptParser.IfStatementContext context) {
             var isTrue = false;
 
             isTrue = Visit(context.@if().Condition).IsTrue();
@@ -143,7 +143,7 @@ namespace Skrypt {
             return DefaultResult;
         }
 
-        public override BaseValue VisitReturnStatement(SkryptParser.ReturnStatementContext context) {
+        public override BaseObject VisitReturnStatement(SkryptParser.ReturnStatementContext context) {
             var fnCtx = context.Statement;
             var expression = context.expression();
 
@@ -158,21 +158,21 @@ namespace Skrypt {
             return DefaultResult;
         }
 
-        public override BaseValue VisitAssignNameStatement(SkryptParser.AssignNameStatementContext context) {
+        public override BaseObject VisitAssignNameStatement(SkryptParser.AssignNameStatementContext context) {
             if (context.name().variable.IsConstant) {
                 _engine.ErrorHandler.FatalError(context.Start, "Constant cannot be redefined.");
             }
 
             var value = Visit(context.expression());
 
-            if (value is INoReference noref) value = noref.Copy();
+            if (value is IValue noref) value = noref.Copy();
 
             context.name().variable.Value = value;
             
             return DefaultResult;
         }
 
-        public override BaseValue VisitAssignMemberStatement(SkryptParser.AssignMemberStatementContext context) {
+        public override BaseObject VisitAssignMemberStatement(SkryptParser.AssignMemberStatementContext context) {
             var target      = Visit(context.memberAccess().expression());
             var memberName  = context.memberAccess().NAME().GetText();
 
@@ -197,21 +197,21 @@ namespace Skrypt {
 
             var value = Visit(context.expression());
 
-            if (value is INoReference noref) value = noref.Copy();
+            if (value is IValue noref) value = noref.Copy();
 
             target.SetProperty(memberName, value);
 
             return DefaultResult;
         }
 
-        public override BaseValue VisitAssignComputedMemberStatement([NotNull] SkryptParser.AssignComputedMemberStatementContext context) {
+        public override BaseObject VisitAssignComputedMemberStatement([NotNull] SkryptParser.AssignComputedMemberStatementContext context) {
             var lhs = context.memberAccessComp();
 
             var obj = Visit(lhs.expression(0));
             var index = Visit(lhs.expression(1));
             var value = Visit(context.expression());
 
-            if (value is INoReference noref) value = noref.Copy();
+            if (value is IValue noref) value = noref.Copy();
 
             if (obj is ArrayInstance arrayInstance) {
                 return arrayInstance.Set(index, value);
@@ -222,7 +222,7 @@ namespace Skrypt {
             return null;
         }
 
-        public override BaseValue VisitMemberAccessExp(SkryptParser.MemberAccessExpContext context) {
+        public override BaseObject VisitMemberAccessExp(SkryptParser.MemberAccessExpContext context) {
             var obj = Visit(context.expression());
             var memberName = context.NAME().GetText();
 
@@ -253,7 +253,7 @@ namespace Skrypt {
                 value = newVal;
             }
 
-            if (value is INoReference noref) value = noref.Copy();
+            if (value is IValue noref) value = noref.Copy();
 
             accessed = obj;
 
@@ -262,20 +262,20 @@ namespace Skrypt {
             return value;
         }
 
-        public override BaseValue VisitComputedMemberAccessExp([NotNull] SkryptParser.ComputedMemberAccessExpContext context) {
+        public override BaseObject VisitComputedMemberAccessExp([NotNull] SkryptParser.ComputedMemberAccessExpContext context) {
             var obj = Visit(context.expression(0));
             var index = Visit(context.expression(1));
 
             if (obj is StringInstance stringInstance) {
                 var value = stringInstance.Get(index);
 
-                if (value is INoReference noref) value = noref.Copy();
+                if (value is IValue noref) value = noref.Copy();
 
                 return value;
             } else if (obj is ArrayInstance arrayInstance) {
                 var value = arrayInstance.Get(index);
 
-                if (value is INoReference noref) value = noref.Copy();
+                if (value is IValue noref) value = noref.Copy();
 
                 return value;
             }
@@ -285,7 +285,7 @@ namespace Skrypt {
             return null;
         }
 
-        public override BaseValue VisitNameExp(SkryptParser.NameExpContext context) {
+        public override BaseObject VisitNameExp(SkryptParser.NameExpContext context) {
             var value = context.name().variable.Value;
 
             LastResult = value;
@@ -293,7 +293,7 @@ namespace Skrypt {
             return context.name().variable.Value;
         }
 
-        public override BaseValue VisitNumberLiteral(SkryptParser.NumberLiteralContext context) {
+        public override BaseObject VisitNumberLiteral(SkryptParser.NumberLiteralContext context) {
             var value = context.number().value;
             var num = _engine.CreateNumber(value);
 
@@ -302,7 +302,7 @@ namespace Skrypt {
             return num;
         }
 
-        public override BaseValue VisitBooleanLiteral(SkryptParser.BooleanLiteralContext context) {
+        public override BaseObject VisitBooleanLiteral(SkryptParser.BooleanLiteralContext context) {
             var value = context.boolean().value;
             var boolean = _engine.CreateBoolean(value);
 
@@ -311,7 +311,7 @@ namespace Skrypt {
             return boolean;
         }
 
-        public override BaseValue VisitStringLiteral(SkryptParser.StringLiteralContext context) {
+        public override BaseObject VisitStringLiteral(SkryptParser.StringLiteralContext context) {
             var value = context.@string().value;
             var str = _engine.CreateString(value);
 
@@ -320,7 +320,7 @@ namespace Skrypt {
             return str;
         }
 
-        public override BaseValue VisitVector2Literal(SkryptParser.Vector2LiteralContext context) {
+        public override BaseObject VisitVector2Literal(SkryptParser.Vector2LiteralContext context) {
             var v = context.vector2();
 
             var x = (NumberInstance)Visit(v.X);
@@ -333,7 +333,7 @@ namespace Skrypt {
             return vec;
         }
 
-        public override BaseValue VisitVector3Literal(SkryptParser.Vector3LiteralContext context) {
+        public override BaseObject VisitVector3Literal(SkryptParser.Vector3LiteralContext context) {
             var v = context.vector3();
 
             var x = (NumberInstance)Visit(v.X);
@@ -347,7 +347,7 @@ namespace Skrypt {
             return vec;
         }
 
-        public override BaseValue VisitVector4Literal(SkryptParser.Vector4LiteralContext context) {
+        public override BaseObject VisitVector4Literal(SkryptParser.Vector4LiteralContext context) {
             var v = context.vector4();
 
             var x = (NumberInstance)Visit(v.X);
@@ -362,11 +362,11 @@ namespace Skrypt {
             return vec;
         }
 
-        public override BaseValue VisitArrayLiteral([NotNull] SkryptParser.ArrayLiteralContext context) {
+        public override BaseObject VisitArrayLiteral([NotNull] SkryptParser.ArrayLiteralContext context) {
             var a = context.array();
 
             var expressions = a.expressionGroup().expression();
-            var values = new BaseValue[expressions.Length];
+            var values = new BaseObject[expressions.Length];
 
             for (int i = 0; i < values.Length; i++) {
                 values[i] = Visit(expressions[i]);
@@ -379,11 +379,11 @@ namespace Skrypt {
             return array;
         }
 
-        public override BaseValue VisitParenthesisExp(SkryptParser.ParenthesisExpContext context) {
+        public override BaseObject VisitParenthesisExp(SkryptParser.ParenthesisExpContext context) {
             return Visit(context.expression());
         }
 
-        public override BaseValue VisitPostfixOperationExp(SkryptParser.PostfixOperationExpContext context) {
+        public override BaseObject VisitPostfixOperationExp(SkryptParser.PostfixOperationExpContext context) {
             var operationName = context.Operation.Text;
 
             var target = Visit(context.Target);
@@ -415,12 +415,12 @@ namespace Skrypt {
                 throw new InvalidOperationException($"No such operation: {value?.Name ?? "null"} {operationName}");
             }
 
-            LastResult = (BaseValue)result;
+            LastResult = (BaseObject)result;
 
-            return (BaseValue)result;
+            return (BaseObject)result;
         }
 
-        public override BaseValue VisitPrefixOperationExp(SkryptParser.PrefixOperationExpContext context) {
+        public override BaseObject VisitPrefixOperationExp(SkryptParser.PrefixOperationExpContext context) {
             var operationName = context.Operation.Text;
 
             var target = Visit(context.Target);
@@ -454,12 +454,12 @@ namespace Skrypt {
                 _engine.ErrorHandler.FatalError(context.Target.Start, $"No such operation: {name ?? "null"} {operationName}");
             }
 
-            LastResult = (BaseValue)result;
+            LastResult = (BaseObject)result;
 
-            return (BaseValue)result;
+            return (BaseObject)result;
         }
 
-        public override BaseValue VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
+        public override BaseObject VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
             var operationName = context.Operation.Text;
 
             var left = Visit(context.Left);
@@ -548,12 +548,12 @@ namespace Skrypt {
             }
 
 
-            LastResult = (BaseValue)result;
+            LastResult = (BaseObject)result;
 
-            return (BaseValue)result;
+            return (BaseObject)result;
         }
 
-        public override BaseValue VisitFunctionCallExp(SkryptParser.FunctionCallExpContext context) {
+        public override BaseObject VisitFunctionCallExp(SkryptParser.FunctionCallExpContext context) {
             var function = Visit(context.Function);
             var isConstructor = false;
             var returnValue = DefaultResult;
@@ -567,7 +567,7 @@ namespace Skrypt {
 
             var length = context.Arguments.expression().Length;
 
-            var arguments = new BaseValue[length];
+            var arguments = new BaseObject[length];
 
             for (var i = 0; i < length; i++) {
                 arguments[i] = Visit(context.Arguments.expression(i));

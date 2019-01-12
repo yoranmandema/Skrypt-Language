@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public interface INoReference {
-        BaseValue Copy();
+    public interface IValue {
+        BaseObject Copy();
     }
 }

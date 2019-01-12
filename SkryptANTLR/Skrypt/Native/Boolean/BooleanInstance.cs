@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BooleanInstance : BaseInstance, INoReference {
+    public class BooleanInstance : BaseInstance, IValue {
         public override string Name => "Boolean";
 
         public bool Value { get; set; }
@@ -26,7 +26,7 @@ namespace Skrypt {
             return Value.ToString();
         }
 
-        public BaseValue Copy() {
+        public BaseObject Copy() {
             return Engine.CreateBoolean(Value);
         }
     }

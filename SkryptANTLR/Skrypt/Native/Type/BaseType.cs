@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public abstract class BaseType : BaseValue {
+    public abstract class BaseType : BaseObject {
         public BaseType(Engine engine) : base(engine) {
             var template = engine.templateMaker.CreateTemplate(this.GetType());
 

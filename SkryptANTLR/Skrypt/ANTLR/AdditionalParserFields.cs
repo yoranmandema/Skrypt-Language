@@ -50,7 +50,7 @@ namespace Skrypt.ANTLR {
             public JumpState JumpState { get; set; } = JumpState.None;
         }
 
-        void CreateProperty(BaseValue target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
+        void CreateProperty(BaseObject target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
 
             if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {

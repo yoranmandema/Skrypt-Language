@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public delegate BaseValue MethodDelegate(Engine engine, BaseValue self, Arguments input);
+    public delegate BaseObject MethodDelegate(Engine engine, BaseObject self, Arguments input);
 
     public class NativeFunction : IFunction {
         public MethodDelegate Function;
@@ -14,7 +14,7 @@ namespace Skrypt {
             Function = function;
         }
 
-        public BaseValue Run(Engine engine, BaseValue self, Arguments args) {
+        public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
             return Function.Invoke(engine, self, args);
         }
     }

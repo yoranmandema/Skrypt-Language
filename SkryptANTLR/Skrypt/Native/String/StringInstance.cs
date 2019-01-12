@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class StringInstance : BaseInstance, INoReference {
+    public class StringInstance : BaseInstance, IValue {
         public override string Name => "String";
 
         public string Value { get; set; }
@@ -14,7 +14,7 @@ namespace Skrypt {
             Value = value;
         }
 
-        public BaseValue Get(int index) {
+        public BaseObject Get(int index) {
             if (index >= 0 && index < Value.Length) {
                 return Engine.CreateString(Value[index].ToString());
             }
@@ -22,7 +22,7 @@ namespace Skrypt {
             return Engine.CreateString(string.Empty);
         }
 
-        public BaseValue Get(BaseValue index) {
+        public BaseObject Get(BaseObject index) {
             if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
                 return Get((int)number);
             }
@@ -30,7 +30,7 @@ namespace Skrypt {
             return Engine.CreateString(string.Empty);
         }
 
-        public static BaseValue Length(Engine engine, BaseValue self) {
+        public static BaseObject Length(Engine engine, BaseObject self) {
             return engine.CreateNumber((self as StringInstance).Value.Length);
         }
 
@@ -42,7 +42,7 @@ namespace Skrypt {
             return Value.ToString();
         }
 
-        public BaseValue Copy() {
+        public BaseObject Copy() {
             return Engine.CreateString(Value);
         }
     }

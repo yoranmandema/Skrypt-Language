@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class ArrayInstance : BaseInstance {
-        public List<BaseValue> SequenceValues = new List<BaseValue>();
-        public Dictionary<BaseValue,BaseValue> Dictionary = new Dictionary<BaseValue, BaseValue>();
+        public List<BaseObject> SequenceValues = new List<BaseObject>();
+        public Dictionary<BaseObject,BaseObject> Dictionary = new Dictionary<BaseObject, BaseObject>();
 
         public ArrayInstance(Engine engine) : base(engine) {
         }
 
-        public BaseValue Get (int index) {
+        public BaseObject Get (int index) {
             if (index >= 0 && index < SequenceValues.Count) {
                 return SequenceValues[index];
             } else {
@@ -20,7 +20,7 @@ namespace Skrypt {
             }
         }
 
-        public BaseValue Get(BaseValue index) {
+        public BaseObject Get(BaseObject index) {
             if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
                 return Get((int)number);
             }
@@ -32,7 +32,7 @@ namespace Skrypt {
             return null;
         }
 
-        public BaseValue Set(BaseValue index, BaseValue value) {
+        public BaseObject Set(BaseObject index, BaseObject value) {
             if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
                 if (number >= 0 && number < SequenceValues.Count) {
                     SequenceValues[(int)number] = value;
@@ -54,11 +54,11 @@ namespace Skrypt {
             return this;
         }
 
-        public static BaseValue Length(Engine engine, BaseValue self) {
+        public static BaseObject Length(Engine engine, BaseObject self) {
             return engine.CreateNumber((self as ArrayInstance).SequenceValues.Count);
         }
 
-        public static BaseValue Push(Engine engine, BaseValue self, Arguments arguments) {
+        public static BaseObject Push(Engine engine, BaseObject self, Arguments arguments) {
             foreach (var a in arguments.Values) {
                 (self as ArrayInstance).SequenceValues.Add(a);
             }
@@ -66,7 +66,7 @@ namespace Skrypt {
             return null;
         }
 
-        public static BaseValue Insert(Engine engine, BaseValue self, Arguments arguments) {
+        public static BaseObject Insert(Engine engine, BaseObject self, Arguments arguments) {
             var array = self as ArrayInstance;
             var index = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(0)),0), array.SequenceValues.Count);
 

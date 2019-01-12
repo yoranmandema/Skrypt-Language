@@ -24,7 +24,7 @@ namespace Skrypt {
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;
-                var function = default(BaseValue);
+                var function = default(BaseObject);
 
                 var methodDelegate = (MethodDelegate)Delegate.CreateDelegate(typeof(MethodDelegate),m,false);
 
