@@ -235,7 +235,7 @@ namespace Skrypt {
                 }
             }
 
-            var val = obj.GetProperty(memberName).Value;        
+            var val = property.Value;        
 
             if (val is GetPropertyInstance) {
                 var newVal = (val as GetPropertyInstance).Property.Run(_engine, obj);
