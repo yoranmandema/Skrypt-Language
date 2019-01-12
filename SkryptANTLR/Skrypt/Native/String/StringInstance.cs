@@ -52,6 +52,20 @@ namespace Skrypt {
             }
         }
 
+        public static BaseObject StartsWith(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+            var input = arguments.GetAs<StringInstance>(0);
+
+            return engine.CreateBoolean(str.Value.StartsWith(input.Value));
+        }
+
+        public static BaseObject EndsWith(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+            var input = arguments.GetAs<StringInstance>(0);
+
+            return engine.CreateBoolean(str.Value.EndsWith(input.Value));
+        }
+
         public static implicit operator string(StringInstance s) {
             return s.Value;
         }
