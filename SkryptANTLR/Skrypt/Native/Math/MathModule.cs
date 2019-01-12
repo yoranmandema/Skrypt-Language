@@ -8,6 +8,8 @@ namespace Skrypt {
     public class MathModule : BaseModule {
         public override string Name => "Math";
 
+        static Random _random = new Random();
+
         public MathModule(Engine engine) : base(engine) {
             CreateProperty("PI", engine.CreateNumber(Math.PI));
             CreateProperty("E", engine.CreateNumber(Math.E));
@@ -75,6 +77,10 @@ namespace Skrypt {
 
         public static BaseObject Log10(Engine engine, BaseObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Log10(arguments.GetAs<NumberInstance>(0)));
+        }
+
+        public static BaseObject Random(Engine engine, BaseObject self) {
+            return engine.CreateNumber(_random.NextDouble());
         }
 
         public static BaseObject Max(Engine engine, BaseObject self, Arguments arguments) {

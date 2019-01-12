@@ -1,2 +1,2 @@
 ﻿
-print("Hello world!".IndexOf("o", 4))
+print(Math.Random)
