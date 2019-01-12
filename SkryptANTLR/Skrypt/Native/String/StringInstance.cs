@@ -66,6 +66,40 @@ namespace Skrypt {
             return engine.CreateBoolean(str.Value.EndsWith(input.Value));
         }
 
+        public static BaseObject Replace(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+            var input = arguments.GetAs<StringInstance>(0);
+            var replacement = arguments.GetAs<StringInstance>(1);
+
+            return engine.CreateString(str.Value.Replace(input.Value, replacement.Value));
+        }
+
+        public static BaseObject PadLeft(Engine engine, BaseObject self, Arguments arguments) {
+            var str = (self as StringInstance).Value;
+            var totalWidth = arguments.GetAs<NumberInstance>(0);
+            var input = arguments.GetAs<StringInstance>(1);
+            var newStr = "";
+
+            while (newStr.Length < totalWidth) {
+                newStr = input + newStr;
+            }
+
+            return engine.CreateString(newStr);
+        }
+
+        public static BaseObject PadRight(Engine engine, BaseObject self, Arguments arguments) {
+            var str = (self as StringInstance).Value;
+            var totalWidth = arguments.GetAs<NumberInstance>(0);
+            var input = arguments.GetAs<StringInstance>(1);
+            var newStr = "";
+
+            while (newStr.Length < totalWidth) {
+                newStr = newStr + input;
+            }
+
+            return engine.CreateString(newStr);
+        }
+
         public static implicit operator string(StringInstance s) {
             return s.Value;
         }
