@@ -263,7 +263,7 @@ moduleProperty		: property | moduleStmnt ;
 property			: assignStmnt | fnStmnt ;
 
 fnStmnt				locals [
-					BaseValue ReturnValue = null,
+					BaseObject ReturnValue = null,
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: CONST? FN name '(' parameterGroup ')' {
@@ -384,12 +384,6 @@ if (nameCtx.variable == null) {
 } 	
 
 var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
-
-//if (!isInFunction) {
-//	try {
-//		nameCtx.variable.Value = this.Engine.Visitor.Visit(assignNameCtx.expression());
-//	} finally {}
-//}
 }																																#assignNameStatement
 					| memberAccess		ASSIGN expression																		#assignMemberStatement
 					| memberAccessComp	ASSIGN expression																		#assignComputedMemberStatement					
