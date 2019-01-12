@@ -1,2 +1,2 @@
 ﻿
-print("Hello world!".Split("H","l"))
+print("Hello world!".IndexOf("o", 4))
