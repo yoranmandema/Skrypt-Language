@@ -1,2 +1,2 @@
 ﻿
-print(!true)
+print(55 >> 3)

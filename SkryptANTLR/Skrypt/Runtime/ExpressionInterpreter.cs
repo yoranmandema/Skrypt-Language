@@ -34,7 +34,7 @@ namespace Skrypt.Runtime {
 
         public object EvaluateBitNotExpression(BaseObject value) {
             if (value is NumberInstance) {
-                return ~(int)(value as NumberInstance);
+                return ~(int)(value as NumberInstance).Value;
             }
 
             return new InvalidOperation();

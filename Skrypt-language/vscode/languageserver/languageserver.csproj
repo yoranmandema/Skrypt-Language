@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OmniSharp.Extensions.JsonRpc" Version="0.10.0" />
+    <PackageReference Include="OmniSharp.Extensions.LanguageClient" Version="0.10.0" />
+    <PackageReference Include="OmniSharp.Extensions.LanguageProtocol" Version="0.10.0" />
+    <PackageReference Include="OmniSharp.Extensions.LanguageServer" Version="0.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Antlr4.Runtime">
+      <HintPath>..\..\..\SkryptANTLR\Skrypt\bin\Release\Antlr4.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Skrypt">
+      <HintPath>..\..\..\SkryptANTLR\Skrypt\bin\Release\Skrypt.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="libs\Antlr4.Runtime.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="libs\Skrypt.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

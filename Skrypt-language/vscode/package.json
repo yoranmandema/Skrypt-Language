@@ -18,7 +18,7 @@
 		"url": "https://github.com/KrispyteK/SkryptANTLR/issues"
 	},
 	"preview": true,
-	"galleryBanner":{
+	"galleryBanner": {
 		"color": "#A0AF00",
 		"theme": "dark"
 	},
@@ -29,6 +29,10 @@
 		"Programming Languages",
 		"Snippets"
 	],
+	"activationEvents": [
+		"onLanguage:skrypt"
+	],
+	"main": "./out/extension",
 	"contributes": {
 		"languages": [
 			{
@@ -56,5 +60,21 @@
 				"path": "./snippets.code-snippets"
 			}
 		]
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -watch -p ./",
+		"update-vscode": "node ./node_modules/vscode/bin/install",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.0",
+		"@types/node": "^10.1.2",
+		"typescript": "^2.8.3"
+	},
+	"dependencies": {
+		"path": "^0.12.7",
+		"vscode": "^1.1.21",
+		"vscode-languageclient": "^4.1.4"
 	}
 }
