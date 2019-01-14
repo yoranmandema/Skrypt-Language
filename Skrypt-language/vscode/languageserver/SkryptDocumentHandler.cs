@@ -27,13 +27,16 @@ namespace languageserver {
             _router = router;
         }
 
-        public TextDocumentSyncKind Change { get; } = TextDocumentSyncKind.Full;
+        public TextDocumentSyncKind Change { get; } = TextDocumentSyncKind.Incremental;
 
         public Task<Unit> Handle(DidChangeTextDocumentParams notification, CancellationToken token) {
-            _router.Window.LogMessage(new LogMessageParams() {
-                Type = MessageType.Log,
-                Message = "Hello World!!!!"
-            });
+            foreach (var c in notification.ContentChanges) {
+                _router.Window.ShowMessage(new ShowMessageParams() {
+                    Type = MessageType.Info,
+                    Message = c.Text
+                });
+            }
+
             return Unit.Task;
         }
 

@@ -74,4 +74,4 @@ struct Thing {
 
 Thing().a
 thing().a
- Thing().a
+Thing().a
