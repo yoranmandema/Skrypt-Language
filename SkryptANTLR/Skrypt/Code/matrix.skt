@@ -1,0 +1,141 @@
+﻿
+struct Matrix {
+    Rows = 0
+    Cols = 0
+    Matrix = []
+
+    fn init (rows = 0, cols = 0) {
+        self.Rows = rows
+        self.Cols = cols
+
+        for (i = 0, i < self.Rows, i++) {
+            self.Matrix[i] = [] 
+
+            for (j = 0, j < self.Cols, j++) {
+                self.Matrix[i][j] = 0
+            }          
+        }
+    }
+
+    // This transposes a matrix
+    // rows X cols --> cols X rows
+    fn Transpose () {
+        result = Matrix(self.Cols, self.Rows)
+
+        for (i = 0, i < result.Rows, i++) {
+            for (j = 0, j < result.Cols, j++) {
+                result.Matrix[i][j] = self.Matrix[j][i]
+            }
+        }
+
+        return result
+    }
+
+    // This makes a copy of the matrix
+    fn Copy () {
+        result = Matrix(self.Rows, self.Cols)
+
+        for (i = 0, i < result.Rows, i++) {
+            for (j = 0, j < result.Cols, j++) {
+                result.Matrix[i][j] = self.Matrix[i][j]
+            }
+        }
+
+        return result
+    }
+
+    // This adds another matrix or a single value
+    fn Add (other) {
+        result = Matrix(self.Rows, self.Cols)
+
+        // Are we trying to add a Matrix?
+        if (other is Matrix) {
+            for (i = 0, i < self.Rows, i++) {
+                for (j = 0, j < self.Cols, j++) {
+                    result.Matrix[i][j] = self.Matrix[i][j] + other.Matrix[i][j]
+                }
+            }
+            // Or just a single scalar value?
+        } else {
+            for (i = 0, i < self.Rows, i++) {
+                for (j = 0, j < self.Cols, j++) {
+                    result.Matrix[i][j] = self.Matrix[i][j] + other
+                }
+            }
+        }
+
+        return result
+    }
+
+    // This subtracts another matrix or a single value
+    fn Subtract (other) {
+        result = Matrix(self.Rows, self.Cols)
+
+        // Are we trying to add a Matrix?
+        if (other is Matrix) {
+            for (i = 0, i < self.Rows, i++) {
+                for (j = 0, j < self.Cols, j++) {
+                    result.Matrix[i][j] = self.Matrix[i][j] + other.Matrix[i][j]
+                }
+            }
+            // Or just a single scalar value?
+        } else {
+            for (i = 0, i < self.Rows, i++) {
+                for (j = 0, j < self.Cols, j++) {
+                    result.Matrix[i][j] = self.Matrix[i][j] + other
+                }
+            }
+        }
+
+        return result
+    }
+
+    // This multiplies another matrix or a single value
+    // This is different than the dot() function!
+    fn Multiply (other) {
+        result = Matrix(self.Rows, self.Cols)
+
+        // Are we trying to add a Matrix?
+        if (other is Matrix) {
+            for (i = 0, i < self.Rows, i++) {
+                for (j = 0, j < self.Cols, j++) {
+                    result.Matrix[i][j] = self.Matrix[i][j] * other.Matrix[i][j]
+                }
+            }
+            // Or just a single scalar value?
+        } else {
+            for (i = 0, i < self.Rows, i++) {
+                for (j = 0, j < self.Cols, j++) {
+                    result.Matrix[i][j] = self.Matrix[i][j] * other
+                }
+            }
+        }
+
+        return result
+    }
+
+    fn Dot(other) {
+        // Won't work if columns of self don't equal columns of other
+        if (self.Cols != other.Rows) {
+            print("Incompatible matrix sizes!")
+            return
+        }
+
+        // Make a new matrix
+        result = Matrix(self.Rows, other.Cols)
+        
+        for (i = 0, i < self.Rows, i++) {
+            for (j = 0, j < other.Cols, j++) {
+                // Sum all the rows of self times columns of other
+                sum = 0
+                for (k = 0, k < self.Cols, k++) {
+                    sum = sum + self.Matrix[i][k] * other.Matrix[k][j]
+                }
+                // New value
+                result.Matrix[i][j] = sum
+            }
+        }
+
+        return result
+    }
+}

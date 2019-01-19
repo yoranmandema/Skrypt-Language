@@ -1,2 +1,3 @@
-﻿
-print(55 >> 3)a
+﻿import Matrix from "matrix.skt"
+
+print(Matrix(2,3))
