@@ -1,0 +1,144 @@
+﻿
+import Matrix from "matrix.skt"
+
+struct NeuralNetwork {
+    inodes = 0
+    hnodes = 0
+    onodes = 0
+    wih = 0
+    who = 0 
+    activation = 0
+    derivative = 0 
+    lr = 0
+
+    fn Sigmoid (x) {
+        return 1 / (1 + Math.E ** -x)
+    }
+
+    fn SigmoidD (x) {
+        return x * (1 - x)
+    }
+
+    fn Tanh (x) {
+        return Math.Tanh(x)
+    }
+    
+    fn TanhD (x) {
+        return 1 / (Math.Cosh(x) ** 2)
+    }
+
+    private fn mutate (x) {
+        if (Math.Random < 0.1) {
+            offset = (Math.Random ** Math.Random) * 0.5
+            return x + offset
+        } else {
+            return x
+        }
+    }
+
+    fn Mutate () {
+        self.wih = self.wih.Map(mutate)
+        self.who = self.who.Map(mutate)
+    }
+    
+    fn Copy () {
+        return NeuralNetwork(self)
+    }
+
+    fn init(inputnodes, hiddennodes, outputnodes, learning_rate, activation) {
+
+        // If it's a copy of another NN
+        if (inputnodes is NeuralNetwork) {
+            nn = inputnodes
+            self.inodes = nn.inodes
+            self.hnodes = nn.hnodes
+            self.onodes = nn.onodes
+            self.wih = nn.wih.Copy()
+            self.who = nn.who.Copy()
+            self.activation = nn.activation
+            self.derivative = nn.derivative
+        } else {
+            // Number of nodes in layer (input, hidden, output)
+            // This network is limited to 3 layers
+            self.inodes = inputnodes
+            self.hnodes = hiddennodes
+            self.onodes = outputnodes
+        
+            // These are the weight matrices
+            // wih: weights from input to hidden
+            // who: weights from hidden to output
+            // weights inside the arrays are w_i_j
+            // where link is from node i to node j in the next layer
+            // Matrix is rows X columns
+            self.wih = Matrix(self.hnodes, self.inodes)
+            self.who = Matrix(self.onodes, self.hnodes)
+        
+            // Start with random values
+            self.wih.Randomize()
+            self.who.Randomize()
+        
+            // Default learning rate of 0.1
+            self.lr = learning_rate
+        
+            // Activation Function
+            if (activation == "tanh") {
+                self.activation = NeuralNetwork.Tanh
+                self.derivative = NeuralNetwork.TanhD
+            } else {
+                self.activation = NeuralNetwork.Sigmoid
+                self.derivative = NeuralNetwork.SigmoidD
+            }     
+        }    
+    }
+
+    fn Train(inputs_array, targets_array) {
+
+        // Turn input and target arrays into matrices
+        inputs = Matrix.FromArray(inputs_array)
+        targets = Matrix.FromArray(targets_array)
+      
+        // The input to the hidden layer is the weights (wih) multiplied by inputs
+        hidden_inputs = self.wih.Dot(inputs)
+        // The outputs of the hidden layer pass through sigmoid activation function
+        hidden_outputs = hidden_inputs.Map(self.activation)
+      
+        // The input to the output layer is the weights (who) multiplied by hidden layer
+        output_inputs = self.who.Dot(hidden_outputs)
+      
+        // The output of the network passes through sigmoid activation function
+        outputs = output_inputs.Map(self.activation)
+      
+        // Error is TARGET - OUTPUT
+        output_errors = targets.Subtract(outputs)
+      
+        // Now we are starting back propogation!
+      
+        // Transpose hidden <-> output weights
+        whoT = this.who.Transpose()
+        // Hidden errors is output error multiplied by weights (who)
+        hidden_errors = whoT.Dot(output_errors)
+      
+        // Calculate the gradient, this is much nicer in python!
+        gradient_output = outputs.Map(self.derivative)
+        // Weight by errors and learing rate
+        gradient_output = gradient_output.Multiply(output_errors)
+        gradient_output = gradient_output.Multiply(self.lr)
+      
+        // Gradients for next layer, more back propogation!
+        gradient_hidden = hidden_outputs.Map(self.derivative)
+        // Weight by errors and learning rate
+        gradient_hidden = gradient_hidden.Multiply(hidden_errors)
+        gradient_hidden = gradient_hidden.Multiply(self.lr)
+      
+        // Change in weights from HIDDEN --> OUTPUT
+        hidden_outputs_T = hidden_outputs.Transpose()
+        deltaW_output = gradient_output.Dot(hidden_outputs_T)
+        self.who = self.who.Add(deltaW_output)
+      
+        // Change in weights from INPUT --> HIDDEN
+        inputs_T = inputs.Transpose()
+        deltaW_hidden = gradient_hidden.Dot(inputs_T)
+        self.wih = self.wih.Add(deltaW_hidden)
+    }
+    
+}

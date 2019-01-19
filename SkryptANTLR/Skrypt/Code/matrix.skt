@@ -44,6 +44,14 @@ struct Matrix {
         return result
     }
 
+    fn Randomize() {
+        for (i = 0, i < self.Rows, i++) {
+            for (j = 0, j < self.Cols, j++) {
+                self.Matrix[i][j] = Math.Random ** Math.Random
+            }
+        }
+    }
+
     // This adds another matrix or a single value
     fn Add (other) {
         result = Matrix(self.Rows, self.Cols)
@@ -137,5 +145,27 @@ struct Matrix {
         }
 
         return result
+    }
+
+    fn Map (function) {
+        result = Matrix(self.Rows, self.Cols)
+
+        for (i = 0, i < result.Rows, i++) {
+            for (j = 0, j < result.Cols, j++) {
+                result.Matrix[i][j] = function(self.Matrix[i][j])
+            }
+        }
+
+        return result
+    }
+
+    static fn FromArray (array) {
+        m = Matrix(array.Length, 1)
+
+        for (i = 0, i < array.Length, i++) {
+            m.Matrix[i][0] = array[i]
+        }
+
+        return m
     }
 }

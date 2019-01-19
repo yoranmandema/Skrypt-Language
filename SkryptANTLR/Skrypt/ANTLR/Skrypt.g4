@@ -515,7 +515,7 @@ BITNOT					: '~' ;
 
 BOOLEAN					: TRUE | FALSE ;
 
-NAME					: LETTER (LETTER | DIGIT)*;
+NAME					: ('_' | LETTER) ('_' | LETTER | DIGIT)*;
 
 NUMBER					: DIGIT+ ('.' DIGIT+)?;
 
