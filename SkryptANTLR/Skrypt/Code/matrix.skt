@@ -2,42 +2,42 @@
 struct Matrix {
     Rows = 0
     Cols = 0
-    Matrix = []
+    Data = []
 
     fn init (rows = 0, cols = 0) {
         self.Rows = rows
         self.Cols = cols
 
         for (i = 0, i < self.Rows, i++) {
-            self.Matrix[i] = [] 
+            self.Data[i] = [] 
 
             for (j = 0, j < self.Cols, j++) {
-                self.Matrix[i][j] = 0
+                self.Data[i][j] = 0
             }          
         }
     }
 
-    // This transposes a matrix
+    // This transposes a Data
     // rows X cols --> cols X rows
     fn Transpose () {
         result = Matrix(self.Cols, self.Rows)
 
         for (i = 0, i < result.Rows, i++) {
             for (j = 0, j < result.Cols, j++) {
-                result.Matrix[i][j] = self.Matrix[j][i]
+                result.Data[i][j] = self.Data[j][i]
             }
         }
 
         return result
     }
 
-    // This makes a copy of the matrix
+    // This makes a copy of the Data
     fn Copy () {
         result = Matrix(self.Rows, self.Cols)
 
         for (i = 0, i < result.Rows, i++) {
             for (j = 0, j < result.Cols, j++) {
-                result.Matrix[i][j] = self.Matrix[i][j]
+                result.Data[i][j] = self.Data[i][j]
             }
         }
 
@@ -47,27 +47,27 @@ struct Matrix {
     fn Randomize() {
         for (i = 0, i < self.Rows, i++) {
             for (j = 0, j < self.Cols, j++) {
-                self.Matrix[i][j] = Math.Random ** Math.Random
+                self.Data[i][j] = Math.Random ** Math.Random
             }
         }
     }
 
-    // This adds another matrix or a single value
+    // This adds another Data or a single value
     fn Add (other) {
         result = Matrix(self.Rows, self.Cols)
 
-        // Are we trying to add a Matrix?
-        if (other is Matrix) {
+        // Are we trying to add a Data?
+        if (other is Data) {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Matrix[i][j] = self.Matrix[i][j] + other.Matrix[i][j]
+                    result.Data[i][j] = self.Data[i][j] + other.Data[i][j]
                 }
             }
             // Or just a single scalar value?
         } else {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Matrix[i][j] = self.Matrix[i][j] + other
+                    result.Data[i][j] = self.Data[i][j] + other
                 }
             }
         }
@@ -75,22 +75,22 @@ struct Matrix {
         return result
     }
 
-    // This subtracts another matrix or a single value
+    // This subtracts another Data or a single value
     fn Subtract (other) {
         result = Matrix(self.Rows, self.Cols)
 
-        // Are we trying to add a Matrix?
-        if (other is Matrix) {
+        // Are we trying to add a Data?
+        if (other is Data) {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Matrix[i][j] = self.Matrix[i][j] + other.Matrix[i][j]
+                    result.Data[i][j] = self.Data[i][j] + other.Data[i][j]
                 }
             }
             // Or just a single scalar value?
         } else {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Matrix[i][j] = self.Matrix[i][j] + other
+                    result.Data[i][j] = self.Data[i][j] + other
                 }
             }
         }
@@ -98,23 +98,23 @@ struct Matrix {
         return result
     }
 
-    // This multiplies another matrix or a single value
+    // This multiplies another Data or a single value
     // This is different than the dot() function!
     fn Multiply (other) {
         result = Matrix(self.Rows, self.Cols)
 
-        // Are we trying to add a Matrix?
+        // Are we trying to add a Data?
         if (other is Matrix) {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Matrix[i][j] = self.Matrix[i][j] * other.Matrix[i][j]
+                    result.Data[i][j] = self.Data[i][j] * other.Data[i][j]
                 }
             }
             // Or just a single scalar value?
         } else {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Matrix[i][j] = self.Matrix[i][j] * other
+                    result.Data[i][j] = self.Data[i][j] * other
                 }
             }
         }
@@ -125,11 +125,11 @@ struct Matrix {
     fn Dot(other) {
         // Won't work if columns of self don't equal columns of other
         if (self.Cols != other.Rows) {
-            print("Incompatible matrix sizes!")
+            print("Incompatible Data sizes!")
             return
         }
 
-        // Make a new matrix
+        // Make a new Data
         result = Matrix(self.Rows, other.Cols)
         
         for (i = 0, i < self.Rows, i++) {
@@ -137,10 +137,10 @@ struct Matrix {
                 // Sum all the rows of self times columns of other
                 sum = 0
                 for (k = 0, k < self.Cols, k++) {
-                    sum = sum + self.Matrix[i][k] * other.Matrix[k][j]
+                    sum = sum + self.Data[i][k] * other.Data[k][j]
                 }
                 // New value
-                result.Matrix[i][j] = sum
+                result.Data[i][j] = sum
             }
         }
 
@@ -152,7 +152,7 @@ struct Matrix {
 
         for (i = 0, i < result.Rows, i++) {
             for (j = 0, j < result.Cols, j++) {
-                result.Matrix[i][j] = function(self.Matrix[i][j])
+                result.Data[i][j] = function(self.Data[i][j])
             }
         }
 
@@ -163,7 +163,7 @@ struct Matrix {
         m = Matrix(array.Length, 1)
 
         for (i = 0, i < array.Length, i++) {
-            m.Matrix[i][0] = array[i]
+            m.Data[i][0] = array[i]
         }
 
         return m

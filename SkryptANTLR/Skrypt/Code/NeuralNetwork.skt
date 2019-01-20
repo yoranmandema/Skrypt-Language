@@ -114,7 +114,7 @@ struct NeuralNetwork {
         // Now we are starting back propogation!
       
         // Transpose hidden <-> output weights
-        whoT = this.who.Transpose()
+        whoT = self.who.Transpose()
         // Hidden errors is output error multiplied by weights (who)
         hidden_errors = whoT.Dot(output_errors)
       
