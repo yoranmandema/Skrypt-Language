@@ -91,7 +91,7 @@ foreach (var n in Ctx.NAME()) {
 }																																#importFromStatement
 					;
 
-moduleStmnt			: MODULE name  '{' property* '}' {
+moduleStmnt			: MODULE name {
 
 var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
@@ -108,6 +108,8 @@ if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler
 var module = new Skrypt.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
 
 block.Variables[nameCtx.GetText()] = module;
+
+} '{' property* '}' {
 
 foreach (var c in Ctx.property()) {
 	this.Engine.Visitor.Visit(c);
@@ -172,7 +174,8 @@ foreach (var c in Ctx.structProperty()) {
 }																																#structStatement
 					;
 
-traitStmnt			: TRAIT name propertiesBlock {
+traitStmnt			: TRAIT name {
+
 var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
 if (!isInValidContext) {
@@ -190,6 +193,8 @@ var trait = new ScriptTrait(traitName, this.Engine);
 var traitVariable = new Skrypt.Variable(traitName, trait);
 
 block.Variables[nameCtx.GetText()] = traitVariable;
+
+} propertiesBlock {
 
 foreach (var child in Ctx.propertiesBlock().property()) {
 	this.Engine.Visitor.Visit(child);
