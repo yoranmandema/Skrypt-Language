@@ -37,7 +37,11 @@ namespace Skrypt {
                     Context.Variables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
                 }
 
-                preCallValues[parameter.Name] = Context.Variables[parameter.Name].Value.Clone();
+                if (Context.Variables[parameter.Name].Value != null) {
+                    preCallValues[parameter.Name] = Context.Variables[parameter.Name].Value.Clone();
+                } else {
+                    preCallValues[parameter.Name] = null;
+                }
             }
 
             var returnValue = default(BaseObject);

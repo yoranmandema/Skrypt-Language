@@ -119,7 +119,7 @@ foreach (var c in Ctx.property()) {
 					;
 
 
-structStmnt			: STRUCT name  '{' structProperty* '}' {
+structStmnt			: STRUCT name {
 
 var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
 
@@ -138,6 +138,9 @@ var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine));
 var template = new Template {Name = typeName};
 
 block.Variables[nameCtx.GetText()] = type;
+Ctx.Variables[nameCtx.GetText()] = type;
+
+}  '{' structProperty* '}' {
 
 foreach (var c in Ctx.structProperty()) {
 	var isPrivate = c.PRIVATE() != null;	

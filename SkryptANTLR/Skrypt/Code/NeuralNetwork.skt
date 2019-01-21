@@ -82,11 +82,11 @@ struct NeuralNetwork {
         
             // Activation Function
             if (activation == "tanh") {
-                self.activation = NeuralNetwork.Tanh
-                self.derivative = NeuralNetwork.TanhD
+                self.activation = Tanh
+                self.derivative = TanhD
             } else {
-                self.activation = NeuralNetwork.Sigmoid
-                self.derivative = NeuralNetwork.SigmoidD
+                self.activation = Sigmoid
+                self.derivative = SigmoidD
             }     
         }    
     }

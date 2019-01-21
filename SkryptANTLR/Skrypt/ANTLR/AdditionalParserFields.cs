@@ -97,7 +97,6 @@ namespace Skrypt.ANTLR {
             IScoped first = null;
 
             RuleContext currentContext = ctx;
-
             while (currentContext.Parent != null) {
                 if (currentContext is IScoped scopedCtx) {
                     if (first == null) first = scopedCtx;
