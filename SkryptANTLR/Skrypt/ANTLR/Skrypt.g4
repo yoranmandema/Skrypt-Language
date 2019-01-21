@@ -420,6 +420,7 @@ expression          : '(' expression ')'																						#parenthesisExp
                     | number																									#numberLiteral
 					| string																									#stringLiteral
 					| boolean																									#booleanLiteral
+					| null																										#nullLiteral
 					| vector2																									#vector2Literal
 					| vector3																									#vector3Literal
 					| vector4																									#vector4Literal
@@ -454,6 +455,10 @@ $value = double.Parse($NUMBER.text);
 
 boolean returns [bool value] : BOOLEAN { 
 $value = $BOOLEAN.text == "true" ? true : false; 
+} ;
+
+null returns [object value] : NULL { 
+$value = null; 
 } ;
 
 vector2				:	'<' X=expression ',' Y=expression '>' ;
@@ -520,6 +525,8 @@ INCREMENT				: '++'	;
 DECREMENT				: '--'	;
 NOT						: '!' ;
 BITNOT					: '~' ;
+
+NULL					: 'null' ;
 
 BOOLEAN					: TRUE | FALSE ;
 

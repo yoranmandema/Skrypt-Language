@@ -2,14 +2,14 @@
 import Matrix from "matrix.skt"
 
 struct NeuralNetwork {
-    inodes = 0
-    hnodes = 0
-    onodes = 0
+    inodes = 1
+    hnodes = 1
+    onodes = 1
     wih = 0
     who = 0 
-    activation = 0
+    activation = null
     derivative = 0 
-    lr = 0
+    lr = 0.2
 
     fn Sigmoid (x) {
         return 1 / (1 + Math.E ** -x)
@@ -50,13 +50,13 @@ struct NeuralNetwork {
         // If it's a copy of another NN
         if (inputnodes is NeuralNetwork) {
             nn = inputnodes
-            self.inodes = nn.inodes
-            self.hnodes = nn.hnodes
-            self.onodes = nn.onodes
-            self.wih = nn.wih.Copy()
-            self.who = nn.who.Copy()
-            self.activation = nn.activation
-            self.derivative = nn.derivative
+            self.inodes = inodes
+            self.hnodes = hnodes
+            self.onodes = onodes
+            self.wih = wih.Copy()
+            self.who = who.Copy()
+            self.activation = activation
+            self.derivative = derivative
         } else {
             // Number of nodes in layer (input, hidden, output)
             // This network is limited to 3 layers

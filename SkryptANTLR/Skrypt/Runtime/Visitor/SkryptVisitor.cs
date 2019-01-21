@@ -311,6 +311,12 @@ namespace Skrypt {
             return boolean;
         }
 
+        public override BaseObject VisitNullLiteral([NotNull] SkryptParser.NullLiteralContext context) {
+            LastResult = null;
+
+            return null;
+        }
+
         public override BaseObject VisitStringLiteral(SkryptParser.StringLiteralContext context) {
             var value = context.@string().value;
             var str = _engine.CreateString(value);
