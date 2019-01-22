@@ -16,7 +16,11 @@ namespace Skrypt {
             var engine = new Engine();
 
             engine.SetValue("print", (e, s, i) => {
-                Console.WriteLine(i[0]);
+                if (i[0].Members.ContainsKey("string")) {
+                    Console.WriteLine((i[0].Members["string"].Value as FunctionInstance).Function.Run(engine, null, Arguments.Empty));
+                } else {
+                    Console.WriteLine(i[0]);
+                }
 
                 return null;
             });

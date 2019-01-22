@@ -7,7 +7,7 @@ struct NeuralNetwork {
     onodes = 1
     wih = 0
     who = 0 
-    activation = null
+    activation = 0
     derivative = 0 
     lr = 0.2
 

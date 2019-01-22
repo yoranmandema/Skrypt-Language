@@ -17,6 +17,20 @@ struct Matrix {
         }
     }
 
+    // fn string () {
+    //     str = ""
+
+    //     for (i = 0, i < self.Rows, i++) {
+    //         print(i)
+
+    //         str = str + self.Data[i]
+            
+    //         str = str + "\n"
+    //     }      
+
+    //     return str
+    // }
+
     // This transposes a Data
     // rows X cols --> cols X rows
     fn Transpose () {
@@ -124,10 +138,10 @@ struct Matrix {
 
     fn Dot(other) {
         // Won't work if columns of self don't equal columns of other
-        if (self.Cols != other.Rows) {
-            print("Incompatible Data sizes!")
-            return
-        }
+        // if (self.Cols != other.Rows) {
+        //     print("Incompatible Data sizes!")
+        //     return
+        // }
 
         // Make a new Data
         result = Matrix(self.Rows, other.Cols)

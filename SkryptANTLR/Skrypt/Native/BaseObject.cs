@@ -42,7 +42,7 @@ namespace Skrypt {
 
         public Member GetProperty(string name) {
             if (!Members.ContainsKey(name)) {
-                throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
+                throw new NonExistingMemberException($"Value {Name} does not contain a member with the name '{name}'.");
             }
 
             return Members[name];
