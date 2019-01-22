@@ -17,7 +17,7 @@ namespace Skrypt {
 
             engine.SetValue("print", (e, s, i) => {
                 if (i[0].Members.ContainsKey("string")) {
-                    Console.WriteLine((i[0].Members["string"].Value as FunctionInstance).Function.Run(engine, null, Arguments.Empty));
+                    Console.WriteLine((i[0].Members["string"].Value as FunctionInstance).Function.Run(engine, i[0], Arguments.Empty));
                 } else {
                     Console.WriteLine(i[0]);
                 }
