@@ -1,4 +1,6 @@
 ﻿
-someFunction = a => {return a}
+fn test (a,b) {
+	print(a,b)
+}
 
-benchmark(someFunction,1000000)
+benchmark(test,100)
