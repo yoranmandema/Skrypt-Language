@@ -12,7 +12,7 @@ block				: (
 					| traitImplStmnt
 					| ifStmnt
 					| forStmnt
-					| whileStmnt
+					| whileStmnt																								
 					| fnStmnt 
 					| returnStmnt
 					| breakStmnt
@@ -270,10 +270,10 @@ structProperty		: PRIVATE? STATIC? Property=property ;
 moduleProperty		: property | moduleStmnt ;
 property			: assignStmnt | fnStmnt ;
 
-fnStmnt				locals [
+fnStmnt				/*locals [
 					BaseObject ReturnValue = null,
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
-					]
+					]*/
 					: CONST? FN name '(' parameterGroup ')' {
 var fnCtx = ($ctx as FunctionStatementContext);
 var nameCtx = fnCtx.name();
@@ -315,10 +315,10 @@ for (var i = 0; i < parameters.Length; i++) {
 					;											
 
 returnStmnt			locals [
-					FunctionStatementContext Statement
+					IFunctionContext Statement
 					]
 					: RETURN expression? {
-$Statement = GetFirstOfType<FunctionStatementContext>($ctx);
+$Statement = GetFirstFunctionStatement($ctx);
 
 if ($Statement == null) {
 	Engine.ErrorHandler.AddError((_localctx as ReturnStatementContext).RETURN().Symbol, "Return statement must be inside a function.");
@@ -398,6 +398,7 @@ var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBl
 					;
 
 expression          : '(' expression ')'																						#parenthesisExp
+					| fnLiteral																									#functionLiteral		
 					| expression DOT NAME	 																					#memberAccessExp
 					| expression '[' expression ']'																				#computedMemberAccessExp
                     | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
@@ -460,6 +461,38 @@ $value = $BOOLEAN.text == "true" ? true : false;
 null returns [object value] : NULL { 
 $value = null; 
 } ;
+
+fnLiteral			returns [Skrypt.FunctionInstance value]
+					:  ('(' parameterGroup ')' | parameter) '=>' {
+var fnCtx = ($ctx as FnLiteralContext);
+var scope = GetDefinitionBlock($ctx.Parent);
+
+fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
+
+var parameters = fnCtx.parameterGroup().parameter();
+var processedParameters = new Skrypt.Parameter[parameters.Length];
+
+for (var i = 0; i < parameters.Length; i++) {
+	var p = parameters[i];
+	var name = p.NAME().GetText();
+
+	processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
+
+	var parameterVar = new Skrypt.Variable(name);
+
+	fnCtx.Variables[name] = parameterVar;
+}
+
+} stmntBlock {
+	var function = new Skrypt.ScriptFunction(fnCtx) { 
+		Parameters = processedParameters
+	}; 
+
+	var functionVar = new Skrypt.FunctionInstance(this.Engine, function); 
+
+	$value = functionVar;												
+}																																				
+					;					
 
 vector2				:	'<' X=expression ',' Y=expression '>' ;
 vector3				:	'<' X=expression ',' Y=expression ',' Z=expression '>' ;

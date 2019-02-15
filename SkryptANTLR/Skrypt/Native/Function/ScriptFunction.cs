@@ -9,15 +9,15 @@ using Antlr4.Runtime.Tree;
 
 namespace Skrypt {
     public class ScriptFunction : IFunction {
-        internal SkryptParser.FunctionStatementContext Context;
+        internal IFunctionContext Context;
         internal Parameter[] Parameters;
 
-        public ScriptFunction(SkryptParser.FunctionStatementContext block) {
+        public ScriptFunction(IFunctionContext block) {
             Context = block;
         }
 
         public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
-            var blockStmnt = Context.stmntBlock();
+            var blockStmnt = Context.StmntBlock;
             var block = blockStmnt.block();
             var expr = blockStmnt.expression();
             var preCallValues = new Dictionary<string, BaseObject>();

@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ANTLR\AdditionalLexerFields.cs" />
+    <Compile Include="ANTLR\IFunctionContext.cs" />
     <Compile Include="ANTLR\Skrypt.g4.lexer.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>

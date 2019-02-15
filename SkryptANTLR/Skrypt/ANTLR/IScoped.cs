@@ -7,7 +7,7 @@ using Skrypt.ANTLR;
 using Antlr4.Runtime;
 
 namespace Skrypt {
-    internal interface IScoped {
+    public interface IScoped {
         Dictionary<string, Variable> Variables { get; set; }
         RuleContext Context { get; }
     }

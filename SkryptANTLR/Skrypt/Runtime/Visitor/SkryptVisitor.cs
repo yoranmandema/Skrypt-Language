@@ -385,6 +385,14 @@ namespace Skrypt {
             return array;
         }
 
+        public override BaseObject VisitFunctionLiteral([NotNull] SkryptParser.FunctionLiteralContext context) {
+            var fn = context.fnLiteral().value;
+
+            LastResult = fn;
+
+            return fn;
+        }
+
         public override BaseObject VisitParenthesisExp(SkryptParser.ParenthesisExpContext context) {
             return Visit(context.expression());
         }

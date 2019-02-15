@@ -37,9 +37,20 @@ namespace Skrypt.ANTLR {
             public RuleContext Context => this;
         }
 
-        public partial class FunctionStatementContext : IScoped {
+        public partial class FunctionStatementContext : IFunctionContext {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public StmntBlockContext StmntBlock => stmntBlock();
+            public BaseObject ReturnValue { get; set; }
+            public JumpState JumpState { get; set; }
+        }
+
+        public partial class FnLiteralContext : IFunctionContext {
+            public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
+            public StmntBlockContext StmntBlock => stmntBlock();
+            public BaseObject ReturnValue { get; set; }
+            public JumpState JumpState { get; set; }
         }
 
         public partial class WhileStatementContext : ILoop {
@@ -134,6 +145,20 @@ namespace Skrypt.ANTLR {
 
             while (currentContext.Parent != null) {
                 if (currentContext is T typeCtx) {
+                    return typeCtx;
+                }
+
+                currentContext = currentContext.Parent;
+            }
+
+            return null;
+        }
+
+        IFunctionContext GetFirstFunctionStatement (RuleContext ctx){
+            RuleContext currentContext = ctx;
+
+            while (currentContext.Parent != null) {
+                if (currentContext is IFunctionContext typeCtx) {
                     return typeCtx;
                 }
 
