@@ -89,6 +89,13 @@ namespace Skrypt.Runtime {
                 return (left as NumberInstance) * (right as NumberInstance);
             }
 
+            if (left is StringInstance && right is NumberInstance) {
+                var str = (left as StringInstance).Value;
+                var amt = (int)(right as NumberInstance).Value;
+
+                return new StringBuilder(str.Length * amt).Insert(0, str, amt).ToString();
+            }
+
             if (left is VectorInstance && right is VectorInstance) {
                 return VectorInstance.ComponentMath(_engine, left as VectorInstance, right as VectorInstance, (x, y) => x * y);
             }

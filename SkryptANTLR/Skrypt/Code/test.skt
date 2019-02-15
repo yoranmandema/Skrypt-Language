@@ -1,5 +1,9 @@
 ﻿
 
-IO.WriteAsync("test.txt", "get fucked", () => {
+print("before")
+
+IO.WriteAsync("test.txt", "get fucked" * 1000, () => {
 	print("written")
 })
+
+print("after")
