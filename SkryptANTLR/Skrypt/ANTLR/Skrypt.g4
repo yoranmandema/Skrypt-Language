@@ -469,7 +469,7 @@ var scope = GetDefinitionBlock($ctx.Parent);
 
 fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
 
-var parameters = fnCtx.parameterGroup().parameter();
+var parameters = fnCtx.parameterGroup() == null ? new ParameterContext[] {fnCtx.parameter()} : fnCtx.parameterGroup().parameter();
 var processedParameters = new Skrypt.Parameter[parameters.Length];
 
 for (var i = 0; i < parameters.Length; i++) {

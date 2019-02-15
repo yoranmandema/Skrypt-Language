@@ -1,4 +1,4 @@
 ﻿
-someFunction = (a,b) => { return a + b }
+someFunction = a => {return a}
 
-someFunction()
+benchmark(someFunction,1000000)
