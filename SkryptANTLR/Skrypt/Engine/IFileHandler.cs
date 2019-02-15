@@ -7,8 +7,9 @@ using System.IO;
 
 namespace Skrypt {
     public interface IFileHandler {
-        string File { get; set; }
-        string Directory { get; set; }
-        string Read(string path);
+        string  File { get; set; }
+        string  Folder { get; set; }
+        string  Read(string path);
+        void    Write(string path, string content);
     }
 }

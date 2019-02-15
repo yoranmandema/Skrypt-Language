@@ -25,6 +25,7 @@ namespace Skrypt {
         internal ArrayType Array;
 
         internal MathModule Math;
+        internal IOModule IO;
 
         internal SkryptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
@@ -43,13 +44,14 @@ namespace Skrypt {
             Array                   = new ArrayType(this);
 
             Math                    = new MathModule(this);
+            IO                      = new IOModule(this);
 
             Visitor                 = new SkryptVisitor(this);
         }
 
         public Engine DoFile(string file) {
             FileHandler.File = file;
-            FileHandler.Directory = System.IO.Path.GetDirectoryName(file);
+            FileHandler.Folder = System.IO.Path.GetDirectoryName(file);
 
             var code = FileHandler.Read(file);
 

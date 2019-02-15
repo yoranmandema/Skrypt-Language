@@ -1,6 +1,2 @@
 ﻿
-fn test (a,b) {
-	print(a,b)
-}
-
-benchmark(test,100)
+IO.Write("test.txt", Math)
