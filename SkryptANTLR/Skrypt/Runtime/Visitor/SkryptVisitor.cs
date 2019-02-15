@@ -480,9 +480,9 @@ namespace Skrypt {
             }
 
             if (result is InvalidOperation) {
-                var name = typeof(BaseType).IsAssignableFrom(value.GetType()) ? "type" : value?.Name;
+                var name = value == null ? "null" : typeof(BaseType).IsAssignableFrom(value.GetType()) ? "type" : value.Name;
 
-                _engine.ErrorHandler.FatalError(context.Target.Start, $"No such operation: {name ?? "null"} {operationName}");
+                _engine.ErrorHandler.FatalError(context.Target.Start, $"No such operation: {name} {operationName}");
             }
 
             LastResult = (BaseObject)result;
@@ -572,10 +572,10 @@ namespace Skrypt {
             }
 
             if (result is InvalidOperation) {
-                var lname = typeof(BaseType).IsAssignableFrom(left.GetType()) ? "type" : left?.Name;
-                var rname = typeof(BaseType).IsAssignableFrom(right.GetType()) ? "type" : right?.Name;
+                var lname = left == null ? "null" : typeof(BaseType).IsAssignableFrom(left.GetType()) ? "type" : left.Name;
+                var rname = right == null ? "null" : typeof(BaseType).IsAssignableFrom(right.GetType()) ? "type" : right.Name;
 
-                _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {lname ?? "null"} {operationName} {rname ?? "null"}.");
+                _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {lname} {operationName} {rname}.");
             }
 
 
