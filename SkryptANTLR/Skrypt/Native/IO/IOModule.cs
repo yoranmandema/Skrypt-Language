@@ -29,5 +29,24 @@ namespace Skrypt {
 
             return null;
         }
+
+        public static BaseObject ReadAsync(Engine engine, BaseObject self, Arguments arguments) {
+            var destination = arguments.GetAs<StringInstance>(0);
+            var function = arguments.GetAs<FunctionInstance>(1);
+
+            engine.FileHandler.ReadAsync(destination, function);
+
+            return null;
+        }
+
+        public static BaseObject WriteAsync(Engine engine, BaseObject self, Arguments arguments) {
+            var destination = arguments.GetAs<StringInstance>(0);
+            var content = arguments.GetAs<BaseObject>(1).ToString();
+            var function = arguments.GetAs<FunctionInstance>(2);
+
+            engine.FileHandler.WriteAsync(destination, content, function);
+
+            return null;
+        }
     }
 }

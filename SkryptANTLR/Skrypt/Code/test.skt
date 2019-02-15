@@ -1,2 +1,5 @@
 ﻿
-IO.Write("test.txt", Math)
+
+IO.WriteAsync("test.txt", "get fucked", () => {
+	print("written")
+})

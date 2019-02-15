@@ -31,11 +31,13 @@ namespace Skrypt {
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
 
         public ErrorHandler ErrorHandler = new ErrorHandler();
-        public IFileHandler FileHandler = new DefaultFileHandler();
+        public IFileHandler FileHandler;
 
         public Engine() {
             expressionInterpreter   = new ExpressionInterpreter(this);
             templateMaker           = new TemplateMaker(this);
+            FileHandler             = new DefaultFileHandler(this);
+            Visitor                 = new SkryptVisitor(this);
 
             Number                  = new NumberType(this);
             String                  = new StringType(this);
@@ -45,8 +47,6 @@ namespace Skrypt {
 
             Math                    = new MathModule(this);
             IO                      = new IOModule(this);
-
-            Visitor                 = new SkryptVisitor(this);
         }
 
         public Engine DoFile(string file) {
