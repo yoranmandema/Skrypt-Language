@@ -91,6 +91,7 @@
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\IO\IOModule.cs" />
     <Compile Include="Native\IValue.cs" />
+    <Compile Include="Native\Reflection\Reflection.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
     <Compile Include="Native\Trait\ScriptTrait.cs" />
     <Compile Include="Native\Type\BaseType.cs" />
