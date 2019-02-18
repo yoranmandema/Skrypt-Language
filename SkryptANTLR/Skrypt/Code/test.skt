@@ -1,3 +1,7 @@
 ﻿
 
-print(Reflection.Memory.Value)
+size = Reflection.Memory.GetSizeOfAction(_ => {
+	a = 2 * 4 * 102312
+})
+
+print(size)

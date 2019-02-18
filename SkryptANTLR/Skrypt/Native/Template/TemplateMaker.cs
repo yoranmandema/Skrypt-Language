@@ -15,16 +15,18 @@ namespace Skrypt {
 
         public Template CreateTemplate(Type t) {
             var methods = t.GetMethods();
-            var modules = t.GetNestedTypes();
+            var types = t.GetNestedTypes();
             var template = new Template();
 
-            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseModule).IsAssignableFrom(t) && !typeof(BaseType).IsAssignableFrom(t))
+            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseModule).IsAssignableFrom(t) && !typeof(BaseType).IsAssignableFrom(t)) {
                 throw new InvalidTemplateTargetException("Target type must derive from BaseInstance, BaseModule or BaseType.");
+            }
 
             template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Module|Instance|Type)$", "");
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;
+
                 var function = default(BaseObject);
 
                 var methodDelegate = (MethodDelegate)Delegate.CreateDelegate(typeof(MethodDelegate),m,false);
@@ -42,12 +44,10 @@ namespace Skrypt {
                 template.Members[m.Name] = new Member(function, m.IsPrivate, null);
             }
 
-            foreach (var m in modules) {
-                var module = default(BaseModule);
+            foreach (var type in types) {
+                var instance = (BaseModule)Activator.CreateInstance(type, _engine);
 
-                module = (BaseModule)Activator.CreateInstance(m, _engine);
-
-                template.Members[module.Name] = new Member(module, m.IsNestedPrivate, null);
+                template.Members[instance.Name] = new Member(instance, type.IsNestedPrivate, null);
             }
 
             return template;
