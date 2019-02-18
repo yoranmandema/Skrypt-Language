@@ -105,16 +105,20 @@ var block = GetDefinitionBlock($ctx.Parent);
 
 if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddError(nameCtx.Start, "Constant cannot be redefined.");
 
-var module = new Skrypt.Variable(nameCtx.GetText(), new ScriptModule(nameCtx.GetText(), this.Engine));
+var module = new ScriptModule(nameCtx.GetText(), this.Engine);
 
-block.Variables[nameCtx.GetText()] = module;
+this.Engine.AddModule(module);
+
+var variable = new Skrypt.Variable(nameCtx.GetText(), module);
+
+block.Variables[nameCtx.GetText()] = variable;
 
 } '{' property* '}' {
 
 foreach (var c in Ctx.property()) {
 	this.Engine.Visitor.Visit(c);
 
-	CreateProperty(module.Value, Ctx, c, false);
+	CreateProperty(variable.Value, Ctx, c, false);
 }
 
 }																																#moduleStatement

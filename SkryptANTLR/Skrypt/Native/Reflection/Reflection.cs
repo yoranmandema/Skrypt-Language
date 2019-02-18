@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public partial class Reflection : BaseModule {
-        public Reflection(Engine engine) : base(engine) {
+    public partial class ReflectionModule : BaseModule {
+        public ReflectionModule(Engine engine) : base(engine) {
             CreateProperty("Value", engine.CreateString("I am reflection"));
         }
 
-        public class Memory : BaseModule {
-            public Memory(Engine engine) : base(engine) {
+        public class MemoryModule : BaseModule {
+            public MemoryModule(Engine engine) : base(engine) {
                 CreateProperty("Value", engine.CreateString("I am memory"));
             }
         }

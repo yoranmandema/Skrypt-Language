@@ -47,7 +47,7 @@ namespace Skrypt {
 
                 module = (BaseModule)Activator.CreateInstance(m, _engine);
 
-                template.Members[m.Name] = new Member(module, m.IsNestedPrivate, null);
+                template.Members[module.Name] = new Member(module, m.IsNestedPrivate, null);
             }
 
             return template;

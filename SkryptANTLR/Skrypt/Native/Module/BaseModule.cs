@@ -11,8 +11,6 @@ namespace Skrypt {
 
             GetProperties(template.Members);
 
-            engine.SetGlobal(template.Name,this);
-
             Name = template.Name;
         }
     }

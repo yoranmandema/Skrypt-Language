@@ -1,9 +1,3 @@
 ﻿
 
-print("before")
-
-IO.ReadAsync("test.txt", (str) => {
-	print(str)
-})
-
-print("after")
+print(Reflection.Memory.Value)

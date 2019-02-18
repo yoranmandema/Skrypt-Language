@@ -26,6 +26,7 @@ namespace Skrypt {
 
         internal MathModule Math;
         internal IOModule IO;
+        internal ReflectionModule Reflection;
 
         internal SkryptParser.ProgramContext ProgramContext;
         internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
@@ -47,6 +48,11 @@ namespace Skrypt {
 
             Math                    = new MathModule(this);
             IO                      = new IOModule(this);
+            Reflection              = new ReflectionModule(this);
+
+            AddModule(Math);
+            AddModule(IO);
+            AddModule(Reflection);
         }
 
         public Engine DoFile(string file) {
@@ -88,6 +94,10 @@ namespace Skrypt {
             }
 
             return this;
+        }
+
+        public void AddModule (BaseModule module) {
+            SetGlobal(module.Name, module);
         }
 
         public Engine CreateGlobals () {
