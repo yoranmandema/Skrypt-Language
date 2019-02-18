@@ -20,7 +20,7 @@ namespace Skrypt {
 
             var fullPath = Path.Combine(Folder,path);
 
-            using (StreamReader sr = new StreamReader(fullPath)) {
+            using (var sr = new StreamReader(fullPath)) {
                 str = sr.ReadToEnd();
             }
 
@@ -36,7 +36,7 @@ namespace Skrypt {
                 Directory.CreateDirectory(directory);
             }
 
-            using (StreamWriter sr = new StreamWriter(fullPath)) {
+            using (var sr = new StreamWriter(fullPath)) {
                 foreach (var c in content) { 
                     sr.Write(c);
                 }
@@ -48,13 +48,13 @@ namespace Skrypt {
             var builder = new StringBuilder();
             var fullPath = Path.Combine(Folder, path);
 
-            using (StreamReader sr = new StreamReader(fullPath)) {
+            using (var sr = new StreamReader(fullPath)) {
                 result = new char[sr.BaseStream.Length];
 
                 await sr.ReadAsync(result, 0, (int)sr.BaseStream.Length);
             }
 
-            foreach (char c in result) {
+            foreach (var c in result) {
                 if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)) {
                     builder.Append(c);
                 }
@@ -72,7 +72,7 @@ namespace Skrypt {
                 Directory.CreateDirectory(directory);
             }
 
-            using (StreamWriter sw = new StreamWriter(fullPath)) {
+            using (var sw = new StreamWriter(fullPath)) {
                 foreach (var c in content) {
                     await sw.WriteAsync(c);
                 }
