@@ -2,8 +2,8 @@
 
 print("before")
 
-IO.WriteAsync("test.txt", "get fucked" * 1000, () => {
-	print("written")
+IO.ReadAsync("test.txt", (str) => {
+	print(str)
 })
 
 print("after")

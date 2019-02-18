@@ -218,6 +218,7 @@ namespace Skrypt.Runtime {
                 (typeof(BaseInstance).IsAssignableFrom(left.GetType()) || typeof(BaseType).IsAssignableFrom(left.GetType())) && 
                 (typeof(BaseType).IsAssignableFrom(right.GetType()) || typeof(BaseTrait).IsAssignableFrom(right.GetType()))
                 ) {
+
                 var leftType = default(BaseType);
 
                 if (typeof(BaseInstance).IsAssignableFrom(left.GetType())) {

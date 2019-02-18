@@ -16,5 +16,17 @@ namespace Skrypt {
         public FunctionInstance(Engine engine, ScriptFunction function) : base(engine) {
             Function = function;
         }
+
+        public BaseObject RunOnSelf (BaseObject self, params BaseObject[] args) {
+            var arguments = new Arguments(args);
+
+            return Function.Run(Engine, self, arguments);
+        }
+
+        public BaseObject Run (params BaseObject[] args) {
+            var arguments = new Arguments(args);
+
+            return Function.Run(Engine, null, arguments);
+        }
     }
 }

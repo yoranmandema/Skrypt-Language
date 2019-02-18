@@ -12,7 +12,8 @@ namespace Skrypt {
         string  Folder { get; set; }
         string  Read(string path);
         void    Write(string path, string content);
-        void ReadAsync(string path, FunctionInstance callback);
-        void WriteAsync(string path, string content, FunctionInstance callback);
+        void    ReadAsync(string path, FunctionInstance callback);
+        void    WriteAsync(string path, string content, FunctionInstance callback);
     }
 }
+

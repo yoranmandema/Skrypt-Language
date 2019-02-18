@@ -16,9 +16,9 @@ namespace Skrypt {
         }
 
         public string Read(string path) {
-            string str;
+            var str = string.Empty;
 
-            string fullPath = Path.Combine(Folder,path);
+            var fullPath = Path.Combine(Folder,path);
 
             using (StreamReader sr = new StreamReader(fullPath)) {
                 str = sr.ReadToEnd();
@@ -28,7 +28,7 @@ namespace Skrypt {
         }
 
         public void Write(string destination, string content) {
-            string fullPath = Path.Combine(Folder, destination);
+            var fullPath = Path.Combine(Folder, destination);
 
             var directory = Path.GetDirectoryName(fullPath);
 
@@ -45,9 +45,8 @@ namespace Skrypt {
 
         public async void ReadAsync(string path, FunctionInstance callback) {
             char[] result;
-            StringBuilder builder = new StringBuilder();
-
-            string fullPath = Path.Combine(Folder, path);
+            var builder = new StringBuilder();
+            var fullPath = Path.Combine(Folder, path);
 
             using (StreamReader sr = new StreamReader(fullPath)) {
                 result = new char[sr.BaseStream.Length];
@@ -61,11 +60,11 @@ namespace Skrypt {
                 }
             }
 
-            callback.Function.Run(Engine, null, new Arguments(new BaseObject[] { Engine.CreateString(builder.ToString()) }));
+            callback.Run(Engine.CreateString(builder.ToString()));
         }
 
         public async void WriteAsync(string destination, string content, FunctionInstance callback) {
-            string fullPath = Path.Combine(Folder, destination);
+            var fullPath = Path.Combine(Folder, destination);
 
             var directory = Path.GetDirectoryName(fullPath);
 
@@ -79,7 +78,7 @@ namespace Skrypt {
                 }
             }
 
-            callback.Function.Run(Engine, null, new Arguments(null));
+            callback.Run();
         }
     }
 }
