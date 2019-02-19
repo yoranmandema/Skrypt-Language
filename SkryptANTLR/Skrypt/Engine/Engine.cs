@@ -19,7 +19,7 @@ namespace Skrypt {
         internal TemplateMaker templateMaker;
 
         internal EnumerableTrait Enumerable;
-        internal IteratorType Iterator;
+        internal IteratorTrait Iterator;
 
         internal NumberType Number;
         internal StringType String;
@@ -44,7 +44,7 @@ namespace Skrypt {
             Visitor                 = new SkryptVisitor(this);
 
             Enumerable              = FastAdd(new EnumerableTrait(this));
-            Iterator                = FastAdd(new IteratorType(this));
+            Iterator                = FastAdd(new IteratorTrait(this));
 
             Number                  = FastAdd(new NumberType(this));
             String                  = FastAdd(new StringType(this));

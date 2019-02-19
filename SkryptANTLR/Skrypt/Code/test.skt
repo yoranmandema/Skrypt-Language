@@ -1,24 +1,46 @@
 ﻿
+
+struct StringIterator {
+	index = -1 
+	string = ""
+
+	fn init (str) {
+		self.string = str
+	}
+}
+
+impl Iterator for StringIterator {
+	fn Current () {
+		return self.string[self.index]
+	}
+
+	fn Next () {
+		self.index = self.index + 1
+
+		return self.string[self.index]
+	}
+
+	fn HasNext () {
+		return self.index + 1 < self.string.Length
+	}
+
+	fn Reset () {
+		self.index = -1
+	}
+}
+
 impl Enumerable for String {	
-
 	fn GetIterator () {
-		return Iterator(self)
+		return StringIterator(self)
 	}
-
-	fn Get (i) {
-		return self[i]
-	}
-
-	fn IsInRange (i) {
-		return i < self.Length
-	}
-} 
+}
 
 str = "hello world"
 
 iterator = str.GetIterator()
 
-print(iterator.Current)
-print(iterator.Next())
-print(iterator.Current)
-print(iterator.Next())
+benchmark (() => {
+while (iterator.HasNext()) {
+	item = iterator.Next()
+}
+}, 10000)
