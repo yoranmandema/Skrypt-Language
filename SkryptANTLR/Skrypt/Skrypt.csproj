@@ -92,7 +92,6 @@
     <Compile Include="Native\Array\ArrayType.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\IO\IOModule.cs" />
-    <Compile Include="Native\Iterator\IteratorInstance.cs" />
     <Compile Include="Native\Iterator\EnumerableTrait.cs" />
     <Compile Include="Native\Iterator\IteratorTrait.cs" />
     <Compile Include="Native\IValue.cs" />
