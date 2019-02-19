@@ -107,7 +107,7 @@ if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler
 
 var module = new ScriptModule(nameCtx.GetText(), this.Engine);
 
-this.Engine.AddModule(module);
+this.Engine.FastAdd(module);
 
 var variable = new Skrypt.Variable(nameCtx.GetText(), module);
 

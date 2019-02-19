@@ -11,9 +11,20 @@ namespace Skrypt {
 
             GetProperties(template.Members);
 
-            engine.SetGlobal(template.Name, this);
-
             Name = template.Name;
+        }
+
+        public Dictionary<string, Member> ImplementTrait (BaseTrait trait) {
+            var dict = new Dictionary<string, Member>();
+
+            Traits.Add(trait);
+
+            foreach (var kv in trait.TraitMembers) {
+                Template.Members[kv.Key] = kv.Value;
+                dict[kv.Key] = kv.Value;
+            }
+
+            return dict;
         }
 
         public Template Template;

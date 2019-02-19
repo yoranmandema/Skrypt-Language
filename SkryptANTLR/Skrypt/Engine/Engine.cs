@@ -18,6 +18,9 @@ namespace Skrypt {
         internal ExpressionInterpreter expressionInterpreter;
         internal TemplateMaker templateMaker;
 
+        internal EnumerableTrait Enumerable;
+        internal IteratorType Iterator;
+
         internal NumberType Number;
         internal StringType String;
         internal BooleanType Boolean;
@@ -40,19 +43,18 @@ namespace Skrypt {
             FileHandler             = new DefaultFileHandler(this);
             Visitor                 = new SkryptVisitor(this);
 
-            Number                  = new NumberType(this);
-            String                  = new StringType(this);
-            Boolean                 = new BooleanType(this);
-            Vector                  = new VectorType(this);
-            Array                   = new ArrayType(this);
+            Enumerable              = FastAdd(new EnumerableTrait(this));
+            Iterator                = FastAdd(new IteratorType(this));
 
-            Math                    = new MathModule(this);
-            IO                      = new IOModule(this);
-            Reflection              = new ReflectionModule(this);
+            Number                  = FastAdd(new NumberType(this));
+            String                  = FastAdd(new StringType(this));
+            Boolean                 = FastAdd(new BooleanType(this));
+            Vector                  = FastAdd(new VectorType(this));
+            Array                   = FastAdd(new ArrayType(this));
 
-            AddModule(Math);
-            AddModule(IO);
-            AddModule(Reflection);
+            Math                    = FastAdd(new MathModule(this));
+            IO                      = FastAdd(new IOModule(this));
+            Reflection              = FastAdd(new ReflectionModule(this));
         }
 
         public Engine DoFile(string file) {
@@ -96,8 +98,10 @@ namespace Skrypt {
             return this;
         }
 
-        public void AddModule (BaseModule module) {
-            SetGlobal(module.Name, module);
+        public T FastAdd<T> (T obj) where T : BaseObject {
+            SetGlobal(obj.Name, obj);
+
+            return obj;
         }
 
         public Engine CreateGlobals () {

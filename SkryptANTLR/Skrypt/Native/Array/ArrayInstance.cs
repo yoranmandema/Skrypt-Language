@@ -10,6 +10,7 @@ namespace Skrypt {
         public Dictionary<BaseObject,BaseObject> Dictionary = new Dictionary<BaseObject, BaseObject>();
 
         public ArrayInstance(Engine engine) : base(engine) {
+            CreateProperty("iteratorIndex", engine.CreateNumber(0), true);
         }
 
         public BaseObject Get (int index) {

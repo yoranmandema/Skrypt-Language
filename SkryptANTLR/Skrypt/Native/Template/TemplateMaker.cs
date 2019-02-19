@@ -18,11 +18,16 @@ namespace Skrypt {
             var types = t.GetNestedTypes();
             var template = new Template();
 
-            if (!typeof(BaseInstance).IsAssignableFrom(t) && !typeof(BaseModule).IsAssignableFrom(t) && !typeof(BaseType).IsAssignableFrom(t)) {
-                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance, BaseModule or BaseType.");
+            if (
+                !typeof(BaseInstance).IsAssignableFrom(t) && 
+                !typeof(BaseModule).IsAssignableFrom(t) && 
+                !typeof(BaseType).IsAssignableFrom(t) &&
+                !typeof(BaseTrait).IsAssignableFrom(t)
+                ) {
+                throw new InvalidTemplateTargetException("Target type must derive from BaseInstance, BaseModule, BaseType or BaseTrait.");
             }
 
-            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Module|Instance|Type)$", "");
+            template.Name = System.Text.RegularExpressions.Regex.Replace(t.Name, "(Module|Instance|Type|Trait)$", "");
 
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;

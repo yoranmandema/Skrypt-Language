@@ -1,7 +1,24 @@
 ﻿
+impl Enumerable for String {	
 
-size = Reflection.Memory.GetSizeOfAction(_ => {
-	a = 2 * 4 * 102312
-})
+	fn GetIterator () {
+		return Iterator(self)
+	}
 
-print(size)
+	fn Get (i) {
+		return self[i]
+	}
+
+	fn IsInRange (i) {
+		return i < self.Length
+	}
+} 
+
+str = "hello world"
+
+iterator = str.GetIterator()
+
+print(iterator.Current)
+print(iterator.Next())
+print(iterator.Current)
+print(iterator.Next())
