@@ -166,6 +166,19 @@ namespace Skrypt {
             return engine.CreateString(str.Value.TrimEnd());
         }
 
+        public static BaseObject ToArray(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            var charArray = str.Value.ToCharArray();
+            var array = engine.CreateArray(new BaseObject[0]);
+
+            for (var i = 0; i < charArray.Length; i++) {
+                ArrayInstance.Push(engine, array, new Arguments(engine.CreateString("" + charArray[i])));
+            }
+
+            return array;
+        }
+
         public static BaseObject Split(Engine engine, BaseObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = new List<string>();

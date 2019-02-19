@@ -11,7 +11,7 @@ namespace Skrypt {
 
         public static Arguments Empty => new Arguments(new BaseObject[0]);
 
-        public Arguments(BaseObject[] values) {
+        public Arguments(params BaseObject[] values) {
             Values = values;
         }
 

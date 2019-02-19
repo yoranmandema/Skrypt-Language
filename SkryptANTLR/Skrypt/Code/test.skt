@@ -35,12 +35,27 @@ impl Enumerable for String {
 	}
 }
 
-str = "hello world"
+fn ForEach (enumerable, action) {
+	if (enumerable is Enumerable) {
+		iterator = enumerable.GetIterator()
+		iterator.Reset()
 
-iterator = str.GetIterator()
+		while (iterator.HasNext()) {
+			item = iterator.Next()
 
-benchmark (() => {
-while (iterator.HasNext()) {
-	item = iterator.Next()
-}
-}, 10000)
+			action(item)
+		}
+	} else {
+		print("Input object is not an Enumerable.")
+	}
+}	
+
+
+string = "hello world"
+stringArray = string.ToArray()
+
+print("// Array")
+benchmark(() => { ForEach (stringArray, (i) => a = i) }, 1000)
+
+print("// String")
+benchmark(() => { ForEach (string, (i) => a = i) }, 1000)
