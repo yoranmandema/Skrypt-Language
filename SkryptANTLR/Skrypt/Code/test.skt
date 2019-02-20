@@ -4,9 +4,7 @@ struct StringIterator {
 	index = -1 
 	string = ""
 
-	fn init (str) {
-		self.string = str
-	}
+	fn init (str) self.string = str
 }
 
 impl Iterator for StringIterator {
@@ -17,9 +15,7 @@ impl Iterator for StringIterator {
 }
 
 impl Enumerable for String {	
-	fn GetIterator () {
-		return StringIterator(self)
-	}
+	fn GetIterator () StringIterator(self)
 }
 
 fn ForEach (enumerable, action) {

@@ -25,6 +25,7 @@ block				: (
 stmntBlock			: '{' Block=block '}'
 					| returnStmnt
 					| continueStmnt
+					| breakStmnt
 					| assignStmnt
 					| expression
 					;

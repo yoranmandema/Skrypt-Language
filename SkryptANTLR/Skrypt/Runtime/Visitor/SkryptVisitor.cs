@@ -1,4 +1,5 @@
 ﻿using System;
+using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System.Collections.Generic;
@@ -24,7 +25,16 @@ namespace Skrypt {
         public override BaseObject VisitTraitStatement(SkryptParser.TraitStatementContext context) => null;
         public override BaseObject VisitTraitImplStatement(SkryptParser.TraitImplStatementContext context) => null;
 
-        void DoLoop(SkryptParser.BlockContext block, SkryptParser.ExpressionContext expression, ILoop context, Func<bool> cond, Action callback = null) {
+        void DoLoop(SkryptParser.StmntBlockContext stmntBlock, ILoop context, Func<bool> cond, Action callback = null) {
+            var block           = stmntBlock.block();
+            var expression      = (RuleContext)stmntBlock.expression();
+            var assignStmnt     = (RuleContext)stmntBlock.assignStmnt();
+            var returnStmnt     = (RuleContext)stmntBlock.returnStmnt();
+            var continueStmnt   = (RuleContext)stmntBlock.continueStmnt();
+            var breakStmnt      = (RuleContext)stmntBlock.breakStmnt();
+
+            var singleLine = expression ?? assignStmnt ?? returnStmnt ?? continueStmnt ?? breakStmnt;
+
             if (block != null) {
                 while (cond()) {
                     for (int i = 0; i < block.ChildCount; i++) {
@@ -49,9 +59,9 @@ namespace Skrypt {
                     }
                 }
             }
-            else if (expression != null) {
+            else if (singleLine != null) {
                 while (cond()) {
-                    Visit(expression);
+                    Visit(singleLine);
 
                     callback?.Invoke();
 
@@ -68,10 +78,7 @@ namespace Skrypt {
         }
 
         public override BaseObject VisitWhileStatement(SkryptParser.WhileStatementContext context) {
-            var block = context.stmntBlock().block();
-            var expression = context.stmntBlock().expression();
-
-            DoLoop(block, expression, context, () => {
+            DoLoop(context.stmntBlock(), context, () => {
                 return Visit(context.Condition).IsTrue();
             });
 
@@ -79,12 +86,9 @@ namespace Skrypt {
         }
 
         public override BaseObject VisitForStatement(SkryptParser.ForStatementContext context) {
-            var block = context.stmntBlock().block();
-            var expression = context.stmntBlock().expression();
-
             Visit(context.Instantiator);
 
-            DoLoop(block, expression, context, 
+            DoLoop(context.stmntBlock(), context, 
             () => {
                 var result = Visit(context.Condition).IsTrue();
 

@@ -18,8 +18,6 @@ namespace Skrypt {
 
         public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
             var blockStmnt = Context.StmntBlock;
-            var block = blockStmnt.block();
-            var expr = blockStmnt.expression();
             var preCallValues = new Dictionary<string, BaseObject>();
 
             Context.Variables["self"].Value = self;
@@ -45,7 +43,13 @@ namespace Skrypt {
             }
 
             var returnValue = default(BaseObject);
-                    
+            var block           = blockStmnt.block();
+            var expr            = blockStmnt.expression();
+            var assignStmnt     = blockStmnt.assignStmnt();
+            var returnStmnt     = blockStmnt.returnStmnt();
+            var continueStmnt   = blockStmnt.continueStmnt();
+            var breakStmnt      = blockStmnt.breakStmnt();
+
             if (block != null) {
                 for (int i = 0; i < block.ChildCount; i++) {
                     var c = block.GetChild(i);
@@ -63,6 +67,18 @@ namespace Skrypt {
             else if (expr != null) {
                 returnValue = engine.Visitor.Visit(expr);
             }
+            else if (assignStmnt != null) {
+                engine.Visitor.Visit(assignStmnt);
+            }
+            else if (returnStmnt != null) {
+                engine.Visitor.Visit(returnStmnt);
+
+                returnValue = Context.ReturnValue;
+            }
+            else if (breakStmnt != null) {
+                engine.Visitor.Visit(breakStmnt);
+            }
+
 
             foreach (var v in preCallValues) {
                 if (preCallValues[v.Key] is IValue noref) {
