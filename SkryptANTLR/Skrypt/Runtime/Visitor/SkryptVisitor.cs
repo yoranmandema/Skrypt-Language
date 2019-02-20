@@ -253,7 +253,7 @@ namespace Skrypt {
                 value = newVal;
             }
 
-            if (value is IValue noref) value = noref.Copy();
+            //if (value is IValue noref) value = noref.Copy();
 
             accessed = obj;
 

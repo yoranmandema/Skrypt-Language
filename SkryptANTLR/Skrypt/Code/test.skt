@@ -10,23 +10,10 @@ struct StringIterator {
 }
 
 impl Iterator for StringIterator {
-	fn Current () {
-		return self.string[self.index]
-	}
-
-	fn Next () {
-		self.index = self.index + 1
-
-		return self.string[self.index]
-	}
-
-	fn HasNext () {
-		return self.index + 1 < self.string.Length
-	}
-
-	fn Reset () {
-		self.index = -1
-	}
+	fn Current ()	self.string[self.index] 
+	fn Next ()		self.string[++self.index]
+	fn HasNext ()	self.index + 1 < self.string.Length
+	fn Reset ()		self.index = -1
 }
 
 impl Enumerable for String {	
@@ -48,14 +35,13 @@ fn ForEach (enumerable, action) {
 	} else {
 		print("Input object is not an Enumerable.")
 	}
-}	
+}
 
 
-string = "hello world"
-stringArray = string.ToArray()
+wdawd = [1,2,3]
 
-print("// Array")
-benchmark(() => { ForEach (stringArray, (i) => a = i) }, 1000)
+ForEach(wdawd, (i) => print(i))
 
-print("// String")
-benchmark(() => { ForEach (string, (i) => a = i) }, 1000)
+wdawd = "hello world"
+
+ForEach(wdawd, (i) => print(i))

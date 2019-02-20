@@ -241,7 +241,9 @@ if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
 type.Traits.Add(trait);
 
 foreach (var kv in trait.TraitMembers) {
-	type.Template.Members[kv.Key] = kv.Value;
+	var newMember = new Member(kv.Value.Value, kv.Value.IsPrivate, kv.Value.DefinitionBlock);
+
+	type.Template.Members[kv.Key] = newMember;
 }
 
 var modifiesProperties = Ctx.propertiesBlock() != null;

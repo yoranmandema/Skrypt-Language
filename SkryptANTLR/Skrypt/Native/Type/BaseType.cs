@@ -20,8 +20,10 @@ namespace Skrypt {
             Traits.Add(trait);
 
             foreach (var kv in trait.TraitMembers) {
-                Template.Members[kv.Key] = kv.Value;
-                dict[kv.Key] = kv.Value;
+                var newMember = new Member(kv.Value.Value, kv.Value.IsPrivate, kv.Value.DefinitionBlock);
+
+                Template.Members[kv.Key] = newMember;
+                dict[kv.Key] = newMember;
             }
 
             return dict;
