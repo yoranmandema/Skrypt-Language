@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class BaseTrait : BaseObject {
         public BaseTrait(Engine engine) : base(engine) {
-            var template = engine.templateMaker.CreateTemplate(this.GetType());
+            var template = engine.TemplateMaker.CreateTemplate(this.GetType());
 
             Name = template.Name;
 

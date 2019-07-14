@@ -127,6 +127,19 @@ namespace Skrypt {
             return engine.CreateString(newStr);
         }
 
+        public static BaseObject ToByteArray(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+
+            var bytes = Encoding.ASCII.GetBytes(str.Value);
+            var array = engine.CreateArray(new BaseObject[0]);
+
+            for (var i = 0; i < bytes.Length; i++) {
+                ArrayInstance.Push(engine, array, new Arguments(engine.CreateNumber(bytes[i])));
+            }
+
+            return array;
+        }
+
         public static BaseObject Reverse(Engine engine, BaseObject self, Arguments arguments) {
             var str = self as StringInstance;
 

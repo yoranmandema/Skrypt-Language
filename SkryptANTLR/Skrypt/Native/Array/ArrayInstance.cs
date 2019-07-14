@@ -67,6 +67,25 @@ namespace Skrypt {
             return null;
         }
 
+        public static BaseObject Concat(Engine engine, BaseObject self, Arguments arguments) {
+            var otherArray = arguments.GetAs<ArrayInstance>(0);
+            var newArray = engine.CreateArray(new BaseObject[0]);
+
+            Console.WriteLine("Concat input" + (self as ArrayInstance) + " " + otherArray);
+
+            foreach (var v in (self as ArrayInstance).SequenceValues) {
+                newArray.SequenceValues.Add(v);
+            }
+
+            foreach (var v in otherArray.SequenceValues) {
+                newArray.SequenceValues.Add(v);
+            }
+
+            Console.WriteLine("Concat result: " + newArray);
+
+            return newArray;
+        }
+
         public static BaseObject Insert(Engine engine, BaseObject self, Arguments arguments) {
             var array = self as ArrayInstance;
             var index = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(0)),0), array.SequenceValues.Count);
@@ -74,6 +93,43 @@ namespace Skrypt {
             if (arguments.Values.Length > 1) {
                 for (int i = arguments.Values.Length - 1; i > 0; i--) {
                     array.SequenceValues.Insert(index, arguments.Values[i]);
+                }
+            }
+
+            return null;
+        }
+
+        public static BaseObject Slice(Engine engine, BaseObject self, Arguments arguments) {
+            var array = self as ArrayInstance;
+            var start = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(0)), 0), array.SequenceValues.Count);
+
+            var endNumber = arguments[1];
+            var end = array.SequenceValues.Count;
+
+            if (endNumber != null) {
+                end = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(1)), 0), array.SequenceValues.Count);
+            }
+
+            var newArray = engine.CreateArray(new BaseObject[0]);
+
+            for (int i = start; i < end; i++) {
+                newArray.SequenceValues.Add(array.SequenceValues[i]);
+            }
+
+            return newArray;
+        }
+
+        public static BaseObject Remove(Engine engine, BaseObject self, Arguments arguments) {
+            var array = self as ArrayInstance;
+            var toRemove = arguments.GetAs<BaseObject>(0);
+
+            if (toRemove is NumberInstance) {
+                array.SequenceValues.RemoveAt((int)(toRemove as NumberInstance).Value);
+            }  else { 
+                var found = array.SequenceValues.Find(x => x == toRemove);
+
+                if (found != null) {
+                    array.SequenceValues.Remove(found);
                 }
             }
 

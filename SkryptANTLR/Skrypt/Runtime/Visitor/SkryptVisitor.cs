@@ -230,6 +230,10 @@ namespace Skrypt {
             var obj = Visit(context.expression());
             var memberName = context.NAME().GetText();
 
+            if (obj == null) {
+                throw new NonExistingMemberException($"Tried to get member from null value.");
+            }
+
             var property = obj.GetProperty(memberName);
 
             if (property.IsPrivate && property.DefinitionBlock != null) {
@@ -461,13 +465,13 @@ namespace Skrypt {
                     }
                     break;
                 case "-":
-                    result = _engine.expressionInterpreter.EvaluateMinusExpression(value);
+                    result = _engine.ExpressionInterpreter.EvaluateMinusExpression(value);
                     break;
                 case "~":
-                    result = _engine.expressionInterpreter.EvaluateBitNotExpression(value);
+                    result = _engine.ExpressionInterpreter.EvaluateBitNotExpression(value);
                     break;
                 case "!":
-                    result = _engine.expressionInterpreter.EvaluateNotExpression(value);
+                    result = _engine.ExpressionInterpreter.EvaluateNotExpression(value);
                     break;
             }
 
@@ -504,58 +508,58 @@ namespace Skrypt {
 
             switch (operationName) {
                 case "+":
-                    result = _engine.expressionInterpreter.EvaluatePlusExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluatePlusExpression(left, right);
                     break;
                 case "-":
-                    result = _engine.expressionInterpreter.EvaluateSubtractExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateSubtractExpression(left, right);
                     break;
                 case "*":
-                    result = _engine.expressionInterpreter.EvaluateMultiplyExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateMultiplyExpression(left, right);
                     break;
                 case "/":
-                    result = _engine.expressionInterpreter.EvaluateDivideExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateDivideExpression(left, right);
                     break;
                 case "%":
-                    result = _engine.expressionInterpreter.EvaluateRemainderExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateRemainderExpression(left, right);
                     break;
                 case "**":
-                    result = _engine.expressionInterpreter.EvaluateExponentExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateExponentExpression(left, right);
                     break;
                 case "<":
-                    result = _engine.expressionInterpreter.EvaluateLessExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateLessExpression(left, right);
                     break;
                 case "<=":
-                    result = _engine.expressionInterpreter.EvaluateLessEqualExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateLessEqualExpression(left, right);
                     break;
                 case ">":
-                    result = _engine.expressionInterpreter.EvaluateGreaterExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateGreaterExpression(left, right);
                     break;
                 case ">=":
-                    result = _engine.expressionInterpreter.EvaluateGreaterEqualExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateGreaterEqualExpression(left, right);
                     break;
                 case "==":
-                    result = _engine.expressionInterpreter.EvaluateEqualExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateEqualExpression(left, right);
                     break;
                 case "!=":
-                    result = _engine.expressionInterpreter.EvaluateNotEqualExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateNotEqualExpression(left, right);
                     break;
                 case "is":
-                    result = _engine.expressionInterpreter.EvaluateIsExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateIsExpression(left, right);
                     break;
                 case "and":
-                    result = _engine.expressionInterpreter.EvaluateAndExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateAndExpression(left, right);
                     break;
                 case "or":
-                    result = _engine.expressionInterpreter.EvaluateOrExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateOrExpression(left, right);
                     break;
                 case "&":
-                    result = _engine.expressionInterpreter.EvaluateBitAndExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateBitAndExpression(left, right);
                     break;
                 case "^":
-                    result = _engine.expressionInterpreter.EvaluateBitXOrExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateBitXOrExpression(left, right);
                     break;
                 case "|":
-                    result = _engine.expressionInterpreter.EvaluateBitOrExpression(left, right);
+                    result = _engine.ExpressionInterpreter.EvaluateBitOrExpression(left, right);
                     break;
             }
 

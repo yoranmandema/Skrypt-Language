@@ -7,39 +7,43 @@ using Antlr4.Runtime;
 using Antlr4;
 using Skrypt.ANTLR;
 using Skrypt.Runtime;
+using System.Diagnostics;
 
 namespace Skrypt {
     public class Engine {
         public BaseObject CompletionValue => Visitor.LastResult;
 
-        internal SkryptParser Parser;
-        internal SkryptVisitor Visitor;
+        internal Stopwatch SW { get; private set; }
+        internal SkryptParser Parser { get; private set; }
+        internal SkryptVisitor Visitor { get; private set; }
+        internal ExpressionInterpreter ExpressionInterpreter { get; private set; }
+        internal TemplateMaker TemplateMaker { get; private set; }
+        internal EnumerableTrait Enumerable { get; private set; }
+        internal IteratorTrait Iterator { get; private set; }
+        internal SkryptParser.ProgramContext ProgramContext { get; private set; }
 
-        internal ExpressionInterpreter expressionInterpreter;
-        internal TemplateMaker templateMaker;
+        #region Types
+        internal NumberType Number { get; private set; }
+        internal StringType String { get; private set; }
+        internal BooleanType Boolean { get; private set; }
+        internal VectorType Vector { get; private set; }
+        internal ArrayType Array { get; private set; }
+        #endregion
 
-        internal EnumerableTrait Enumerable;
-        internal IteratorTrait Iterator;
+        #region Modules
+        internal MathModule Math { get; private set; }
+        internal IOModule IO { get; private set; }
+        internal ReflectionModule Reflection { get; private set; }
+        #endregion
 
-        internal NumberType Number;
-        internal StringType String;
-        internal BooleanType Boolean;
-        internal VectorType Vector;
-        internal ArrayType Array;
 
-        internal MathModule Math;
-        internal IOModule IO;
-        internal ReflectionModule Reflection;
-
-        internal SkryptParser.ProgramContext ProgramContext;
-        internal Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
-
-        public ErrorHandler ErrorHandler = new ErrorHandler();
-        public IFileHandler FileHandler;
+        public Dictionary<string, Variable> Globals { get; set; } = new Dictionary<string, Variable>();
+        public ErrorHandler ErrorHandler { get; set; } = new ErrorHandler();
+        public IFileHandler FileHandler { get; set; }
 
         public Engine() {
-            expressionInterpreter   = new ExpressionInterpreter(this);
-            templateMaker           = new TemplateMaker(this);
+            ExpressionInterpreter   = new ExpressionInterpreter(this);
+            TemplateMaker           = new TemplateMaker(this);
             FileHandler             = new DefaultFileHandler(this);
             Visitor                 = new SkryptVisitor(this);
 
@@ -55,6 +59,8 @@ namespace Skrypt {
             Math                    = FastAdd(new MathModule(this));
             IO                      = FastAdd(new IOModule(this));
             Reflection              = FastAdd(new ReflectionModule(this));
+
+            SW                      = Stopwatch.StartNew();
         }
 
         public Engine DoFile(string file) {

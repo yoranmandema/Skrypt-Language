@@ -12,10 +12,10 @@ namespace Skrypt {
         Template Template4;
 
         public VectorType(Engine engine) : base(engine) {
-            Template = engine.templateMaker.CreateTemplate(typeof(VectorInstance));
-            Template2 = engine.templateMaker.CreateTemplate(typeof(Vector2Instance));
-            Template3 = engine.templateMaker.CreateTemplate(typeof(Vector3Instance));
-            Template4 = engine.templateMaker.CreateTemplate(typeof(Vector4Instance));
+            Template = engine.TemplateMaker.CreateTemplate(typeof(VectorInstance));
+            Template2 = engine.TemplateMaker.CreateTemplate(typeof(Vector2Instance));
+            Template3 = engine.TemplateMaker.CreateTemplate(typeof(Vector3Instance));
+            Template4 = engine.TemplateMaker.CreateTemplate(typeof(Vector4Instance));
         }
 
         public BaseInstance Construct(params double[] args) {

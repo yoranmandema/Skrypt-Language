@@ -15,6 +15,8 @@ namespace Skrypt {
 
             var engine = new Engine();
 
+            engine.FastAdd(new TimeModule(engine));
+
             engine.SetValue("print", (e, s, i) => {
 
                 var str = "";

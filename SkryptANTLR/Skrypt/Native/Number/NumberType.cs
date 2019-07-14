@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class NumberType : BaseType {
         public NumberType(Engine engine) : base(engine) {
-            Template = engine.templateMaker.CreateTemplate(typeof(NumberInstance));
+            Template = engine.TemplateMaker.CreateTemplate(typeof(NumberInstance));
         }
 
         public static BaseObject Parse(Engine engine, BaseObject self, Arguments input) {

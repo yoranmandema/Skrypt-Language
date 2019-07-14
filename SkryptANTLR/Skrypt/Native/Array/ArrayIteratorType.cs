@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class ArrayIteratorType : BaseType {
         public ArrayIteratorType(Engine engine) : base(engine) {
-            Template = Engine.templateMaker.CreateTemplate(typeof(ArrayInstance));
+            Template = Engine.TemplateMaker.CreateTemplate(typeof(ArrayInstance));
 
             var iteratorTrait = ImplementTrait(engine.Iterator);
 

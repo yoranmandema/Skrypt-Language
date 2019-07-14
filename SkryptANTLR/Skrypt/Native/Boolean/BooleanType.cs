@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Skrypt {
     class BooleanType : BaseType {
         public BooleanType(Engine engine) : base(engine) {
-            Template = engine.templateMaker.CreateTemplate(typeof(BooleanInstance));
+            Template = engine.TemplateMaker.CreateTemplate(typeof(BooleanInstance));
         }
 
         public BaseInstance Construct(bool val) {

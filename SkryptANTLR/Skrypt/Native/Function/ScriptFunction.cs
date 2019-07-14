@@ -42,13 +42,11 @@ namespace Skrypt {
                 }
             }
 
-            var returnValue = default(BaseObject);
+            var returnValue     = default(BaseObject);
             var block           = blockStmnt.block();
             var expr            = blockStmnt.expression();
             var assignStmnt     = blockStmnt.assignStmnt();
             var returnStmnt     = blockStmnt.returnStmnt();
-            var continueStmnt   = blockStmnt.continueStmnt();
-            var breakStmnt      = blockStmnt.breakStmnt();
 
             if (block != null) {
                 for (int i = 0; i < block.ChildCount; i++) {
@@ -75,10 +73,6 @@ namespace Skrypt {
 
                 returnValue = Context.ReturnValue;
             }
-            else if (breakStmnt != null) {
-                engine.Visitor.Visit(breakStmnt);
-            }
-
 
             foreach (var v in preCallValues) {
                 if (preCallValues[v.Key] is IValue noref) {

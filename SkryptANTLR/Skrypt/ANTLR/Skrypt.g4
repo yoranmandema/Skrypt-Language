@@ -159,6 +159,7 @@ foreach (var c in Ctx.structProperty()) {
 		CreateProperty(type.Value, Ctx, c.Property, isPrivate);
 	} else {
 		var nameToken = GetPropertyNameToken(c.Property);
+
 		var value = Ctx.Variables[nameToken.Text].Value;
 
         if (value == null) {
