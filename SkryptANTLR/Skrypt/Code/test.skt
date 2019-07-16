@@ -1,5 +1,9 @@
 ﻿
-a = Number()
+fn Test () {
+	print("hello")
+}
+
+Test()
 
 /*
 struct StringIterator {

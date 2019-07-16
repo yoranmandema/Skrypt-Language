@@ -598,8 +598,6 @@ namespace Skrypt {
             var returnValue = DefaultResult;
 
             if (function is BaseType) {
-                Console.WriteLine($"{function.Name} is a type");
-
                 isConstructor = true;
             }
             else if (!(function is FunctionInstance)) {
@@ -612,8 +610,6 @@ namespace Skrypt {
 
             for (var i = 0; i < length; i++) {
                 arguments[i] = Visit(context.Arguments.expression(i));
-
-                Console.WriteLine(arguments[i]);
             }
 
             var args = new Arguments(arguments);
