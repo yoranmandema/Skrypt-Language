@@ -19,11 +19,15 @@ namespace Skrypt {
         internal SkryptVisitor Visitor { get; private set; }
         internal ExpressionInterpreter ExpressionInterpreter { get; private set; }
         internal TemplateMaker TemplateMaker { get; private set; }
-        internal EnumerableTrait Enumerable { get; private set; }
-        internal IteratorTrait Iterator { get; private set; }
-        internal AddableTrait AddTrait { get; private set; }
         internal SkryptParser.ProgramContext ProgramContext { get; private set; }
         internal List<BaseTrait> StandardTraits { get; private set; } = new List<BaseTrait>();
+
+        #region Traits
+        internal EnumerableTrait Enumerable { get; private set; }
+        internal IteratorTrait Iterator { get; private set; }
+        internal AddableTrait AddableTrait { get; private set; }
+        internal SubtractableTrait SubtractableTrait { get; private set; }
+        #endregion
 
         #region Types
         internal NumberType Number { get; private set; }
@@ -52,7 +56,8 @@ namespace Skrypt {
 
             Enumerable              = FastAdd(new EnumerableTrait(this));
             Iterator                = FastAdd(new IteratorTrait(this));
-            AddTrait                = FastAdd(new AddableTrait(this));
+            AddableTrait            = FastAdd(new AddableTrait(this));
+            SubtractableTrait       = FastAdd(new SubtractableTrait(this));
 
             Number                  = FastAdd(new NumberType(this));
             String                  = FastAdd(new StringType(this));

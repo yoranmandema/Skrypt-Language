@@ -516,7 +516,13 @@ namespace Skrypt {
 
                     break;
                 case "-":
-                    result = _engine.ExpressionInterpreter.EvaluateSubtractExpression(left, right);
+                    if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<SubtractableTrait>().Any()) {
+                        result = left.AsType<BaseInstance>().GetProperty("Sub").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
+                    }
+                    else {
+                        result = _engine.ExpressionInterpreter.EvaluateSubtractExpression(left, right);
+                    }
+
                     break;
                 case "*":
                     result = _engine.ExpressionInterpreter.EvaluateMultiplyExpression(left, right);

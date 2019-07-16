@@ -7,21 +7,11 @@ struct Test {
 	}
 }
 
-impl Addable for Test {
-	fn Add (rhs) Test(self.value + rhs.value)
+impl Subtractable for String {
+	fn Sub (rhs) self.Replace(rhs,"")
 }
 
-print(Test is Addable)
-
-a = 2 
-
-benchmark (() => {
-	Test(4) + Test(3)
-}, 10000)
-
-benchmark (() => {
-	a + 1
-}, 10000)
+print("Hello World" - "l")
 
 /*
 struct StringIterator {
