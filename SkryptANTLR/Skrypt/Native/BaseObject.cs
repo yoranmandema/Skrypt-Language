@@ -20,8 +20,6 @@ namespace Skrypt {
         }
 
         public void GetProperties(Template template) {
-            Members = Members.Concat(template.Members).ToDictionary(d => d.Key, d => d.Value);
-
             foreach (var kv in template.Members) {
                 var key = kv.Key;
                 var member = kv.Value;

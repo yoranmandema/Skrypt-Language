@@ -8,24 +8,19 @@ struct Test {
 }
 
 impl Add for Test {
-	fn Add (lhs, rhs) {
-		print(lhs)
-		print(rhs)
-
-		result = lhs.value + rhs.value
-
-		print(result)
-
-		return Test(lhs.value + rhs.value)
-	}
+	fn Add (lhs, rhs) Test(lhs.value + rhs.value)
 }
 
-a = Test(1)
-b = Test(3)
 
-print(a)
-print(b)
-print(Test(4))
+a = 2 
+
+benchmark (() => {
+	Test(4) + Test(3)
+}, 10000)
+
+benchmark (() => {
+	a + 1
+}, 10000)
 
 /*
 struct StringIterator {

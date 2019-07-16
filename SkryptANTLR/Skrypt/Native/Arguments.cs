@@ -28,8 +28,6 @@ namespace Skrypt {
         public T GetAs<T> (int i) where T : BaseObject {
             var value = this[i];
 
-            Console.WriteLine(typeof(T).Name);
-
             if (value != null || value is T) {
                 return value as T;
             } else {
