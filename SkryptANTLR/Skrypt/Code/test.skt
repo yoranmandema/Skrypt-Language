@@ -7,10 +7,11 @@ struct Test {
 	}
 }
 
-impl Add for Test {
+impl Addable for Test {
 	fn Add (lhs, rhs) Test(lhs.value + rhs.value)
 }
 
+print(Test is Addable)
 
 a = 2 
 
