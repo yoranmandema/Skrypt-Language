@@ -26,6 +26,8 @@ namespace Skrypt {
         }
 
         public override BaseInstance Construct(Arguments arguments) {
+            Console.WriteLine(arguments);
+
             return Construct(arguments.GetAs<NumberInstance>(0).Value);
         }
     }

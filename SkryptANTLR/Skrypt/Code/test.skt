@@ -1,5 +1,7 @@
 ﻿
+a = Number()
 
+/*
 struct StringIterator {
 	index = -1 
 	string = ""
@@ -41,3 +43,4 @@ ForEach(wdawd, (i) => print(i))
 wdawd = "hello world"
 
 ForEach(wdawd, (i) => print(i))
+*/
