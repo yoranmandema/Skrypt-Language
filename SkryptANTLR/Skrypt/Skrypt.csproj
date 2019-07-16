@@ -92,11 +92,12 @@
     <Compile Include="Native\Array\ArrayType.cs" />
     <Compile Include="Native\Attributes\IgnoreMemberAttribute.cs" />
     <Compile Include="Native\IO\IOModule.cs" />
-    <Compile Include="Native\Iterator\EnumerableTrait.cs" />
-    <Compile Include="Native\Iterator\IteratorTrait.cs" />
+    <Compile Include="Native\StandardTraits\Iterator\EnumerableTrait.cs" />
+    <Compile Include="Native\StandardTraits\Iterator\IteratorTrait.cs" />
     <Compile Include="Native\IValue.cs" />
     <Compile Include="Native\Reflection\Reflection.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
+    <Compile Include="Native\StandardTraits\Operators\AddTrait.cs" />
     <Compile Include="Native\Time\TimeModule.cs" />
     <Compile Include="Native\Trait\ScriptTrait.cs" />
     <Compile Include="Native\Type\BaseType.cs" />
@@ -180,6 +181,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

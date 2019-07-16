@@ -1,9 +1,31 @@
 ﻿
-fn Test () {
-	print("hello")
+struct Test {
+	value = 1
+
+	fn init (v) {
+		self.value = v 
+	}
 }
 
-Test()
+impl Add for Test {
+	fn Add (lhs, rhs) {
+		print(lhs)
+		print(rhs)
+
+		result = lhs.value + rhs.value
+
+		print(result)
+
+		return Test(lhs.value + rhs.value)
+	}
+}
+
+a = Test(1)
+b = Test(3)
+
+print(a)
+print(b)
+print(Test(4))
 
 /*
 struct StringIterator {

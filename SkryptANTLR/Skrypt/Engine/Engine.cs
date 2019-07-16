@@ -8,6 +8,7 @@ using Antlr4;
 using Skrypt.ANTLR;
 using Skrypt.Runtime;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Skrypt {
     public class Engine {
@@ -20,7 +21,9 @@ namespace Skrypt {
         internal TemplateMaker TemplateMaker { get; private set; }
         internal EnumerableTrait Enumerable { get; private set; }
         internal IteratorTrait Iterator { get; private set; }
+        internal AddTrait AddTrait { get; private set; }
         internal SkryptParser.ProgramContext ProgramContext { get; private set; }
+        internal List<BaseTrait> StandardTraits { get; private set; } = new List<BaseTrait>();
 
         #region Types
         internal NumberType Number { get; private set; }
@@ -49,6 +52,7 @@ namespace Skrypt {
 
             Enumerable              = FastAdd(new EnumerableTrait(this));
             Iterator                = FastAdd(new IteratorTrait(this));
+            AddTrait                = FastAdd(new AddTrait(this));
 
             Number                  = FastAdd(new NumberType(this));
             String                  = FastAdd(new StringType(this));
