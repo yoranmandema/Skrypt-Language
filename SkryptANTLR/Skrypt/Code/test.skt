@@ -8,7 +8,7 @@ struct Test {
 }
 
 impl Addable for Test {
-	fn Add (lhs, rhs) Test(lhs.value + rhs.value)
+	fn Add (rhs) Test(self.value + rhs.value)
 }
 
 print(Test is Addable)

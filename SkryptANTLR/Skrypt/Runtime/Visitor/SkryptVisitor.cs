@@ -509,7 +509,7 @@ namespace Skrypt {
             switch (operationName) {
                 case "+":
                     if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<AddableTrait>().Any()) {
-                        result = left.AsType<BaseInstance>().GetProperty("Add").Value.AsType<FunctionInstance>().Run(left, right);
+                        result = left.AsType<BaseInstance>().GetProperty("Add").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
                     } else { 
                         result = _engine.ExpressionInterpreter.EvaluatePlusExpression(left, right);
                     }
