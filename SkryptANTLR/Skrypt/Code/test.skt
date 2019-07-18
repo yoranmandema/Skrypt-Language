@@ -1,17 +1,9 @@
 ﻿
 struct Test {
-	value = 1
-
-	fn init (v) {
-		self.value = v 
-	}
+	
 }
 
-impl Subtractable for String {
-	fn Sub (rhs) self.Replace(rhs,"")
-}
-
-print("Hello World" - "l")
+print(typeof <1,2>)
 
 /*
 struct StringIterator {

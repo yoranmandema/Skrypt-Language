@@ -8,5 +8,9 @@ namespace Skrypt {
     public class BaseInstance : BaseObject {
         public BaseInstance(Engine engine) : base (engine) { }
         public BaseType TypeObject { get; set; }
+
+        public static BaseObject Type(Engine engine, BaseObject self) {
+            return (self as BaseInstance).TypeObject;
+        }
     }
 }

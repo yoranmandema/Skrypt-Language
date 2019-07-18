@@ -138,14 +138,14 @@
     <Compile Include="Native\Function\IFunction.cs" />
     <Compile Include="Native\Number\NumberType.cs" />
     <Compile Include="Native\Vector\VectorType.cs" />
-    <Compile Include="Runtime\ExpressionInterpreter.cs" />
+    <Compile Include="Engine\ExpressionInterpreter.cs" />
     <Compile Include="Runtime\InvalidOperation.cs" />
     <Compile Include="Runtime\JumpState.cs" />
     <Compile Include="Runtime\Scope.cs" />
     <Compile Include="Native\Module\BaseModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\Variable.cs" />
+    <Compile Include="Engine\Variable.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitBinaryOperationExp.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitNameExp.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitParenthesisExp.cs" />

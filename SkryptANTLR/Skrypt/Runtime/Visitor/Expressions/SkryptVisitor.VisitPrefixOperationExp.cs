@@ -36,6 +36,14 @@ namespace Skrypt {
                 case "!":
                     result = _engine.ExpressionInterpreter.EvaluateNotExpression(value);
                     break;
+                case "typeof":
+                    if (value is BaseInstance instance) {
+                        result = instance.TypeObject;
+                    } else {
+                        result = value;
+                    }
+
+                    break;
             }
 
             if (result is bool) {

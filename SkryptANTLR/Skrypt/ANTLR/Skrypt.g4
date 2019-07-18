@@ -412,7 +412,7 @@ expression          : '(' expression ')'																						#parenthesisExp
                     | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
 					
 					| Target=expression Operation=(INCREMENT|DECREMENT) 														#postfixOperationExp		
-					| Operation=(MINUS|NOT|BITNOT|INCREMENT|DECREMENT) Target=expression										#prefixOperationExp
+					| Operation=(MINUS|NOT|BITNOT|INCREMENT|DECREMENT|TYPEOF) Target=expression									#prefixOperationExp
 			
 
 
@@ -535,8 +535,9 @@ CONTINUE				: 'continue' ;
 STATIC					: 'static' ;
 PRIVATE					: 'private' ;
 CONST					: 'const' ;
+TYPEOF					: 'typeof' ;
 
-KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | PRIVATE | CONST) ;
+KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | PRIVATE | CONST | TYPEOF) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;
