@@ -145,7 +145,34 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\Variable.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitBinaryOperationExp.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitNameExp.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitParenthesisExp.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitPrefixOperationExp.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitArrayLiteral.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitBooleanLiteral.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitFunctionLiteral.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitNullLiteral.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitNumberLiteral.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitStringLiteral.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitVector4Literal.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitVector3Literal.cs" />
+    <Compile Include="Runtime\Visitor\Literals\SkryptVisitor.VisitVector2Literal.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitPostfixOperationExp.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignComputedMemberStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignMemberStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitIfStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitContinueStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitBreakStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.DoLoop.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitForStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitWhileStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitReturnStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignNameStatement.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitComputedMemberAccessExp.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitFunctionCallExp.cs" />
+    <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitMemberAccessExp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Antlr4 Include="ANTLR\Skrypt.g4">
