@@ -76,6 +76,7 @@
     <Compile Include="ANTLR\Skrypt.g4.parser.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>
+    <Compile Include="Engine\Call.cs" />
     <Compile Include="Engine\CodeError.cs" />
     <Compile Include="ANTLR\ILoop.cs" />
     <Compile Include="ANTLR\IScoped.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Engine\ErrorHandler.cs" />
     <Compile Include="Engine\IFileHandler.cs" />
     <Compile Include="Native\Arguments.cs" />
+    <Compile Include="Native\StandardModules\Debug\DebugModule.cs" />
     <Compile Include="Native\StandardTypes\Array\ArrayInstance.cs" />
     <Compile Include="Native\StandardTypes\Array\ArrayIteratorInstance.cs" />
     <Compile Include="Native\StandardTypes\Array\ArrayIteratorType.cs" />

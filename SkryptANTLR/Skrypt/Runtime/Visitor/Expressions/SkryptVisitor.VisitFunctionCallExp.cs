@@ -17,6 +17,12 @@ namespace Skrypt {
                 _engine.ErrorHandler.FatalError(context.Function.Start, "Called object is not a function.");
             }
 
+            _engine.CallStack.Push(new Call {
+                name = context.Function.GetText(),
+                column = context.Function.Start.Column,
+                line = context.Function.Start.Line,
+            });
+
             var length = context.Arguments.expression().Length;
 
             var arguments = new BaseObject[length];
@@ -33,6 +39,8 @@ namespace Skrypt {
             else {
                 returnValue = (function as FunctionInstance).Function.Run(_engine, accessed, args);
             }
+
+            _engine.CallStack.Pop();
 
             LastResult = returnValue;
 

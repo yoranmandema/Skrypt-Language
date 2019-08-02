@@ -1,2 +1,16 @@
 ﻿
-print(Vector2(0,0,2))
+fn Function1 () {
+	print("gay")
+
+	Debug.PrintCallStack()
+}
+
+fn Function2 () {
+	Function1()
+}
+
+Function2()
+
+print("-----")
+
+Function1()

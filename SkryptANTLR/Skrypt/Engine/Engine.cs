@@ -13,6 +13,7 @@ using System.Reflection;
 namespace Skrypt {
     public class Engine {
         public BaseObject CompletionValue => Visitor.LastResult;
+        public Stack<Call> CallStack { get; internal set; } = new Stack<Call>();
 
         internal Stopwatch SW { get; private set; }
         internal SkryptParser Parser { get; private set; }
@@ -40,6 +41,7 @@ namespace Skrypt {
         #endregion
 
         #region Modules
+        internal DebugModule Debug { get; private set; }
         internal MathModule Math { get; private set; }
         internal IOModule IO { get; private set; }
         internal ReflectionModule Reflection { get; private set; }
@@ -72,8 +74,9 @@ namespace Skrypt {
             Math                    = FastAdd(new MathModule(this));
             IO                      = FastAdd(new IOModule(this));
             Reflection              = FastAdd(new ReflectionModule(this));
+            Debug                   = FastAdd(new DebugModule(this));
 
-            SW                      = Stopwatch.StartNew();
+            SW = Stopwatch.StartNew();
         }
 
         public Engine DoFile(string file) {
@@ -139,6 +142,10 @@ namespace Skrypt {
             } else {
                 Globals[name] = new Variable(name, value);
             }
+        }
+
+        public void Print(string message) {
+            Console.WriteLine(message);
         }
 
         public BaseObject SetValue(string name, BaseObject value) {
