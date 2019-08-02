@@ -34,6 +34,8 @@ namespace Skrypt {
         internal StringType String { get; private set; }
         internal BooleanType Boolean { get; private set; }
         internal VectorType Vector { get; private set; }
+        internal VectorType Vector2 { get; private set; }
+        internal VectorType Vector3 { get; private set; }
         internal ArrayType Array { get; private set; }
         #endregion
 
@@ -63,6 +65,8 @@ namespace Skrypt {
             String                  = FastAdd(new StringType(this));
             Boolean                 = FastAdd(new BooleanType(this));
             Vector                  = FastAdd(new VectorType(this));
+            Vector2                 = FastAdd(new Vector2Type(this));
+            Vector3                 = FastAdd(new Vector3Type(this));
             Array                   = FastAdd(new ArrayType(this));
 
             Math                    = FastAdd(new MathModule(this));

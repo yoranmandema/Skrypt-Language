@@ -16,15 +16,6 @@ namespace Skrypt {
             Template2 = engine.TemplateMaker.CreateTemplate(typeof(Vector2Instance));
             Template3 = engine.TemplateMaker.CreateTemplate(typeof(Vector3Instance));
             Template4 = engine.TemplateMaker.CreateTemplate(typeof(Vector4Instance));
-
-            CreateProperty("forward", Construct(1,0,0));
-            CreateProperty("back", Construct(-1, 0, 0));
-            CreateProperty("down", Construct(0, -1, 0));
-            CreateProperty("up", Construct(0, 1, 0));
-            CreateProperty("right", Construct(0, 0, 1));
-            CreateProperty("left", Construct(0, 0, -1));
-            CreateProperty("zero", Construct(0, 0, 0));
-            CreateProperty("one", Construct(1, 1, 1));
         }
 
         public BaseInstance Construct(params double[] args) {

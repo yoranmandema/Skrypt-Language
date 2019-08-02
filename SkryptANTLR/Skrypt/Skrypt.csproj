@@ -130,6 +130,8 @@
     <Compile Include="Native\Trait\BaseTrait.cs" />
     <Compile Include="Native\Type\ScriptType.cs" />
     <Compile Include="Native\Vector\Vector2Instance.cs" />
+    <Compile Include="Native\Vector\Vector2Type.cs" />
+    <Compile Include="Native\Vector\Vector3Type.cs" />
     <Compile Include="Native\Vector\Vector4Instance.cs" />
     <Compile Include="Native\Vector\Vector3Instance.cs" />
     <Compile Include="Native\Vector\VectorInstance.cs" />

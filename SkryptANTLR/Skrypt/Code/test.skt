@@ -1,3 +1,2 @@
 ﻿
-
-print(Vector)
+print(Vector2(0,0,2))
