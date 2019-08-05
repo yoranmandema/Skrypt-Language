@@ -91,9 +91,16 @@ namespace Skrypt {
 
             if (result is InvalidOperation) {
                 if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<SubtractableTrait>().Any()) {
-                    result = left.AsType<BaseInstance>().GetProperty("Sub").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
-                } else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<AddableTrait>().Any()) {
-                    result = left.AsType<BaseInstance>().GetProperty("Add").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
+                    result = EvaluateTraitOperator("Sub", left, right);
+                }
+                else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<AddableTrait>().Any()) {
+                    result = EvaluateTraitOperator("Add", left, right);
+                }
+                else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<MultiplicableTrait>().Any()) {
+                    result = EvaluateTraitOperator("Mul", left, right);
+                }
+                else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<DividableTrait>().Any()) {
+                    result = EvaluateTraitOperator("Div", left, right);
                 }
 
                 if (result is InvalidOperation) {
@@ -108,6 +115,10 @@ namespace Skrypt {
             LastResult = (BaseObject)result;
 
             return (BaseObject)result;
+        }
+
+        private object EvaluateTraitOperator (string name, BaseObject left, BaseObject right) {
+            return left.AsType<BaseInstance>().GetProperty(name).Value.AsType<FunctionInstance>().RunOnSelf(left, right);
         }
     }
 }
