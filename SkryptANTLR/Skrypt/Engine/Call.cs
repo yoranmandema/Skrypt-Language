@@ -9,10 +9,7 @@ namespace Skrypt {
         public string name;
         public int column;
         public int line;
+        public string callFile;
         public string file;
-
-        public override string ToString() {
-            return $"at {name}() in {file} ({line},{column})";
-        }
     }
 }

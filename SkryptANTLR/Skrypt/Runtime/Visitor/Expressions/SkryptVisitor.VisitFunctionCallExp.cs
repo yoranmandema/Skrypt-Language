@@ -21,7 +21,8 @@ namespace Skrypt {
                 name = context.Function.GetText(),
                 column = context.Function.Start.Column,
                 line = context.Function.Start.Line,
-                file = context.File
+                file = (function as IDefined).File,
+                callFile = context.CallFile
             });
 
             var length = context.Arguments.expression().Length;

@@ -1,6 +1,4 @@
 ﻿
-fn Function1 () {
-	Debug.Assert(0 == true)
-}
+import External from "importTest.skt"
 
-Function1()
+External.Print()

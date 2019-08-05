@@ -81,7 +81,7 @@ var scope = GetDefinitionBlock($ctx);
 var relativePath = Ctx.@string().value;
 var input = Engine.FileHandler.Read(relativePath);
 
-Engine.Run(input);
+Engine.DoRelativeFile(relativePath);
 
 foreach (var n in Ctx.NAME()) {
 	var name = n.GetText();
@@ -417,7 +417,7 @@ expression          : '(' expression ')'																						#parenthesisExp
                     | Function=expression '(' Arguments=expressionGroup ')'	{
 var functionCtx = ($ctx as FunctionCallExpContext);
 
-functionCtx.File = Engine.FileHandler.File;		
+functionCtx.CallFile = Engine.FileHandler.File;		
 }																																#functionCallExp
 					
 					| Target=expression Operation=(INCREMENT|DECREMENT) 														#postfixOperationExp		

@@ -88,6 +88,22 @@ namespace Skrypt {
             return Run(code);
         }
 
+        public Engine DoRelativeFile (string file) {
+            var oldFile = FileHandler.File;
+            var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
+
+            FileHandler.File = newFile;
+            FileHandler.Folder = System.IO.Path.GetDirectoryName(newFile);
+
+            var code = FileHandler.Read(file);
+            var result = Run(code);
+
+            FileHandler.File = oldFile;
+            FileHandler.Folder = System.IO.Path.GetDirectoryName(oldFile);
+
+            return result;
+        }
+
         public Engine Run(string code) {
             var inputStream = new AntlrInputStream(code);
             var skryptLexer = new SkryptLexer(inputStream) {

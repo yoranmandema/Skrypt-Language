@@ -1,0 +1,14 @@
+﻿
+fn PrintSomething () {
+	Debug.PrintCallStack()
+
+	print("Gay")
+}
+
+struct External {
+	A = 2
+
+	static fn Print () {
+		PrintSomething()
+	}
+}

@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace Skrypt {
     interface IDefined {
         string File { get; set; }
+        //BaseObject Owner { get; set; }
     }
 }
