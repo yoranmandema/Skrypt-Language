@@ -16,21 +16,11 @@ namespace Skrypt {
 
             switch (operationName) {
                 case "+":
-                    if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<AddableTrait>().Any()) {
-                        result = left.AsType<BaseInstance>().GetProperty("Add").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
-                    }
-                    else {
-                        result = _engine.ExpressionInterpreter.EvaluatePlusExpression(left, right);
-                    }
+                    result = _engine.ExpressionInterpreter.EvaluatePlusExpression(left, right);
 
                     break;
                 case "-":
-                    if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<SubtractableTrait>().Any()) {
-                        result = left.AsType<BaseInstance>().GetProperty("Sub").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
-                    }
-                    else {
-                        result = _engine.ExpressionInterpreter.EvaluateSubtractExpression(left, right);
-                    }
+                    result = _engine.ExpressionInterpreter.EvaluateSubtractExpression(left, right);
 
                     break;
                 case "*":
@@ -100,10 +90,18 @@ namespace Skrypt {
             }
 
             if (result is InvalidOperation) {
-                var lname = left == null ? "null" : typeof(BaseType).IsAssignableFrom(left.GetType()) ? "type" : left.Name;
-                var rname = right == null ? "null" : typeof(BaseType).IsAssignableFrom(right.GetType()) ? "type" : right.Name;
+                if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<SubtractableTrait>().Any()) {
+                    result = left.AsType<BaseInstance>().GetProperty("Sub").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
+                } else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<AddableTrait>().Any()) {
+                    result = left.AsType<BaseInstance>().GetProperty("Add").Value.AsType<FunctionInstance>().RunOnSelf(left, right);
+                }
 
-                _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {lname} {operationName} {rname}.");
+                if (result is InvalidOperation) {
+                    var lname = left == null ? "null" : typeof(BaseType).IsAssignableFrom(left.GetType()) ? "type" : left.Name;
+                    var rname = right == null ? "null" : typeof(BaseType).IsAssignableFrom(right.GetType()) ? "type" : right.Name;
+
+                    _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {lname} {operationName} {rname}.");
+                }
             }
 
 
