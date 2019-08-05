@@ -71,6 +71,8 @@ var input = Engine.FileHandler.Read(relativePath);
 
 Engine.Run(input).CreateGlobals();
 
+Engine.DoRelativeFile(relativePath).CreateGlobals();
+
 }																																#importAllFromStatement
 					;
 
