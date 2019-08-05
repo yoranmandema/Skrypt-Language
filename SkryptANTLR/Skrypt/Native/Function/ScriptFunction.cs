@@ -8,7 +8,8 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 
 namespace Skrypt {
-    public class ScriptFunction : IFunction {
+    public class ScriptFunction : IFunction, IDefined {
+        public string File { get; set; }
         internal IFunctionContext Context;
         internal Parameter[] Parameters;
 

@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class FunctionInstance : BaseInstance {
+    public class FunctionInstance : BaseInstance, IDefined {
+        public string File { get; set; }
         public override string Name => "Function";
         public IFunction Function { get; set; }
 
@@ -15,6 +16,7 @@ namespace Skrypt {
 
         public FunctionInstance(Engine engine, ScriptFunction function) : base(engine) {
             Function = function;
+            File = function.File;
         }
 
         public BaseObject RunOnSelf (BaseObject self, params BaseObject[] args) {

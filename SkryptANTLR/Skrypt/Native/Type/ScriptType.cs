@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class ScriptType : BaseType {
+    public class ScriptType : BaseType, IDefined {
+        public string File { get; set; }
         public ScriptFunction Constructor;
 
         public ScriptType(string name, Engine engine) : base(engine) {

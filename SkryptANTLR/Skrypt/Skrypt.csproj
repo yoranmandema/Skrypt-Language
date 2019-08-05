@@ -88,6 +88,7 @@
     <Compile Include="Engine\ErrorHandler.cs" />
     <Compile Include="Engine\IFileHandler.cs" />
     <Compile Include="Native\Arguments.cs" />
+    <Compile Include="Native\IDefined.cs" />
     <Compile Include="Native\StandardModules\Debug\DebugModule.cs" />
     <Compile Include="Native\StandardTypes\Array\ArrayInstance.cs" />
     <Compile Include="Native\StandardTypes\Array\ArrayIteratorInstance.cs" />

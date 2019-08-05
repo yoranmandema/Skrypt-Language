@@ -1,16 +1,6 @@
 ﻿
 fn Function1 () {
-	print("gay")
-
-	Debug.PrintCallStack()
+	Debug.Assert(0 == true)
 }
-
-fn Function2 () {
-	Function1()
-}
-
-Function2()
-
-print("-----")
 
 Function1()

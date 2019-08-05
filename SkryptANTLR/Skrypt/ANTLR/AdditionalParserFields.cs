@@ -61,6 +61,10 @@ namespace Skrypt.ANTLR {
             public JumpState JumpState { get; set; } = JumpState.None;
         }
 
+        public partial class FunctionCallExpContext : IDefined {
+            public string File { get; set; }
+        }
+
         void CreateProperty(BaseObject target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
 

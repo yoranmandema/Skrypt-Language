@@ -175,7 +175,10 @@ foreach (var c in Ctx.structProperty()) {
 	}
 }
 
-(type.Value as ScriptType).Template = template;
+var finalType = (type.Value as ScriptType);
+
+finalType.Template = template;
+finalType.File = Engine.FileHandler.File;
 
 }																																#structStatement
 					;
@@ -314,8 +317,10 @@ for (var i = 0; i < parameters.Length; i++) {
 
 } stmntBlock {
 	var function = new Skrypt.ScriptFunction(fnCtx) { 
-		Parameters = processedParameters
+		Parameters = processedParameters,
+		File = Engine.FileHandler.File
 	}; 
+
 	var functionVar = new Skrypt.FunctionInstance(this.Engine, function); 
 
 	newVar.Value = functionVar;													
@@ -409,7 +414,11 @@ expression          : '(' expression ')'																						#parenthesisExp
 					| fnLiteral																									#functionLiteral		
 					| expression DOT NAME	 																					#memberAccessExp
 					| expression '[' expression ']'																				#computedMemberAccessExp
-                    | Function=expression '(' Arguments=expressionGroup ')'														#functionCallExp
+                    | Function=expression '(' Arguments=expressionGroup ')'	{
+var functionCtx = ($ctx as FunctionCallExpContext);
+
+functionCtx.File = Engine.FileHandler.File;		
+}																																#functionCallExp
 					
 					| Target=expression Operation=(INCREMENT|DECREMENT) 														#postfixOperationExp		
 					| Operation=(MINUS|NOT|BITNOT|INCREMENT|DECREMENT|TYPEOF) Target=expression									#prefixOperationExp
