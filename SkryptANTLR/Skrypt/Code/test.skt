@@ -1,4 +1,4 @@
 ﻿
-import External from "importTest.skt"
+import * from "importTest.skt"
 
 External.Print()

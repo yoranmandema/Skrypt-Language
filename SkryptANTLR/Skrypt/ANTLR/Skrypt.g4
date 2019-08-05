@@ -69,8 +69,6 @@ var Ctx = ($ctx as ImportAllFromStatementContext);
 var relativePath = Ctx.@string().value;
 var input = Engine.FileHandler.Read(relativePath);
 
-Engine.Run(input).CreateGlobals();
-
 Engine.DoRelativeFile(relativePath).CreateGlobals();
 
 }																																#importAllFromStatement

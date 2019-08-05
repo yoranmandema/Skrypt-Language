@@ -28,7 +28,7 @@ namespace Skrypt {
         public T GetAs<T> (int i) where T : BaseObject {
             var value = this[i];
 
-            if (value != null || value is T) {
+            if (value != null && value is T) {
                 return value as T;
             } else {
                 throw new InvalidArgumentTypeException($"Expected argument of type {typeof(T).Name}.");

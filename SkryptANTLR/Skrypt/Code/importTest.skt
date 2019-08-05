@@ -1,8 +1,6 @@
 ﻿
 fn PrintSomething () {
-	Debug.PrintCallStack()
-
-	print("Gay")
+	Debug.Assert(1 == 0, "test")
 }
 
 struct External {
