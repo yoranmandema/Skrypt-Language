@@ -68,7 +68,7 @@ namespace Skrypt.ANTLR {
         void CreateProperty(BaseObject target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
 
-            if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {
+            if (propertyTree.GetChild(0) is MemberDefinitionStatementContext assignCtx) {
                 nameToken = assignCtx.name().NAME().Symbol;
             } else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
                 nameToken = fnCtx.name().NAME().Symbol;

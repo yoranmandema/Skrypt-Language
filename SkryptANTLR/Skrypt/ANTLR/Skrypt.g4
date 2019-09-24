@@ -278,8 +278,8 @@ if (modifiesProperties) {
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
 structProperty		: PRIVATE? STATIC? Property=property ;
-moduleProperty		: moduleStmnt | structStmnt | assignStmnt | fnStmnt;
-property			: assignStmnt | fnStmnt ;
+moduleProperty		: moduleStmnt | structStmnt | memberDefStmnt | fnStmnt;
+property			: memberDefStmnt | fnStmnt ;
 
 fnStmnt				/*locals [
 					BaseObject ReturnValue = null,
@@ -386,6 +386,26 @@ elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
 
 else				: ELSE stmntBlock																			
 					;
+
+memberDefStmnt		: CONST? name ASSIGN expression {
+var memberDefCtx = ($ctx as MemberDefinitionStatementContext);
+var nameCtx = memberDefCtx.name();
+var block = GetDefinitionBlock($ctx);
+
+var isConstant = memberDefCtx.CONST() != null;
+
+if (nameCtx.variable != null) Engine.ErrorHandler.AddError(nameCtx.Start, "Member is already defined.");
+
+if (nameCtx.variable == null) {
+	var newVar = new Skrypt.Variable(nameCtx.GetText()) {
+		IsConstant = isConstant
+	};
+
+	block.Variables[nameCtx.GetText()] = newVar;
+	nameCtx.variable = newVar;
+} 	
+} #memberDefinitionStatement
+;
 
 assignStmnt			: CONST? name ASSIGN expression	{
 var assignNameCtx = ($ctx as AssignNameStatementContext);

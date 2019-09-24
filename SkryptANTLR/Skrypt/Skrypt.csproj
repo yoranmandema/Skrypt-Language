@@ -176,6 +176,7 @@
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitBreakStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.DoLoop.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitForStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitMemberDefinitionStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitWhileStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitReturnStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignNameStatement.cs" />
