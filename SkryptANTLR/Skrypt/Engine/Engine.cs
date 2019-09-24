@@ -28,6 +28,9 @@ namespace Skrypt {
         internal IteratorTrait Iterator { get; private set; }
         internal AddableTrait AddableTrait { get; private set; }
         internal SubtractableTrait SubtractableTrait { get; private set; }
+        internal DividableTrait DividableTrait { get; private set; }
+        internal MultiplicableTrait MultiplicableTrait { get; private set; }
+
         #endregion
 
         #region Types
@@ -37,6 +40,7 @@ namespace Skrypt {
         internal VectorType Vector { get; private set; }
         internal VectorType Vector2 { get; private set; }
         internal VectorType Vector3 { get; private set; }
+        internal VectorType Vector4 { get; private set; }
         internal ArrayType Array { get; private set; }
         #endregion
 
@@ -62,6 +66,8 @@ namespace Skrypt {
             Iterator                = FastAdd(new IteratorTrait(this));
             AddableTrait            = FastAdd(new AddableTrait(this));
             SubtractableTrait       = FastAdd(new SubtractableTrait(this));
+            DividableTrait          = FastAdd(new DividableTrait(this));
+            MultiplicableTrait      = FastAdd(new MultiplicableTrait(this));
 
             Number                  = FastAdd(new NumberType(this));
             String                  = FastAdd(new StringType(this));
@@ -69,6 +75,7 @@ namespace Skrypt {
             Vector                  = FastAdd(new VectorType(this));
             Vector2                 = FastAdd(new Vector2Type(this));
             Vector3                 = FastAdd(new Vector3Type(this));
+            Vector4                 = FastAdd(new Vector4Type(this));
             Array                   = FastAdd(new ArrayType(this));
 
             Math                    = FastAdd(new MathModule(this));
