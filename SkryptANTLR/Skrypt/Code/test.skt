@@ -1,7 +1,15 @@
 ﻿
 module System {
+	A = 0
+	B = 0
+
 	module IO {
-		A = 1
+		D = 0
+		E = 0
+
+		struct Struct {
+			static C = 3
+		}
 	}
 }
 

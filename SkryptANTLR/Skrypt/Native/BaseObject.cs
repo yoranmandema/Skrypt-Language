@@ -66,14 +66,50 @@ namespace Skrypt {
             return (BaseObject)MemberwiseClone();
         }
 
-        public override string ToString() {
+        protected string FormattedString (int depth) {
+            var isContainer = this is BaseModule || this is BaseType;
+
+            //if (!isContainer) return this.ToString();
+
+            var indent = new string('\t',depth);
             var str = $"{Name}";
 
-            foreach (var kv in Members) {
-                str += $"\n{kv.Key}:\t{kv.Value.Value}";
+            if (Members.Any() && isContainer) {
+                str += $" {{";
+
+                foreach (var kv in Members) {
+                    var objectString =
+                        (kv.Value.Value is BaseModule || kv.Value.Value is BaseType) ?
+                        $"{kv.Value.Value.FormattedString(depth + 1)}" :
+                        $"{kv.Key} ({kv.Value.Value.Name}): {kv.Value.Value}";
+
+                    str += $"\n\t{indent}{objectString}";
+                }
+
+                str += $"\n{indent}}}\n";
             }
 
             return str;
+        }
+
+        public override string ToString() {
+            var str = $"{Name}";
+
+            var isContainer = this is BaseType || this is BaseModule;
+
+            if (Members.Any()) {
+                str += " {";
+
+                foreach (var kv in Members) {
+                    str += $"\n{kv.Key}:\t{kv.Value.Value}";
+                }
+
+                str += "\n}";
+            }
+
+            //Console.WriteLine(FormattedString(0));
+
+            return FormattedString(0);
         }
     }
 }
