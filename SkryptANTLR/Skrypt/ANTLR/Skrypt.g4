@@ -114,9 +114,9 @@ var variable = new Skrypt.Variable(nameCtx.GetText(), module);
 
 block.Variables[nameCtx.GetText()] = variable;
 
-} '{' property* '}' {
+} '{' moduleProperty* '}' {
 
-foreach (var c in Ctx.property()) {
+foreach (var c in Ctx.moduleProperty()) {
 	this.Engine.Visitor.Visit(c);
 
 	CreateProperty(variable.Value, Ctx, c, false);
@@ -278,7 +278,7 @@ if (modifiesProperties) {
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
 structProperty		: PRIVATE? STATIC? Property=property ;
-moduleProperty		: property | moduleStmnt ;
+moduleProperty		: moduleStmnt | structStmnt | property;
 property			: assignStmnt | fnStmnt ;
 
 fnStmnt				/*locals [

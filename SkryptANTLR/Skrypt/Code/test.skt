@@ -1,4 +1,10 @@
 ﻿
-import * from "importTest.skt"
+module System {
+	module IO {
+		fn WriteLine (message) {
+			print(message)
+		}
+	}
+}
 
-External.Print()
+print(System)

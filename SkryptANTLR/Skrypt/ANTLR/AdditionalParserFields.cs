@@ -72,7 +72,14 @@ namespace Skrypt.ANTLR {
                 nameToken = assignCtx.name().NAME().Symbol;
             } else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
                 nameToken = fnCtx.name().NAME().Symbol;
+            } else if (propertyTree.GetChild(0) is ModuleStatementContext moduleCtx) {
+                nameToken = moduleCtx.name().NAME().Symbol;
+            } else if (propertyTree.GetChild(0) is StructStatementContext structCtx) {
+                nameToken = structCtx.name().NAME().Symbol;
             }
+
+            Console.WriteLine(propertyTree.GetChild(0).GetType());
+            Console.WriteLine(propertyTree.GetText());
 
             var value = ctx.Variables[nameToken.Text].Value;
 

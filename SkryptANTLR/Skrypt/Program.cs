@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Skrypt {
     class Program {
-        static void Main(string[] args){
+        static void Main(string[] args) {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Code\\test.skt");
 
             var engine = new Engine();
@@ -40,6 +40,10 @@ namespace Skrypt {
                 return null;
             });
 
+            engine.SetValue("input", (e, s, i) => {
+                return engine.CreateString(Console.ReadLine());
+            });
+
             engine.SetValue("benchmark", (e, s, i) => {
                 var function = i.GetAs<FunctionInstance>(0);
                 var amount = i.GetAs<NumberInstance>(1).Value;
@@ -60,7 +64,7 @@ namespace Skrypt {
             });
 
             engine.DoFile(path).CreateGlobals();
-            
+
             while (true) {
                 string line = Console.ReadLine();
 
@@ -68,7 +72,8 @@ namespace Skrypt {
 
                 try {
                     Console.WriteLine(engine.Run(line).CreateGlobals().CompletionValue);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Console.WriteLine(e);
                 }
             }
