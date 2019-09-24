@@ -11,12 +11,14 @@ namespace Skrypt {
 
             var property = target.GetProperty(memberName);
 
-            if (property.IsPrivate && property.DefinitionBlock != null) {
+            if (property.isConstant) _engine.ErrorHandler.FatalError(context.Start, "Constant member cannot be redefined.");
+
+            if (property.isPrivate && property.definitionBlock != null) {
                 var parent = context.Parent;
                 var canAccess = false;
 
                 while (parent != null) {
-                    if (parent == property.DefinitionBlock) {
+                    if (parent == property.definitionBlock) {
                         canAccess = true;
                     }
 

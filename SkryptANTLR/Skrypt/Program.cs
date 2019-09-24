@@ -26,7 +26,7 @@ namespace Skrypt {
                         str += "null";
                     }
                     else if (i[j].Members.ContainsKey("string")) {
-                        str += (i[j].Members["string"].Value as FunctionInstance).Function.Run(engine, i[j], Arguments.Empty).ToString();
+                        str += (i[j].Members["string"].value as FunctionInstance).Function.Run(engine, i[j], Arguments.Empty).ToString();
                     }
                     else {
                         str += i[j].ToString();

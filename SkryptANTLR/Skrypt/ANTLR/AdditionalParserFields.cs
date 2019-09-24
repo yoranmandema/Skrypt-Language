@@ -84,7 +84,7 @@ namespace Skrypt.ANTLR {
                 Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
             }
 
-            target.CreateProperty(nameToken.Text, value, isPrivate);
+            target.CreateProperty(nameToken.Text, value, isPrivate, ctx.Variables[nameToken.Text].IsConstant);
         }
 
         bool ContextIsIn(RuleContext context, Type[] types) {

@@ -12,7 +12,7 @@ namespace Skrypt{
             var arrayIteratorType = Engine.FastAdd(new ArrayIteratorType(Engine));
             var enumerable = ImplementTrait(engine.Enumerable);
 
-            enumerable["GetIterator"].Value = new FunctionInstance(Engine, (e, s, args) => {
+            enumerable["GetIterator"].value = new FunctionInstance(Engine, (e, s, args) => {
                 return arrayIteratorType.Construct(new BaseObject[] { s as ArrayInstance });
             });
         }

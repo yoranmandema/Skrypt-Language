@@ -11,13 +11,13 @@ namespace Skrypt {
 
             var iteratorTrait = ImplementTrait(engine.Iterator);
 
-            iteratorTrait["Current"].Value = new FunctionInstance(Engine, (e, s, args) => {
+            iteratorTrait["Current"].value = new FunctionInstance(Engine, (e, s, args) => {
                 var iterator = s as ArrayIteratorInstance;
 
                 return iterator.Index > -1 && iterator.Index < iterator.Array.SequenceValues.Count ? iterator.Array.SequenceValues[iterator.Index] : null;
             });
 
-            iteratorTrait["Next"].Value = new FunctionInstance(Engine, (e, s, args) => {
+            iteratorTrait["Next"].value = new FunctionInstance(Engine, (e, s, args) => {
                 var iterator = s as ArrayIteratorInstance;
 
                 iterator.Index++;
@@ -25,14 +25,14 @@ namespace Skrypt {
                 return iterator.Index > -1 && iterator.Index < iterator.Array.SequenceValues.Count ? iterator.Array.SequenceValues[iterator.Index] : null;
             });
 
-            iteratorTrait["HasNext"].Value = new FunctionInstance(Engine, (e, s, args) => {
+            iteratorTrait["HasNext"].value = new FunctionInstance(Engine, (e, s, args) => {
                 var iterator = s as ArrayIteratorInstance;
                 var index = iterator.Index + 1;
 
                 return Engine.CreateBoolean(index > -1 && index < iterator.Array.SequenceValues.Count);
             });
 
-            iteratorTrait["Reset"].Value = new FunctionInstance(Engine, (e, s, args) => {
+            iteratorTrait["Reset"].value = new FunctionInstance(Engine, (e, s, args) => {
                 var iterator = s as ArrayIteratorInstance;
 
                 iterator.Index = -1;

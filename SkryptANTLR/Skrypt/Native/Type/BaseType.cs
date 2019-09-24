@@ -20,7 +20,7 @@ namespace Skrypt {
             Traits.Add(trait);
 
             foreach (var kv in trait.TraitMembers) {
-                var newMember = new Member(kv.Value.Value, kv.Value.IsPrivate, kv.Value.DefinitionBlock);
+                var newMember = new Member(kv.Value.value, kv.Value.isPrivate, kv.Value.definitionBlock);
 
                 Template.Members[kv.Key] = newMember;
                 dict[kv.Key] = newMember;
@@ -46,7 +46,7 @@ namespace Skrypt {
             }
 
             foreach (var kv in Members) {
-                str += $"\n{kv.Key}:\t{kv.Value.Value}";
+                str += $"\n{kv.Key}:\t{kv.Value.value}";
             }
 
             return str;

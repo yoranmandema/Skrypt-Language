@@ -15,12 +15,12 @@ namespace Skrypt {
 
             var property = obj.GetProperty(memberName);
 
-            if (property.IsPrivate && property.DefinitionBlock != null) {
+            if (property.isPrivate && property.definitionBlock != null) {
                 var parent = context.Parent;
                 var canAccess = false;
 
                 while (parent != null) {
-                    if (parent == property.DefinitionBlock) {
+                    if (parent == property.definitionBlock) {
                         canAccess = true;
                     }
 
@@ -32,7 +32,7 @@ namespace Skrypt {
                 }
             }
 
-            var value = property.Value;
+            var value = property.value;
 
             if (value is GetPropertyInstance) {
                 var newVal = (value as GetPropertyInstance).Property.Run(_engine, obj);

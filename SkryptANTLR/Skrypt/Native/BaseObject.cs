@@ -24,7 +24,7 @@ namespace Skrypt {
                 var key = kv.Key;
                 var member = kv.Value;
 
-                Members[key] = new Member(member.Value, member.IsPrivate, member.DefinitionBlock);
+                Members[key] = new Member(member.value, member.isPrivate, member.definitionBlock);
             }
 
             Name = template.Name;
@@ -35,13 +35,15 @@ namespace Skrypt {
                 throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
             }
 
-            Members[name].Value = value;
+            Members[name].value = value;
 
             return Members[name];
         }
 
-        public Member CreateProperty(string name, BaseObject value, bool isPrivate = false) {
+        public Member CreateProperty(string name, BaseObject value, bool isPrivate = false, bool isConstant = false) {
             Members[name] = new Member(value, isPrivate, null);
+
+            Members[name].isConstant = isConstant;
 
             return Members[name];
         }
@@ -79,9 +81,9 @@ namespace Skrypt {
 
                 foreach (var kv in Members) {
                     var objectString =
-                        (kv.Value.Value is BaseModule || kv.Value.Value is BaseType) ?
-                        $"{kv.Value.Value.FormattedString(depth + 1)}" :
-                        $"{kv.Key} ({kv.Value.Value.Name}): {kv.Value.Value}";
+                        (kv.Value.value is BaseModule || kv.Value.value is BaseType) ?
+                        $"{kv.Value.value.FormattedString(depth + 1)}" :
+                        $"{kv.Key} ({kv.Value.value.Name}): {kv.Value.value}";
 
                     str += $"\n\t{indent}{objectString}";
                 }
@@ -101,7 +103,7 @@ namespace Skrypt {
                 str += " {";
 
                 foreach (var kv in Members) {
-                    str += $"\n{kv.Key}:\t{kv.Value.Value}";
+                    str += $"\n{kv.Key}:\t{kv.Value.value}";
                 }
 
                 str += "\n}";
