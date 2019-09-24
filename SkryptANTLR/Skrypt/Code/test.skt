@@ -1,9 +1,7 @@
 ﻿
 module System {
 	module IO {
-		fn WriteLine (message) {
-			print(message)
-		}
+		A = 1
 	}
 }
 

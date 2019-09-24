@@ -78,9 +78,6 @@ namespace Skrypt.ANTLR {
                 nameToken = structCtx.name().NAME().Symbol;
             }
 
-            Console.WriteLine(propertyTree.GetChild(0).GetType());
-            Console.WriteLine(propertyTree.GetText());
-
             var value = ctx.Variables[nameToken.Text].Value;
 
             if (value == null) {

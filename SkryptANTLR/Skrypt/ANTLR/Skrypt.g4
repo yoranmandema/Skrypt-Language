@@ -278,7 +278,7 @@ if (modifiesProperties) {
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
 structProperty		: PRIVATE? STATIC? Property=property ;
-moduleProperty		: moduleStmnt | structStmnt | property;
+moduleProperty		: moduleStmnt | structStmnt | assignStmnt | fnStmnt;
 property			: assignStmnt | fnStmnt ;
 
 fnStmnt				/*locals [
