@@ -394,7 +394,7 @@ var block = GetDefinitionBlock($ctx);
 
 var isConstant = memberDefCtx.CONST() != null;
 
-if (nameCtx.variable != null) Engine.ErrorHandler.AddError(nameCtx.Start, "Member is already defined.");
+if (nameCtx.variable != null) Engine.ErrorHandler.AddError(nameCtx.Start, $"Member {nameCtx.GetText()} is already defined.");
 
 if (nameCtx.variable == null) {
 	var newVar = new Skrypt.Variable(nameCtx.GetText()) {

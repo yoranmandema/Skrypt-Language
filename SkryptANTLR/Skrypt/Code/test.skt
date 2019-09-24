@@ -1,7 +1,7 @@
 ﻿
 module System {
 	A = 0
-	B = 0
+	A = 0
 }
 
 print(System)
