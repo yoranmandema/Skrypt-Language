@@ -26,24 +26,21 @@ fn Sort (numberArray) {
 	}
 }
 
-lowestValue = 0
-
 numberArray = []
 
-print("Please enter up to 20 integers, or end input with a negative value.")
+print("Please enter up to 20 integers, or end input with an empty string.")
 
-//try { 
-	in = input()
+in = input()
 
-	while (in != "") {
+while (in != "") {
+	try { 
 		numberArray.Push(Number.ParseInt(in))
-
-		in = input()
+	} catch (err) {
+		print("User input datatype invalid, please only enter integers.")
 	}
-//} catch (err) {
-//	print(err)
-//	print("User input datatype invalid, please only enter integers.")
-//}
+
+	in = input()
+}
 
 print("Numbers entered:")
 print(numberArray)
