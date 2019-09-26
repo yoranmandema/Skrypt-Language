@@ -45,9 +45,7 @@ namespace Skrypt {
             });
 
             engine.SetValue("error", (e, s, i) => {
-                engine.ErrorHandler.FatalError(e.CallStack.Last().token, i.GetAs<StringInstance>(0));
-
-                return null;
+                throw new FatalErrorException(i.GetAs<StringInstance>(0));
             });
 
             engine.SetValue("benchmark", (e, s, i) => {

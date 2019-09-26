@@ -37,6 +37,12 @@ namespace Skrypt.ANTLR {
             public RuleContext Context => this;
         }
 
+        public partial class CatchStmtContext : IScoped {
+            public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
+            public RuleContext Context => this;
+            public Exception error;
+        }
+
         public partial class FunctionStatementContext : IFunctionContext {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;

@@ -10,6 +10,7 @@ block				: (
 					| structStmnt
 					| traitStmnt
 					| traitImplStmnt
+					| tryStmnt
 					| ifStmnt
 					| forStmnt
 					| whileStmnt																								
@@ -342,6 +343,21 @@ if ($Statement == null) {
 parameterGroup		: (parameter (',' parameter)*)? ;								
 
 parameter			: NAME ('=' expression)?;
+		
+tryStmnt			: TRY stmntBlock catchStmt 																					#tryStatement
+					;
+
+catchStmt			: CATCH '('name')' {
+	var catchCtx = ($ctx as CatchStatementContext);
+	var nameCtx = catchCtx.name();
+	var newVar = new Skrypt.Variable(nameCtx.GetText());
+
+	var scope = GetDefinitionBlock($ctx);
+
+	scope.Variables[nameCtx.GetText()] = newVar;
+	nameCtx.variable = newVar;	
+} stmntBlock 																													#catchStatement
+					;
 
 forStmnt			: FOR '(' Instantiator=assignStmnt ',' Condition=expression ',' Modifier=expression ')' stmntBlock			#forStatement
 					;
@@ -565,8 +581,10 @@ STATIC					: 'static' ;
 PRIVATE					: 'private' ;
 CONST					: 'const' ;
 TYPEOF					: 'typeof' ;
+TRY						: 'try' ;
+CATCH					: 'catch' ;
 
-KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | PRIVATE | CONST | TYPEOF) ;
+KEYWORD					: (IMPORT | MODULE | IF | ELSE | FN | WHILE | FOR | RETURN | BREAK | CONTINUE | STATIC | PRIVATE | CONST | TYPEOF | TRY | CATCH) ;
 
 LESS					: '<'	;
 LESSEQ					: '<='	;

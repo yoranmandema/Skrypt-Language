@@ -171,6 +171,7 @@
     <Compile Include="Runtime\Visitor\SkryptVisitor.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignComputedMemberStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignMemberStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitCatchStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitIfStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitContinueStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitBreakStatement.cs" />
@@ -206,6 +207,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitTryStatement.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

@@ -1,2 +1,6 @@
 ﻿
-error("This is a fucking error")
+try {
+	//error("lol fuck you")
+} catch (err) {
+	print("caught error: " + err)
+}
