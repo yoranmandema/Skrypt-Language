@@ -1,6 +1,60 @@
 ﻿
-try {
-	//error("lol fuck you")
-} catch (err) {
-	print("caught error: " + err)
+fn Average (numberArray) {
+	total = 0
+	average = 0
+
+	for (i = 0, i < numberArray.Length, i++) {
+		total = total + numberArray[i]
+	}
+
+	average = total / numberArray.Length
+
+	return average
 }
+
+fn Sort (numberArray) {
+	temp = 0
+
+	for (i = 0, i < numberArray.Length, i++) {
+		for (j = i + 1, j < numberArray.Length, j++) {
+			if (numberArray[i] > numberArray[j]) {
+				temp = numberArray[i]
+				numberArray[i] = numberArray[j]
+				numberArray[j] = temp 
+			}
+		}
+	}
+}
+
+lowestValue = 0
+
+numberArray = []
+
+print("Please enter up to 20 integers, or end input with a negative value.")
+
+//try { 
+	in = input()
+
+	while (in != "") {
+		numberArray.Push(Number.ParseInt(in))
+
+		in = input()
+	}
+//} catch (err) {
+//	print(err)
+//	print("User input datatype invalid, please only enter integers.")
+//}
+
+print("Numbers entered:")
+print(numberArray)
+
+Sort(numberArray)
+
+print("\nSorted:")
+print(numberArray)
+
+average = Average(numberArray)
+print("\nAverage:\n" + average)
+
+print("Lowest input value: " + numberArray[0])
+print("Highest input value: " + numberArray[numberArray.Length - 1])

@@ -11,7 +11,13 @@ namespace Skrypt {
         }
 
         public static BaseObject Parse(Engine engine, BaseObject self, Arguments input) {
-            var value = double.Parse(input.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+            var value = double.Parse(input[0].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+
+            return engine.CreateNumber(value);
+        }
+
+        public static BaseObject ParseInt(Engine engine, BaseObject self, Arguments input) {
+            var value = int.Parse(input[0].ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
             return engine.CreateNumber(value);
         }

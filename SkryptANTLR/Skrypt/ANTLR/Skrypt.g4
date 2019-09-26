@@ -370,7 +370,7 @@ continueStmnt		locals [
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: CONTINUE {
-$Statement = GetFirstOfType<WhileStatementContext>($ctx);
+$Statement = GetFirstLoopStatement($ctx) as RuleContext;
 
 if ($Statement == null) {
 	Engine.ErrorHandler.AddError((_localctx as ContinueStatementContext).CONTINUE().Symbol, "Continue statement must be inside a loop.");
@@ -383,7 +383,7 @@ breakStmnt			locals [
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: BREAK {
-$Statement = GetFirstOfType<WhileStatementContext>($ctx);
+$Statement = GetFirstLoopStatement($ctx) as RuleContext;
 
 if ($Statement == null) {
 	Engine.ErrorHandler.AddError((_localctx as BreakStatementContext).BREAK().Symbol, "Break statement must be inside a loop.");

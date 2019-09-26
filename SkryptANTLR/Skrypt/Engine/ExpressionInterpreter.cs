@@ -108,6 +108,19 @@ namespace Skrypt.Runtime {
                 return VectorInstance.ComponentMathNumeric(_engine, left as VectorInstance, (x) => x * (right as NumberInstance));
             }
 
+            if (left is ArrayInstance && right is NumberInstance) {
+                var list = new List<BaseObject>();
+
+                for (int i = 0; i < (right as NumberInstance); i++) {
+                    list.AddRange((left as ArrayInstance).SequenceValues);
+                }
+
+                var repeated = _engine.CreateArray(list.ToArray());
+                repeated.Dictionary = (left as ArrayInstance).Dictionary;
+
+                return repeated;
+            }
+
             return new InvalidOperation();
         }
 

@@ -182,6 +182,20 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
+        ILoop GetFirstLoopStatement(RuleContext ctx) {
+            RuleContext currentContext = ctx;
+
+            while (currentContext.Parent != null) {
+                if (currentContext is ILoop loopCtx) {
+                    return loopCtx;
+                }
+
+                currentContext = currentContext.Parent;
+            }
+
+            return null;
+        }
+
         Variable GetReference (string name, IScoped scope) {
             Variable variable = null;
 

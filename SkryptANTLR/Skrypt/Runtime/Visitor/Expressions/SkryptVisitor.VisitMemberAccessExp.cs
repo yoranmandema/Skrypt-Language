@@ -40,11 +40,11 @@ namespace Skrypt {
                 value = newVal;
             }
 
-            //if (value is IValue noref) value = noref.Copy();
-
             accessed = obj;
 
             LastResult = accessed;
+
+            //if (value is IValue noref) value = noref.Copy();
 
             return value;
         }
