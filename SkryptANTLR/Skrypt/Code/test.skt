@@ -1,9 +1,2 @@
 ﻿
-
-for (i = 0, i < 666, i++) {
-	if (i == 69 or i == 420) {
-		print("Holy fuck " + i + " nice xdddd")
-	} else {
-		print(i)
-	}
-}
+error("This is a fucking error")

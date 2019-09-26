@@ -44,6 +44,12 @@ namespace Skrypt {
                 return engine.CreateString(Console.ReadLine());
             });
 
+            engine.SetValue("error", (e, s, i) => {
+                engine.ErrorHandler.FatalError(e.CallStack.Last().token, i.GetAs<StringInstance>(0));
+
+                return null;
+            });
+
             engine.SetValue("benchmark", (e, s, i) => {
                 var function = i.GetAs<FunctionInstance>(0);
                 var amount = i.GetAs<NumberInstance>(1).Value;
