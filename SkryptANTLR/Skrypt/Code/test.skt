@@ -1,8 +1,10 @@
 ﻿
-struct System {
-	static const A = 0
+
+
+for (i = 0, i < 666, i++) {
+	if (i == 420) {
+		print("Holy fuck " + i + " nice xdddd")
+	} else {
+		print(i)
+	}
 }
-
-System.A = 2
-
-print(System)

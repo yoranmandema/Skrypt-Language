@@ -46,7 +46,7 @@ if (nameCtx.variable == null) {
 
 	foreach (var m in members) {
 		try {
-			target = target.GetProperty(m.GetText()).Value;
+			target = target.GetProperty(m.GetText()).value;
 		} catch (System.Exception e) {
 			Engine.ErrorHandler.AddError(nameCtx.NAME().Symbol, e.Message);
 		}
@@ -55,7 +55,7 @@ if (nameCtx.variable == null) {
 	foreach (var m in target.Members) {
 		var v = m.Value;
 
-		scope.Variables[m.Key] = new Skrypt.Variable(m.Key,v.Value);
+		scope.Variables[m.Key] = new Skrypt.Variable(m.Key,v.value);
 	}
 
 }
@@ -246,7 +246,7 @@ if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
 type.Traits.Add(trait);
 
 foreach (var kv in trait.TraitMembers) {
-	var newMember = new Member(kv.Value.Value, kv.Value.IsPrivate, kv.Value.DefinitionBlock);
+	var newMember = new Member(kv.Value.value, kv.Value.isPrivate, kv.Value.definitionBlock);
 
 	type.Template.Members[kv.Key] = newMember;
 }
@@ -269,7 +269,7 @@ if (modifiesProperties) {
 			Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
 		}
 
-		type.Template.Members[nameToken.Text].Value = value;
+		type.Template.Members[nameToken.Text].value = value;
 	}
 }
 }																																#traitImplStatement
@@ -394,7 +394,7 @@ var block = GetDefinitionBlock($ctx);
 
 var isConstant = memberDefCtx.CONST() != null;
 
-if (nameCtx.variable != null) Engine.ErrorHandler.AddError(nameCtx.Start, $"Member {nameCtx.GetText()} is already defined.");
+if (nameCtx.variable != null) Engine.ErrorHandler.AddError(nameCtx.Start, $"Member {nameCtx} is already defined.");
 
 if (nameCtx.variable == null) {
 	var newVar = new Skrypt.Variable(nameCtx.GetText()) {
