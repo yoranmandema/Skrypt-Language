@@ -253,7 +253,7 @@ namespace Skrypt.Runtime {
 
         public object EvaluateOrExpression(BaseObject left, BaseObject right) {
             if (left is BooleanInstance && right is BooleanInstance) {
-                return (left as BooleanInstance).Value && (right as BooleanInstance).Value;
+                return (left as BooleanInstance).Value || (right as BooleanInstance).Value;
             }
 
             return new InvalidOperation();
