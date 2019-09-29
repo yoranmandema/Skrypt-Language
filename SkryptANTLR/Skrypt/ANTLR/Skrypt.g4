@@ -32,247 +32,234 @@ stmntBlock			: '{' Block=block '}'
 					;
 
 importStmnt			: IMPORT name (DOT NAME)*?	{
+	var nameCtx = ($ctx as ImportStatementContext).name();
+	var scope = GetDefinitionBlock($ctx);
 
-var nameCtx = ($ctx as ImportStatementContext).name();
-var scope = GetDefinitionBlock($ctx);
+	if (nameCtx.variable == null) {
+		Engine.ErrorHandler.AddParseError(nameCtx.NAME().Symbol, "Undefined variable: " + nameCtx.GetText());
+	} else {
+		var root = nameCtx.variable.Value;
+		var target = root;
+		var members = ($ctx as ImportStatementContext).NAME();
 
-if (nameCtx.variable == null) {
-	Engine.ErrorHandler.AddParseError(nameCtx.NAME().Symbol, "Undefined variable: " + nameCtx.GetText());
-} else {
+		foreach (var m in members) {
+			try {
+				target = target.GetProperty(m.GetText()).value;
+			} catch (System.Exception e) {
+				Engine.ErrorHandler.AddParseError(nameCtx.NAME().Symbol, e.Message);
+			}
+		}
 
-	var root = nameCtx.variable.Value;
-	var target = root;
+		foreach (var m in target.Members) {
+			var v = m.Value;
 
-	var members = ($ctx as ImportStatementContext).NAME();
-
-	foreach (var m in members) {
-		try {
-			target = target.GetProperty(m.GetText()).value;
-		} catch (System.Exception e) {
-			Engine.ErrorHandler.AddParseError(nameCtx.NAME().Symbol, e.Message);
+			scope.Variables[m.Key] = new Skrypt.Variable(m.Key,v.value);
 		}
 	}
-
-	foreach (var m in target.Members) {
-		var v = m.Value;
-
-		scope.Variables[m.Key] = new Skrypt.Variable(m.Key,v.value);
-	}
-
-}
-
 }																																#importStatement
 					;
 
 importAllFromStmnt	: IMPORT ASTERISK FROM string {
-var Ctx = ($ctx as ImportAllFromStatementContext);
+	var Ctx = ($ctx as ImportAllFromStatementContext);
 
-var relativePath = Ctx.@string().value;
-var input = Engine.FileHandler.Read(relativePath);
+	var relativePath = Ctx.@string().value;
+	var input = Engine.FileHandler.Read(relativePath);
 
-Engine.DoRelativeFile(relativePath).CreateGlobals();
-
+	Engine.DoRelativeFile(relativePath).CreateGlobals();
 }																																#importAllFromStatement
 					;
 
 importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
-var Ctx = ($ctx as ImportFromStatementContext);
-var scope = GetDefinitionBlock($ctx);
+	var Ctx = ($ctx as ImportFromStatementContext);
+	var scope = GetDefinitionBlock($ctx);
 
-var relativePath = Ctx.@string().value;
-var input = Engine.FileHandler.Read(relativePath);
+	var relativePath = Ctx.@string().value;
+	var input = Engine.FileHandler.Read(relativePath);
 
-Engine.DoRelativeFile(relativePath);
+	Engine.DoRelativeFile(relativePath);
 
-foreach (var n in Ctx.NAME()) {
-	var name = n.GetText();
+	foreach (var n in Ctx.NAME()) {
+		var name = n.GetText();
 
-	scope.Variables[name] = new Skrypt.Variable(name, Engine.GetValue(name));
-}
-
+		scope.Variables[name] = new Skrypt.Variable(name, Engine.GetValue(name));
+	}
 }																																#importFromStatement
 					;
 
 moduleStmnt			: MODULE name {
+	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
-var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
+	if (!isInValidContext) {
+		Engine.ErrorHandler.AddParseError($ctx.Start, "Module has to be in global scope or module block.");
+	}
 
-if (!isInValidContext) {
-	Engine.ErrorHandler.AddParseError($ctx.Start, "Module has to be in global scope or module block.");
-}
+	var Ctx = ($ctx as ModuleStatementContext);
+	var nameCtx = Ctx.name();
+	var block = GetDefinitionBlock($ctx.Parent);
 
-var Ctx = ($ctx as ModuleStatementContext);
-var nameCtx = Ctx.name();
-var block = GetDefinitionBlock($ctx.Parent);
+	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
-if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
+	var module = new ScriptModule(nameCtx.GetText(), this.Engine);
 
-var module = new ScriptModule(nameCtx.GetText(), this.Engine);
+	this.Engine.FastAdd(module);
 
-this.Engine.FastAdd(module);
+	var variable = new Skrypt.Variable(nameCtx.GetText(), module);
 
-var variable = new Skrypt.Variable(nameCtx.GetText(), module);
+	block.Variables[nameCtx.GetText()] = variable;
 
-block.Variables[nameCtx.GetText()] = variable;
+	} '{' moduleProperty* '}' {
 
-} '{' moduleProperty* '}' {
+	foreach (var c in Ctx.moduleProperty()) {
+		this.Engine.Visitor.Visit(c);
 
-foreach (var c in Ctx.moduleProperty()) {
-	this.Engine.Visitor.Visit(c);
-
-	CreateProperty(variable.Value, Ctx, c, false);
-}
-
+		CreateProperty(variable.Value, Ctx, c, false);
+	}
 }																																#moduleStatement
 					;
 
 
 structStmnt			: STRUCT name {
+	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
 
-var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
-
-if (!isInValidContext) {
-	Engine.ErrorHandler.AddParseError($ctx.Start, "Struct has to be in global scope, module block or struct block.");
-}
-
-var Ctx = ($ctx as StructStatementContext);
-var nameCtx = Ctx.name();
-var block = GetDefinitionBlock($ctx.Parent);
-var typeName = nameCtx.GetText();
-
-if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
-
-var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine));
-var template = new Template {Name = typeName};
-
-block.Variables[nameCtx.GetText()] = type;
-Ctx.Variables[nameCtx.GetText()] = type;
-
-}  '{' structProperty* '}' {
-
-foreach (var c in Ctx.structProperty()) {
-	var isPrivate = c.PRIVATE() != null;	
-	var isStatic = c.STATIC() != null;
-
-	this.Engine.Visitor.Visit(c.Property);
-
-	if (isStatic) {
-		CreateProperty(type.Value, Ctx, c.Property, isPrivate);
-	} else {
-		var nameToken = GetPropertyNameToken(c.Property);
-
-		var value = Ctx.Variables[nameToken.Text].Value;
-
-        if (value == null) {
-            Engine.ErrorHandler.AddParseError(c.Property.Start, "Field can't be set to an undefined value.");
-        }
-
-		if (nameToken.Text == "init" && value is FunctionInstance function) {
-			(type.Value as ScriptType).Constructor = function.Function as ScriptFunction;
-			continue;
-		}
-
-		template.Members[nameToken.Text] = new Member(value, isPrivate, Ctx);
+	if (!isInValidContext) {
+		Engine.ErrorHandler.AddParseError($ctx.Start, "Struct has to be in global scope, module block or struct block.");
 	}
-}
 
-var finalType = (type.Value as ScriptType);
+	var Ctx = ($ctx as StructStatementContext);
+	var nameCtx = Ctx.name();
+	var block = GetDefinitionBlock($ctx.Parent);
+	var typeName = nameCtx.GetText();
 
-finalType.Template = template;
-finalType.File = Engine.FileHandler.File;
+	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
+	var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine));
+	var template = new Template {Name = typeName};
+
+	block.Variables[nameCtx.GetText()] = type;
+	Ctx.Variables[nameCtx.GetText()] = type;
+
+	}  '{' structProperty* '}' {
+
+	foreach (var c in Ctx.structProperty()) {
+		var isPrivate = c.PRIVATE() != null;	
+		var isStatic = c.STATIC() != null;
+
+		this.Engine.Visitor.Visit(c.Property);
+
+		if (isStatic) {
+			CreateProperty(type.Value, Ctx, c.Property, isPrivate);
+		} else {
+			var nameToken = GetPropertyNameToken(c.Property);
+
+			var value = Ctx.Variables[nameToken.Text].Value;
+
+			if (value == null) {
+				Engine.ErrorHandler.AddParseError(c.Property.Start, "Field can't be set to an undefined value.");
+			}
+
+			if (nameToken.Text == "init" && value is FunctionInstance function) {
+				(type.Value as ScriptType).Constructor = function.Function as ScriptFunction;
+				continue;
+			}
+
+			template.Members[nameToken.Text] = new Member(value, isPrivate, Ctx);
+		}
+	}
+
+	var finalType = (type.Value as ScriptType);
+
+	finalType.Template = template;
+	finalType.File = Engine.FileHandler.File;
 }																																#structStatement
 					;
 
 traitStmnt			: TRAIT name {
+	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
-var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
+	if (!isInValidContext) {
+		Engine.ErrorHandler.AddParseError($ctx.Start, "Trait has to be in global scope or module block.");
+	}
 
-if (!isInValidContext) {
-	Engine.ErrorHandler.AddParseError($ctx.Start, "Trait has to be in global scope or module block.");
-}
+	var Ctx = ($ctx as TraitStatementContext);
+	var nameCtx = Ctx.name();
+	var block = GetDefinitionBlock($ctx.Parent);
+	var traitName = nameCtx.GetText();
 
-var Ctx = ($ctx as TraitStatementContext);
-var nameCtx = Ctx.name();
-var block = GetDefinitionBlock($ctx.Parent);
-var traitName = nameCtx.GetText();
+	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
-if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
+	var trait = new ScriptTrait(traitName, this.Engine);
+	var traitVariable = new Skrypt.Variable(traitName, trait);
 
-var trait = new ScriptTrait(traitName, this.Engine);
-var traitVariable = new Skrypt.Variable(traitName, trait);
+	block.Variables[nameCtx.GetText()] = traitVariable;
 
-block.Variables[nameCtx.GetText()] = traitVariable;
+	} propertiesBlock {
 
-} propertiesBlock {
-
-foreach (var child in Ctx.propertiesBlock().property()) {
-	this.Engine.Visitor.Visit(child);
-
-	var nameToken = GetPropertyNameToken(child);
-	var value = Ctx.Variables[nameToken.Text].Value;
-
-    if (value == null) {
-        Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
-    }
-
-	trait.TraitMembers[nameToken.Text] = new Member(value, false, Ctx);
-}
-
-}																																#traitStatement
-					;
-
-traitImplStmnt		: IMPL name FOR name propertiesBlock? {
-var isInValidContext = ContextIsIn($ctx, new [] {typeof(ProgramContext)});
-
-if (!isInValidContext) {
-	Engine.ErrorHandler.AddParseError($ctx.Start, "Implementation has to be in global scope.");
-}
-
-var Ctx = ($ctx as TraitImplStatementContext);
-var traitNameCtx = Ctx.name(0);
-var typeNameCtx = Ctx.name(1);
-
-var trait = traitNameCtx.variable.Value as BaseTrait;
-var type = typeNameCtx.variable.Value as BaseType;
-
-if (!typeof(BaseTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
-	Engine.ErrorHandler.AddParseError(traitNameCtx.NAME().Symbol, "Trait expected.");
-}
-
-if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
-	Engine.ErrorHandler.AddParseError(typeNameCtx.NAME().Symbol, "Type expected.");
-}
-
-type.Traits.Add(trait);
-
-foreach (var kv in trait.TraitMembers) {
-	var newMember = new Member(kv.Value.value, kv.Value.isPrivate, kv.Value.definitionBlock);
-
-	type.Template.Members[kv.Key] = newMember;
-}
-
-var modifiesProperties = Ctx.propertiesBlock() != null;
-
-if (modifiesProperties) {
 	foreach (var child in Ctx.propertiesBlock().property()) {
 		this.Engine.Visitor.Visit(child);
 
-		var nameToken = GetPropertyNameToken(child);	
+		var nameToken = GetPropertyNameToken(child);
 		var value = Ctx.Variables[nameToken.Text].Value;
-
-		if (!trait.TraitMembers.ContainsKey(nameToken.Text)) {
-			Engine.ErrorHandler.AddParseError(nameToken, $"Trait does not contain property {nameToken.Text}.");
-			continue;
-		}
 
 		if (value == null) {
 			Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
 		}
 
-		type.Template.Members[nameToken.Text].value = value;
+		trait.TraitMembers[nameToken.Text] = new Member(value, false, Ctx);
 	}
-}
+}																																#traitStatement
+					;
+
+traitImplStmnt		: IMPL name FOR name propertiesBlock? {
+	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ProgramContext)});
+
+	if (!isInValidContext) {
+		Engine.ErrorHandler.AddParseError($ctx.Start, "Implementation has to be in global scope.");
+	}
+
+	var Ctx = ($ctx as TraitImplStatementContext);
+	var traitNameCtx = Ctx.name(0);
+	var typeNameCtx = Ctx.name(1);
+
+	var trait = traitNameCtx.variable.Value as BaseTrait;
+	var type = typeNameCtx.variable.Value as BaseType;
+
+	if (!typeof(BaseTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
+		Engine.ErrorHandler.AddParseError(traitNameCtx.NAME().Symbol, "Trait expected.");
+	}
+
+	if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
+		Engine.ErrorHandler.AddParseError(typeNameCtx.NAME().Symbol, "Type expected.");
+	}
+
+	type.Traits.Add(trait);
+
+	foreach (var kv in trait.TraitMembers) {
+		var newMember = new Member(kv.Value.value, kv.Value.isPrivate, kv.Value.definitionBlock);
+
+		type.Template.Members[kv.Key] = newMember;
+	}
+
+	var modifiesProperties = Ctx.propertiesBlock() != null;
+
+	if (modifiesProperties) {
+		foreach (var child in Ctx.propertiesBlock().property()) {
+			this.Engine.Visitor.Visit(child);
+
+			var nameToken = GetPropertyNameToken(child);	
+			var value = Ctx.Variables[nameToken.Text].Value;
+
+			if (!trait.TraitMembers.ContainsKey(nameToken.Text)) {
+				Engine.ErrorHandler.AddParseError(nameToken, $"Trait does not contain property {nameToken.Text}.");
+				continue;
+			}
+
+			if (value == null) {
+				Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
+			}
+
+			type.Template.Members[nameToken.Text].value = value;
+		}
+	}
 }																																#traitImplStatement
 					;
 
@@ -287,35 +274,34 @@ fnStmnt				/*locals [
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]*/
 					: CONST? FN name '(' parameterGroup ')' {
-var fnCtx = ($ctx as FunctionStatementContext);
-var nameCtx = fnCtx.name();
-var isConstant = fnCtx.CONST() != null;
+	var fnCtx = ($ctx as FunctionStatementContext);
+	var nameCtx = fnCtx.name();
+	var isConstant = fnCtx.CONST() != null;
 
-if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
+	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
-var newVar = new Skrypt.Variable(nameCtx.GetText());
+	var newVar = new Skrypt.Variable(nameCtx.GetText());
 
-var scope = GetDefinitionBlock($ctx.Parent);
+	var scope = GetDefinitionBlock($ctx.Parent);
 
-scope.Variables[nameCtx.GetText()] = newVar;
-nameCtx.variable = newVar;		
+	scope.Variables[nameCtx.GetText()] = newVar;
+	nameCtx.variable = newVar;		
 
-fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
+	fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
 
-var parameters = fnCtx.parameterGroup().parameter();
-var processedParameters = new Skrypt.Parameter[parameters.Length];
+	var parameters = fnCtx.parameterGroup().parameter();
+	var processedParameters = new Skrypt.Parameter[parameters.Length];
 
-for (var i = 0; i < parameters.Length; i++) {
-	var p = parameters[i];
-	var name = p.NAME().GetText();
+	for (var i = 0; i < parameters.Length; i++) {
+		var p = parameters[i];
+		var name = p.NAME().GetText();
 
-	processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
+		processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
 
-	var parameterVar = new Skrypt.Variable(name);
+		var parameterVar = new Skrypt.Variable(name);
 
-	fnCtx.Variables[name] = parameterVar;
-}
-
+		fnCtx.Variables[name] = parameterVar;
+	}
 } stmntBlock {
 	var function = new Skrypt.ScriptFunction(fnCtx) { 
 		Parameters = processedParameters,
@@ -332,11 +318,11 @@ returnStmnt			locals [
 					IFunctionContext Statement
 					]
 					: RETURN expression? {
-$Statement = GetFirstFunctionStatement($ctx);
+	$Statement = GetFirstFunctionStatement($ctx);
 
-if ($Statement == null) {
-	Engine.ErrorHandler.AddParseError((_localctx as ReturnStatementContext).RETURN().Symbol, "Return statement must be inside a function.");
-}
+	if ($Statement == null) {
+		Engine.ErrorHandler.AddParseError((_localctx as ReturnStatementContext).RETURN().Symbol, "Return statement must be inside a function.");
+	}
 }																																#returnStatement
 					;
 
@@ -370,11 +356,11 @@ continueStmnt		locals [
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: CONTINUE {
-$Statement = GetFirstLoopStatement($ctx) as RuleContext;
+	$Statement = GetFirstLoopStatement($ctx) as RuleContext;
 
-if ($Statement == null) {
-	Engine.ErrorHandler.AddParseError((_localctx as ContinueStatementContext).CONTINUE().Symbol, "Continue statement must be inside a loop.");
-}
+	if ($Statement == null) {
+		Engine.ErrorHandler.AddParseError((_localctx as ContinueStatementContext).CONTINUE().Symbol, "Continue statement must be inside a loop.");
+	}
 }																																#continueStatement
 					;
 
@@ -383,11 +369,11 @@ breakStmnt			locals [
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: BREAK {
-$Statement = GetFirstLoopStatement($ctx) as RuleContext;
+	$Statement = GetFirstLoopStatement($ctx) as RuleContext;
 
-if ($Statement == null) {
-	Engine.ErrorHandler.AddParseError((_localctx as BreakStatementContext).BREAK().Symbol, "Break statement must be inside a loop.");
-}
+	if ($Statement == null) {
+		Engine.ErrorHandler.AddParseError((_localctx as BreakStatementContext).BREAK().Symbol, "Break statement must be inside a loop.");
+	}
 }																																#breakStatement
 					;
 
@@ -404,43 +390,43 @@ else				: ELSE stmntBlock
 					;
 
 memberDefStmnt		: CONST? name ASSIGN expression {
-var memberDefCtx = ($ctx as MemberDefinitionStatementContext);
-var nameCtx = memberDefCtx.name();
-var block = GetDefinitionBlock($ctx);
+	var memberDefCtx = ($ctx as MemberDefinitionStatementContext);
+	var nameCtx = memberDefCtx.name();
+	var block = GetDefinitionBlock($ctx);
 
-var isConstant = memberDefCtx.CONST() != null;
+	var isConstant = memberDefCtx.CONST() != null;
 
-if (nameCtx.variable != null) Engine.ErrorHandler.AddParseError(nameCtx.Start, $"Member {nameCtx} is already defined.");
+	if (nameCtx.variable != null) Engine.ErrorHandler.AddParseError(nameCtx.Start, $"Member {nameCtx} is already defined.");
 
-if (nameCtx.variable == null) {
-	var newVar = new Skrypt.Variable(nameCtx.GetText()) {
-		IsConstant = isConstant
-	};
+	if (nameCtx.variable == null) {
+		var newVar = new Skrypt.Variable(nameCtx.GetText()) {
+			IsConstant = isConstant
+		};
 
-	block.Variables[nameCtx.GetText()] = newVar;
-	nameCtx.variable = newVar;
-} 	
+		block.Variables[nameCtx.GetText()] = newVar;
+		nameCtx.variable = newVar;
+	} 	
 } #memberDefinitionStatement
 ;
 
 assignStmnt			: CONST? name ASSIGN expression	{
-var assignNameCtx = ($ctx as AssignNameStatementContext);
-var nameCtx = assignNameCtx.name();
-var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
-var isConstant = assignNameCtx.CONST() != null;
+	var assignNameCtx = ($ctx as AssignNameStatementContext);
+	var nameCtx = assignNameCtx.name();
+	var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
+	var isConstant = assignNameCtx.CONST() != null;
 
-if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
+	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
-if (nameCtx.variable == null) {
-	var newVar = new Skrypt.Variable(nameCtx.GetText()) {
-		IsConstant = isConstant
-	};
+	if (nameCtx.variable == null) {
+		var newVar = new Skrypt.Variable(nameCtx.GetText()) {
+			IsConstant = isConstant
+		};
 
-	block.Variables[nameCtx.GetText()] = newVar;
-	nameCtx.variable = newVar;
-} 	
+		block.Variables[nameCtx.GetText()] = newVar;
+		nameCtx.variable = newVar;
+	} 	
 
-var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
+	var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
 }																																#assignNameStatement
 					| memberAccess		ASSIGN expression																		#assignMemberStatement
 					| memberAccessComp	ASSIGN expression																		#assignComputedMemberStatement					
@@ -480,18 +466,18 @@ functionCtx.CallFile = Engine.FileHandler.File;
 					| vector4																									#vector4Literal
 					| array																										#arrayLiteral
 					| name {
-var nameCtx = ($ctx as NameExpContext).name();
+	var nameCtx = ($ctx as NameExpContext).name();
 
-if (nameCtx.variable == null) {
-	Engine.ErrorHandler.AddParseError(nameCtx.NAME().Symbol, "Undefined variable: " + nameCtx.GetText());
-}																								
+	if (nameCtx.variable == null) {
+		Engine.ErrorHandler.AddParseError(nameCtx.NAME().Symbol, "Undefined variable: " + nameCtx.GetText());
+	}																								
 }																																#nameExp
                     ;
 
 name returns [Skrypt.Variable variable] : NAME 	{
-var scope = GetDefinitionBlock($NAME.text, $ctx);
+	var scope = GetDefinitionBlock($NAME.text, $ctx);
 
-$variable = GetReference($NAME.text, scope);
+	$variable = GetReference($NAME.text, scope);
 } ;
 
 memberAccess		: expression DOT NAME ;
