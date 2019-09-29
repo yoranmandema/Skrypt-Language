@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 namespace Skrypt {
-    public class Engine {
+    public partial class Engine {
         public BaseObject CompletionValue => Visitor.LastResult;
         public Stack<Call> CallStack { get; internal set; } = new Stack<Call>();
 
@@ -53,10 +53,11 @@ namespace Skrypt {
 
 
         public Dictionary<string, Variable> Globals { get; set; } = new Dictionary<string, Variable>();
-        public ErrorHandler ErrorHandler { get; set; } = new ErrorHandler();
+        public ErrorHandler ErrorHandler { get; set; }
         public IFileHandler FileHandler { get; set; }
 
         public Engine() {
+            ErrorHandler            = new ErrorHandler(this);
             ExpressionInterpreter   = new ExpressionInterpreter(this);
             TemplateMaker           = new TemplateMaker(this);
             FileHandler             = new DefaultFileHandler(this);
@@ -112,21 +113,27 @@ namespace Skrypt {
         }
 
         public Engine Run(string code) {
+            var errorListener = new ErrorListener(this);
+
             var inputStream = new AntlrInputStream(code);
             var skryptLexer = new SkryptLexer(inputStream) {
                 Engine = this
             };
 
-            skryptLexer.AddErrorListener(new LexingErrorListener());
+            skryptLexer.RemoveErrorListeners();
+            skryptLexer.AddErrorListener(errorListener);
 
             var commonTokenStream = new CommonTokenStream(skryptLexer);
 
             Parser = new SkryptParser(commonTokenStream) {
-                Engine = this,
-                ErrorHandler = new BailErrorStrategy()
+                Engine = this
+
+                //Engine = this,
+                //ErrorHandler = new BailErrorStrategy()
             };
 
-            Parser.AddErrorListener(new ParsingErrorListener());
+            Parser.RemoveErrorListeners();
+            Parser.AddErrorListener(errorListener);
 
             Parser.Globals = Globals;
 

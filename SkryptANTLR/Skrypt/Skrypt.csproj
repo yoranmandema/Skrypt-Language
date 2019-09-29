@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ANTLR\AdditionalLexerFields.cs" />
+    <Compile Include="Engine\ErrorHandling\ErrorListener.cs" />
     <Compile Include="ANTLR\IFunctionContext.cs" />
     <Compile Include="ANTLR\Skrypt.g4.lexer.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
@@ -77,7 +78,7 @@
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine\Call.cs" />
-    <Compile Include="Engine\CodeError.cs" />
+    <Compile Include="Engine\ErrorHandling\CodeError.cs" />
     <Compile Include="ANTLR\ILoop.cs" />
     <Compile Include="ANTLR\IScoped.cs" />
     <Compile Include="ANTLR\LexingErrorListener.cs" />
@@ -85,10 +86,13 @@
     <Compile Include="ANTLR\ParsingErrorListener.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Engine\DefaultFileHandler.cs" />
-    <Compile Include="Engine\ErrorHandler.cs" />
+    <Compile Include="Engine\ErrorHandling\ErrorHandler.cs" />
+    <Compile Include="Engine\ErrorHandling\LexError.cs" />
     <Compile Include="Engine\IFileHandler.cs" />
+    <Compile Include="Engine\ErrorHandling\ParseError.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\IDefined.cs" />
+    <Compile Include="Engine\Interop.cs" />
     <Compile Include="Native\StandardModules\Debug\DebugModule.cs" />
     <Compile Include="Native\StandardTraits\Operators\MultiplicableTrait.cs" />
     <Compile Include="Native\StandardTraits\Operators\DividableTrait.cs" />

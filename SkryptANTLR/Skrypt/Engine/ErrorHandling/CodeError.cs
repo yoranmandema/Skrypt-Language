@@ -10,12 +10,12 @@ using Skrypt.Runtime;
 
 namespace Skrypt {
     public class CodeError {
-        public readonly IToken Token;
-        public readonly string Message;
+        public string Message { get; protected set; }
+        public string File { get; protected set; }
 
-        public CodeError(IToken token, string message) {
-            Token = token;
+        public CodeError (string message, string file) {
             Message = message;
+            File = file;
         }
     }
 }

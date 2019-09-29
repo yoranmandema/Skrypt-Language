@@ -87,7 +87,7 @@ namespace Skrypt.ANTLR {
             var value = ctx.Variables[nameToken.Text].Value;
 
             if (value == null) {
-                Engine.ErrorHandler.AddError(nameToken, "Field can't be set to an undefined value.");
+                Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
             }
 
             target.CreateProperty(nameToken.Text, value, isPrivate, ctx.Variables[nameToken.Text].IsConstant);
