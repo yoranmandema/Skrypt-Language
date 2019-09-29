@@ -32,22 +32,7 @@ namespace Skrypt {
         }
 
         public string ReportError(CodeError error) {
-            int line = -1;
-            int column = -1;
-
-            string positionString = default;
-
-            if (error is ParseError parseError) {
-                line = parseError.Token.Line;
-                column = parseError.Token.Column;
-
-                positionString = $"({line},{column})";
-            } else if (error is LexError lexError) {
-                line = lexError.Line;
-                column = lexError.CharInline;
-
-                positionString = $"({line},{column})";
-            }
+            string positionString = $"({error.Line},{error.CharInLine})";
 
             var msg = error.Message;
 
@@ -58,9 +43,9 @@ namespace Skrypt {
             return finalMessage;
         }
         public void ReportAllErrors() {
-            var sorted = Errors.OrderBy(x => x);
+            var sorted = Errors.OrderBy(x => x.Line).ThenBy(x => x.CharInLine);
 
-            foreach (var error in Errors) {
+            foreach (var error in sorted) {
                 ReportError(error);
             }
         }

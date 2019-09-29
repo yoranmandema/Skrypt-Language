@@ -12,7 +12,6 @@ namespace Skrypt {
     public class CodeError {
         public string Message { get; protected set; }
         public string File { get; protected set; }
-
         public int Line { get; protected set; }
         public int CharInLine { get; protected set; }
 
