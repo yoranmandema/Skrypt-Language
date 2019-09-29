@@ -499,8 +499,6 @@ memberAccessComp	: expression '[' expression ']' ;
 
 string returns [string value] : STRING { 
 	if ($STRING.text.Length > 2) {
-		System.Console.WriteLine($STRING.text.Length);
-
 		var content = $STRING.text.Substring(1, $STRING.text.Length - 2);
 
 		$value = System.Text.RegularExpressions.Regex.Unescape(content);
