@@ -9,12 +9,9 @@ namespace Skrypt {
     public class LexError : CodeError {
         public IToken Token { get; private set; }
 
-        public int Line { get; private set; }
-        public int CharInline { get; private set; }
-
         public LexError(int line, int charInLine, string message, string file) : base(message, file) {
             Line = line;
-            CharInline = charInLine;
+            CharInLine = charInLine;
             Message = message;
         }
     }

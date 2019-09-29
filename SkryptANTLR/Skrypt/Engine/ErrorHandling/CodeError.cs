@@ -13,7 +13,10 @@ namespace Skrypt {
         public string Message { get; protected set; }
         public string File { get; protected set; }
 
-        public CodeError (string message, string file) {
+        public int Line { get; protected set; }
+        public int CharInLine { get; protected set; }
+
+    public CodeError (string message, string file) {
             Message = message;
             File = file;
         }

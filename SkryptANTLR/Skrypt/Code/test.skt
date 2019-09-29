@@ -1,2 +1,7 @@
 ﻿
-"awdaw"
+
+a = NonExistingVariable
+
+import NonExistentObject
+
+"invalid string

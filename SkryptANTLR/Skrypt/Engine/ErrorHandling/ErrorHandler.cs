@@ -58,6 +58,8 @@ namespace Skrypt {
             return finalMessage;
         }
         public void ReportAllErrors() {
+            var sorted = Errors.OrderBy(x => x);
+
             foreach (var error in Errors) {
                 ReportError(error);
             }

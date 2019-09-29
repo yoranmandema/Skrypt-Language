@@ -12,6 +12,8 @@ namespace Skrypt {
         public ParseError(IToken token, string message, string file) : base (message, file) {
             Token = token;
             Message = message;
+            Line = token.Line;
+            CharInLine = token.Column;
         }
     }
 }
