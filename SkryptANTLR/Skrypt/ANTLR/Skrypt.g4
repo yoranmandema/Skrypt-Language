@@ -612,11 +612,7 @@ NAME					: ('_' | LETTER) ('_' | LETTER | DIGIT)*;
 NUMBER					: DIGIT+ ('.' DIGIT+)?;
 
 STRING					: '"' ~('"')* ('"' | {
-
-		System.Console.WriteLine(Token);
-
 		Engine.ErrorHandler.AddLexError(_tokenStartLine, _tokenStartCharPositionInLine, "Unterminated string.");
-
 }) ;
 
 WHITESPACE				: [ \n\t\r]+ -> channel(HIDDEN);

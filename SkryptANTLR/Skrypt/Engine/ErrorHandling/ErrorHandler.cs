@@ -43,7 +43,7 @@ namespace Skrypt {
             return finalMessage;
         }
         public void ReportAllErrors() {
-            var sorted = Errors.OrderBy(x => x.Line).ThenBy(x => x.CharInLine);
+            var sorted = Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.CharInLine);
 
             foreach (var error in sorted) {
                 ReportError(error);

@@ -139,13 +139,15 @@ namespace Skrypt {
 
             ProgramContext = Parser.program();
 
-            if (ErrorHandler.HasErrors) {
-                ErrorHandler.ReportAllErrors();
-
-                ErrorHandler.Errors.Clear();
-            } else {
+            if (!ErrorHandler.HasErrors) {
                 Visitor.Visit(ProgramContext);
             }
+
+            return this;
+        }
+
+        public Engine ReportErrors () {
+            ErrorHandler.ReportAllErrors();
 
             return this;
         }

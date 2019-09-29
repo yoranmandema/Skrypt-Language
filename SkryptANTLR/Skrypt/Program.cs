@@ -69,7 +69,7 @@ namespace Skrypt {
 
             engine.AddCLRType(typeof(Console));
 
-            engine.DoFile(path).CreateGlobals();
+            engine.DoFile(path).ReportErrors().CreateGlobals();
 
             while (true) {
                 string line = Console.ReadLine();

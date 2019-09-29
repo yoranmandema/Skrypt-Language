@@ -198,6 +198,9 @@
     <None Include="Code\importTest.skt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Code\InvalidImport.skt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Code\library.skt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

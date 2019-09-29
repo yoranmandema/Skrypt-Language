@@ -1,7 +1,9 @@
 ﻿
-
 a = NonExistingVariable
 
 import NonExistentObject
 
+import * from "InvalidImport.skt"
+
 "invalid string
+
