@@ -498,43 +498,47 @@ memberAccess		: expression DOT NAME ;
 memberAccessComp	: expression '[' expression ']' ;
 
 string returns [string value] : STRING { 
-var content = $STRING.text.Substring(1,  $STRING.text.Length - 2);
+	if ($STRING.text.Length > 2) {
+		System.Console.WriteLine($STRING.text.Length);
 
-$value = System.Text.RegularExpressions.Regex.Unescape(content);
+		var content = $STRING.text.Substring(1, $STRING.text.Length - 2);
+
+		$value = System.Text.RegularExpressions.Regex.Unescape(content);
+	}
 } ;
 
 number returns [double value] : NUMBER { 
-$value = double.Parse($NUMBER.text); 
+	$value = double.Parse($NUMBER.text); 
 } ;
 
 boolean returns [bool value] : BOOLEAN { 
-$value = $BOOLEAN.text == "true" ? true : false; 
+	$value = $BOOLEAN.text == "true" ? true : false; 
 } ;
 
 null returns [object value] : NULL { 
-$value = null; 
+	$value = null; 
 } ;
 
 fnLiteral			returns [Skrypt.FunctionInstance value]
 					:  ('(' parameterGroup ')' | parameter) '=>' {
-var fnCtx = ($ctx as FnLiteralContext);
-var scope = GetDefinitionBlock($ctx.Parent);
+	var fnCtx = ($ctx as FnLiteralContext);
+	var scope = GetDefinitionBlock($ctx.Parent);
 
-fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
+	fnCtx.Variables["self"] = new Variable("self", null){IsConstant = true};
 
-var parameters = fnCtx.parameterGroup() == null ? new ParameterContext[] {fnCtx.parameter()} : fnCtx.parameterGroup().parameter();
-var processedParameters = new Skrypt.Parameter[parameters.Length];
+	var parameters = fnCtx.parameterGroup() == null ? new ParameterContext[] {fnCtx.parameter()} : fnCtx.parameterGroup().parameter();
+	var processedParameters = new Skrypt.Parameter[parameters.Length];
 
-for (var i = 0; i < parameters.Length; i++) {
-	var p = parameters[i];
-	var name = p.NAME().GetText();
+	for (var i = 0; i < parameters.Length; i++) {
+		var p = parameters[i];
+		var name = p.NAME().GetText();
 
-	processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
+		processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
 
-	var parameterVar = new Skrypt.Variable(name);
+		var parameterVar = new Skrypt.Variable(name);
 
-	fnCtx.Variables[name] = parameterVar;
-}
+		fnCtx.Variables[name] = parameterVar;
+	}
 
 } stmntBlock {
 	var function = new Skrypt.ScriptFunction(fnCtx) { 
@@ -625,9 +629,9 @@ NUMBER					: DIGIT+ ('.' DIGIT+)?;
 
 STRING					: '"' ~('"')* ('"' | {
 
-System.Console.WriteLine(Token);
+		System.Console.WriteLine(Token);
 
-Engine.ErrorHandler.FatalError(Token, "Unterminated string.");
+		Engine.ErrorHandler.AddLexError(_tokenStartLine, _tokenStartCharPositionInLine, "Unterminated string.");
 
 }) ;
 
