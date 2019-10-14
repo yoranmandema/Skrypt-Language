@@ -11,7 +11,7 @@ using System.IO;
 namespace Skrypt {
     class Program {
         static void Main(string[] args) {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Code\\test.skt");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
 
             var engine = new Engine();
 
