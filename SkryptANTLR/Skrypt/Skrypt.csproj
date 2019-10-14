@@ -94,7 +94,7 @@
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\IDefined.cs" />
     <Compile Include="Engine\Interop.cs" />
-    <Compile Include="Native\StandardModules\Debug\DebugModule.cs" />
+    <Compile Include="Native\StandardModules\DebugModule\DebugModule.cs" />
     <Compile Include="Native\StandardTraits\Operators\MultiplicableTrait.cs" />
     <Compile Include="Native\StandardTraits\Operators\DividableTrait.cs" />
     <Compile Include="Native\StandardTypes\Array\ArrayInstance.cs" />
