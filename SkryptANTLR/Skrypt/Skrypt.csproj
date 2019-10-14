@@ -214,6 +214,9 @@
     <None Include="Code\test.skt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Code\Types\BasicStruct.skt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitTryStatement.cs" />
   </ItemGroup>

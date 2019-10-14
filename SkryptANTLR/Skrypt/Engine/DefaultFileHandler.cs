@@ -10,6 +10,7 @@ namespace Skrypt {
         public Engine Engine { get; set; }
         public string File { get; set; }
         public string Folder { get; set; }
+        public string BaseFolder { get; set; }
 
         public DefaultFileHandler (Engine e) {
             Engine = e;
@@ -18,7 +19,7 @@ namespace Skrypt {
         public string Read(string path) {
             var str = string.Empty;
 
-            var fullPath = Path.Combine(Folder,path);
+            var fullPath = Path.Combine(BaseFolder, path);
 
             using (var sr = new StreamReader(fullPath)) {
                 str = sr.ReadToEnd();
@@ -28,7 +29,7 @@ namespace Skrypt {
         }
 
         public void Write(string destination, string content) {
-            var fullPath = Path.Combine(Folder, destination);
+            var fullPath = Path.Combine(BaseFolder, destination);
 
             var directory = Path.GetDirectoryName(fullPath);
 
@@ -46,7 +47,7 @@ namespace Skrypt {
         public async void ReadAsync(string path, FunctionInstance callback) {
             char[] result;
             var builder = new StringBuilder();
-            var fullPath = Path.Combine(Folder, path);
+            var fullPath = Path.Combine(BaseFolder, path);
 
             using (var sr = new StreamReader(fullPath)) {
                 result = new char[sr.BaseStream.Length];
@@ -64,7 +65,7 @@ namespace Skrypt {
         }
 
         public async void WriteAsync(string destination, string content, FunctionInstance callback) {
-            var fullPath = Path.Combine(Folder, destination);
+            var fullPath = Path.Combine(BaseFolder, destination);
 
             var directory = Path.GetDirectoryName(fullPath);
 

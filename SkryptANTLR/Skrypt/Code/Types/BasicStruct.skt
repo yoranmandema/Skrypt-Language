@@ -1,0 +1,6 @@
+﻿
+struct BasicStruct {
+	fn SayHello () {
+		print("Hello world!")
+	}
+}

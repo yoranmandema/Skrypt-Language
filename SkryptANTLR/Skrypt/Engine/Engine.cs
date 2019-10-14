@@ -90,6 +90,7 @@ namespace Skrypt {
         public Engine DoFile(string file) {
             FileHandler.File = file;
             FileHandler.Folder = System.IO.Path.GetDirectoryName(file);
+            FileHandler.BaseFolder = System.IO.Path.GetDirectoryName(file);
 
             var code = FileHandler.Read(file);
 

@@ -10,6 +10,7 @@ namespace Skrypt {
         Engine  Engine { get; set; }
         string  File { get; set; }
         string  Folder { get; set; }
+        string  BaseFolder { get; set; }
         string  Read(string path);
         void    Write(string path, string content);
         void    ReadAsync(string path, FunctionInstance callback);
