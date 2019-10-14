@@ -1,6 +1,14 @@
 ﻿
-struct BasicStruct {
-	fn SayHello () {
-		print("Hello world!")
-	}
+struct Test {
+    value = 1
+
+    fn init(val) {
+        self.value = val
+    }
+}
+
+impl Addable for Test {
+    fn Add(lhs, rhs) {
+        return Test(lhs.value + rhs.value)
+    }
 }

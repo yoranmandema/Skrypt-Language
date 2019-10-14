@@ -1,2 +1,4 @@
 ﻿
 import * from "Types/BasicStruct.skt"
+
+print(Test(1) + Test(2))

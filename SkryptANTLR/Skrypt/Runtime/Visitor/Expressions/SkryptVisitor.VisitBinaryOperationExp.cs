@@ -118,7 +118,7 @@ namespace Skrypt {
         }
 
         private object EvaluateTraitOperator (string name, BaseObject left, BaseObject right) {
-            return left.AsType<BaseInstance>().GetProperty(name).value.AsType<FunctionInstance>().RunOnSelf(left, right);
+            return left.AsType<BaseInstance>().GetProperty(name).value.AsType<FunctionInstance>().RunOnSelf(left, left, right);
         }
     }
 }
