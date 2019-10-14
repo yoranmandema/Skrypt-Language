@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Skrypt.ANTLR;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using Antlr4.Runtime;
 
 namespace Skrypt {
     public class ScriptFunction : IFunction, IDefined {

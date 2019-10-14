@@ -22,14 +22,13 @@ namespace Skrypt {
 
                     for (int i = 0; i < input.Length; i++) {
                         if (input[0] is StringInstance) {
-                            arguments.Add((input[0] as StringInstance).Value);
+                            arguments.Add((input[0] as StringInstance).Value as object);
                         } else {
-                            arguments.Add(input[0]);
+                            arguments.Add(input[0] as object);
                         }
                     }
 
                     method.Invoke(null, arguments.ToArray());
-
 
                     return null;
                 }));

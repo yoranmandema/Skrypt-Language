@@ -126,8 +126,8 @@ namespace Skrypt {
             var commonTokenStream = new CommonTokenStream(skryptLexer);
 
             Parser = new SkryptParser(commonTokenStream) {
-                Engine = this
-
+                Engine = this,
+                TokenStream = commonTokenStream
                 //Engine = this,
                 //ErrorHandler = new BailErrorStrategy()
             };

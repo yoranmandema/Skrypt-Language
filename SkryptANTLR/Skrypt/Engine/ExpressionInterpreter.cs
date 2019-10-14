@@ -228,8 +228,8 @@ namespace Skrypt.Runtime {
 
         public object EvaluateIsExpression(BaseObject left, BaseObject right) {
             if (
-                (typeof(BaseInstance).IsAssignableFrom(left.GetType()) || typeof(BaseType).IsAssignableFrom(left.GetType())) && 
-                (typeof(BaseType).IsAssignableFrom(right.GetType()) || typeof(BaseTrait).IsAssignableFrom(right.GetType()))
+                (left is BaseInstance || left is BaseType) && 
+                (right is BaseInstance || right is BaseType)
                 ) {
 
                 var leftType = default(BaseType);
@@ -248,9 +248,9 @@ namespace Skrypt.Runtime {
                 }
             }
 
-            if (!typeof(BaseInstance).IsAssignableFrom(left.GetType())) 
+            if (!(left is BaseInstance)) 
                 throw new InvalidOperationException("Expected instance on left-hand side.");
-            if (!(typeof(BaseType).IsAssignableFrom(right.GetType()) || typeof(BaseTrait).IsAssignableFrom(right.GetType())))
+            if (!(right is BaseType || right is BaseTrait))
                 throw new InvalidOperationException("Expected type or trait on right-hand side.");
 
             return new InvalidOperation();

@@ -10,7 +10,10 @@ namespace Skrypt.ANTLR {
     public partial class SkryptParser {
         public Engine Engine { get; internal set; }
 
+        public TreeDuplicator TreeDuplicator = new TreeDuplicator();
+
         public Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
+        public ITokenStream TokenStream { get; internal set; }
 
         public partial class ModuleStmntContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
@@ -49,6 +52,10 @@ namespace Skrypt.ANTLR {
             public StmntBlockContext StmntBlock => stmntBlock();
             public BaseObject ReturnValue { get; set; }
             public JumpState JumpState { get; set; }
+
+            public FunctionStatementContext Clone () {
+                return (FunctionStatementContext)MemberwiseClone();
+            }
         }
 
         public partial class FnLiteralContext : IFunctionContext {
@@ -112,6 +119,9 @@ namespace Skrypt.ANTLR {
             }
             else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
                 nameToken = fnCtx.name().NAME().Symbol;
+            }
+            else if (propertyTree.GetChild(0) is MemberDefinitionStatementContext mdCtx) {
+                nameToken = mdCtx.name().NAME().Symbol;
             }
 
             return nameToken;
@@ -206,6 +216,12 @@ namespace Skrypt.ANTLR {
             }
 
             return variable;
+        }
+
+        public ParserRuleContext CopyContext (ParserRuleContext context) {
+
+
+            return null;
         }
     }
 }

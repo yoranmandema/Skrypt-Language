@@ -10,14 +10,23 @@ namespace Skrypt {
         public BaseObject Value { get; set; }
         public bool IsConstant { get; set; }
 
+        public IScoped Scope { get; set; }
+
         public Variable (string name) {
             Name = name;
             Value = default(BaseObject);
         }
 
-        public Variable(string name, BaseObject value) : this(name){
-            Name = name;
+        public Variable (string name, IScoped scope) : this(name) {
+            Scope = scope;
+        }
+
+        public Variable(string name, BaseObject value) : this(name) {
             Value = value;
+        }
+
+        public Variable(string name, BaseObject value, IScoped scope) : this(name, value) {
+            Scope = scope;
         }
     }
 }
