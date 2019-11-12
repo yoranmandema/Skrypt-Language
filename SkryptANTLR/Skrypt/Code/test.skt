@@ -1,4 +1,7 @@
 ﻿
-import * from "Types/BasicStruct.skt"
 
-print(Test(1) + Test(2))
+fn Test (a) {
+	print(a + 2)
+}
+
+Test(4)

@@ -21,8 +21,10 @@ namespace Skrypt {
         public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
             var blockStmnt = Context.StmntBlock;
             var preCallValues = new Dictionary<string, BaseObject>();
+            var previousEnvironment = engine.CurrentEnvironment;
+            var lexicalEnvironment = LexicalEnvironment.MakeCopy(Context.LexicalEnvironment);
 
-            Context.Variables["self"].Value = self;
+            lexicalEnvironment.Variables["self"].Value = self;
 
             for (int i = 0; i < Parameters.Length; i++) {
                 var parameter = Parameters[i];
@@ -31,18 +33,20 @@ namespace Skrypt {
                 if (input is IValue noref) input = noref.Copy();
 
                 if (i < args.Values.Length) {
-                    Context.Variables[parameter.Name].Value = input;
+                    lexicalEnvironment.Variables[parameter.Name].Value = input;
                 }
                 else {
-                    Context.Variables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
+                    lexicalEnvironment.Variables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
                 }
 
-                if (Context.Variables[parameter.Name].Value != null) {
-                    preCallValues[parameter.Name] = Context.Variables[parameter.Name].Value.Clone();
+                if (lexicalEnvironment.Variables[parameter.Name].Value != null) {
+                    preCallValues[parameter.Name] = lexicalEnvironment.Variables[parameter.Name].Value.Clone();
                 } else {
                     preCallValues[parameter.Name] = null;
                 }
             }
+
+            engine.SetEnvironment(lexicalEnvironment);
 
             var returnValue     = default(BaseObject);
             var block           = blockStmnt.block();
@@ -76,11 +80,13 @@ namespace Skrypt {
                 returnValue = Context.ReturnValue;
             }
 
-            foreach (var v in preCallValues) {
-                if (preCallValues[v.Key] is IValue noref) {
-                    Context.Variables[v.Key].Value = preCallValues[v.Key];
-                }
-            }
+            //foreach (var v in preCallValues) {
+            //    if (preCallValues[v.Key] is IValue noref) {
+            //        lexicalEnvironment.Variables[v.Key].Value = preCallValues[v.Key];
+            //    }
+            //}
+
+            engine.SetEnvironment(previousEnvironment);
 
             return returnValue;
         }

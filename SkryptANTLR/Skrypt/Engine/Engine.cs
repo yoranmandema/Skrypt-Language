@@ -52,14 +52,16 @@ namespace Skrypt {
         #endregion
 
 
-        public Dictionary<string, Variable> Globals { get; set; } = new Dictionary<string, Variable>();
+        //public Dictionary<string, Variable> Globals { get; set; } = new Dictionary<string, Variable>();
         public ErrorHandler ErrorHandler { get; set; }
         public IFileHandler FileHandler { get; set; }
 
         public LexicalEnvironment GlobalEnvironment { get; set; }
+        public LexicalEnvironment CurrentEnvironment { get; set; }
 
         public Engine() {
             GlobalEnvironment       = new LexicalEnvironment();
+            CurrentEnvironment      = GlobalEnvironment;
 
             ErrorHandler            = new ErrorHandler(this);
             ExpressionInterpreter   = new ExpressionInterpreter(this);
@@ -100,7 +102,6 @@ namespace Skrypt {
 
             return Run(code);
         }
-
         public Engine DoRelativeFile (string file) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
@@ -140,9 +141,10 @@ namespace Skrypt {
             Parser.RemoveErrorListeners();
             Parser.AddErrorListener(errorListener);
 
-            Parser.Globals = Globals;
+            Parser.Globals = GlobalEnvironment.Variables;
 
             ProgramContext = Parser.program();
+            Parser.LinkLexicalEnvironments(ProgramContext, GlobalEnvironment);
 
             if (!ErrorHandler.HasErrors) {
                 Visitor.Visit(ProgramContext);
@@ -167,18 +169,22 @@ namespace Skrypt {
             var block = ProgramContext.block();
 
             foreach (var v in block.Variables) {
-                Globals[v.Key] = v.Value;
+                GlobalEnvironment.AddVariable(v.Value);
             }
 
             return this;
         }
 
         internal void SetGlobal (string name, BaseObject value) {
-            if (Globals.ContainsKey(name)) {
-                Globals[name].Value = value;
+            if (GlobalEnvironment.Variables.ContainsKey(name)) {
+                GlobalEnvironment.Variables[name].Value = value;
             } else {
-                Globals[name] = new Variable(name, value);
+                GlobalEnvironment.Variables[name] = new Variable(name, value);
             }
+        }
+
+        public void SetEnvironment (LexicalEnvironment lexicalEnvironment) {
+            CurrentEnvironment = lexicalEnvironment;
         }
 
         public void Print(string message) {
@@ -212,8 +218,8 @@ namespace Skrypt {
 
             if (block.Variables.ContainsKey(name)) {
                 return block.Variables[name].Value;
-            } else if (Globals.ContainsKey(name)) {
-                return Globals[name].Value;
+            } else if (GlobalEnvironment.Variables.ContainsKey(name)) {
+                return GlobalEnvironment.Variables[name].Value;
             } else {
                 throw new VariableNotFoundException($"A variable with the name {name} was not found.");
             }
