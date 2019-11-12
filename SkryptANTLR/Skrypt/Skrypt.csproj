@@ -91,6 +91,7 @@
     <Compile Include="Engine\ErrorHandling\LexError.cs" />
     <Compile Include="Engine\IFileHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ParseError.cs" />
+    <Compile Include="Engine\LexicalEnvironment\LexicalEnvironment.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\IDefined.cs" />
     <Compile Include="Engine\Interop.cs" />

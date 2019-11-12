@@ -56,7 +56,11 @@ namespace Skrypt {
         public ErrorHandler ErrorHandler { get; set; }
         public IFileHandler FileHandler { get; set; }
 
+        public LexicalEnvironment GlobalEnvironment { get; set; }
+
         public Engine() {
+            GlobalEnvironment       = new LexicalEnvironment();
+
             ErrorHandler            = new ErrorHandler(this);
             ExpressionInterpreter   = new ExpressionInterpreter(this);
             TemplateMaker           = new TemplateMaker(this);

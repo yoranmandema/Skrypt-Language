@@ -18,37 +18,45 @@ namespace Skrypt.ANTLR {
         public partial class ModuleStmntContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
         public partial class StructStmntContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
         public partial class TraitStmntContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
         public partial class TraitImplStmntContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
         public partial class BlockContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
         public partial class CatchStmtContext : IScoped {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
             public Exception error;
         }
 
         public partial class FunctionStatementContext : IFunctionContext {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
             public StmntBlockContext StmntBlock => stmntBlock();
             public BaseObject ReturnValue { get; set; }
             public JumpState JumpState { get; set; }
@@ -61,6 +69,7 @@ namespace Skrypt.ANTLR {
         public partial class FnLiteralContext : IFunctionContext {
             public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
             public RuleContext Context => this;
+            public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
             public StmntBlockContext StmntBlock => stmntBlock();
             public BaseObject ReturnValue { get; set; }
             public JumpState JumpState { get; set; }
