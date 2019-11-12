@@ -54,7 +54,7 @@ importStmnt			: IMPORT name (DOT NAME)*?	{
 		foreach (var m in target.Members) {
 			var v = m.Value;
 
-			scope.Variables[m.Key] = new Skrypt.Variable(m.Key,v.value, scope);
+			scope.LexicalEnvironment.AddVariable(new Skrypt.Variable(m.Key,v.value, scope.LexicalEnvironment));
 		}
 	}
 }																																#importStatement
@@ -82,7 +82,7 @@ importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
 	foreach (var n in Ctx.NAME()) {
 		var name = n.GetText();
 
-		scope.Variables[name] = new Skrypt.Variable(name, Engine.GetValue(name)) { Scope = scope };
+		scope.LexicalEnvironment.AddVariable(new Skrypt.Variable(name, Engine.GetValue(name), scope.LexicalEnvironment));
 	}
 }																																#importFromStatement
 					;
@@ -104,9 +104,9 @@ moduleStmnt			: MODULE name {
 
 	this.Engine.FastAdd(module);
 
-	var variable = new Skrypt.Variable(nameCtx.GetText(), module) { Scope = block };
+	var variable = new Skrypt.Variable(nameCtx.GetText(), module, block.LexicalEnvironment);
 
-	block.Variables[nameCtx.GetText()] = variable;
+	block.LexicalEnvironment.AddVariable(variable);
 
 	} '{' moduleProperty* '}' {
 
@@ -133,11 +133,11 @@ structStmnt			: STRUCT name {
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
-	var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine)) { Scope = block};
+	var type = new Skrypt.Variable(typeName, new ScriptType(typeName, this.Engine), block.LexicalEnvironment);
 	var template = new Template {Name = typeName};
 
-	block.Variables[nameCtx.GetText()] = type;
-	Ctx.Variables[nameCtx.GetText()] = type;
+	block.LexicalEnvironment.AddVariable(type);
+	Ctx.LexicalEnvironment.AddVariable(type);
 
 	}  '{' structProperty* '}' {
 
@@ -189,9 +189,9 @@ traitStmnt			: TRAIT name {
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
 	var trait = new ScriptTrait(traitName, this.Engine);
-	var traitVariable = new Skrypt.Variable(traitName, trait) { Scope = block };
+	var traitVariable = new Skrypt.Variable(traitName, trait, block.LexicalEnvironment);
 
-	block.Variables[nameCtx.GetText()] = traitVariable;
+	block.LexicalEnvironment.AddVariable(traitVariable);
 
 	} propertiesBlock {
 
@@ -270,26 +270,20 @@ structProperty		: PRIVATE? STATIC? Property=property ;
 moduleProperty		: moduleStmnt | structStmnt | memberDefStmnt | fnStmnt;
 property			: memberDefStmnt | fnStmnt ;
 
-fnStmnt				/*locals [
-					BaseObject ReturnValue = null,
-					Skrypt.JumpState JumpState = Skrypt.JumpState.None
-					]*/
-					: CONST? FN name '(' parameterGroup ')' {
+fnStmnt				: CONST? FN name '(' parameterGroup ')' {
 	var fnCtx = ($ctx as FunctionStatementContext);
 	var nameCtx = fnCtx.name();
 	var isConstant = fnCtx.CONST() != null;
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
-
 	var scope = GetDefinitionBlock($ctx.Parent);
+	var newVar = new Skrypt.Variable(nameCtx.GetText(), scope.LexicalEnvironment);
 
-	var newVar = new Skrypt.Variable(nameCtx.GetText(), scope);
-
-	scope.Variables[nameCtx.GetText()] = newVar;
+	scope.LexicalEnvironment.AddVariable(newVar);
 	nameCtx.variable = newVar;		
 
-	fnCtx.Variables["self"] = new Skrypt.Variable("self", null, scope){IsConstant = true};
+	fnCtx.LexicalEnvironment.AddVariable(new Skrypt.Variable("self", scope.LexicalEnvironment){IsConstant = true});
 
 	var parameters = fnCtx.parameterGroup().parameter();
 	var processedParameters = new Skrypt.Parameter[parameters.Length];
@@ -300,9 +294,9 @@ fnStmnt				/*locals [
 
 		processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
 
-		var parameterVar = new Skrypt.Variable(name, null, scope);
+		var parameterVar = new Skrypt.Variable(name, null, scope.LexicalEnvironment);
 
-		fnCtx.Variables[name] = parameterVar;
+		fnCtx.LexicalEnvironment.AddVariable(parameterVar);
 	}
 } stmntBlock {
 	var function = new Skrypt.ScriptFunction(fnCtx) { 
@@ -338,11 +332,11 @@ tryStmnt			: TRY stmntBlock catchStmt 																					#tryStatement
 catchStmt			: CATCH '('name')' {
 	var catchCtx = ($ctx as CatchStatementContext);
 	var nameCtx = catchCtx.name();
-	var newVar = new Skrypt.Variable(nameCtx.GetText(), catchCtx);
+	var newVar = new Skrypt.Variable(nameCtx.GetText(), catchCtx.LexicalEnvironment);
 
 	var scope = GetDefinitionBlock($ctx);
+	scope.LexicalEnvironment.AddVariable(newVar);
 
-	scope.Variables[nameCtx.GetText()] = newVar;
 	nameCtx.variable = newVar;	
 } stmntBlock 																													#catchStatement
 					;
@@ -401,11 +395,11 @@ memberDefStmnt		: CONST? name ASSIGN expression {
 	if (nameCtx.variable != null) Engine.ErrorHandler.AddParseError(nameCtx.Start, $"Member {nameCtx} is already defined.");
 
 	if (nameCtx.variable == null) {
-		var newVar = new Skrypt.Variable(nameCtx.GetText(), block) {
+		var newVar = new Skrypt.Variable(nameCtx.GetText(), block.LexicalEnvironment) {
 			IsConstant = isConstant
 		};
 
-		block.Variables[nameCtx.GetText()] = newVar;
+		block.LexicalEnvironment.AddVariable(newVar);
 		nameCtx.variable = newVar;
 	} 	
 } #memberDefinitionStatement
@@ -420,11 +414,11 @@ assignStmnt			: CONST? name ASSIGN expression	{
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
 	if (nameCtx.variable == null) {
-		var newVar = new Skrypt.Variable(nameCtx.GetText(),block) {
+		var newVar = new Skrypt.Variable(nameCtx.GetText(),block.LexicalEnvironment) {
 			IsConstant = isConstant
 		};
 
-		block.Variables[nameCtx.GetText()] = newVar;
+		block.LexicalEnvironment.AddVariable(newVar);
 		nameCtx.variable = newVar;
 	} 	
 
@@ -510,7 +504,7 @@ fnLiteral			returns [Skrypt.FunctionInstance value]
 	var fnCtx = ($ctx as FnLiteralContext);
 	var scope = GetDefinitionBlock($ctx.Parent);
 
-	fnCtx.Variables["self"] = new Skrypt.Variable("self", scope){IsConstant = true};
+	fnCtx.LexicalEnvironment.AddVariable(new Skrypt.Variable("self", scope.LexicalEnvironment){IsConstant = true});
 
 	var parameters = fnCtx.parameterGroup() == null ? new ParameterContext[] {fnCtx.parameter()} : fnCtx.parameterGroup().parameter();
 	var processedParameters = new Skrypt.Parameter[parameters.Length];
@@ -521,9 +515,9 @@ fnLiteral			returns [Skrypt.FunctionInstance value]
 
 		processedParameters[i] = new Skrypt.Parameter(name, p.expression()); 
 
-		var parameterVar = new Skrypt.Variable(name, scope);
+		var parameterVar = new Skrypt.Variable(name, scope.LexicalEnvironment);
 
-		fnCtx.Variables[name] = parameterVar;
+		fnCtx.LexicalEnvironment.AddVariable(parameterVar);
 	}
 
 } stmntBlock {

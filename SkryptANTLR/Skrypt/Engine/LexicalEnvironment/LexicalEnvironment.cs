@@ -12,6 +12,25 @@ namespace Skrypt {
         public LexicalEnvironment Parent { get; set; }
         public List<LexicalEnvironment> Children { get; set; } = new List<LexicalEnvironment>();
 
+        public void AddVariable (Variable variable) {
+            Variables[variable.Name] = variable;
+        }
+
+        public Variable GetVariable (string name) {
+            if (Variables.ContainsKey(name)) {
+                return Variables[name];
+            } else if (Parent != null)  {
+                return Parent.GetVariable(name);
+            } else {
+                throw new VariableNotFoundException($"Variable {name} not found in current context.");
+            }
+        }
+
+        public void AddChild (LexicalEnvironment child) {
+            child.Parent = this;
+            Children.Add(child);
+        }
+
         public static LexicalEnvironment MakeCopy (LexicalEnvironment lexicalEnvironment) {
             var newEnvironment = new LexicalEnvironment {
                 Context = lexicalEnvironment.Context,

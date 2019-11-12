@@ -100,13 +100,13 @@ namespace Skrypt.ANTLR {
                 nameToken = structCtx.name().NAME().Symbol;
             }
 
-            var value = ctx.Variables[nameToken.Text].Value;
+            var value = ctx.LexicalEnvironment.Variables[nameToken.Text].Value;
 
             if (value == null) {
                 Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
             }
 
-            target.CreateProperty(nameToken.Text, value, isPrivate, ctx.Variables[nameToken.Text].IsConstant);
+            target.CreateProperty(nameToken.Text, value, isPrivate, ctx.LexicalEnvironment.Variables[nameToken.Text].IsConstant);
         }
 
         bool ContextIsIn(RuleContext context, Type[] types) {
@@ -145,7 +145,7 @@ namespace Skrypt.ANTLR {
                 if (currentContext is IScoped scopedCtx) {
                     if (first == null) first = scopedCtx;
 
-                    if (scopedCtx.Variables.ContainsKey(name)) {
+                    if (scopedCtx.LexicalEnvironment.Variables.ContainsKey(name)) {
                         scope = scopedCtx;
                         break;
                     }
@@ -218,8 +218,8 @@ namespace Skrypt.ANTLR {
         Variable GetReference (string name, IScoped scope) {
             Variable variable = null;
 
-            if (scope.Variables.ContainsKey(name)) {
-                variable = scope.Variables[name];
+            if (scope.LexicalEnvironment.Variables.ContainsKey(name)) {
+                variable = scope.LexicalEnvironment.GetVariable(name);
             } else if (this.Globals.ContainsKey(name)) {
                 variable = this.Globals[name];
             }
@@ -227,10 +227,24 @@ namespace Skrypt.ANTLR {
             return variable;
         }
 
-        public ParserRuleContext CopyContext (ParserRuleContext context) {
+        public void LinkLexicalEnvironments (RuleContext context, LexicalEnvironment parentEnvironment) {
+            if (context is IScoped scoped) {
+                var defBlock = GetDefinitionBlock(context);
 
+                parentEnvironment.AddChild(scoped.LexicalEnvironment);
+                parentEnvironment = defBlock?.LexicalEnvironment ?? parentEnvironment;
+                parentEnvironment.Context = (defBlock as RuleContext);
 
-            return null;
+                //Console.WriteLine($"{context.GetText()} linked to {parentEnvironment.Context?.GetText()}");
+            }
+
+            for (int i = 0; i < context.ChildCount; i++) {
+                var child = context.GetChild(i);
+
+                if (child is RuleContext ruleContext) {
+                    LinkLexicalEnvironments(ruleContext, parentEnvironment);
+                }
+            }
         }
     }
 }
