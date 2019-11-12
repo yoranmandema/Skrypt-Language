@@ -5,6 +5,10 @@ struct Test {
     fn init(val) {
         self.value = val
     }
+
+	fn string () {
+		return "" + self.value
+	}
 }
 
 impl Addable for Test {

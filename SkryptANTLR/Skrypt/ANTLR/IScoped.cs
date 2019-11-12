@@ -10,5 +10,6 @@ namespace Skrypt {
     public interface IScoped {
         Dictionary<string, Variable> Variables { get; set; }
         RuleContext Context { get; }
+        LexicalEnvironment LexicalEnvironment { get; set; }
     }
 }
