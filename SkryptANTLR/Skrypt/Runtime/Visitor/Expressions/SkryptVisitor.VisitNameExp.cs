@@ -6,8 +6,7 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
         public override BaseObject VisitNameExp(SkryptParser.NameExpContext context) {
-            var value = _engine.CurrentEnvironment.GetVariable(context.name().GetText()).Value;
-
+            var value = CurrentEnvironment.GetVariable(context.name().GetText()).Value;
             LastResult = value;
 
             return value;

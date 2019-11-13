@@ -14,7 +14,7 @@ namespace Skrypt {
 
             if (value is IValue noref) value = noref.Copy();
 
-            context.name().variable.Value = value;
+            CurrentEnvironment.Variables[context.name().GetText()].Value = value;
 
             return DefaultResult;
         }
