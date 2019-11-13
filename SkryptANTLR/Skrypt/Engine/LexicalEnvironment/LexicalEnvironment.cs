@@ -12,6 +12,12 @@ namespace Skrypt {
         public LexicalEnvironment Parent { get; set; }
         public List<LexicalEnvironment> Children { get; set; } = new List<LexicalEnvironment>();
 
+        public void PrintAllChildVariables () {
+            foreach (var kv in Variables) Console.WriteLine($"{kv.Key}: {kv.Value.Value}");
+
+            if (Children != null) foreach (var child in Children) child.PrintAllChildVariables();
+        }
+
         public void AddVariable (Variable variable) {
             Variables[variable.Name] = variable;
         }
@@ -46,10 +52,16 @@ namespace Skrypt {
                     variable.Value = kv.Value.Value;
                 }
 
-                newEnvironment.Variables[kv.Key] = variable;
+                newEnvironment.AddVariable(variable);
             }
 
-            newEnvironment.Children = CopyChildrenRecursively(lexicalEnvironment);
+            var children = CopyChildrenRecursively(lexicalEnvironment);
+
+            if (children != null) {
+                foreach (var child in children) {
+                    newEnvironment.AddChild(child);
+                }
+            }
 
             return newEnvironment;
         }
