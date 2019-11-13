@@ -1,7 +1,18 @@
 ﻿
 
-fn Test (a) {
-	print(a + 2)
+fn fib(n) {
+    if(n <= 1) { return 0 }
+    if(n == 2) { return 1 }
+    a = fib(n - 1)
+    b = fib(n - 2)
+    return a + b
 }
 
-Test(4)
+print(fib(1))
+print(fib(2))
+print(fib(3))
+print(fib(4))
+print(fib(5))
+print(fib(6))
+print(fib(7))
+print(fib(8))
