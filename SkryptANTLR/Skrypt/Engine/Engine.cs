@@ -57,11 +57,11 @@ namespace Skrypt {
         public IFileHandler FileHandler { get; set; }
 
         public LexicalEnvironment GlobalEnvironment { get; set; }
-        public LexicalEnvironment CurrentEnvironment { get; set; }
+        //public LexicalEnvironment CurrentEnvironment { get; set; }
 
         public Engine() {
             GlobalEnvironment       = new LexicalEnvironment();
-            CurrentEnvironment      = GlobalEnvironment;
+            //CurrentEnvironment      = GlobalEnvironment;
 
             ErrorHandler            = new ErrorHandler(this);
             ExpressionInterpreter   = new ExpressionInterpreter(this);
@@ -147,6 +147,7 @@ namespace Skrypt {
             Parser.LinkLexicalEnvironments(ProgramContext, GlobalEnvironment);
 
             if (!ErrorHandler.HasErrors) {
+                Visitor.CurrentEnvironment = GlobalEnvironment;
                 Visitor.Visit(ProgramContext);
             }
 
@@ -184,7 +185,7 @@ namespace Skrypt {
         }
 
         public void SetEnvironment (LexicalEnvironment lexicalEnvironment) {
-            CurrentEnvironment = lexicalEnvironment;
+            //CurrentEnvironment = lexicalEnvironment;
         }
 
         public void Print(string message) {

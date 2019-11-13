@@ -10,7 +10,8 @@ using Skrypt.Runtime;
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
         public BaseObject LastResult { get; private set; }
-
+        
+        public LexicalEnvironment CurrentEnvironment { get; internal set; }
         private readonly Engine _engine;
         private BaseObject accessed;
 
