@@ -67,8 +67,6 @@ namespace Skrypt {
                 return null;
             });
 
-            engine.AddCLRType(typeof(Console));
-
             engine.DoFile(path).ReportErrors().CreateGlobals();
 
             while (true) {
