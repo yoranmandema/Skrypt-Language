@@ -12,7 +12,9 @@ namespace Skrypt.ANTLR {
 
         public TreeDuplicator TreeDuplicator = new TreeDuplicator();
 
-        public Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
+        //public Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
+        public LexicalEnvironment GlobalEnvironment;
+
         public ITokenStream TokenStream { get; internal set; }
 
         public partial class ModuleStmntContext : IScoped {
@@ -220,8 +222,8 @@ namespace Skrypt.ANTLR {
 
             if (scope.LexicalEnvironment.Variables.ContainsKey(name)) {
                 variable = scope.LexicalEnvironment.GetVariable(name);
-            } else if (this.Globals.ContainsKey(name)) {
-                variable = this.Globals[name];
+            } else if (this.GlobalEnvironment.Variables.ContainsKey(name)) {
+                variable = this.GlobalEnvironment.Variables[name];
             }
 
             return variable;

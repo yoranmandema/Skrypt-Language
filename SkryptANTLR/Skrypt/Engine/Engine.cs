@@ -141,7 +141,7 @@ namespace Skrypt {
             Parser.RemoveErrorListeners();
             Parser.AddErrorListener(errorListener);
 
-            Parser.Globals = GlobalEnvironment.Variables;
+            Parser.GlobalEnvironment = GlobalEnvironment;
 
             ProgramContext = Parser.program();
             Parser.LinkLexicalEnvironments(ProgramContext, GlobalEnvironment);
@@ -182,10 +182,6 @@ namespace Skrypt {
             } else {
                 GlobalEnvironment.Variables[name] = new Variable(name, value);
             }
-        }
-
-        public void SetEnvironment (LexicalEnvironment lexicalEnvironment) {
-            //CurrentEnvironment = lexicalEnvironment;
         }
 
         public void Print(string message) {

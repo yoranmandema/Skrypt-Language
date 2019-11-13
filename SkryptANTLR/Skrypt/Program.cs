@@ -51,11 +51,12 @@ namespace Skrypt {
             engine.SetValue("benchmark", (e, s, i) => {
                 var function = i.GetAs<FunctionInstance>(0);
                 var amount = i.GetAs<NumberInstance>(1).Value;
+                var lastResult = default(BaseObject);
 
                 var sw = System.Diagnostics.Stopwatch.StartNew();
 
                 for (int x = 0; x < amount; x++) {
-                    function.Function.Run(engine, null, Arguments.Empty);
+                    lastResult = function.Function.Run(engine, null, Arguments.Empty);
                 }
 
                 sw.Stop();
@@ -63,6 +64,7 @@ namespace Skrypt {
                 Console.WriteLine($"Executed function {amount} times in {sw.Elapsed.TotalMilliseconds}ms");
                 Console.WriteLine($"Equals {1 / sw.Elapsed.TotalSeconds * amount} times per second");
                 Console.WriteLine($"Average {(sw.Elapsed.TotalMilliseconds / amount).ToString(".####################")}ms");
+                if (lastResult != null) Console.WriteLine($"Last result: {lastResult}");
 
                 return null;
             });
