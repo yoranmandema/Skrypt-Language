@@ -6,11 +6,15 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
         public override BaseObject VisitBlock([NotNull] SkryptParser.BlockContext context) {
-            if (context is IScoped scoped) {
-                _engine.CurrentEnvironment = _engine.CurrentEnvironment.Children.Find(x => x.Context == scoped);
-            }
+            var previousEnvironment = CurrentEnvironment;
 
-            return base.VisitBlock(context);
+            CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (context as IScoped));
+
+            var result = base.VisitBlock(context);
+
+            CurrentEnvironment = previousEnvironment;
+
+            return result;
         }
     }
 }
