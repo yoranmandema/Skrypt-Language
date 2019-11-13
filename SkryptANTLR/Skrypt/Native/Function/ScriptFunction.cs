@@ -20,8 +20,7 @@ namespace Skrypt {
 
         public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
             var blockStmnt = Context.StmntBlock;
-            var preCallValues = new Dictionary<string, BaseObject>();
-            var previousEnvironment = engine.CurrentEnvironment;
+            var visitor = new SkryptVisitor(engine);
             var lexicalEnvironment = LexicalEnvironment.MakeCopy(Context.LexicalEnvironment);
 
             lexicalEnvironment.Variables["self"].Value = self;
@@ -38,15 +37,7 @@ namespace Skrypt {
                 else {
                     lexicalEnvironment.Variables[parameter.Name].Value = parameter.Default == null ? null : engine.Visitor.Visit(parameter.Default);
                 }
-
-                if (lexicalEnvironment.Variables[parameter.Name].Value != null) {
-                    preCallValues[parameter.Name] = lexicalEnvironment.Variables[parameter.Name].Value.Clone();
-                } else {
-                    preCallValues[parameter.Name] = null;
-                }
             }
-
-            engine.SetEnvironment(lexicalEnvironment);
 
             var returnValue     = default(BaseObject);
             var block           = blockStmnt.block();
@@ -54,11 +45,18 @@ namespace Skrypt {
             var assignStmnt     = blockStmnt.assignStmnt();
             var returnStmnt     = blockStmnt.returnStmnt();
 
+            visitor.CurrentEnvironment = lexicalEnvironment;
+
             if (block != null) {
+
+                var prev = visitor.CurrentEnvironment;
+
+                visitor.CurrentEnvironment = visitor.CurrentEnvironment.Children.Find(x => x.Context == block);
+
                 for (int i = 0; i < block.ChildCount; i++) {
                     var c = block.GetChild(i);
 
-                    engine.Visitor.Visit(c);
+                    visitor.Visit(c);
 
                     if (Context.JumpState == JumpState.Return) {
                         Context.JumpState = JumpState.None;
@@ -69,24 +67,16 @@ namespace Skrypt {
                 returnValue = Context.ReturnValue;
             }
             else if (expr != null) {
-                returnValue = engine.Visitor.Visit(expr);
+                returnValue = visitor.Visit(expr);
             }
             else if (assignStmnt != null) {
-                engine.Visitor.Visit(assignStmnt);
+                visitor.Visit(assignStmnt);
             }
             else if (returnStmnt != null) {
-                engine.Visitor.Visit(returnStmnt);
+                visitor.Visit(returnStmnt);
 
                 returnValue = Context.ReturnValue;
             }
-
-            //foreach (var v in preCallValues) {
-            //    if (preCallValues[v.Key] is IValue noref) {
-            //        lexicalEnvironment.Variables[v.Key].Value = preCallValues[v.Key];
-            //    }
-            //}
-
-            engine.SetEnvironment(previousEnvironment);
 
             return returnValue;
         }
