@@ -1,12 +1,9 @@
 ﻿
 
-fn fib(n) {
-    if(n <= 1) { return 0 }
-    if(n == 2) { return 1 }
-    a = fib(n - 1)
-    b = fib(n - 2)
-    return a + b
+x = 0
+
+fn Update () {
+	x = x + 0.1
+
+	print(x)
 }
-
-benchmark(x => fib(8),10000)
-

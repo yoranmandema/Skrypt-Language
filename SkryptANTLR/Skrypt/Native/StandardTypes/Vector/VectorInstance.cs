@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class VectorInstance : BaseInstance {
-        internal double[] Components;
+        public double[] Components;
 
         public VectorInstance(Engine engine) : base(engine) { }
 

@@ -152,7 +152,7 @@ structStmnt			: STRUCT name {
 		} else {
 			var nameToken = GetPropertyNameToken(c.Property);
 
-			var value = Ctx.Variables[nameToken.Text].Value;
+			var value = Ctx.LexicalEnvironment.GetVariable(nameToken.Text).Value;
 
 			if (value == null) {
 				Engine.ErrorHandler.AddParseError(c.Property.Start, "Field can't be set to an undefined value.");
@@ -199,7 +199,7 @@ traitStmnt			: TRAIT name {
 		this.Engine.Visitor.Visit(child);
 
 		var nameToken = GetPropertyNameToken(child);
-		var value = Ctx.Variables[nameToken.Text].Value;
+		var value = Ctx.LexicalEnvironment.GetVariable(nameToken.Text).Value;
 
 		if (value == null) {
 			Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
@@ -247,7 +247,7 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 			this.Engine.Visitor.Visit(child);
 
 			var nameToken = GetPropertyNameToken(child);	
-			var value = Ctx.Variables[nameToken.Text].Value;
+			var value = Ctx.LexicalEnvironment.GetVariable(nameToken.Text).Value;
 
 			if (!trait.TraitMembers.ContainsKey(nameToken.Text)) {
 				Engine.ErrorHandler.AddParseError(nameToken, $"Trait does not contain property {nameToken.Text}.");

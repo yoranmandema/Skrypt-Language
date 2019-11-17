@@ -6,7 +6,9 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
         public override BaseObject VisitAssignNameStatement(SkryptParser.AssignNameStatementContext context) {
-            if (context.name().variable.IsConstant) {
+            var variable = CurrentEnvironment.GetVariable(context.name().GetText());
+
+            if (variable.IsConstant) {
                 _engine.ErrorHandler.FatalError(context.Start, "Constant cannot be redefined.");
             }
 
@@ -14,7 +16,7 @@ namespace Skrypt {
 
             if (value is IValue noref) value = noref.Copy();
 
-            CurrentEnvironment.Variables[context.name().GetText()].Value = value;
+            variable.Value = value;
 
             return DefaultResult;
         }

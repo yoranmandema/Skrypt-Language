@@ -14,7 +14,7 @@ namespace Skrypt {
 
         public Variable (string name) {
             Name = name;
-            Value = default;
+            Value = default(BaseObject);
         }
 
         public Variable (string name, LexicalEnvironment lexicalEnvironment) : this(name) {

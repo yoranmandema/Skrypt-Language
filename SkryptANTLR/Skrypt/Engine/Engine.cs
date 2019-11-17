@@ -9,6 +9,7 @@ using Skrypt.ANTLR;
 using Skrypt.Runtime;
 using System.Diagnostics;
 using System.Reflection;
+using System.IO;
 
 namespace Skrypt {
     public partial class Engine {
@@ -19,9 +20,10 @@ namespace Skrypt {
         internal SkryptParser Parser { get; private set; }
         internal SkryptVisitor Visitor { get; private set; }
         internal ExpressionInterpreter ExpressionInterpreter { get; private set; }
-        internal TemplateMaker TemplateMaker { get; private set; }
         internal SkryptParser.ProgramContext ProgramContext { get; private set; }
         internal List<BaseTrait> StandardTraits { get; private set; } = new List<BaseTrait>();
+
+        internal TextWriter TextWriter { get; private set; }
 
         #region Traits
         internal EnumerableTrait Enumerable { get; private set; }
@@ -55,7 +57,7 @@ namespace Skrypt {
         //public Dictionary<string, Variable> Globals { get; set; } = new Dictionary<string, Variable>();
         public ErrorHandler ErrorHandler { get; set; }
         public IFileHandler FileHandler { get; set; }
-
+        public TemplateMaker TemplateMaker { get; private set; }
         public LexicalEnvironment GlobalEnvironment { get; set; }
         //public LexicalEnvironment CurrentEnvironment { get; set; }
 
@@ -93,6 +95,14 @@ namespace Skrypt {
             SW = Stopwatch.StartNew();
         }
 
+        public Engine SetOut (TextWriter textWriter) {
+            TextWriter = textWriter;
+
+            Console.SetOut(textWriter);
+
+            return this;
+        }
+
         public Engine DoFile(string file) {
             FileHandler.File = file;
             FileHandler.Folder = System.IO.Path.GetDirectoryName(file);
@@ -102,6 +112,7 @@ namespace Skrypt {
 
             return Run(code);
         }
+
         public Engine DoRelativeFile (string file) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
@@ -169,7 +180,7 @@ namespace Skrypt {
         public Engine CreateGlobals () {
             var block = ProgramContext.block();
 
-            foreach (var v in block.Variables) {
+            foreach (var v in block.LexicalEnvironment.Variables) {
                 GlobalEnvironment.AddVariable(v.Value);
             }
 
@@ -213,8 +224,8 @@ namespace Skrypt {
         public BaseObject GetValue(string name) {
             var block = ProgramContext.block();
 
-            if (block.Variables.ContainsKey(name)) {
-                return block.Variables[name].Value;
+            if (block.LexicalEnvironment.Variables.ContainsKey(name)) {
+                return block.LexicalEnvironment.Variables[name].Value;
             } else if (GlobalEnvironment.Variables.ContainsKey(name)) {
                 return GlobalEnvironment.Variables[name].Value;
             } else {

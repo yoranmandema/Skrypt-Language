@@ -71,13 +71,24 @@ namespace Skrypt {
 
             engine.DoFile(path).ReportErrors().CreateGlobals();
 
+            var name = "Update";
+
+            if (engine.GlobalEnvironment.Variables.ContainsKey(name)) {
+                var function = engine.GlobalEnvironment.Variables[name];
+
+                if (function.Value is FunctionInstance functionInstance) {
+                    functionInstance.Run();
+                }
+            }
+
+
             while (true) {
                 string line = Console.ReadLine();
 
                 if (line == "exit") break;
 
                 try {
-                    Console.WriteLine(engine.Run(line).CreateGlobals().CompletionValue);
+                    Console.WriteLine(engine.Run(line).ReportErrors().CreateGlobals().CompletionValue);
                 }
                 catch (Exception e) {
                     Console.WriteLine(e);
