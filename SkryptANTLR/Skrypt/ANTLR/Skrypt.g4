@@ -405,11 +405,19 @@ memberDefStmnt		: CONST? name ASSIGN expression {
 } #memberDefinitionStatement
 ;
 
-assignStmnt			: CONST? name ASSIGN expression	{
+assign				: ASSIGNOPERATOR? ASSIGN  #assignOperator ;
+
+assignStmnt			: CONST? name assign expression {
 	var assignNameCtx = ($ctx as AssignNameStatementContext);
 	var nameCtx = assignNameCtx.name();
 	var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
 	var isConstant = assignNameCtx.CONST() != null;
+	var hasOperator = (assignNameCtx.assign() as SkryptParser.AssignOperatorContext).ASSIGNOPERATOR() != null;
+
+	if (hasOperator) {
+		if (nameCtx.variable == null) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Undefined variable: " + nameCtx.GetText());
+		if (isConstant) Engine.ErrorHandler.AddParseError(assignNameCtx.Start, "Const keyword cannot be used for operator assignment.");
+	}
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Constant cannot be redefined.");
 
@@ -424,8 +432,8 @@ assignStmnt			: CONST? name ASSIGN expression	{
 
 	var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
 }																																#assignNameStatement
-					| memberAccess		ASSIGN expression																		#assignMemberStatement
-					| memberAccessComp	ASSIGN expression																		#assignComputedMemberStatement					
+					| memberAccess		assign expression																		#assignMemberStatement
+					| memberAccessComp	assign expression																		#assignComputedMemberStatement					
 					;
 
 expression          : '(' expression ')'																						#parenthesisExp
@@ -582,6 +590,7 @@ AND						: 'and' ;
 OR						: 'or' ;
 
 ASSIGN					: '='	;
+ASSIGNOPERATOR			: (PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR);
 
 ASTERISK				: '*'	;
 SLASH					: '/'	;

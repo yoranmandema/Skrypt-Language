@@ -155,6 +155,7 @@ namespace Skrypt {
             Parser.GlobalEnvironment = GlobalEnvironment;
 
             ProgramContext = Parser.program();
+
             Parser.LinkLexicalEnvironments(ProgramContext, GlobalEnvironment);
 
             if (!ErrorHandler.HasErrors) {

@@ -1,9 +1,5 @@
-﻿
+﻿x = 1
 
-x = 0
+x += 5
 
-fn Update () {
-	x = x + 0.1
-
-	print(x)
-}
+print(x)

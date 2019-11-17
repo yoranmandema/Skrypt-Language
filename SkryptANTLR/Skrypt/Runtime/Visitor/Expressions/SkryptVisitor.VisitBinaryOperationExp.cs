@@ -6,12 +6,8 @@ using System.Linq;
 
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
-            var operationName = context.Operation.Text;
 
-            var left = Visit(context.Left);
-            var right = Visit(context.Right);
-
+        public BaseObject EvaluateExpression (string operationName, BaseObject left, BaseObject right, IToken token) {
             object result = new InvalidOperation();
 
             switch (operationName) {
@@ -107,14 +103,24 @@ namespace Skrypt {
                     var lname = left == null ? "null" : typeof(BaseType).IsAssignableFrom(left.GetType()) ? "type" : left.Name;
                     var rname = right == null ? "null" : typeof(BaseType).IsAssignableFrom(right.GetType()) ? "type" : right.Name;
 
-                    _engine.ErrorHandler.FatalError(context.Left.Start, $"No such operation: {lname} {operationName} {rname}.");
+                    _engine.ErrorHandler.FatalError(token, $"No such operation: {lname} {operationName} {rname}.");
                 }
             }
 
-
-            LastResult = (BaseObject)result;
-
             return (BaseObject)result;
+        }
+
+        public override BaseObject VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
+            var operationName = context.Operation.Text;
+
+            var left = Visit(context.Left);
+            var right = Visit(context.Right);
+
+            var result = EvaluateExpression(operationName, left, right, context.Left.start);
+
+            LastResult = result;
+
+            return result;
         }
 
         private object EvaluateTraitOperator (string name, BaseObject left, BaseObject right) {

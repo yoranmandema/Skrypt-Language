@@ -177,6 +177,7 @@
     <Compile Include="Runtime\Visitor\SkryptVisitor.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignComputedMemberStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignMemberStatement.cs" />
+    <Compile Include="Runtime\Visitor\SkryptVisitor.VisitAssignOperator.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitBlock.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitCatchStatement.cs" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitIfStatement.cs" />
