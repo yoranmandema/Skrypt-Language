@@ -1,11 +1,5 @@
 ﻿x = 0
 
 while (x < 10) {
-	print(x)
-
-	a = 2
-
-	print(a)
-
 	x++
 }

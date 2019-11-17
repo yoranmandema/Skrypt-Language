@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class BaseInstance : BaseObject {
-        public BaseInstance(Engine engine) : base (engine) { }
+        public BaseInstance(Engine engine) : base(engine) { }
         public BaseType TypeObject { get; set; }
 
         public static BaseObject Type(Engine engine, BaseObject self) {
             return (self as BaseInstance).TypeObject;
+        }
+
+        public bool HasTrait<T> () where T : BaseTrait {
+            return TypeObject.Traits.OfType<SubtractableTrait>().Any();
         }
     }
 }

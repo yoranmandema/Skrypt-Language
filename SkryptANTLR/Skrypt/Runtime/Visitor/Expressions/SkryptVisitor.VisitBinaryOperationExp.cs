@@ -86,16 +86,16 @@ namespace Skrypt {
             }
 
             if (result is InvalidOperation) {
-                if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<SubtractableTrait>().Any()) {
+                if (left.AsType<BaseInstance>().HasTrait<SubtractableTrait>()) {
                     result = EvaluateTraitOperator("Sub", left, right);
                 }
-                else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<AddableTrait>().Any()) {
+                else if (left.AsType<BaseInstance>().HasTrait<AddableTrait>()) {
                     result = EvaluateTraitOperator("Add", left, right);
                 }
-                else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<MultiplicableTrait>().Any()) {
+                else if (left.AsType<BaseInstance>().HasTrait<MultiplicableTrait>()) {
                     result = EvaluateTraitOperator("Mul", left, right);
                 }
-                else if (left.AsType<BaseInstance>().TypeObject.Traits.OfType<DividableTrait>().Any()) {
+                else if (left.AsType<BaseInstance>().HasTrait<DividableTrait>()) {
                     result = EvaluateTraitOperator("Div", left, right);
                 }
 
