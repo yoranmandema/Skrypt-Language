@@ -14,7 +14,7 @@ namespace Skrypt {
         }
 
         public bool HasTrait<T> () where T : BaseTrait {
-            return TypeObject.Traits.OfType<SubtractableTrait>().Any();
+            return TypeObject.Traits.OfType<T>().Any();
         }
     }
 }
