@@ -7,6 +7,7 @@ using Antlr4.Runtime;
 using Antlr4;
 using Skrypt.ANTLR;
 using System.IO;
+using Skrypt.Extensions.Image;
 
 namespace Skrypt {
     class Program {
@@ -16,6 +17,7 @@ namespace Skrypt {
             var engine = new Engine();
 
             engine.FastAdd(new TimeModule(engine));
+            engine.FastAdd(new ImproModule(engine));
 
             engine.SetValue("print", (e, s, i) => {
 

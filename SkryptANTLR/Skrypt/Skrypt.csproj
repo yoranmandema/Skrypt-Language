@@ -60,6 +60,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -92,6 +93,7 @@
     <Compile Include="Engine\IFileHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ParseError.cs" />
     <Compile Include="Engine\LexicalEnvironment\LexicalEnvironment.cs" />
+    <Compile Include="Extensions\Image\ImproModule.cs" />
     <Compile Include="Native\Arguments.cs" />
     <Compile Include="Native\IDefined.cs" />
     <Compile Include="Engine\Interop.cs" />

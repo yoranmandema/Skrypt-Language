@@ -31,7 +31,7 @@ namespace Skrypt {
                 name = context.Function.GetText(),
                 column = context.Function.Start.Column,
                 line = context.Function.Start.Line,
-                file = (function as IDefined).File,
+                file = (function as IDefined)?.File,
                 callFile = context.CallFile,
                 token = context.Start
             });

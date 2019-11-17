@@ -1,5 +1,16 @@
-﻿x = 0
+﻿import Impro
 
-while (x < 10) {
-	
+img = Image(256,256)
+
+print("Rendering image...")
+
+for (y = 0, y < img.Height, y++) {
+	for (x = 0, x < img.Width, x++) {
+		img.SetPixel(x,y,Color(Math.Random * 255))
+	}
 }
+
+Write(img, "test.png")
+
+print("Image saved!")
+

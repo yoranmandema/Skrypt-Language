@@ -590,7 +590,6 @@ AND						: 'and' ;
 OR						: 'or' ;
 
 ASSIGN					: '='	;
-ASSIGNOPERATOR			: (PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR);
 
 ASTERISK				: '*'	;
 SLASH					: '/'	;
@@ -609,6 +608,8 @@ NOT						: '!' ;
 BITNOT					: '~' ;
 
 NULL					: 'null' ;
+
+ASSIGNOPERATOR			: (PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR);
 
 BOOLEAN					: TRUE | FALSE ;
 

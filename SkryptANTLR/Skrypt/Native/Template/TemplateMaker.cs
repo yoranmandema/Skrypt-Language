@@ -15,7 +15,7 @@ namespace Skrypt {
 
         public Template CreateTemplate(Type t) {
             var methods = t.GetMethods();
-            var types = t.GetNestedTypes();
+            var subTypes = t.GetNestedTypes();
             var template = new Template();
 
             if (
@@ -49,10 +49,14 @@ namespace Skrypt {
                 template.Members[m.Name] = new Member(function, m.IsPrivate, null);
             }
 
-            foreach (var type in types) {
-                var instance = (BaseModule)Activator.CreateInstance(type, _engine);
+            if (typeof(BaseModule).IsAssignableFrom(t)) {
+                foreach (var type in subTypes) {
+                    if (typeof(BaseType).IsAssignableFrom(type)) {
+                        var instance = (BaseObject)Activator.CreateInstance(type, _engine);
 
-                template.Members[instance.Name] = new Member(instance, type.IsNestedPrivate, null);
+                        template.Members[instance.Name] = new Member(instance, type.IsNestedPrivate, null);
+                    }
+                }
             }
 
             return template;
