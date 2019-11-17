@@ -16,6 +16,8 @@ namespace Skrypt {
             var singleLine = expression ?? assignStmnt ?? returnStmnt ?? continueStmnt ?? breakStmnt;
 
             if (block != null) {
+                CurrentEnvironment = block.LexicalEnvironment;
+
                 while (cond()) {
                     for (int i = 0; i < block.ChildCount; i++) {
                         var c = block.GetChild(i);

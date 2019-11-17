@@ -1,5 +1,11 @@
-﻿x = 1
+﻿x = 0
 
-x += 5
+while (x < 10) {
+	print(x)
 
-print(x)
+	a = 2
+
+	print(a)
+
+	x++
+}
