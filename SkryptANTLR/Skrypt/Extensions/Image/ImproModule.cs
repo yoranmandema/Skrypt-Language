@@ -10,7 +10,7 @@ namespace Skrypt.Extensions.Image {
     public class ImproModule : BaseModule {
         public ImproModule(Engine engine) : base(engine) { }
 
-        public static BaseObject Write(Engine engine, BaseObject self, Arguments arguments) {
+        public static BaseObject WriteImage(Engine engine, BaseObject self, Arguments arguments) {
             var image = arguments.GetAs<ImageInstance>(0);
             var file = arguments.GetAs<StringInstance>(1);
 

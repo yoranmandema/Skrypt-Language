@@ -10,7 +10,7 @@ for (y = 0, y < img.Height, y++) {
 	}
 }
 
-Write(img, "test.png")
+WriteImage(img, "test.png")
 
 print("Image saved!")
 
