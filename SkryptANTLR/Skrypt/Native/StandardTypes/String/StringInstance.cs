@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Skrypt {
@@ -99,6 +100,16 @@ namespace Skrypt {
             var replacement = arguments.GetAs<StringInstance>(1);
 
             return engine.CreateString(str.Value.Replace(input.Value, replacement.Value));
+        }
+
+        public static BaseObject ReplaceRE(Engine engine, BaseObject self, Arguments arguments) {
+            var str = self as StringInstance;
+            var input = arguments.GetAs<StringInstance>(0);
+            var replacement = arguments.GetAs<StringInstance>(1);
+
+            var newString = Regex.Replace(str.Value, input.Value, replacement.Value);
+
+            return engine.CreateString(newString);
         }
 
         public static BaseObject PadLeft(Engine engine, BaseObject self, Arguments arguments) {

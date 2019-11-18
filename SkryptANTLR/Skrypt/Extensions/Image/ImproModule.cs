@@ -62,12 +62,47 @@ namespace Skrypt.Extensions.Image {
                 CreateProperty("Height", engine.CreateNumber(height));
             }
 
+            public static Bitmap ResizeBitmap(Bitmap bmp, int width, int height) {
+                Bitmap result = new Bitmap(width, height);
+                using (Graphics g = Graphics.FromImage(result)) {
+                    g.DrawImage(bmp, 0, 0, width, height);
+                }
+
+                return result;
+            }
+
+            public static BaseObject SetResolution(Engine engine, BaseObject self, Arguments arguments) {
+                var width = arguments.GetAs<NumberInstance>(0);
+                var height = arguments.GetAs<NumberInstance>(1);
+
+                self.AsType<ImageInstance>().bitMap.SetResolution((int)width, (int)height);
+
+                self.SetProperty("Width", width);
+                self.SetProperty("Height", height);
+
+                return null;
+            }
+
+            public static BaseObject Resize(Engine engine, BaseObject self, Arguments arguments) {
+                var width = arguments.GetAs<NumberInstance>(0);
+                var height = arguments.GetAs<NumberInstance>(1);
+
+                var newBitMap = ResizeBitmap(self.AsType<ImageInstance>().bitMap, (int)width, (int)height);
+
+                self.AsType<ImageInstance>().bitMap = newBitMap;
+
+                self.SetProperty("Width", width);
+                self.SetProperty("Height", height);
+
+                return null;
+            }
+
             public static BaseObject SetPixel (Engine engine, BaseObject self, Arguments arguments) {
                 var x = arguments.GetAs<NumberInstance>(0);
                 var y = arguments.GetAs<NumberInstance>(1);
                 var color = arguments.GetAs<ColorInstance>(2);
 
-                ((ImageInstance)self).bitMap.SetPixel((int)x, (int)y, color.color);
+                self.AsType<ImageInstance>().bitMap.SetPixel((int)x, (int)y, color.color);
 
                 return null;
             }
@@ -76,7 +111,7 @@ namespace Skrypt.Extensions.Image {
                 var x = arguments.GetAs<NumberInstance>(0);
                 var y = arguments.GetAs<NumberInstance>(1);
 
-                var color = ((ImageInstance)self).bitMap.GetPixel((int)x, (int)y);
+                var color = self.AsType<ImageInstance>().bitMap.GetPixel((int)x, (int)y);
 
                 return engine.GetValue("Color").AsType<ColorType>().Construct(color.R,color.G,color.B);
             }

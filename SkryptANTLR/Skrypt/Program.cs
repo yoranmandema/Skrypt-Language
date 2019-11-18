@@ -43,7 +43,15 @@ namespace Skrypt {
             });
 
             engine.SetValue("input", (e, s, i) => {
-                return engine.CreateString(Console.ReadLine());
+                if (i.Length == 1) Console.WriteLine(i[0]);
+
+                string fullString = "";
+                string line;
+                while (!String.IsNullOrWhiteSpace(line = Console.ReadLine())) {
+                    fullString += line;
+                }
+
+                return engine.CreateString(fullString);
             });
 
             engine.SetValue("error", (e, s, i) => {
