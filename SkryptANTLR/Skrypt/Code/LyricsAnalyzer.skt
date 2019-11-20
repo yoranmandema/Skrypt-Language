@@ -1,0 +1,32 @@
+﻿import Impro
+
+lyrics = input("Please give lyrics...")
+lyrics = lyrics.ReplaceRE("(,.()-\n)"," ")
+lyrics = lyrics.ToLower().Trim()
+
+words = lyrics.Split(" ")
+
+img = Image(words.Length,words.Length)
+
+print("Rendering image...")
+
+for (y = 0, y < words.Length, y++) {
+	wordA = words[y]
+
+	for (x = 0, x < words.Length, x++) {
+		wordB = words[x]
+
+		color = Color(255,255,255)
+
+		if (wordA == wordB) color = Color(255,0,150)
+
+		img.SetPixel(x,y,color)
+	}
+}
+
+img.Resize(1024,1024)
+
+WriteImage(img, "test.png")
+
+print("Image saved!")
+
