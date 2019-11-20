@@ -18,6 +18,10 @@ namespace Skrypt {
             if (Children != null) foreach (var child in Children) child.PrintAllChildVariables();
         }
 
+        public void PrintVariables() {
+            foreach (var kv in Variables) Console.WriteLine($"{kv.Key}: {kv.Value.Value}");
+        }
+
         public void AddVariable (Variable variable) {
             Variables[variable.Name] = variable;
         }
@@ -57,13 +61,15 @@ namespace Skrypt {
 
             var children = CopyChildrenRecursively(lexicalEnvironment);
 
-            if (children != null) {
-                foreach (var child in children) {
-                    newEnvironment.AddChild(child);
-                }
-            }
+            if (children != null) newEnvironment.AddChildren(children);
 
             return newEnvironment;
+        }
+
+        public void AddChildren (List<LexicalEnvironment> children) {
+            foreach (var child in children) {
+                this.AddChild(child);
+            }
         }
 
         public static List<LexicalEnvironment> CopyChildrenRecursively (LexicalEnvironment lexicalEnvironment) {
@@ -75,7 +81,10 @@ namespace Skrypt {
 
             foreach (var child in lexicalEnvironment.Children) {
                 var newChild = MakeCopy(child);
-                newChild.Children = CopyChildrenRecursively(child);
+                var children = CopyChildrenRecursively(child);
+
+                if (children != null) newChild.AddChildren(children);
+
 
                 newChildren.Add(newChild);
             }

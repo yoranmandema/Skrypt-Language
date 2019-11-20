@@ -1,32 +1,32 @@
-﻿import Impro
+﻿
 
-lyrics = input("Please give lyrics...")
-lyrics = lyrics.ReplaceRE("(,.()-)"," ")
-lyrics = lyrics.ToLower()
+struct HitResult {
+	Hit = true
+}
 
-words = lyrics.Split(" ")
-
-img = Image(words.Length,words.Length)
-
-print("Rendering image...")
-
-for (y = 0, y < words.Length, y++) {
-	wordA = words[y]
-
-	for (x = 0, x < words.Length, x++) {
-		wordB = words[x]
-
-		color = Color(255,255,255)
-
-		if (wordA == wordB) color = Color(255,0,150)
-
-		img.SetPixel(x,y,color)
+module Agent {
+	fn Scan (direction) {
+		return HitResult()
 	}
 }
 
-img.Resize(1024,1024)
 
-WriteImage(img, "test.png")
+scanSteps = 8
+i = 0
+moveDirection = <1,0,0>
 
-print("Image saved!")
+fn Update () {	
+	angle = (i / scanSteps) * 2 * Math.PI
 
+	direction = <Math.Sin(angle), 0, Math.Cos(angle)>
+
+	scanResult = Agent.Scan(direction)
+
+	if (scanResult.Hit) { 
+		moveDirection = -direction
+	}
+
+	i++
+
+	if (i > scanSteps) i = 0
+}              

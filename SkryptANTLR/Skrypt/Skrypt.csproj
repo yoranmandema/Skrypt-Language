@@ -216,6 +216,9 @@
     <None Include="Code\neuralnetwork.skt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Code\LyricsAnalyzer.skt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Code\test.skt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
