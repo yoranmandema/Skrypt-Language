@@ -29,5 +29,13 @@ namespace Skrypt {
         public BaseObject Copy() {
             return Engine.CreateBoolean(Value);
         }
+
+        BaseObject IValue.Copy() {
+            throw new NotImplementedException();
+        }
+
+        bool IValue.Equals(IValue other) {
+            return this.Value.Equals(((BooleanInstance)other).Value);
+        }
     }
 }

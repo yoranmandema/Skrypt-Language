@@ -1,10 +1,18 @@
 ﻿
-vec2 = Vector2(1,2)
-vec3 = Vector3(1,2,3)
-vec4 = Vector4(1,2,3,4)
-wildcard = Vector(1)
+interest = "hetero"
 
-print(vec2)
-print(vec3)
-print(vec4)
-print(wildcard)
+switch = []
+
+switch["gay"] = () => {
+	print("You're gay")
+}
+
+switch["lesbian"] = () => {
+	print("You're gay")
+}
+
+switch["hetero"] = () => {
+	print("Epstein didn't kill himself")
+}
+
+switch[interest]()

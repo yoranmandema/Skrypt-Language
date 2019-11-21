@@ -535,7 +535,7 @@ fnLiteral			returns [Skrypt.FunctionInstance value]
 
 	var functionVar = new Skrypt.FunctionInstance(this.Engine, function); 
 
-	$value = functionVar;												
+	$value = functionVar;	
 }																																				
 					;					
 

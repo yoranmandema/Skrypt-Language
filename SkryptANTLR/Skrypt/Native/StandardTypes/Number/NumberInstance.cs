@@ -29,5 +29,9 @@ namespace Skrypt {
         public BaseObject Copy() {
             return Engine.CreateNumber(Value);
         }
+
+        bool IValue.Equals(IValue other) {
+            return this.Value.Equals(((NumberInstance)other).Value);
+        }
     }
 }

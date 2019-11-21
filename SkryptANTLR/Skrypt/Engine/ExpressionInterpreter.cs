@@ -197,14 +197,18 @@ namespace Skrypt.Runtime {
         }
 
         public object EvaluateEqualExpression(BaseObject left, BaseObject right) {
-            if (left is NumberInstance && right is NumberInstance) {
-                return (left as NumberInstance).Value == (right as NumberInstance).Value;
-            }
-            else if (left is StringInstance && right is StringInstance) {
-                return (left as StringInstance).Value == (right as StringInstance).Value;
-            }
-            else if (left is BooleanInstance && right is BooleanInstance) {
-                return (left as BooleanInstance).Value == (right as BooleanInstance).Value;
+            //if (left is NumberInstance && right is NumberInstance) {
+            //    return (left as NumberInstance).Value == (right as NumberInstance).Value;
+            //}
+            //else if (left is StringInstance && right is StringInstance) {
+            //    return (left as StringInstance).Value == (right as StringInstance).Value;
+            //}
+            //else if (left is BooleanInstance && right is BooleanInstance) {
+            //    return (left as BooleanInstance).Value == (right as BooleanInstance).Value;
+            //}
+            //else 
+            if (left is IValue valL && right is IValue valR) {
+                return valL.Equals(valR);
             }
             else {
                 return left == right;

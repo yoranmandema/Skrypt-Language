@@ -43,5 +43,18 @@ namespace Skrypt {
         public BaseObject Copy() {
             return Engine.CreateVector4(Components[0], Components[1], Components[2], Components[3]);
         }
+
+        bool IValue.Equals(IValue other) {
+            bool isEqual = true;
+
+            for (int i = 0; i < Components.Length; i++) {
+                if (this.Components[i] != ((VectorInstance)other).Components[i]) {
+                    isEqual = false;
+                    break;
+                }
+            }
+
+            return isEqual;
+        }
     }
 }

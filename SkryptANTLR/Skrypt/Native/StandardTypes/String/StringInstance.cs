@@ -235,5 +235,9 @@ namespace Skrypt {
         public BaseObject Copy() {
             return Engine.CreateString(Value);
         }
+
+        bool IValue.Equals(IValue other) {
+            return this.Value.Equals(((StringInstance)other).Value);
+        }
     }
 }
