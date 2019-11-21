@@ -1,4 +1,4 @@
-﻿
-a = false ? 1 : 0
+﻿add = a => b => a + b
 
-print(a)
+print(add(1)(3))
+

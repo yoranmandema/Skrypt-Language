@@ -13,16 +13,19 @@ namespace Skrypt {
         public string File { get; set; }
         internal IFunctionContext Context;
         internal Parameter[] Parameters;
+        internal LexicalEnvironment BaseEnvironment;
 
         public ScriptFunction(IFunctionContext block) {
             Context = block;
         }
+
 
         public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
             var blockStmnt = Context.StmntBlock;
             var visitor = new SkryptVisitor(engine);
             var lexicalEnvironment = LexicalEnvironment.MakeCopy(Context.LexicalEnvironment);
 
+            if (BaseEnvironment != null) lexicalEnvironment.Parent = BaseEnvironment;
             lexicalEnvironment.Variables["self"].Value = self;
 
             for (int i = 0; i < Parameters.Length; i++) {
@@ -77,6 +80,12 @@ namespace Skrypt {
 
                 returnValue = Context.ReturnValue;
             }
+
+            if (returnValue is FunctionInstance functionInstance && functionInstance.Function is ScriptFunction scriptFunction) {
+                scriptFunction.BaseEnvironment = visitor.CurrentEnvironment;
+            }
+            
+            BaseEnvironment = null;
 
             return returnValue;
         }
