@@ -436,7 +436,8 @@ assignStmnt			: CONST? name assign expression {
 					| memberAccessComp	assign expression																		#assignComputedMemberStatement					
 					;
 
-expression          : '(' expression ')'																						#parenthesisExp
+expression          : expression TERNARYTRUE expression TERNARYFALSE expression													#conditionalExp
+					| '(' expression ')'																						#parenthesisExp
 					| fnLiteral																									#functionLiteral		
 					| expression DOT NAME	 																					#memberAccessExp
 					| expression '[' expression ']'																				#computedMemberAccessExp
@@ -609,6 +610,9 @@ INCREMENT				: '++'	;
 DECREMENT				: '--'	;
 NOT						: '!' ;
 BITNOT					: '~' ;
+
+TERNARYTRUE				: '?' ;
+TERNARYFALSE			: ':' ;
 
 NULL					: 'null' ;
 

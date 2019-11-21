@@ -1,18 +1,4 @@
 ﻿
-interest = "hetero"
+a = false ? 1 : 0
 
-switch = []
-
-switch["gay"] = () => {
-	print("You're gay")
-}
-
-switch["lesbian"] = () => {
-	print("You're gay")
-}
-
-switch["hetero"] = () => {
-	print("Epstein didn't kill himself")
-}
-
-switch[interest]()
+print(a)
