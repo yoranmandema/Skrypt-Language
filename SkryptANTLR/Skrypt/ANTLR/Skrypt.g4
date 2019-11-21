@@ -465,9 +465,9 @@ functionCtx.CallFile = Engine.FileHandler.File;
 					| string																									#stringLiteral
 					| boolean																									#booleanLiteral
 					| null																										#nullLiteral
-					| vector2																									#vector2Literal
+					/*| vector2																									#vector2Literal
 					| vector3																									#vector3Literal
-					| vector4																									#vector4Literal
+					| vector4																									#vector4Literal*/
 					| array																										#arrayLiteral
 					| name {
 	var nameCtx = ($ctx as NameExpContext).name();
@@ -539,9 +539,12 @@ fnLiteral			returns [Skrypt.FunctionInstance value]
 }																																				
 					;					
 
+
+/*
 vector2				:	'<' X=expression ',' Y=expression '>' ;
 vector3				:	'<' X=expression ',' Y=expression ',' Z=expression '>' ;
 vector4				:	'<' X=expression ',' Y=expression ',' Z=expression ',' W=expression'>' ;
+*/
 
 array				: '[' expressionGroup ']' ; 
 

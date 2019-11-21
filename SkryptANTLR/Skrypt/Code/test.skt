@@ -1,32 +1,10 @@
 ﻿
+vec2 = Vector2(1,2)
+vec3 = Vector3(1,2,3)
+vec4 = Vector4(1,2,3,4)
+wildcard = Vector(1)
 
-struct HitResult {
-	Hit = true
-}
-
-module Agent {
-	fn Scan (direction) {
-		return HitResult()
-	}
-}
-
-
-scanSteps = 8
-i = 0
-moveDirection = <1,0,0>
-
-fn Update () {	
-	angle = (i / scanSteps) * 2 * Math.PI
-
-	direction = <Math.Sin(angle), 0, Math.Cos(angle)>
-
-	scanResult = Agent.Scan(direction)
-
-	if (scanResult.Hit) { 
-		moveDirection = -direction
-	}
-
-	i++
-
-	if (i > scanSteps) i = 0
-}              
+print(vec2)
+print(vec3)
+print(vec4)
+print(wildcard)
