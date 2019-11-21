@@ -26,6 +26,14 @@ namespace Skrypt {
                 return Get((int)number);
             }
 
+            else if (index is IValue val) {
+                foreach (var key in Dictionary.Keys) {
+                    if (key is IValue val2 && val2.Equals(val)) {
+                        return Dictionary[key];
+                    }
+                }
+            }
+
             if (Dictionary.ContainsKey(index)) {
                 return Dictionary[index];
             }
