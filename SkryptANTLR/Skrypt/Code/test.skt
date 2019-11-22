@@ -1,2 +1,8 @@
 ﻿
-print("Mori is " + (Math.Random() > 0.5 ? "gay" : "a nice guy"))
+Mori = "Mori"
+Sundae = "Sundae"
+Octo = "Octo"
+KrypteK = "KrypteK"
+Galaxy = "Galaxy"
+
+Users = [Mori,Sundae,Octo,KrypteK,Galaxy]
