@@ -65,7 +65,7 @@ namespace Skrypt {
             GlobalEnvironment       = new LexicalEnvironment();
             //CurrentEnvironment      = GlobalEnvironment;
 
-            ErrorHandler            = new ErrorHandler(this);
+            ErrorHandler            = new DefaultErrorHandler(this);
             ExpressionInterpreter   = new ExpressionInterpreter(this);
             TemplateMaker           = new TemplateMaker(this);
             FileHandler             = new DefaultFileHandler(this);

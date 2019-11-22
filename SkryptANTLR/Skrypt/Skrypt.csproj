@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ANTLR\AdditionalLexerFields.cs" />
     <Compile Include="ANTLR\TreeDuplicator.cs" />
+    <Compile Include="Engine\DefaultErrorHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ErrorListener.cs" />
     <Compile Include="ANTLR\IFunctionContext.cs" />
     <Compile Include="ANTLR\Skrypt.g4.lexer.cs">
