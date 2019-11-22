@@ -12,10 +12,12 @@ namespace Skrypt.Tests {
             }
         }
 
+
         public AssignTests () {
             _engine = new Engine();
 
             _engine.SetValue("BasicStruct", new BasicStruct(_engine));
+            _engine.SetValue("numberVariable", 5);
         }
 
         [Fact]
@@ -42,6 +44,14 @@ namespace Skrypt.Tests {
 
             Assert.NotNull(value);
             Assert.Equal(1, value.GetProperty("Property").value.AsType<NumberInstance>().Value);
+        }
+
+        [Fact]
+        public void ShouldDoAssignWithOperator() {
+            var value = _engine.Run("numberVariable += 2").GetValue("numberVariable");
+
+            Assert.NotNull(value);
+            Assert.Equal(7, value.AsType<NumberInstance>().Value);
         }
     }
 }

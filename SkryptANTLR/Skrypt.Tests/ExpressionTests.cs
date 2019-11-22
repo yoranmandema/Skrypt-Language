@@ -7,6 +7,19 @@ namespace Skrypt.Tests {
         private readonly Engine _engine;
         public ExpressionTests() {
             _engine = new Engine();
+
+            _engine
+                .SetValue("assert", (e, s, i) => { Assert.True(i.GetAs<BooleanInstance>(0).Value); return null; })
+                .SetValue("equal", (e, s, i) => { Assert.Equal(i[0], i[1]); return null; })
+                ;
+        }
+
+        private void RunTest(string source) {
+            _engine.Run(source).ReportErrors();
+
+            if (_engine.ErrorHandler.HasErrors) {
+                throw new FatalErrorException();
+            }
         }
 
         [Theory]
@@ -66,6 +79,41 @@ namespace Skrypt.Tests {
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
         }
 
+        [Theory]
+        [InlineData("1 + 3", 4d)]
+        [InlineData("1 - 3", -2d)]
+        [InlineData("1 * 3", 3d)]
+        [InlineData("6 / 3", 2d)]
+        [InlineData("15 & 9", 9d)]
+        [InlineData("15 | 9", 15d)]
+        [InlineData("15 ^ 9", 6d)]
+        [InlineData("9 << 2", 36d)]
+        [InlineData("9 >> 2", 2d)]
+        [InlineData("19 >>> 2", 4d)]
+        public void ShouldEvaluateBinaryExpression(string source, double expected) {
+            var value = _engine.Run(source).CompletionValue;
 
+            Assert.Equal(expected, value.AsType<NumberInstance>().Value);
+        }
+
+        [Theory]
+        [InlineData("~58", -59d)]
+        [InlineData("~~58", 58d)]
+        public void ShouldInterpretUnaryExpression(string source, double expected) {
+            var value = _engine.Run(source).CompletionValue;
+
+            Assert.Equal(expected, value.AsType<NumberInstance>().Value);
+        }
+
+        [Fact]
+        public void ArrowFunctionCall() {
+            RunTest(@"
+                add = (a, b) => {
+                    return a + b
+                }
+                x = add(1, 2)
+                assert(x == 3)
+            ");
+        }
     }
 }

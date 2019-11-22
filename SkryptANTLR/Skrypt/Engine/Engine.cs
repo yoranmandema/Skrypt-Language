@@ -200,26 +200,42 @@ namespace Skrypt {
             Console.WriteLine(message);
         }
 
-        public BaseObject SetValue(string name, BaseObject value) {
+        public Engine SetValue(string name, BaseObject value) {
             SetGlobal(name, value);
 
-            return value;
+            return this;
         }
 
-        public BaseObject SetValue(string name, bool value) {
+        public Engine SetValue(string name, bool value) {
             var val = CreateBoolean(value);
 
             SetGlobal(name, val);
 
-            return val;
+            return this;
         }
 
-        public BaseObject SetValue (string name, MethodDelegate value) {
+        public Engine SetValue(string name, double value) {
+            var val = CreateNumber(value);
+
+            SetGlobal(name, val);
+
+            return this;
+        }
+
+        public Engine SetValue(string name, string value) {
+            var val = CreateString(value);
+
+            SetGlobal(name, val);
+
+            return this;
+        }
+
+        public Engine SetValue (string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 
             SetGlobal(name,val);
 
-            return val;
+            return this;
         }
 
         public BaseObject GetValue(string name) {
