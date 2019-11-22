@@ -299,5 +299,29 @@ namespace Skrypt.Runtime {
 
             return new InvalidOperation();
         }
+
+        public object EvaluateBitShiftLExpression(BaseObject left, BaseObject right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return (int)(left as NumberInstance).Value << (int)(right as NumberInstance).Value;
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateBitShiftRExpression(BaseObject left, BaseObject right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return (int)(left as NumberInstance).Value >> (int)(right as NumberInstance).Value;
+            }
+
+            return new InvalidOperation();
+        }
+
+        public object EvaluateBitShiftURExpression(BaseObject left, BaseObject right) {
+            if (left is NumberInstance && right is NumberInstance) {
+                return (int)((uint)Convert.ToInt32((left as NumberInstance).Value) >> Convert.ToInt32((right as NumberInstance).Value));
+            }
+
+            return new InvalidOperation();
+        }
     }
 }

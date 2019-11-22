@@ -456,6 +456,8 @@ functionCtx.CallFile = Engine.FileHandler.File;
                     |					Left=expression Operation=(ASTERISK|SLASH|REMAINDER)	Right=expression				#binaryOperationExp
                     |					Left=expression Operation=(PLUS|MINUS)		Right=expression							#binaryOperationExp
 
+                    |					Left=expression Operation=(BITSHIFTL|BITSHIFTR|BITSHIFTUR)	Right=expression			#binaryOperationExp
+
                     |					Left=expression Operation=(LESS|LESSEQ|GREATER|GREATEREQ)	Right=expression			#binaryOperationExp
                     |					Left=expression Operation=(EQUAL|NOTEQUAL|IS)				Right=expression			#binaryOperationExp
                     |					Left=expression Operation=BITAND		Right=expression								#binaryOperationExp
@@ -608,6 +610,9 @@ EXPONENT				: '**'	;
 BITAND					: '&' ;
 BITOR					: '^' ;
 BITXOR					: '|' ; 
+BITSHIFTL				: '<<' ; 
+BITSHIFTR				: '>>' ; 
+BITSHIFTUR				: '>>>' ; 
 
 INCREMENT				: '++'	;
 DECREMENT				: '--'	;

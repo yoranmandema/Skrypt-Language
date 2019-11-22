@@ -67,6 +67,15 @@ namespace Skrypt {
                 case "|":
                     result = _engine.ExpressionInterpreter.EvaluateBitOrExpression(left, right);
                     break;
+                case "<<":
+                    result = _engine.ExpressionInterpreter.EvaluateBitShiftLExpression(left, right);
+                    break;
+                case ">>":
+                    result = _engine.ExpressionInterpreter.EvaluateBitShiftRExpression(left, right);
+                    break;
+                case ">>>":
+                    result = _engine.ExpressionInterpreter.EvaluateBitShiftURExpression(left, right);
+                    break;
             }
 
             if (result is bool) {
