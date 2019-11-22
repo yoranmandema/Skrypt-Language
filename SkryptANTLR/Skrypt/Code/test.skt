@@ -1,2 +1,21 @@
 ﻿
-print(256 >> 2)
+fn ToBinary (number) {
+	const mask = 1
+	binary = ""
+
+    while(number > 0) {
+        // Logical AND the number and prepend it to the result string
+        binary = (number & mask) + binary
+        number = number >> 1
+    }
+
+    return binary
+}
+
+fn ToBinaryPadded (number, length) {
+	binary = ToBinary(number)
+	
+	return binary.PadLeft(length - binary.Length,"0")
+}
+
+print(ToBinaryPadded(1023, 16))

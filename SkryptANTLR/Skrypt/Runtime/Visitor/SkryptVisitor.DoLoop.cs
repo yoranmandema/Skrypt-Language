@@ -16,7 +16,9 @@ namespace Skrypt {
             var singleLine = expression ?? assignStmnt ?? returnStmnt ?? continueStmnt ?? breakStmnt;
 
             if (block != null) {
-                CurrentEnvironment = block.LexicalEnvironment;
+                var previousEnvironment = CurrentEnvironment;
+
+                CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (block as IScoped));
 
                 while (cond()) {
                     for (int i = 0; i < block.ChildCount; i++) {
@@ -40,6 +42,8 @@ namespace Skrypt {
                         continue;
                     }
                 }
+
+                CurrentEnvironment = previousEnvironment;
             }
             else if (singleLine != null) {
                 while (cond()) {

@@ -122,7 +122,7 @@ namespace Skrypt {
                 newStr = input + newStr;
             }
 
-            return engine.CreateString(newStr);
+            return engine.CreateString(newStr + str);
         }
 
         public static BaseObject PadRight(Engine engine, BaseObject self, Arguments arguments) {
@@ -135,7 +135,7 @@ namespace Skrypt {
                 newStr = newStr + input;
             }
 
-            return engine.CreateString(newStr);
+            return engine.CreateString(str + newStr);
         }
 
         public static BaseObject ToByteArray(Engine engine, BaseObject self, Arguments arguments) {
