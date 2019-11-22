@@ -42,7 +42,7 @@ namespace Skrypt {
 
             accessed = obj;
 
-            LastResult = accessed;
+            LastResult = value;
 
             //if (value is IValue noref) value = noref.Copy();
 

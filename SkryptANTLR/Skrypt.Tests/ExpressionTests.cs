@@ -12,6 +12,7 @@ namespace Skrypt.Tests {
         [InlineData("15 / 3 + 2", 7)]
         [InlineData("2 + 15 / 3", 7)]
         [InlineData("(2 + 13) * 2", 30)]
+        [InlineData("-30", -30)]
         public void ShouldEvaluateNumericExpressions(string source, double expected) {
             var value = new Engine().Run(source).CompletionValue;
 
@@ -38,5 +39,27 @@ namespace Skrypt.Tests {
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<BooleanInstance>().Value);
         }
+
+        [Theory]
+        [InlineData("true ? 1 : 0", 1)]
+        [InlineData("false ? 1 : 0", 0)]
+        [InlineData("1 > 0 ? 1 : 0", 1)]
+        public void ShouldEvaluateConditional(string source, double expected) {
+            var value = new Engine().Run(source).CompletionValue;
+
+            Assert.NotNull(value);
+            Assert.Equal(expected, value.AsType<NumberInstance>().Value);
+        }
+
+        [Theory]
+        [InlineData("(String(1)).Length", 1)]
+        public void ShouldEvaluateMemberAccessAfterParenthesis (string source, double expected) {
+            var value = new Engine().Run(source).CompletionValue;
+
+            Assert.NotNull(value);
+            Assert.Equal(expected, value.AsType<NumberInstance>().Value);
+        }
+
+
     }
 }
