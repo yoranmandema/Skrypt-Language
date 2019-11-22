@@ -3,6 +3,12 @@ using Skrypt;
 
 namespace Skrypt.Tests {
     public class ExpressionTests {
+
+        private readonly Engine _engine;
+        public ExpressionTests() {
+            _engine = new Engine();
+        }
+
         [Theory]
         [InlineData("1 + 1", 2)]
         [InlineData("2 * 4", 8)]
@@ -14,7 +20,7 @@ namespace Skrypt.Tests {
         [InlineData("(2 + 13) * 2", 30)]
         [InlineData("-30", -30)]
         public void ShouldEvaluateNumericExpressions(string source, double expected) {
-            var value = new Engine().Run(source).CompletionValue;
+            var value = _engine.Run(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
@@ -34,7 +40,7 @@ namespace Skrypt.Tests {
         [InlineData("!true", false)]
         [InlineData("!false", true)]
         public void ShouldEvaluateBooleanExpressions(string source, bool expected) {
-            var value = new Engine().Run(source).CompletionValue;
+            var value = _engine.Run(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<BooleanInstance>().Value);
@@ -45,7 +51,7 @@ namespace Skrypt.Tests {
         [InlineData("false ? 1 : 0", 0)]
         [InlineData("1 > 0 ? 1 : 0", 1)]
         public void ShouldEvaluateConditional(string source, double expected) {
-            var value = new Engine().Run(source).CompletionValue;
+            var value = _engine.Run(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
@@ -54,7 +60,7 @@ namespace Skrypt.Tests {
         [Theory]
         [InlineData("(String(1)).Length", 1)]
         public void ShouldEvaluateMemberAccessAfterParenthesis (string source, double expected) {
-            var value = new Engine().Run(source).CompletionValue;
+            var value = _engine.Run(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
