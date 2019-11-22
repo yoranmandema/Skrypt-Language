@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 
 namespace Skrypt {
-    public class ErrorHandler {
+    public abstract class ErrorHandler {
        
-        private readonly Engine _engine;
+        protected readonly Engine _engine;
 
         public List<CodeError> Errors = new List<CodeError>();
         public bool HasErrors => Errors.Any();
@@ -25,23 +25,9 @@ namespace Skrypt {
             Errors.Add(new LexError(line, charInLine, message, _engine.FileHandler.File));
         }
 
-        public void FatalError (IToken token, string msg) {
-            var errorMsg = ReportError(new ParseError(token, msg, _engine.FileHandler.File));
+        public abstract void FatalError(IToken token, string msg); 
+        public abstract string ReportError(CodeError error);
 
-            throw new FatalErrorException(msg);
-        }
-
-        public string ReportError(CodeError error) {
-            string positionString = $"({error.Line},{error.CharInLine})";
-
-            var msg = error.Message;
-
-            var finalMessage = $"{error.File}{positionString}: {msg}";
-
-            Console.WriteLine(finalMessage);
-
-            return finalMessage;
-        }
         public void ReportAllErrors() {
             var sorted = Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.CharInLine);
 
