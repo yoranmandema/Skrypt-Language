@@ -52,10 +52,10 @@ namespace Skrypt {
                 case "is":
                     result = _engine.ExpressionInterpreter.EvaluateIsExpression(left, right);
                     break;
-                case "and":
+                case "&&":
                     result = _engine.ExpressionInterpreter.EvaluateAndExpression(left, right);
                     break;
-                case "or":
+                case "||":
                     result = _engine.ExpressionInterpreter.EvaluateOrExpression(left, right);
                     break;
                 case "&":

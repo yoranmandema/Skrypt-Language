@@ -499,6 +499,8 @@ string returns [string value] : STRING {
 		var content = $STRING.text.Substring(1, $STRING.text.Length - 2);
 
 		$value = System.Text.RegularExpressions.Regex.Unescape(content);
+	} else {
+		$value = "";
 	}
 } ;
 
@@ -596,8 +598,8 @@ EQUAL					: '=='	;
 NOTEQUAL				: '!='	;
 IS						: 'is' ;
 
-AND						: 'and' ;
-OR						: 'or' ;
+AND						: '&&' ;
+OR						: '||' ;
 
 ASTERISK				: '*'	;
 SLASH					: '/'	;
