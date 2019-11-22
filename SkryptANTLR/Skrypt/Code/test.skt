@@ -1,8 +1,3 @@
 ﻿
-sayHello = offset => (name, index) => "Hello, " + name + ". Your number is " + (offset + index) + "."
+for (i = 0, i < 10, i++) print(Math.Random(2,4))
 
-names = [ "Deqwan", "Samir" ]
-
-names
-    .Map(sayHello(5))
-    .ForEach(print)

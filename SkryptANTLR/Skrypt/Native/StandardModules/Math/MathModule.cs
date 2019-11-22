@@ -89,8 +89,33 @@ namespace Skrypt {
             return engine.CreateNumber(Math.Log10(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Random(Engine engine, BaseObject self) {
+        public static BaseObject Random(Engine engine, BaseObject self, Arguments arguments) {
+            if (arguments.Values.Length == 1) {
+                return engine.CreateNumber(_random.NextDouble() * arguments.GetAs<NumberInstance>(0).Value);
+            } else if (arguments.Values.Length == 2) {
+                var val = _random.NextDouble();
+                var min = arguments.GetAs<NumberInstance>(0).Value;
+                var max= arguments.GetAs<NumberInstance>(1).Value;
+
+                return engine.CreateNumber(max * val + min * (1 - val));
+            }
+
             return engine.CreateNumber(_random.NextDouble());
+        }
+
+        public static BaseObject RandomInt(Engine engine, BaseObject self, Arguments arguments) {
+            if (arguments.Values.Length == 1) {
+                return engine.CreateNumber((int)(_random.NextDouble() * arguments.GetAs<NumberInstance>(0).Value));
+            }
+            else if (arguments.Values.Length == 2) {
+                var val = _random.NextDouble();
+                var min = arguments.GetAs<NumberInstance>(0).Value;
+                var max = arguments.GetAs<NumberInstance>(1).Value;
+
+                return engine.CreateNumber((int)(max * val + min * (1 - val)));
+            }
+
+            return engine.CreateNumber((int)_random.NextDouble());
         }
 
         public static BaseObject Max(Engine engine, BaseObject self, Arguments arguments) {
