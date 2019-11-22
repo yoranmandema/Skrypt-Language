@@ -79,8 +79,6 @@ namespace Skrypt {
             var otherArray = arguments.GetAs<ArrayInstance>(0);
             var newArray = engine.CreateArray(new BaseObject[0]);
 
-            Console.WriteLine("Concat input" + (self as ArrayInstance) + " " + otherArray);
-
             foreach (var v in (self as ArrayInstance).SequenceValues) {
                 newArray.SequenceValues.Add(v);
             }
@@ -89,9 +87,43 @@ namespace Skrypt {
                 newArray.SequenceValues.Add(v);
             }
 
-            Console.WriteLine("Concat result: " + newArray);
-
             return newArray;
+        }
+
+        public static BaseObject Map(Engine engine, BaseObject self, Arguments arguments) {
+            var array = self as ArrayInstance;
+            var function = arguments.GetAs<FunctionInstance>(0);
+
+            for (int i = 0; i < array.SequenceValues.Count; i++) {
+                BaseObject functionResult = null;
+
+                if (function.Function is ScriptFunction scriptFunction) {
+                    functionResult = function.Run(array.SequenceValues[i], engine.CreateNumber(i));
+                }
+                else {
+                    functionResult = function.Run(array.SequenceValues[i]);
+                }
+
+                array.SequenceValues[i] = functionResult;
+            }
+
+            return array;
+        }
+
+        public static BaseObject ForEach(Engine engine, BaseObject self, Arguments arguments) {
+            var array = self as ArrayInstance;
+            var function = arguments.GetAs<FunctionInstance>(0);
+
+            for (int i = 0; i < array.SequenceValues.Count; i++) {
+                if (function.Function is ScriptFunction scriptFunction) {
+                    function.Run(array.SequenceValues[i], engine.CreateNumber(i));
+                }
+                else {
+                    function.Run(array.SequenceValues[i]);
+                }
+            }
+
+            return array;
         }
 
         public static BaseObject Insert(Engine engine, BaseObject self, Arguments arguments) {

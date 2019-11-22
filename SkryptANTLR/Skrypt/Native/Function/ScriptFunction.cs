@@ -85,7 +85,7 @@ namespace Skrypt {
                 scriptFunction.BaseEnvironment = visitor.CurrentEnvironment;
             }
             
-            BaseEnvironment = null;
+           // BaseEnvironment = null;
 
             return returnValue;
         }
