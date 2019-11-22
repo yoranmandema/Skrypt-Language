@@ -22,7 +22,9 @@ namespace Skrypt {
 
             variable.Value = value;
 
-            return DefaultResult;
+            LastResult = value;
+
+            return value;
         }
     }
 }
