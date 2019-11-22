@@ -82,7 +82,20 @@ namespace Skrypt {
             }
 
             if (returnValue is FunctionInstance functionInstance && functionInstance.Function is ScriptFunction scriptFunction) {
-                scriptFunction.BaseEnvironment = visitor.CurrentEnvironment;
+                var checkParent = scriptFunction.Context.Context;
+                var isDefinedInCurrentFunction = false;
+
+                while (checkParent.Parent != null) {
+                    if (checkParent == Context.Context) {
+                        isDefinedInCurrentFunction = true;
+                        break;
+                    }
+
+                    checkParent = checkParent.Parent;
+                }
+
+                if (isDefinedInCurrentFunction) 
+                    scriptFunction.BaseEnvironment = visitor.CurrentEnvironment;
             }
             
            // BaseEnvironment = null;
