@@ -436,8 +436,7 @@ assignStmnt			: CONST? name assign expression {
 					| memberAccessComp	assign expression																		#assignComputedMemberStatement					
 					;
 
-expression          : expression TERNARYTRUE expression TERNARYFALSE expression													#conditionalExp
-					| '(' expression ')'																						#parenthesisExp
+expression          : '(' expression ')'																						#parenthesisExp
 					| fnLiteral																									#functionLiteral		
 					| expression DOT NAME	 																					#memberAccessExp
 					| expression '[' expression ']'																				#computedMemberAccessExp
@@ -466,6 +465,8 @@ functionCtx.CallFile = Engine.FileHandler.File;
 
 					|					Left=expression Operation=AND	Right=expression										#binaryOperationExp
                     |					Left=expression Operation=OR	Right=expression										#binaryOperationExp
+
+					| <assoc=right> expression TERNARYTRUE expression TERNARYFALSE expression									#conditionalExp
 
                     | number																									#numberLiteral
 					| string																									#stringLiteral

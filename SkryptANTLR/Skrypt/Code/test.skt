@@ -1,3 +1,2 @@
 ﻿
-for (i = 0, i < 10, i++) print(Math.Random(2,4))
-
+print("Mori is " + (Math.Random() > 0.5 ? "gay" : "a nice guy"))
