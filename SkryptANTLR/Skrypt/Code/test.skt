@@ -1,6 +1,16 @@
 ﻿
-a = 1
+fn binaryToDecimal(n) { 
+    num = n
+    dec_value = 0
+    base = 1
+    temp = num
+    while (temp) { 
+        last_digit = temp % 10
+        temp = temp / 10
+        dec_value += last_digit * base
+        base = base * 2
+    } 
+    return dec_value
+}
 
-a -= 2
-
-print(a)
+print(binaryToDecimal(1000))

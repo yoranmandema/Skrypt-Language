@@ -405,14 +405,14 @@ memberDefStmnt		: CONST? name ASSIGN expression {
 } #memberDefinitionStatement
 ;
 
-assign				: ASSIGNOPERATOR? ASSIGN  #assignOperator ;
+assign				: Operator=(PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR)? ASSIGN  #assignOperator ;
 
 assignStmnt			: CONST? name assign expression {
 	var assignNameCtx = ($ctx as AssignNameStatementContext);
 	var nameCtx = assignNameCtx.name();
 	var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
 	var isConstant = assignNameCtx.CONST() != null;
-	var hasOperator = (assignNameCtx.assign() as SkryptParser.AssignOperatorContext).ASSIGNOPERATOR() != null;
+	var hasOperator = (assignNameCtx.assign() as SkryptParser.AssignOperatorContext).Operator != null;
 
 	if (hasOperator) {
 		if (nameCtx.variable == null) Engine.ErrorHandler.AddParseError(nameCtx.Start, "Undefined variable: " + nameCtx.GetText());
@@ -598,9 +598,6 @@ IS						: 'is' ;
 AND						: 'and' ;
 OR						: 'or' ;
 
-ASSIGN					: '='	;
-ASSIGNOPERATOR			: (PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR);
-
 ASTERISK				: '*'	;
 SLASH					: '/'	;
 PLUS					: '+'	;
@@ -622,6 +619,8 @@ BITNOT					: '~' ;
 
 TERNARYTRUE				: '?' ;
 TERNARYFALSE			: ':' ;
+
+ASSIGN					: '='	;
 
 NULL					: 'null' ;
 

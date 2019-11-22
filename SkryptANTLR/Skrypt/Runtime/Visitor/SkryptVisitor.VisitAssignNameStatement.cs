@@ -16,7 +16,7 @@ namespace Skrypt {
 
             if (value is IValue noref) value = noref.Copy();
 
-            var op = (context.assign() as SkryptParser.AssignOperatorContext).ASSIGNOPERATOR()?.Symbol;
+            var op = (context.assign() as SkryptParser.AssignOperatorContext).Operator;
 
             if (op != null) value = EvaluateExpression(op.Text, variable.Value, value, op);
 
