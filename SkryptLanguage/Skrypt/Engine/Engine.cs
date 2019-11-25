@@ -10,6 +10,7 @@ using Skrypt.Runtime;
 using System.Diagnostics;
 using System.Reflection;
 using System.IO;
+using Skrypt.CLR;
 
 namespace Skrypt {
     public partial class Engine {
@@ -234,6 +235,14 @@ namespace Skrypt {
             var val = new FunctionInstance(this, value);
 
             SetGlobal(name,val);
+
+            return this;
+        }
+
+        public Engine SetValue(string name, Delegate value) {
+            var val = new FunctionInstance(this, new CLRFunction(value));
+
+            SetGlobal(name, val);
 
             return this;
         }

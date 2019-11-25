@@ -80,6 +80,10 @@ namespace Skrypt {
                 return null;
             });
 
+            engine.SetValue("log", new Action<object>(Console.WriteLine));
+
+            engine.SetValue("CLRModule", CLRTypeConverter.CreateModuleFromObject(engine, typeof(Console)));
+
             engine.DoFile(path).ReportErrors().CreateGlobals();
 
             while (true) {

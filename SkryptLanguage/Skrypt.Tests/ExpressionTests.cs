@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Skrypt;
+using System;
 
 namespace Skrypt.Tests {
     public class ExpressionTests {
