@@ -19,6 +19,11 @@ namespace Skrypt {
             File = function.File;
         }
 
+        public FunctionInstance(Engine engine, IFunction function) : base(engine) {
+            Function = function;
+        }
+
+
         public BaseObject RunOnSelf (BaseObject self, params BaseObject[] args) {
             var arguments = new Arguments(args);
 
