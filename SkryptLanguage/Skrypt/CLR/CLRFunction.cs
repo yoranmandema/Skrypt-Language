@@ -6,30 +6,34 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 namespace Skrypt.CLR {
-    public class CLRFunction {
-        public ParameterInfo[] parameters;
-        public Delegate del;
+    public class CLRFunction : IFunction {
+        public string Name { get; set; }
+        public CLRMethod Function { get; set; }
 
-        public object[] ConvertArguments (Arguments arguments, out bool isValid) {
-            var convertedArguments = new object[arguments.Length];
-            isValid = true;
+        public CLRFunction (Delegate del) {
+            Function = CLRTypeConverter.CreateCLRFunction(del);
+        }
 
-            if (arguments.Length != parameters.Length) {
-                isValid = false;
-                return null;
+        public BaseObject Run(Engine engine, BaseObject self, Arguments arguments) {
+            BaseObject result = null;
+
+            var args = Function.ConvertArguments(arguments, out bool isValid);
+
+            if (isValid) {
+                var res = Function.del.DynamicInvoke(args);
+
+                result = CLRTypeConverter.ConvertToSkryptObject(engine, res);
             }
 
-            for (int i = 0; i < arguments.Length; i++) {
-                var arg = arguments[i];
+            if (!isValid) {
+                var argString = "";
 
-                if (arg is NumberInstance numberInstance) {
-                    if (parameters[i].ParameterType.IsAssignableFrom(typeof(double))) {
-                        convertedArguments[i] = Convert.ChangeType(numberInstance.Value, parameters[i].ParameterType);
-                    }
-                }
+                foreach (var arg in arguments.Values) argString += arg.GetType().Name + " ";
+
+                throw new ArgumentException($"No method found for arguments {argString}");
             }
 
-            return convertedArguments;
+            return result;
         }
     }
 }
