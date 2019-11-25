@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrypt", "Skrypt\Skrypt.csproj", "{A623E9C0-8046-440B-B412-2546AA8BB04F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrypt.Tests", "Skrypt.Tests\Skrypt.Tests.csproj", "{56B9E07C-256C-47CA-BD2D-455ABFD4BA3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrypt.Benchmarks", "Skrypt.Benchmarks\Skrypt.Benchmarks.csproj", "{E18EC387-2A60-4D5A-BF71-A89097183929}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{56B9E07C-256C-47CA-BD2D-455ABFD4BA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56B9E07C-256C-47CA-BD2D-455ABFD4BA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56B9E07C-256C-47CA-BD2D-455ABFD4BA3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E18EC387-2A60-4D5A-BF71-A89097183929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E18EC387-2A60-4D5A-BF71-A89097183929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E18EC387-2A60-4D5A-BF71-A89097183929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E18EC387-2A60-4D5A-BF71-A89097183929}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
