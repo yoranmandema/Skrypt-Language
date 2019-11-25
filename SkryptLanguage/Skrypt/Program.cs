@@ -8,6 +8,7 @@ using Antlr4;
 using Skrypt.ANTLR;
 using System.IO;
 using Skrypt.Extensions.Image;
+using Skrypt.CLR;
 
 namespace Skrypt {
     class Program {
@@ -80,17 +81,6 @@ namespace Skrypt {
             });
 
             engine.DoFile(path).ReportErrors().CreateGlobals();
-
-            var name = "Update";
-
-            if (engine.GlobalEnvironment.Variables.ContainsKey(name)) {
-                var function = engine.GlobalEnvironment.Variables[name];
-
-                if (function.Value is FunctionInstance functionInstance) {
-                    functionInstance.Run();
-                }
-            }
-
 
             while (true) {
                 string line = Console.ReadLine();
