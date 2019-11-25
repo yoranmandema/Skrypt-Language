@@ -15,9 +15,11 @@ namespace Skrypt.CLR {
             bool validArguments = false;
 
             foreach (var function in Functions) {
-                var args = function.ConvertArguments(arguments, out bool isValid);
+                var isValid = function.HasValidArguments(arguments);
 
                 if (isValid) {
+                    var args = function.ConvertArguments(arguments);
+
                     validArguments = isValid;
 
                     var res = function.del.DynamicInvoke(args);

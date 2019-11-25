@@ -17,9 +17,10 @@ namespace Skrypt.CLR {
         public BaseObject Run(Engine engine, BaseObject self, Arguments arguments) {
             BaseObject result = null;
 
-            var args = Function.ConvertArguments(arguments, out bool isValid);
+            var isValid = Function.HasValidArguments(arguments);
 
             if (isValid) {
+                var args = Function.ConvertArguments(arguments);
                 var res = Function.del.DynamicInvoke(args);
 
                 result = CLRTypeConverter.ConvertToSkryptObject(engine, res);

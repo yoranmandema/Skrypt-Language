@@ -11,37 +11,51 @@ namespace Skrypt.CLR {
         public Delegate del;
         public MethodInfo methodInfo;
 
-        public object[] ConvertArguments(Arguments arguments, out bool isValid) {
-            var convertedArguments = new object[arguments.Length];
-            isValid = true;
+        public bool HasValidArguments (Arguments arguments) {
+            if (arguments.Length != parameters.Length) return false;
 
-            if (arguments.Length != parameters.Length) {
-                isValid = false;
-                return null;
+            var isValid = true;
+
+            for (int i = 0; i < arguments.Length; i++) {
+                var arg = arguments[i];
+
+                if (arg is NumberInstance && typeof(double).IsAssignableFrom(parameters[i].ParameterType)) {
+                    continue;
+                }
+                else if (arg is StringInstance && parameters[i].ParameterType == typeof(string)) {
+                    continue;
+                }
+                else if (arg is BooleanInstance && parameters[i].ParameterType == typeof(bool)) {
+                    continue;
+                }
+                else if (parameters[i].ParameterType == typeof(object)) {
+                    continue;
+                }
+
+                return false;
             }
+
+            return isValid;
+        }
+
+        public object[] ConvertArguments(Arguments arguments) {
+            var convertedArguments = new object[arguments.Length];
 
             for (int i = 0; i < arguments.Length; i++) {
                 var arg = arguments[i];
 
                 if (arg is NumberInstance numberInstance && typeof(double).IsAssignableFrom(parameters[i].ParameterType)) {
                     convertedArguments[i] = Convert.ChangeType(numberInstance.Value, parameters[i].ParameterType);
-                    continue;
                 }
                 else if (arg is StringInstance stringInstance && typeof(string).IsAssignableFrom(parameters[i].ParameterType)) {
                     convertedArguments[i] = Convert.ChangeType(stringInstance.Value, parameters[i].ParameterType);
-                    continue;
                 }
                 else if (arg is BooleanInstance booleanInstance && typeof(bool).IsAssignableFrom(parameters[i].ParameterType)) {
                     convertedArguments[i] = Convert.ChangeType(booleanInstance.Value, parameters[i].ParameterType);
-                    continue;
                 }
                 else if (typeof(object).IsAssignableFrom(parameters[i].ParameterType)) {
                     convertedArguments[i] = arg;
-                    continue;
                 }
-
-                isValid = false;
-                return null;
             }
 
             return convertedArguments;

@@ -1,6 +1,2 @@
 ﻿
-log("Welcome!")
-
-name = CLRModule.ReadLine()
-
-CLRModule.WriteLine(name)
+Console.WriteLine("Hello world!")

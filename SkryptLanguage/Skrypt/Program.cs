@@ -15,8 +15,9 @@ namespace Skrypt {
         static void Main(string[] args) {
             var path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
 
+            
             var engine = new Engine();
-
+            
             engine.FastAdd(new TimeModule(engine));
             engine.FastAdd(new ImproModule(engine));
 
@@ -82,7 +83,7 @@ namespace Skrypt {
 
             engine.SetValue("log", new Action<object>(Console.WriteLine));
 
-            engine.SetValue("CLRModule", CLRTypeConverter.CreateModuleFromObject(engine, typeof(Console)));
+            engine.SetValue("Console", CLRTypeConverter.CreateModuleFromObject(engine, typeof(Console)));
 
             engine.DoFile(path).ReportErrors().CreateGlobals();
 

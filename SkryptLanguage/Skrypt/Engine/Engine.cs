@@ -248,9 +248,9 @@ namespace Skrypt {
         }
 
         public BaseObject GetValue(string name) {
-            var block = ProgramContext.block();
+            var block = ProgramContext?.block();
 
-            if (block.LexicalEnvironment.Variables.ContainsKey(name)) {
+            if (block != null && block.LexicalEnvironment.Variables.ContainsKey(name)) {
                 return block.LexicalEnvironment.Variables[name].Value;
             } else if (GlobalEnvironment.Variables.ContainsKey(name)) {
                 return GlobalEnvironment.Variables[name].Value;
