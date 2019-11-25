@@ -9,8 +9,8 @@ namespace Skrypt.Tests {
             _engine = new Engine();
 
             _engine
-                .SetValue("assert", (e, s, i) => { Assert.True(i.GetAs<BooleanInstance>(0).Value); return null; })
-                .SetValue("equal", (e, s, i) => { Assert.Equal(i[0], i[1]); return null; })
+                .SetValue("assert", new Action<bool>(Assert.True))
+                .SetValue("equal", new Action<object, object>(Assert.Equal))
                 ;
         }
 
