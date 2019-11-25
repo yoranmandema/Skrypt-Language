@@ -4,13 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Linq.Expressions;
 
 namespace Skrypt.CLR {
     public class MethodWrapper {
-        public static CLRFunction CreateCLRFunction (MethodInfo methodInfo) {
-            var newCLRFunction = new CLRFunction() {
+        private static Delegate CreateDelegate(MethodInfo methodInfo, object target) {
+            Func<Type[], Type> getType;
+            var isAction = methodInfo.ReturnType.Equals((typeof(void)));
+            var types = methodInfo.GetParameters().Select(p => p.ParameterType);
+
+            if (isAction) {
+                getType = Expression.GetActionType;
+            }
+            else {
+                getType = Expression.GetFuncType;
+                types = types.Concat(new[] { methodInfo.ReturnType });
+            }
+
+            if (methodInfo.IsStatic) {
+                return Delegate.CreateDelegate(getType(types.ToArray()), methodInfo);
+            }
+
+            return Delegate.CreateDelegate(getType(types.ToArray()), target, methodInfo.Name);
+        }
+
+
+        public static CLRMethod CreateCLRFunction (MethodInfo methodInfo) {
+            var newCLRFunction = new CLRMethod() {
                 parameters = methodInfo.GetParameters()
             };
+
+            newCLRFunction.del = CreateDelegate(methodInfo, null);
 
             return newCLRFunction;
         }
