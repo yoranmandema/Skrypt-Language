@@ -61,7 +61,7 @@ namespace Skrypt.CLR {
             return true;
         }
 
-        public static BaseModule CreateModuleFromObject (Engine engine, Type type) {
+        public static BaseModule CreateModuleFromObject (SkryptEngine engine, Type type) {
             var module = new BaseModule(engine);
             var methodInfos = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
             var methodGroups = new Dictionary<string, List<MethodInfo>>();
@@ -117,11 +117,11 @@ namespace Skrypt.CLR {
 
         public static float ToFloat(NumberInstance number) => (float)number.Value;
 
-        public static NumberInstance ToNumberInstance(Engine engine, double val) => engine.CreateNumber(val);
-        public static BooleanInstance ToBooleanInstance(Engine engine, bool val) => engine.CreateBoolean(val);
-        public static StringInstance ToStringInstance(Engine engine, string val) => engine.CreateString(val);
+        public static NumberInstance ToNumberInstance(SkryptEngine engine, double val) => engine.CreateNumber(val);
+        public static BooleanInstance ToBooleanInstance(SkryptEngine engine, bool val) => engine.CreateBoolean(val);
+        public static StringInstance ToStringInstance(SkryptEngine engine, string val) => engine.CreateString(val);
 
-        public static BaseObject ConvertToSkryptObject(Engine engine, object value) {
+        public static SkryptObject ConvertToSkryptObject(SkryptEngine engine, object value) {
             if (value == null) return null;
             
             if (IsNumber(value)) {

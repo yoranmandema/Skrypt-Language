@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     class StringType : BaseType {
-        public StringType(Engine engine) : base(engine) {
+        public StringType(SkryptEngine engine) : base(engine) {
             Template = engine.TemplateMaker.CreateTemplate(typeof(StringInstance));
         }
 
-        public BaseInstance Construct(string val) {
+        public SkryptInstance Construct(string val) {
             var obj = new StringInstance(Engine, val);
 
             obj.GetProperties(Template);
@@ -19,12 +19,12 @@ namespace Skrypt {
             return obj;
         }
 
-        public override BaseInstance Construct(Arguments arguments) {
+        public override SkryptInstance Construct(Arguments arguments) {
             return Construct(arguments[0].ToString());
         }
 
 
-        public static BaseObject FromByteArray(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject FromByteArray(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var array = arguments.GetAs<ArrayInstance>(0);
             var rawString = "";
 

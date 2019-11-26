@@ -13,8 +13,8 @@ using System.IO;
 using Skrypt.CLR;
 
 namespace Skrypt {
-    public partial class Engine {
-        public BaseObject CompletionValue => Visitor.LastResult;
+    public partial class SkryptEngine {
+        public SkryptObject CompletionValue => Visitor.LastResult;
         public Stack<Call> CallStack { get; internal set; } = new Stack<Call>();
 
         internal Stopwatch SW { get; private set; }
@@ -62,7 +62,7 @@ namespace Skrypt {
         public LexicalEnvironment GlobalEnvironment { get; set; }
         //public LexicalEnvironment CurrentEnvironment { get; set; }
 
-        public Engine() {
+        public SkryptEngine() {
             GlobalEnvironment       = new LexicalEnvironment();
             //CurrentEnvironment      = GlobalEnvironment;
 
@@ -96,7 +96,7 @@ namespace Skrypt {
             SW = Stopwatch.StartNew();
         }
 
-        public Engine SetOut (TextWriter textWriter) {
+        public SkryptEngine SetOut (TextWriter textWriter) {
             TextWriter = textWriter;
 
             Console.SetOut(textWriter);
@@ -104,7 +104,7 @@ namespace Skrypt {
             return this;
         }
 
-        public Engine DoFile(string file) {
+        public SkryptEngine DoFile(string file) {
             FileHandler.File = file;
             FileHandler.Folder = System.IO.Path.GetDirectoryName(file);
             FileHandler.BaseFolder = System.IO.Path.GetDirectoryName(file);
@@ -114,7 +114,7 @@ namespace Skrypt {
             return Run(code);
         }
 
-        public Engine DoRelativeFile (string file) {
+        public SkryptEngine DoRelativeFile (string file) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
 
@@ -130,7 +130,7 @@ namespace Skrypt {
             return result;
         }
 
-        public Engine Run(string code) {
+        public SkryptEngine Run(string code) {
             var errorListener = new ErrorListener(this);
 
             var inputStream = new AntlrInputStream(code);
@@ -167,19 +167,19 @@ namespace Skrypt {
             return this;
         }
 
-        public Engine ReportErrors () {
+        public SkryptEngine ReportErrors () {
             ErrorHandler.ReportAllErrors();
 
             return this;
         }
 
-        public T FastAdd<T> (T obj) where T : BaseObject {
+        public T FastAdd<T> (T obj) where T : SkryptObject {
             SetGlobal(obj.Name, obj);
 
             return obj;
         }
 
-        public Engine CreateGlobals () {
+        public SkryptEngine CreateGlobals () {
             var block = ProgramContext.block();
 
             foreach (var v in block.LexicalEnvironment.Variables) {
@@ -189,7 +189,7 @@ namespace Skrypt {
             return this;
         }
 
-        internal void SetGlobal (string name, BaseObject value) {
+        internal void SetGlobal (string name, SkryptObject value) {
             if (GlobalEnvironment.Variables.ContainsKey(name)) {
                 GlobalEnvironment.Variables[name].Value = value;
             } else {
@@ -201,13 +201,13 @@ namespace Skrypt {
             Console.WriteLine(message);
         }
 
-        public Engine SetValue(string name, BaseObject value) {
+        public SkryptEngine SetValue(string name, SkryptObject value) {
             SetGlobal(name, value);
 
             return this;
         }
 
-        public Engine SetValue(string name, bool value) {
+        public SkryptEngine SetValue(string name, bool value) {
             var val = CreateBoolean(value);
 
             SetGlobal(name, val);
@@ -215,7 +215,7 @@ namespace Skrypt {
             return this;
         }
 
-        public Engine SetValue(string name, double value) {
+        public SkryptEngine SetValue(string name, double value) {
             var val = CreateNumber(value);
 
             SetGlobal(name, val);
@@ -223,7 +223,7 @@ namespace Skrypt {
             return this;
         }
 
-        public Engine SetValue(string name, string value) {
+        public SkryptEngine SetValue(string name, string value) {
             var val = CreateString(value);
 
             SetGlobal(name, val);
@@ -231,7 +231,7 @@ namespace Skrypt {
             return this;
         }
 
-        public Engine SetValue (string name, MethodDelegate value) {
+        public SkryptEngine SetValue (string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 
             SetGlobal(name,val);
@@ -239,7 +239,7 @@ namespace Skrypt {
             return this;
         }
 
-        public Engine SetValue(string name, Delegate value) {
+        public SkryptEngine SetValue(string name, Delegate value) {
             var val = new FunctionInstance(this, new CLRFunction(value));
 
             SetGlobal(name, val);
@@ -247,7 +247,7 @@ namespace Skrypt {
             return this;
         }
 
-        public BaseObject GetValue(string name) {
+        public SkryptObject GetValue(string name) {
             var block = ProgramContext?.block();
 
             if (block != null && block.LexicalEnvironment.Variables.ContainsKey(name)) {
@@ -283,7 +283,7 @@ namespace Skrypt {
             return (Vector4Instance)Vector.Construct(x, y, z, w);
         }
 
-        public ArrayInstance CreateArray(BaseObject[] values) {
+        public ArrayInstance CreateArray(SkryptObject[] values) {
             return (ArrayInstance)Array.Construct(values);
         }
     }

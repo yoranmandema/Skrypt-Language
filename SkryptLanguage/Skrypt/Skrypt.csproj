@@ -92,7 +92,7 @@
     <Compile Include="ANTLR\LexingErrorListener.cs" />
     <Compile Include="ANTLR\AdditionalParserFields.cs" />
     <Compile Include="ANTLR\ParsingErrorListener.cs" />
-    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Engine\SkryptEngine.cs" />
     <Compile Include="Engine\DefaultFileHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ErrorHandler.cs" />
     <Compile Include="Engine\ErrorHandling\LexError.cs" />
@@ -127,7 +127,7 @@
     <Compile Include="Native\Exceptions\FatalErrorException.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentTypeException.cs" />
     <Compile Include="Native\Exceptions\InvalidTemplateTargetException.cs" />
-    <Compile Include="Native\BaseObject.cs" />
+    <Compile Include="Native\SkryptObject.cs" />
     <Compile Include="Native\Exceptions\InvalidArgumentCountException.cs" />
     <Compile Include="Native\Exceptions\NonExistingMemberException.cs" />
     <Compile Include="Native\Exceptions\VariableNotFoundException.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="Native\StandardTypes\String\StringType.cs" />
     <Compile Include="Native\Template\Template.cs" />
     <Compile Include="Native\StandardTypes\Number\NumberInstance.cs" />
-    <Compile Include="Native\BaseInstance.cs" />
+    <Compile Include="Native\SkryptInstance.cs" />
     <Compile Include="Native\Member.cs" />
     <Compile Include="Native\Template\TemplateMaker.cs" />
     <Compile Include="Native\Trait\BaseTrait.cs" />

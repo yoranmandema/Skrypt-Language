@@ -11,14 +11,14 @@ namespace Skrypt {
         Template Template3;
         Template Template4;
 
-        public VectorType(Engine engine) : base(engine) {
+        public VectorType(SkryptEngine engine) : base(engine) {
             Template = engine.TemplateMaker.CreateTemplate(typeof(VectorInstance));
             Template2 = engine.TemplateMaker.CreateTemplate(typeof(Vector2Instance));
             Template3 = engine.TemplateMaker.CreateTemplate(typeof(Vector3Instance));
             Template4 = engine.TemplateMaker.CreateTemplate(typeof(Vector4Instance));
         }
 
-        public BaseInstance Construct(params double[] args) {
+        public SkryptInstance Construct(params double[] args) {
             var obj = default(VectorInstance);
 
             switch (args.Length) {
@@ -48,7 +48,7 @@ namespace Skrypt {
             return obj;
         }
 
-        public override BaseInstance Construct(Arguments arguments) {
+        public override SkryptInstance Construct(Arguments arguments) {
             var length = Math.Max(arguments.Length, 2);
             var args = new double[length];
 

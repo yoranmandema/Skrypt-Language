@@ -7,9 +7,9 @@ using System.Reflection;
 
 namespace Skrypt {
     public class TemplateMaker {
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
 
-        public TemplateMaker (Engine engine) {
+        public TemplateMaker (SkryptEngine engine) {
             _engine = engine;
         }
 
@@ -19,7 +19,7 @@ namespace Skrypt {
             var template = new Template();
 
             if (
-                !typeof(BaseInstance).IsAssignableFrom(t) && 
+                !typeof(SkryptInstance).IsAssignableFrom(t) && 
                 !typeof(BaseModule).IsAssignableFrom(t) && 
                 !typeof(BaseType).IsAssignableFrom(t) &&
                 !typeof(BaseTrait).IsAssignableFrom(t)
@@ -32,7 +32,7 @@ namespace Skrypt {
             foreach (var m in methods) {
                 if (!m.IsStatic) continue;
 
-                var function = default(BaseObject);
+                var function = default(SkryptObject);
 
                 var methodDelegate = (MethodDelegate)Delegate.CreateDelegate(typeof(MethodDelegate),m,false);
 
@@ -52,7 +52,7 @@ namespace Skrypt {
             if (typeof(BaseModule).IsAssignableFrom(t)) {
                 foreach (var type in subTypes) {
                     if (typeof(BaseType).IsAssignableFrom(type)) {
-                        var instance = (BaseObject)Activator.CreateInstance(type, _engine);
+                        var instance = (SkryptObject)Activator.CreateInstance(type, _engine);
 
                         template.Members[instance.Name] = new Member(instance, type.IsNestedPrivate, null);
                     }

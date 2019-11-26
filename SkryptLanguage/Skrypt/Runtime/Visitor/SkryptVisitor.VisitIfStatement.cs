@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitIfStatement(SkryptParser.IfStatementContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitIfStatement(SkryptParser.IfStatementContext context) {
             var isTrue = false;
 
             isTrue = Visit(context.@if().Condition).IsTrue();

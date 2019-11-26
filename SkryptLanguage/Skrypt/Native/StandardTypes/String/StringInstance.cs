@@ -6,16 +6,16 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class StringInstance : BaseInstance, IValue {
+    public class StringInstance : SkryptInstance, IValue {
         public override string Name => "String";
 
         public string Value { get; set; }
 
-        public StringInstance(Engine engine, string value) : base(engine) {
+        public StringInstance(SkryptEngine engine, string value) : base(engine) {
             Value = value;
         }
 
-        public BaseObject Get(int index) {
+        public SkryptObject Get(int index) {
             if (index >= 0 && index < Value.Length) {
                 return Engine.CreateString(Value[index].ToString());
             }
@@ -23,7 +23,7 @@ namespace Skrypt {
             return Engine.CreateString(string.Empty);
         }
 
-        public BaseObject Get(BaseObject index) {
+        public SkryptObject Get(SkryptObject index) {
             if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
                 return Get((int)number);
             }
@@ -31,11 +31,11 @@ namespace Skrypt {
             return Engine.CreateString(string.Empty);
         }
 
-        public static BaseObject Length(Engine engine, BaseObject self) {
+        public static SkryptObject Length(SkryptEngine engine, SkryptObject self) {
             return engine.CreateNumber((self as StringInstance).Value.Length);
         }
 
-        public static BaseObject Substring (Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Substring (SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var start = arguments.GetAs<NumberInstance>(0);
             var end = arguments[1];
@@ -53,7 +53,7 @@ namespace Skrypt {
             }
         }
 
-        public static BaseObject IndexOf(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject IndexOf(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var search = arguments.GetAs<StringInstance>(0);
             var start = arguments[1];
@@ -73,28 +73,28 @@ namespace Skrypt {
             }
         }
 
-        public static BaseObject Contains(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Contains(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = arguments.GetAs<StringInstance>(0);
 
             return engine.CreateBoolean(str.Value.Contains(input.Value));
         }
 
-        public static BaseObject StartsWith(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject StartsWith(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = arguments.GetAs<StringInstance>(0);
 
             return engine.CreateBoolean(str.Value.StartsWith(input.Value));
         }
 
-        public static BaseObject EndsWith(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject EndsWith(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = arguments.GetAs<StringInstance>(0);
 
             return engine.CreateBoolean(str.Value.EndsWith(input.Value));
         }
 
-        public static BaseObject Replace(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Replace(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = arguments.GetAs<StringInstance>(0);
             var replacement = arguments.GetAs<StringInstance>(1);
@@ -102,7 +102,7 @@ namespace Skrypt {
             return engine.CreateString(str.Value.Replace(input.Value, replacement.Value));
         }
 
-        public static BaseObject ReplaceRE(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ReplaceRE(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = arguments.GetAs<StringInstance>(0);
             var replacement = arguments.GetAs<StringInstance>(1);
@@ -112,7 +112,7 @@ namespace Skrypt {
             return engine.CreateString(newString);
         }
 
-        public static BaseObject PadLeft(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject PadLeft(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = (self as StringInstance).Value;
             var totalWidth = arguments.GetAs<NumberInstance>(0);
             var input = arguments.GetAs<StringInstance>(1);
@@ -125,7 +125,7 @@ namespace Skrypt {
             return engine.CreateString(newStr + str);
         }
 
-        public static BaseObject PadRight(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject PadRight(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = (self as StringInstance).Value;
             var totalWidth = arguments.GetAs<NumberInstance>(0);
             var input = arguments.GetAs<StringInstance>(1);
@@ -138,11 +138,11 @@ namespace Skrypt {
             return engine.CreateString(str + newStr);
         }
 
-        public static BaseObject ToByteArray(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ToByteArray(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             var bytes = Encoding.ASCII.GetBytes(str.Value);
-            var array = engine.CreateArray(new BaseObject[0]);
+            var array = engine.CreateArray(new SkryptObject[0]);
 
             for (var i = 0; i < bytes.Length; i++) {
                 ArrayInstance.Push(engine, array, new Arguments(engine.CreateNumber(bytes[i])));
@@ -151,7 +151,7 @@ namespace Skrypt {
             return array;
         }
 
-        public static BaseObject Reverse(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Reverse(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             char[] charArray = str.Value.ToCharArray();
@@ -160,41 +160,41 @@ namespace Skrypt {
             return engine.CreateString(new string(charArray));
         }
 
-        public static BaseObject ToUpper(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ToUpper(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             return engine.CreateString(str.Value.ToUpper());
         }
 
-        public static BaseObject ToLower(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ToLower(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             return engine.CreateString(str.Value.ToLower());
         }
 
-        public static BaseObject Trim(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Trim(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             return engine.CreateString(str.Value.Trim());
         }
 
-        public static BaseObject TrimStart(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject TrimStart(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             return engine.CreateString(str.Value.TrimStart());
         }
 
-        public static BaseObject TrimEnd(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject TrimEnd(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             return engine.CreateString(str.Value.TrimEnd());
         }
 
-        public static BaseObject ToArray(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ToArray(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
 
             var charArray = str.Value.ToCharArray();
-            var array = engine.CreateArray(new BaseObject[0]);
+            var array = engine.CreateArray(new SkryptObject[0]);
 
             for (var i = 0; i < charArray.Length; i++) {
                 ArrayInstance.Push(engine, array, new Arguments(engine.CreateString("" + charArray[i])));
@@ -203,7 +203,7 @@ namespace Skrypt {
             return array;
         }
 
-        public static BaseObject Split(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Split(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = self as StringInstance;
             var input = new List<string>();
 
@@ -232,7 +232,7 @@ namespace Skrypt {
             return Value.ToString();
         }
 
-        public BaseObject Copy() {
+        public SkryptObject Copy() {
             return Engine.CreateString(Value);
         }
 

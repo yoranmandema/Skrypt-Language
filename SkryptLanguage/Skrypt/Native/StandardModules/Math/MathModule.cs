@@ -10,7 +10,7 @@ namespace Skrypt {
 
         static Random _random = new Random();
 
-        public MathModule(Engine engine) : base(engine) {
+        public MathModule(SkryptEngine engine) : base(engine) {
             CreateProperty("PI", engine.CreateNumber(Math.PI));
             CreateProperty("E", engine.CreateNumber(Math.E));
             CreateProperty("LN10", engine.CreateNumber(Math.Log(10)));
@@ -21,75 +21,75 @@ namespace Skrypt {
             CreateProperty("SQRT2", engine.CreateNumber(Math.Sqrt(2)));
         }
 
-        public static BaseObject Abs(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Abs(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Abs(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Sign(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Sign(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Sign(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Truncate(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Truncate(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Truncate(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Round (Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Round (SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Round(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Floor(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Floor(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Floor(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Ceil(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Ceil(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Ceiling(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Sin(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Sin(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Sin(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Sinh(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Sinh(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Sinh(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Cos(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Cos(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Cos(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Cosh(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Cosh(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Cosh(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Tan(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Tan(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Tan(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Tanh(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Tanh(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Tanh(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Atan(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Atan(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Atan(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Atan2(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Atan2(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Atan2(arguments.GetAs<NumberInstance>(0), arguments.GetAs<NumberInstance>(1)));
         }
 
-        public static BaseObject Log(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Log(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Log(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Log2(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Log2(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Log(arguments.GetAs<NumberInstance>(0),2));
         }
 
-        public static BaseObject Log10(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Log10(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             return engine.CreateNumber(Math.Log10(arguments.GetAs<NumberInstance>(0)));
         }
 
-        public static BaseObject Random(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Random(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             if (arguments.Values.Length == 1) {
                 return engine.CreateNumber(_random.NextDouble() * arguments.GetAs<NumberInstance>(0).Value);
             } else if (arguments.Values.Length == 2) {
@@ -103,7 +103,7 @@ namespace Skrypt {
             return engine.CreateNumber(_random.NextDouble());
         }
 
-        public static BaseObject RandomInt(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject RandomInt(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             if (arguments.Values.Length == 1) {
                 return engine.CreateNumber((int)(_random.NextDouble() * arguments.GetAs<NumberInstance>(0).Value));
             }
@@ -118,7 +118,7 @@ namespace Skrypt {
             return engine.CreateNumber((int)_random.NextDouble());
         }
 
-        public static BaseObject Max(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Max(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var maxValue = default(NumberInstance);
 
             for (int i = 0; i < arguments.Values.Length; i++) {
@@ -130,7 +130,7 @@ namespace Skrypt {
             return maxValue;
         }
 
-        public static BaseObject Min(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Min(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var minValue = default(NumberInstance);
 
             for (int i = 0; i < arguments.Values.Length; i++) {

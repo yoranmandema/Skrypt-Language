@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Skrypt {
     public interface IFileHandler {
-        Engine  Engine { get; set; }
+        SkryptEngine  Engine { get; set; }
         string  File { get; set; }
         string  Folder { get; set; }
         string  BaseFolder { get; set; }

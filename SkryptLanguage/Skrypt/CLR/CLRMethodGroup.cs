@@ -10,8 +10,8 @@ namespace Skrypt.CLR {
         public string Name { get; set; }
         public CLRMethod[] Functions { get; set; }
 
-        public BaseObject Run(Engine engine, BaseObject self, Arguments arguments) {
-            BaseObject result = null;
+        public SkryptObject Run(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            SkryptObject result = null;
             bool validArguments = false;
 
             foreach (var function in Functions) {

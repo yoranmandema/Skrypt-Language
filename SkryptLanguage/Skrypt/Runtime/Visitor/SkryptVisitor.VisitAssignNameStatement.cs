@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitAssignNameStatement(SkryptParser.AssignNameStatementContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitAssignNameStatement(SkryptParser.AssignNameStatementContext context) {
             var variable = CurrentEnvironment.GetVariable(context.name().GetText());
 
             if (variable.IsConstant) {

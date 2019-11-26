@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitConditionalExp(SkryptParser.ConditionalExpContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitConditionalExp(SkryptParser.ConditionalExpContext context) {
             var condition = Visit(context.expression(0));
             var value = DefaultResult;
 

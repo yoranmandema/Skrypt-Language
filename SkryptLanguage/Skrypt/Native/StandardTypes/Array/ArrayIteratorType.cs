@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class ArrayIteratorType : BaseType {
-        public ArrayIteratorType(Engine engine) : base(engine) {
+        public ArrayIteratorType(SkryptEngine engine) : base(engine) {
             Template = Engine.TemplateMaker.CreateTemplate(typeof(ArrayInstance));
 
             var iteratorTrait = ImplementTrait(engine.Iterator);
@@ -41,7 +41,7 @@ namespace Skrypt {
             });
         }
 
-        public BaseInstance Construct(BaseObject[] values) {
+        public SkryptInstance Construct(SkryptObject[] values) {
             var obj = new ArrayIteratorInstance(Engine);
 
             obj.GetProperties(Template);
@@ -51,7 +51,7 @@ namespace Skrypt {
             return obj;
         }
 
-        public override BaseInstance Construct(Arguments arguments) {
+        public override SkryptInstance Construct(Arguments arguments) {
             return Construct(arguments.Values);
         }
     }

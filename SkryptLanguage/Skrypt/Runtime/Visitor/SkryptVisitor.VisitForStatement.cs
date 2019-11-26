@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitForStatement(SkryptParser.ForStatementContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitForStatement(SkryptParser.ForStatementContext context) {
             Visit(context.Instantiator);
 
             DoLoop(context.stmntBlock(), context,

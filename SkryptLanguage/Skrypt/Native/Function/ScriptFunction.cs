@@ -20,7 +20,7 @@ namespace Skrypt {
         }
 
 
-        public BaseObject Run(Engine engine, BaseObject self, Arguments args) {
+        public SkryptObject Run(SkryptEngine engine, SkryptObject self, Arguments args) {
             var blockStmnt = Context.StmntBlock;
             var visitor = new SkryptVisitor(engine);
             var lexicalEnvironment = LexicalEnvironment.MakeCopy(Context.LexicalEnvironment);
@@ -42,7 +42,7 @@ namespace Skrypt {
                 }
             }
 
-            var returnValue     = default(BaseObject);
+            var returnValue     = default(SkryptObject);
             var block           = blockStmnt.block();
             var expr            = blockStmnt.expression();
             var assignStmnt     = blockStmnt.assignStmnt();

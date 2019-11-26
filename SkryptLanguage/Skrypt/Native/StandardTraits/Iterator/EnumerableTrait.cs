@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class EnumerableTrait : BaseTrait {
-        public EnumerableTrait(Engine engine) : base(engine) {}
+        public EnumerableTrait(SkryptEngine engine) : base(engine) {}
 
-        public static BaseObject GetIterator(Engine engine, BaseObject self, Arguments arguments) => null;
-        public static BaseObject Get(Engine engine, BaseObject self, Arguments arguments) => null;
-        public static BaseObject IsInRange(Engine engine, BaseObject self, Arguments arguments) => null;
+        public static SkryptObject GetIterator(SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
+        public static SkryptObject Get(SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
+        public static SkryptObject IsInRange(SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
     }
 }

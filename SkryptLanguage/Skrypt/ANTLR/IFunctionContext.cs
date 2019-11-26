@@ -8,7 +8,7 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     public interface IFunctionContext : IScoped {
         JumpState JumpState { get; set; }
-        BaseObject ReturnValue { get; set; }
+        SkryptObject ReturnValue { get; set; }
         SkryptParser.StmntBlockContext StmntBlock { get; } 
     }
 } 

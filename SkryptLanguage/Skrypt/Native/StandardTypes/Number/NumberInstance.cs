@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class NumberInstance : BaseInstance, IValue {
+    public class NumberInstance : SkryptInstance, IValue {
         public override string Name => "Number";
 
         public double Value { get; set; }
 
-        public NumberInstance(Engine engine, double value) : base(engine) {
+        public NumberInstance(SkryptEngine engine, double value) : base(engine) {
             Value = value;
         }
 
@@ -26,7 +26,7 @@ namespace Skrypt {
             return Value.ToString();
         }
 
-        public BaseObject Copy() {
+        public SkryptObject Copy() {
             return Engine.CreateNumber(Value);
         }
 

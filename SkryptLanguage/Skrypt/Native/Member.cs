@@ -8,12 +8,12 @@ using Antlr4.Runtime;
 
 namespace Skrypt {
     public class Member {
-        public BaseObject value;
+        public SkryptObject value;
         public bool isPrivate;
         public bool isConstant;
         public RuleContext definitionBlock;
 
-        public Member(BaseObject v, bool isPrivate, RuleContext block) {
+        public Member(SkryptObject v, bool isPrivate, RuleContext block) {
             value = v;
             this.isPrivate = isPrivate;
             definitionBlock = block;

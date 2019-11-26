@@ -14,8 +14,8 @@ namespace Skrypt.CLR {
             Function = CLRTypeConverter.CreateCLRFunction(del);
         }
 
-        public BaseObject Run(Engine engine, BaseObject self, Arguments arguments) {
-            BaseObject result = null;
+        public SkryptObject Run(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            SkryptObject result = null;
 
             var isValid = Function.HasValidArguments(arguments);
 

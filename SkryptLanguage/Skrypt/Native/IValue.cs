@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public interface IValue {
-        BaseObject Copy();
+        SkryptObject Copy();
         bool Equals(IValue other);
     }
 }

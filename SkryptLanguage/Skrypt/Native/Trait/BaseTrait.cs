@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BaseTrait : BaseObject {
-        public BaseTrait(Engine engine) : base(engine) {
+    public class BaseTrait : SkryptObject {
+        public BaseTrait(SkryptEngine engine) : base(engine) {
             var template = engine.TemplateMaker.CreateTemplate(this.GetType());
 
             Name = template.Name;

@@ -13,9 +13,15 @@ using Skrypt.CLR;
 namespace Skrypt {
     class Program {
         static void Main(string[] args) {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
-                    
-            var engine = new Engine();
+            string path;
+
+            if (!args.Any()) {
+                path = Console.ReadLine();
+            } else {
+                path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
+            }
+              
+            var engine = new SkryptEngine();
             
             engine.FastAdd(new TimeModule(engine));
             engine.FastAdd(new ImproModule(engine));
@@ -62,7 +68,7 @@ namespace Skrypt {
             engine.SetValue("benchmark", (e, s, i) => {
                 var function = i.GetAs<FunctionInstance>(0);
                 var amount = i.GetAs<NumberInstance>(1).Value;
-                var lastResult = default(BaseObject);
+                var lastResult = default(SkryptObject);
 
                 var sw = System.Diagnostics.Stopwatch.StartNew();
 
@@ -81,8 +87,6 @@ namespace Skrypt {
             });
 
             engine.SetValue("log", new Action<object>(Console.WriteLine));
-
-            engine.SetValue("CLRMath", CLRTypeConverter.CreateModuleFromObject(engine, typeof(Math)));
 
             engine.DoFile(path).ReportErrors().CreateGlobals();
 

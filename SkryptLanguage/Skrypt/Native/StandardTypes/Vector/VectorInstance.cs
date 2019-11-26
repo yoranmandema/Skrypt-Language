@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class VectorInstance : BaseInstance {
+    public class VectorInstance : SkryptInstance {
         public double[] Components;
 
-        public VectorInstance(Engine engine) : base(engine) { }
+        public VectorInstance(SkryptEngine engine) : base(engine) { }
 
-        public static BaseObject Length2 (Engine engine, BaseObject self) {
+        public static SkryptObject Length2 (SkryptEngine engine, SkryptObject self) {
             double val = 0;
             var vector = self as VectorInstance;
 
@@ -21,17 +21,17 @@ namespace Skrypt {
             return engine.CreateNumber(val);
         }
 
-        public static BaseObject Length(Engine engine, BaseObject self) {
+        public static SkryptObject Length(SkryptEngine engine, SkryptObject self) {
             return engine.CreateNumber(Math.Sqrt((NumberInstance)Length2(engine, self)));
         }
 
-        public static BaseObject Normalized(Engine engine, BaseObject self) {
+        public static SkryptObject Normalized(SkryptEngine engine, SkryptObject self) {
             var length = (NumberInstance)Length(engine, self);
 
             return ComponentMathNumeric(engine, self as VectorInstance, (x) => x / length) as VectorInstance;
         }
 
-        internal static object ComponentMath (Engine engine, VectorInstance left, VectorInstance right, Func<double, double, double> func) {
+        internal static object ComponentMath (SkryptEngine engine, VectorInstance left, VectorInstance right, Func<double, double, double> func) {
             var dimension = left.Components.Length;
 
             if (dimension == right.Components.Length) {
@@ -49,7 +49,7 @@ namespace Skrypt {
             return new InvalidOperation();
         }
 
-        internal static object ComponentMathNumeric(Engine engine, VectorInstance left, Func<double, double> func) {
+        internal static object ComponentMathNumeric(SkryptEngine engine, VectorInstance left, Func<double, double> func) {
             var dimension = left.Components.Length;
 
             var args = new double[dimension];

@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitMemberAccessExp(SkryptParser.MemberAccessExpContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitMemberAccessExp(SkryptParser.MemberAccessExpContext context) {
             var obj = Visit(context.expression());
             var memberName = context.NAME().GetText();
 

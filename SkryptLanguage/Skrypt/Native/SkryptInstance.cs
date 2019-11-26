@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BaseInstance : BaseObject {
-        public BaseInstance(Engine engine) : base(engine) { }
+    public class SkryptInstance : SkryptObject {
+        public SkryptInstance(SkryptEngine engine) : base(engine) { }
         public BaseType TypeObject { get; set; }
 
-        public static BaseObject Type(Engine engine, BaseObject self) {
-            return (self as BaseInstance).TypeObject;
+        public static SkryptObject Type(SkryptEngine engine, SkryptObject self) {
+            return (self as SkryptInstance).TypeObject;
         }
 
         public bool HasTrait<T> () where T : BaseTrait {

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class GetPropertyInstance : BaseInstance {
+    public class GetPropertyInstance : SkryptInstance {
         public override string Name => "GetProperty";
         public IGetProperty Property;
 
-        public GetPropertyInstance(Engine engine, GetPropertyDelegate property) : base(engine) {
+        public GetPropertyInstance(SkryptEngine engine, GetPropertyDelegate property) : base(engine) {
             Property = new GetPropertyFunction(property);
         }
     }

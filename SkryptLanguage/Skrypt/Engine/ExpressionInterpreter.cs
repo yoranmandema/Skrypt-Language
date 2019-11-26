@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Skrypt.Runtime {
     sealed class ExpressionInterpreter {
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
 
-        public ExpressionInterpreter (Engine engine) {
+        public ExpressionInterpreter (SkryptEngine engine) {
             _engine = engine;
         }
 
-        public object EvaluateNotExpression (BaseObject value) {
+        public object EvaluateNotExpression (SkryptObject value) {
             if (value is BooleanInstance) {
                 return !(value as BooleanInstance);
             }
@@ -20,7 +20,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateMinusExpression(BaseObject value) {
+        public object EvaluateMinusExpression(SkryptObject value) {
             if (value is NumberInstance) {
                 return -(value as NumberInstance);
             }
@@ -32,7 +32,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitNotExpression(BaseObject value) {
+        public object EvaluateBitNotExpression(SkryptObject value) {
             if (value is NumberInstance) {
                 return ~(int)(value as NumberInstance).Value;
             }
@@ -40,7 +40,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluatePlusExpression (BaseObject left, BaseObject right) {
+        public object EvaluatePlusExpression (SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance) + (right as NumberInstance);
             }
@@ -68,7 +68,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateSubtractExpression(BaseObject left, BaseObject right) {
+        public object EvaluateSubtractExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance) - (right as NumberInstance);
             }
@@ -84,7 +84,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateMultiplyExpression(BaseObject left, BaseObject right) {
+        public object EvaluateMultiplyExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance) * (right as NumberInstance);
             }
@@ -109,7 +109,7 @@ namespace Skrypt.Runtime {
             }
 
             if (left is ArrayInstance && right is NumberInstance) {
-                var list = new List<BaseObject>();
+                var list = new List<SkryptObject>();
 
                 for (int i = 0; i < (right as NumberInstance); i++) {
                     list.AddRange((left as ArrayInstance).SequenceValues);
@@ -124,7 +124,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateDivideExpression(BaseObject left, BaseObject right) {
+        public object EvaluateDivideExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance) / (right as NumberInstance);
             }
@@ -140,7 +140,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateRemainderExpression(BaseObject left, BaseObject right) {
+        public object EvaluateRemainderExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance) % (right as NumberInstance);
             }
@@ -156,7 +156,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateExponentExpression(BaseObject left, BaseObject right) {
+        public object EvaluateExponentExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return Math.Pow(left as NumberInstance, right as NumberInstance);
             }
@@ -164,7 +164,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateLessExpression(BaseObject left, BaseObject right) {
+        public object EvaluateLessExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance).Value < (right as NumberInstance).Value;
             }
@@ -172,7 +172,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateLessEqualExpression(BaseObject left, BaseObject right) {
+        public object EvaluateLessEqualExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance).Value <= (right as NumberInstance).Value;
             }
@@ -180,7 +180,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateGreaterExpression(BaseObject left, BaseObject right) {
+        public object EvaluateGreaterExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance).Value > (right as NumberInstance).Value;
             }
@@ -188,7 +188,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateGreaterEqualExpression(BaseObject left, BaseObject right) {
+        public object EvaluateGreaterEqualExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance).Value >= (right as NumberInstance).Value;
             }
@@ -196,7 +196,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateEqualExpression(BaseObject left, BaseObject right) {
+        public object EvaluateEqualExpression(SkryptObject left, SkryptObject right) {
             //if (left is NumberInstance && right is NumberInstance) {
             //    return (left as NumberInstance).Value == (right as NumberInstance).Value;
             //}
@@ -215,7 +215,7 @@ namespace Skrypt.Runtime {
             }
         }
 
-        public object EvaluateNotEqualExpression(BaseObject left, BaseObject right) {
+        public object EvaluateNotEqualExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (left as NumberInstance).Value != (right as NumberInstance).Value;
             }
@@ -230,16 +230,16 @@ namespace Skrypt.Runtime {
             }
         }
 
-        public object EvaluateIsExpression(BaseObject left, BaseObject right) {
+        public object EvaluateIsExpression(SkryptObject left, SkryptObject right) {
             if (
-                (left is BaseInstance || left is BaseType) && 
-                (right is BaseInstance || right is BaseType)
+                (left is SkryptInstance || left is BaseType) && 
+                (right is SkryptInstance || right is BaseType)
                 ) {
 
                 var leftType = default(BaseType);
 
-                if (typeof(BaseInstance).IsAssignableFrom(left.GetType())) {
-                    var leftInstance = left as BaseInstance;
+                if (typeof(SkryptInstance).IsAssignableFrom(left.GetType())) {
+                    var leftInstance = left as SkryptInstance;
                     leftType = leftInstance.TypeObject;
                 } else {
                     leftType = left as BaseType;
@@ -252,7 +252,7 @@ namespace Skrypt.Runtime {
                 }
             }
 
-            if (!(left is BaseInstance)) 
+            if (!(left is SkryptInstance)) 
                 throw new InvalidOperationException("Expected instance on left-hand side.");
             if (!(right is BaseType || right is BaseTrait))
                 throw new InvalidOperationException("Expected type or trait on right-hand side.");
@@ -260,7 +260,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateAndExpression(BaseObject left, BaseObject right) {
+        public object EvaluateAndExpression(SkryptObject left, SkryptObject right) {
             if (left is BooleanInstance && right is BooleanInstance) {
                 return (left as BooleanInstance).Value && (right as BooleanInstance).Value;
             }
@@ -268,7 +268,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateOrExpression(BaseObject left, BaseObject right) {
+        public object EvaluateOrExpression(SkryptObject left, SkryptObject right) {
             if (left is BooleanInstance && right is BooleanInstance) {
                 return (left as BooleanInstance).Value || (right as BooleanInstance).Value;
             }
@@ -276,7 +276,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitAndExpression(BaseObject left, BaseObject right) {
+        public object EvaluateBitAndExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (int)(left as NumberInstance).Value & (int)(right as NumberInstance).Value;
             }
@@ -284,7 +284,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitXOrExpression(BaseObject left, BaseObject right) {
+        public object EvaluateBitXOrExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (int)(left as NumberInstance).Value ^ (int)(right as NumberInstance).Value;
             }
@@ -292,7 +292,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitOrExpression(BaseObject left, BaseObject right) {
+        public object EvaluateBitOrExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (int)(left as NumberInstance).Value | (int)(right as NumberInstance).Value;
             }
@@ -300,7 +300,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitShiftLExpression(BaseObject left, BaseObject right) {
+        public object EvaluateBitShiftLExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (int)(left as NumberInstance).Value << (int)(right as NumberInstance).Value;
             }
@@ -308,7 +308,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitShiftRExpression(BaseObject left, BaseObject right) {
+        public object EvaluateBitShiftRExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (int)(left as NumberInstance).Value >> (int)(right as NumberInstance).Value;
             }
@@ -316,7 +316,7 @@ namespace Skrypt.Runtime {
             return new InvalidOperation();
         }
 
-        public object EvaluateBitShiftURExpression(BaseObject left, BaseObject right) {
+        public object EvaluateBitShiftURExpression(SkryptObject left, SkryptObject right) {
             if (left is NumberInstance && right is NumberInstance) {
                 return (int)((uint)Convert.ToInt32((left as NumberInstance).Value) >> Convert.ToInt32((right as NumberInstance).Value));
             }

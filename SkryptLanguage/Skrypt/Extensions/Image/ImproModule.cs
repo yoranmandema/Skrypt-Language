@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Skrypt.Extensions.Image {
     public class ImproModule : BaseModule {
-        public ImproModule(Engine engine) : base(engine) { }
+        public ImproModule(SkryptEngine engine) : base(engine) { }
 
-        public static BaseObject WriteImage(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject WriteImage(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var image = arguments.GetAs<ImageInstance>(0);
             var file = arguments.GetAs<StringInstance>(1);
 
@@ -28,11 +28,11 @@ namespace Skrypt.Extensions.Image {
         }
 
         public class ImageType : BaseType {
-            public ImageType(Engine engine) : base(engine) {
+            public ImageType(SkryptEngine engine) : base(engine) {
                 Template = engine.TemplateMaker.CreateTemplate(typeof(ImageInstance));
             }
 
-            public BaseInstance Construct(int width, int height) {
+            public SkryptInstance Construct(int width, int height) {
                 var obj = new ImageInstance(Engine, width, height);
 
                 obj.GetProperties(Template);
@@ -41,7 +41,7 @@ namespace Skrypt.Extensions.Image {
                 return obj;
             }
 
-            public override BaseInstance Construct(Arguments arguments) {
+            public override SkryptInstance Construct(Arguments arguments) {
                 return Construct(
                     (int)arguments.GetAs<NumberInstance>(0),
                     (int)arguments.GetAs<NumberInstance>(1)
@@ -49,13 +49,13 @@ namespace Skrypt.Extensions.Image {
             }
         }
 
-        public class ImageInstance : BaseInstance {
+        public class ImageInstance : SkryptInstance {
             public override string Name => "Image";
 
             public Bitmap bitMap;
-            public ImageInstance(Engine engine) : base(engine) {}
+            public ImageInstance(SkryptEngine engine) : base(engine) {}
 
-            public ImageInstance(Engine engine, int width, int height) : base(engine) {
+            public ImageInstance(SkryptEngine engine, int width, int height) : base(engine) {
                 bitMap = new Bitmap(width, height);
 
                 CreateProperty("Width", engine.CreateNumber(width));
@@ -71,7 +71,7 @@ namespace Skrypt.Extensions.Image {
                 return result;
             }
 
-            public static BaseObject SetResolution(Engine engine, BaseObject self, Arguments arguments) {
+            public static SkryptObject SetResolution(SkryptEngine engine, SkryptObject self, Arguments arguments) {
                 var width = arguments.GetAs<NumberInstance>(0);
                 var height = arguments.GetAs<NumberInstance>(1);
 
@@ -83,7 +83,7 @@ namespace Skrypt.Extensions.Image {
                 return null;
             }
 
-            public static BaseObject Resize(Engine engine, BaseObject self, Arguments arguments) {
+            public static SkryptObject Resize(SkryptEngine engine, SkryptObject self, Arguments arguments) {
                 var width = arguments.GetAs<NumberInstance>(0);
                 var height = arguments.GetAs<NumberInstance>(1);
 
@@ -97,7 +97,7 @@ namespace Skrypt.Extensions.Image {
                 return null;
             }
 
-            public static BaseObject SetPixel (Engine engine, BaseObject self, Arguments arguments) {
+            public static SkryptObject SetPixel (SkryptEngine engine, SkryptObject self, Arguments arguments) {
                 var x = arguments.GetAs<NumberInstance>(0);
                 var y = arguments.GetAs<NumberInstance>(1);
                 var color = arguments.GetAs<ColorInstance>(2);
@@ -107,7 +107,7 @@ namespace Skrypt.Extensions.Image {
                 return null;
             }
 
-            public static BaseObject GetPixel(Engine engine, BaseObject self, Arguments arguments) {
+            public static SkryptObject GetPixel(SkryptEngine engine, SkryptObject self, Arguments arguments) {
                 var x = arguments.GetAs<NumberInstance>(0);
                 var y = arguments.GetAs<NumberInstance>(1);
 
@@ -122,11 +122,11 @@ namespace Skrypt.Extensions.Image {
         }
 
         public class ColorType : BaseType {
-            public ColorType(Engine engine) : base(engine) {
+            public ColorType(SkryptEngine engine) : base(engine) {
                 Template = engine.TemplateMaker.CreateTemplate(typeof(ColorInstance));
             }
 
-            public BaseInstance Construct(int r, int g, int b) {
+            public SkryptInstance Construct(int r, int g, int b) {
                 var obj = new ColorInstance(Engine, Color.FromArgb(255,r,g,b));
 
                 obj.GetProperties(Template);
@@ -135,7 +135,7 @@ namespace Skrypt.Extensions.Image {
                 return obj;
             }
 
-            public override BaseInstance Construct(Arguments arguments) {
+            public override SkryptInstance Construct(Arguments arguments) {
                 int argCount = arguments.Length;
 
                 if (argCount == 3) {
@@ -154,12 +154,12 @@ namespace Skrypt.Extensions.Image {
             }
         }
 
-        public class ColorInstance : BaseInstance {
+        public class ColorInstance : SkryptInstance {
             public override string Name => "Color";
 
             public Color color;
-            public ColorInstance(Engine engine) : base(engine) { }
-            public ColorInstance(Engine engine, Color col) : base(engine) {
+            public ColorInstance(SkryptEngine engine) : base(engine) { }
+            public ColorInstance(SkryptEngine engine, Color col) : base(engine) {
                 color = col;
             }
             public override string ToString() {

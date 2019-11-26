@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public interface IGetProperty {
-        BaseObject Run(Engine engine, BaseObject self); 
+        SkryptObject Run(SkryptEngine engine, SkryptObject self); 
     }
 }

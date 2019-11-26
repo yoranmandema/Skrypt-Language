@@ -8,12 +8,12 @@ using Antlr4.Runtime;
 namespace Skrypt {
     public abstract class ErrorHandler {
        
-        protected readonly Engine _engine;
+        protected readonly SkryptEngine _engine;
 
         public List<CodeError> Errors = new List<CodeError>();
         public bool HasErrors => Errors.Any();
 
-        public ErrorHandler (Engine engine) {
+        public ErrorHandler (SkryptEngine engine) {
             _engine = engine;
         }
 

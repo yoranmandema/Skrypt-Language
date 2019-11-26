@@ -9,15 +9,16 @@ using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Horology;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
+using Skrypt;
 using Skrypt.CLR;
 
 namespace Skrypt.Benchmarks {
     [MemoryDiagnoser]
     public class EngineBenchmarks {
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
 
         public EngineBenchmarks() {
-            _engine = new Engine();
+            _engine = new SkryptEngine();
 
             // Pre-set value to make sure it exists in the GetValue benchmark
             _engine.SetValue("A", 1);
@@ -38,7 +39,7 @@ fn fibonacci(num) {
         //}
 
         [Benchmark]
-        public Engine ExecuteNumericalExpression() {
+        public SkryptEngine ExecuteNumericalExpression() {
             return _engine.Run(@"result = ((A - 2) * 4) / 2");
         }
 
@@ -48,17 +49,17 @@ fn fibonacci(num) {
         //}
 
         [Benchmark]
-        public Engine ExecuteFib8Function() {
+        public SkryptEngine ExecuteFib8Function() {
             return _engine.Run(@"result = fibonacci(8)");
         }
 
         [Benchmark]
-        public Engine ExecuteFib16Function() {
+        public SkryptEngine ExecuteFib16Function() {
             return _engine.Run(@"result = fibonacci(16)");
         }
 
         [Benchmark]
-        public Engine ExecuteVectorExpression() {
+        public SkryptEngine ExecuteVectorExpression() {
             return _engine.Run(@"result = ((Vector(1,2,3) - Vector(3,2,1)) * 4).Normalized");
         }
     }

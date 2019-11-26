@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class ArrayInstance : BaseInstance {
-        public List<BaseObject> SequenceValues = new List<BaseObject>();
-        public Dictionary<BaseObject,BaseObject> Dictionary = new Dictionary<BaseObject, BaseObject>();
+    public class ArrayInstance : SkryptInstance {
+        public List<SkryptObject> SequenceValues = new List<SkryptObject>();
+        public Dictionary<SkryptObject,SkryptObject> Dictionary = new Dictionary<SkryptObject, SkryptObject>();
 
-        public ArrayInstance(Engine engine) : base(engine) {
+        public ArrayInstance(SkryptEngine engine) : base(engine) {
             CreateProperty("iteratorIndex", engine.CreateNumber(0), true);
         }
 
-        public BaseObject Get (int index) {
+        public SkryptObject Get (int index) {
             if (index >= 0 && index < SequenceValues.Count) {
                 return SequenceValues[index];
             } else {
@@ -21,7 +21,7 @@ namespace Skrypt {
             }
         }
 
-        public BaseObject Get(BaseObject index) {
+        public SkryptObject Get(SkryptObject index) {
             if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
                 return Get((int)number);
             }
@@ -41,7 +41,7 @@ namespace Skrypt {
             return null;
         }
 
-        public BaseObject Set(BaseObject index, BaseObject value) {
+        public SkryptObject Set(SkryptObject index, SkryptObject value) {
             if (index is NumberInstance number && number >= 0 && number % 1 == 0) {
                 if (number >= 0 && number < SequenceValues.Count) {
                     SequenceValues[(int)number] = value;
@@ -63,11 +63,11 @@ namespace Skrypt {
             return this;
         }
 
-        public static BaseObject Length(Engine engine, BaseObject self) {
+        public static SkryptObject Length(SkryptEngine engine, SkryptObject self) {
             return engine.CreateNumber((self as ArrayInstance).SequenceValues.Count);
         }
 
-        public static BaseObject Push(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Push(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             foreach (var a in arguments.Values) {
                 (self as ArrayInstance).SequenceValues.Add(a);
             }
@@ -75,9 +75,9 @@ namespace Skrypt {
             return null;
         }
 
-        public static BaseObject Concat(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Concat(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var otherArray = arguments.GetAs<ArrayInstance>(0);
-            var newArray = engine.CreateArray(new BaseObject[0]);
+            var newArray = engine.CreateArray(new SkryptObject[0]);
 
             foreach (var v in (self as ArrayInstance).SequenceValues) {
                 newArray.SequenceValues.Add(v);
@@ -90,12 +90,12 @@ namespace Skrypt {
             return newArray;
         }
 
-        public static BaseObject Map(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Map(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var array = self as ArrayInstance;
             var function = arguments.GetAs<FunctionInstance>(0);
 
             for (int i = 0; i < array.SequenceValues.Count; i++) {
-                BaseObject functionResult = null;
+                SkryptObject functionResult = null;
 
                 if (function.Function is ScriptFunction scriptFunction) {
                     functionResult = function.Run(array.SequenceValues[i], engine.CreateNumber(i));
@@ -110,7 +110,7 @@ namespace Skrypt {
             return array;
         }
 
-        public static BaseObject ForEach(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ForEach(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var array = self as ArrayInstance;
             var function = arguments.GetAs<FunctionInstance>(0);
 
@@ -126,7 +126,7 @@ namespace Skrypt {
             return array;
         }
 
-        public static BaseObject Insert(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Insert(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var array = self as ArrayInstance;
             var index = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(0)),0), array.SequenceValues.Count);
 
@@ -139,7 +139,7 @@ namespace Skrypt {
             return null;
         }
 
-        public static BaseObject Slice(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Slice(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var array = self as ArrayInstance;
             var start = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(0)), 0), array.SequenceValues.Count);
 
@@ -150,7 +150,7 @@ namespace Skrypt {
                 end = (int)Math.Min(Math.Max(Math.Round(arguments.GetAs<NumberInstance>(1)), 0), array.SequenceValues.Count);
             }
 
-            var newArray = engine.CreateArray(new BaseObject[0]);
+            var newArray = engine.CreateArray(new SkryptObject[0]);
 
             for (int i = start; i < end; i++) {
                 newArray.SequenceValues.Add(array.SequenceValues[i]);
@@ -159,9 +159,9 @@ namespace Skrypt {
             return newArray;
         }
 
-        public static BaseObject Remove(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Remove(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var array = self as ArrayInstance;
-            var toRemove = arguments.GetAs<BaseObject>(0);
+            var toRemove = arguments.GetAs<SkryptObject>(0);
 
             if (toRemove is NumberInstance) {
                 array.SequenceValues.RemoveAt((int)(toRemove as NumberInstance).Value);

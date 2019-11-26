@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class DefaultFileHandler : IFileHandler {
-        public Engine Engine { get; set; }
+        public SkryptEngine Engine { get; set; }
         public string File { get; set; }
         public string Folder { get; set; }
         public string BaseFolder { get; set; }
 
-        public DefaultFileHandler (Engine e) {
+        public DefaultFileHandler (SkryptEngine e) {
             Engine = e;
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class ScriptTrait : BaseTrait {
-        public ScriptTrait(string name, Engine engine) : base(engine) {
+        public ScriptTrait(string name, SkryptEngine engine) : base(engine) {
             Name = name;
         }
     }

@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitReturnStatement(SkryptParser.ReturnStatementContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitReturnStatement(SkryptParser.ReturnStatementContext context) {
             var fnCtx = context.Statement;
             var expression = context.expression();
 

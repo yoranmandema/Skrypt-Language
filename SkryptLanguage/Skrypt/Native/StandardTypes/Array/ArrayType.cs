@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Skrypt{
     public class ArrayType : BaseType {
-        public ArrayType(Engine engine) : base(engine) {
+        public ArrayType(SkryptEngine engine) : base(engine) {
             Template = Engine.TemplateMaker.CreateTemplate(typeof(ArrayInstance));
 
             var arrayIteratorType = Engine.FastAdd(new ArrayIteratorType(Engine));
             var enumerable = ImplementTrait(engine.Enumerable);
 
             enumerable["GetIterator"].value = new FunctionInstance(Engine, (e, s, args) => {
-                return arrayIteratorType.Construct(new BaseObject[] { s as ArrayInstance });
+                return arrayIteratorType.Construct(new SkryptObject[] { s as ArrayInstance });
             });
         }
 
-        public BaseInstance Construct(BaseObject[] values) {
+        public SkryptInstance Construct(SkryptObject[] values) {
             var obj = new ArrayInstance(Engine);
 
             for (int i = 0; i < values.Length; i++) {
@@ -30,7 +30,7 @@ namespace Skrypt{
             return obj;
         }
 
-        public override BaseInstance Construct(Arguments arguments) {
+        public override SkryptInstance Construct(Arguments arguments) {
             return Construct(arguments.Values);
         }
     }

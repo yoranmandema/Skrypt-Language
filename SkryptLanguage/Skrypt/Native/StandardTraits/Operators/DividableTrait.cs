@@ -1,9 +1,9 @@
 ﻿
 namespace Skrypt {
     public class DividableTrait : BaseTrait {
-        public DividableTrait(Engine engine) : base(engine) {
+        public DividableTrait(SkryptEngine engine) : base(engine) {
         }
 
-        public static BaseObject Div(Engine engine, BaseObject self, Arguments arguments) => null;
+        public static SkryptObject Div(SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
     }
 }

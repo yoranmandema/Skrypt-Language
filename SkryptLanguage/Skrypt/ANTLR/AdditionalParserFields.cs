@@ -8,7 +8,7 @@ using Antlr4;
 
 namespace Skrypt.ANTLR {
     public partial class SkryptParser {
-        public Engine Engine { get; internal set; }
+        public SkryptEngine Engine { get; internal set; }
 
         public TreeDuplicator TreeDuplicator = new TreeDuplicator();
 
@@ -53,7 +53,7 @@ namespace Skrypt.ANTLR {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
             public StmntBlockContext StmntBlock => stmntBlock();
-            public BaseObject ReturnValue { get; set; }
+            public SkryptObject ReturnValue { get; set; }
             public JumpState JumpState { get; set; }
 
             public FunctionStatementContext Clone () {
@@ -65,7 +65,7 @@ namespace Skrypt.ANTLR {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
             public StmntBlockContext StmntBlock => stmntBlock();
-            public BaseObject ReturnValue { get; set; }
+            public SkryptObject ReturnValue { get; set; }
             public JumpState JumpState { get; set; }
         }
 
@@ -81,7 +81,7 @@ namespace Skrypt.ANTLR {
             public string CallFile { get; set; }
         }
 
-        void CreateProperty(BaseObject target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
+        void CreateProperty(SkryptObject target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
 
             if (propertyTree.GetChild(0) is MemberDefinitionStatementContext assignCtx) {

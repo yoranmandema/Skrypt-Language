@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class ArrayIteratorInstance : BaseInstance {
+    public class ArrayIteratorInstance : SkryptInstance {
         public int Index = -1;
         public ArrayInstance Array;
 
-        public ArrayIteratorInstance(Engine engine) : base(engine) {
+        public ArrayIteratorInstance(SkryptEngine engine) : base(engine) {
         }
     }
 }

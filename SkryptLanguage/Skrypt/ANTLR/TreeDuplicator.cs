@@ -9,7 +9,7 @@ using Antlr4.Runtime.Tree;
 using System.Reflection;
 
 namespace Skrypt.ANTLR {
-    public class TreeDuplicator : SkryptBaseVisitor<BaseObject> {
+    public class TreeDuplicator : SkryptBaseVisitor<SkryptObject> {
 
         public static ParserRuleContext DuplicateTree (ParserRuleContext context) {
             var newContext = (ParserRuleContext)Activator.CreateInstance(context.GetType(), context);

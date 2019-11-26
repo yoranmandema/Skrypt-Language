@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 namespace Skrypt {
-    public partial class Engine {
+    public partial class SkryptEngine {
 
         public ScriptType CreateStructFromClass (Type type) {
             var newStruct = new ScriptType(type.Name, this);

@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Skrypt\Skrypt.csproj">
+      <Project>{a623e9c0-8046-440b-b412-2546aa8bb04f}</Project>
+      <Name>Skrypt</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class Vector3Type : VectorType {
-        public Vector3Type(Engine engine) : base(engine) {
+        public Vector3Type(SkryptEngine engine) : base(engine) {
             CreateProperty("forward", Construct(1, 0, 0));
             CreateProperty("back", Construct(-1, 0, 0));
             CreateProperty("down", Construct(0, -1, 0));

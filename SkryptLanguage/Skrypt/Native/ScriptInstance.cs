@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class ScriptInstance : BaseInstance {
-        public ScriptInstance(Engine engine) : base(engine) {
+    public class ScriptInstance : SkryptInstance {
+        public ScriptInstance(SkryptEngine engine) : base(engine) {
         }
     }
 }

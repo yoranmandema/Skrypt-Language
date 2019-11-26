@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public abstract class BaseType : BaseObject {
-        public BaseType(Engine engine) : base(engine) {
+    public abstract class BaseType : SkryptObject {
+        public BaseType(SkryptEngine engine) : base(engine) {
             var template = engine.TemplateMaker.CreateTemplate(this.GetType());
 
             GetProperties(template.Members);
@@ -31,7 +31,7 @@ namespace Skrypt {
 
         public Template Template;
         public List<BaseTrait> Traits = new List<BaseTrait>();
-        public abstract BaseInstance Construct(Arguments arguments);
+        public abstract SkryptInstance Construct(Arguments arguments);
 
         public override string ToString() {
             var str = $"{Name}";

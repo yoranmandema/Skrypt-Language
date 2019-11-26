@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitCatchStatement(SkryptParser.CatchStatementContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitCatchStatement(SkryptParser.CatchStatementContext context) {
             (context as IScoped).LexicalEnvironment.Variables[context.name().GetText()].Value = _engine.CreateString(context.error.Message);
 
             Visit(context.stmntBlock());

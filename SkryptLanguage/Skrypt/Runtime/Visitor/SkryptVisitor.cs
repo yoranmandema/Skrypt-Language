@@ -8,22 +8,22 @@ using System.Linq;
 using Skrypt.Runtime;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public BaseObject LastResult { get; private set; }
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public SkryptObject LastResult { get; private set; }
         
         public LexicalEnvironment CurrentEnvironment { get; internal set; }
-        private readonly Engine _engine;
-        private BaseObject accessed;
+        private readonly SkryptEngine _engine;
+        private SkryptObject accessed;
 
-        public SkryptVisitor (Engine engine) {
+        public SkryptVisitor (SkryptEngine engine) {
             _engine = engine;
         }
 
-        public override BaseObject VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
-        public override BaseObject VisitFunctionStatement(SkryptParser.FunctionStatementContext context) => DefaultResult;
-        public override BaseObject VisitModuleStatement(SkryptParser.ModuleStatementContext context) => null;
-        public override BaseObject VisitStructStatement(SkryptParser.StructStatementContext context) => null;
-        public override BaseObject VisitTraitStatement(SkryptParser.TraitStatementContext context) => null;
-        public override BaseObject VisitTraitImplStatement(SkryptParser.TraitImplStatementContext context) => null;
+        public override SkryptObject VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
+        public override SkryptObject VisitFunctionStatement(SkryptParser.FunctionStatementContext context) => DefaultResult;
+        public override SkryptObject VisitModuleStatement(SkryptParser.ModuleStatementContext context) => null;
+        public override SkryptObject VisitStructStatement(SkryptParser.StructStatementContext context) => null;
+        public override SkryptObject VisitTraitStatement(SkryptParser.TraitStatementContext context) => null;
+        public override SkryptObject VisitTraitImplStatement(SkryptParser.TraitImplStatementContext context) => null;
     }
 }

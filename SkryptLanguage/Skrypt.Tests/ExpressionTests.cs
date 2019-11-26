@@ -5,9 +5,9 @@ using System;
 namespace Skrypt.Tests {
     public class ExpressionTests {
 
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
         public ExpressionTests() {
-            _engine = new Engine();
+            _engine = new SkryptEngine();
 
             _engine
                 .SetValue("assert", new Action<bool>(Assert.True))

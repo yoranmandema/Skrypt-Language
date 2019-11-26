@@ -1,9 +1,9 @@
 ﻿
 namespace Skrypt {
     public class SubtractableTrait : BaseTrait {
-        public SubtractableTrait(Engine engine) : base(engine) {
+        public SubtractableTrait(SkryptEngine engine) : base(engine) {
         }
 
-        public static BaseObject Sub(Engine engine, BaseObject self, Arguments arguments) => null;
+        public static SkryptObject Sub(SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
     }
 }

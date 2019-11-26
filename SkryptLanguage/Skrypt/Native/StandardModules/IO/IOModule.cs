@@ -9,11 +9,11 @@ namespace Skrypt {
     public class IOModule : BaseModule {
         public override string Name => "IO";
 
-        public IOModule(Engine engine) : base(engine) {
+        public IOModule(SkryptEngine engine) : base(engine) {
             //CreateProperty("Path", engine.CreateString(engine.FileHandler.File));
         }
 
-        public static BaseObject Read(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Read(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var destination = arguments.GetAs<StringInstance>(0);
 
             var str = engine.CreateString(engine.FileHandler.Read(destination));
@@ -21,16 +21,16 @@ namespace Skrypt {
             return str;
         }
 
-        public static BaseObject Write(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject Write(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var destination = arguments.GetAs<StringInstance>(0);
-            var content = arguments.GetAs<BaseObject>(1).ToString();
+            var content = arguments.GetAs<SkryptObject>(1).ToString();
 
             engine.FileHandler.Write(destination, content);
 
             return null;
         }
 
-        public static BaseObject ReadAsync(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject ReadAsync(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var destination = arguments.GetAs<StringInstance>(0);
             var function = arguments.GetAs<FunctionInstance>(1);
 
@@ -39,9 +39,9 @@ namespace Skrypt {
             return null;
         }
 
-        public static BaseObject WriteAsync(Engine engine, BaseObject self, Arguments arguments) {
+        public static SkryptObject WriteAsync(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var destination = arguments.GetAs<StringInstance>(0);
-            var content = arguments.GetAs<BaseObject>(1).ToString();
+            var content = arguments.GetAs<SkryptObject>(1).ToString();
             var function = arguments.GetAs<FunctionInstance>(2);
 
             engine.FileHandler.WriteAsync(destination, content, function);

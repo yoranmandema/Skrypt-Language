@@ -4,8 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitPrefixOperationExp(SkryptParser.PrefixOperationExpContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitPrefixOperationExp(SkryptParser.PrefixOperationExpContext context) {
             var operationName = context.Operation.Text;
 
             var target = Visit(context.Target);
@@ -37,7 +37,7 @@ namespace Skrypt {
                     result = _engine.ExpressionInterpreter.EvaluateNotExpression(value);
                     break;
                 case "typeof":
-                    if (value is BaseInstance instance) {
+                    if (value is SkryptInstance instance) {
                         result = instance.TypeObject;
                     } else {
                         result = value;
@@ -64,9 +64,9 @@ namespace Skrypt {
                 _engine.ErrorHandler.FatalError(context.Target.Start, $"No such operation: {name} {operationName}");
             }
 
-            LastResult = (BaseObject)result;
+            LastResult = (SkryptObject)result;
 
-            return (BaseObject)result;
+            return (SkryptObject)result;
         }
     }
 }

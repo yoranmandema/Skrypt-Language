@@ -4,17 +4,17 @@ using Skrypt;
 namespace Skrypt.Tests {
     public class AssignTests {
 
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
 
-        private class BasicStruct : BaseObject {
-            public BasicStruct(Engine engine) : base(engine) {
+        private class BasicStruct : SkryptObject {
+            public BasicStruct(SkryptEngine engine) : base(engine) {
                 CreateProperty("Property", null);
             }
         }
 
 
         public AssignTests () {
-            _engine = new Engine();
+            _engine = new SkryptEngine();
 
             _engine.SetValue("BasicStruct", new BasicStruct(_engine));
             _engine.SetValue("numberVariable", 5);

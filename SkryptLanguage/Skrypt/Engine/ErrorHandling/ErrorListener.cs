@@ -11,9 +11,9 @@ using Skrypt.Runtime;
 namespace Skrypt {
     internal class ErrorListener : BaseErrorListener, IAntlrErrorListener<int>{
 
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
 
-        public ErrorListener (Engine engine) {
+        public ErrorListener (SkryptEngine engine) {
             _engine = engine;
         }
 

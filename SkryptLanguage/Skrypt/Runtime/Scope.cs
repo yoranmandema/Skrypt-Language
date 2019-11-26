@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class Scope {
         public Dictionary<string, Template> Templates = new Dictionary<string, Template>();
-        public Dictionary<string, BaseObject> Variables = new Dictionary<string, BaseObject>();
+        public Dictionary<string, SkryptObject> Variables = new Dictionary<string, SkryptObject>();
 
         public Template GetTemplate (string name) {
             return Templates[name];
         }
 
-        public void SetVariable (string name, BaseObject value) {
+        public void SetVariable (string name, SkryptObject value) {
             Variables[name] = value;
         }
 
-        public BaseObject GetVariable (string name) {
+        public SkryptObject GetVariable (string name) {
             if (!Variables.ContainsKey(name)) {
                 throw new VariableNotFoundException($"Variable {name} not found in current context.");
             }

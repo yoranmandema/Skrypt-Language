@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class IteratorTrait : BaseTrait {
-        public IteratorTrait(Engine engine) : base(engine) {
+        public IteratorTrait(SkryptEngine engine) : base(engine) {
         }
 
-        public static BaseObject Current    (Engine engine, BaseObject self, Arguments arguments) => null;
-        public static BaseObject Next       (Engine engine, BaseObject self, Arguments arguments) => null;
-        public static BaseObject HasNext    (Engine engine, BaseObject self, Arguments arguments) => null;
-        public static BaseObject Reset      (Engine engine, BaseObject self, Arguments arguments) => null;
+        public static SkryptObject Current    (SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
+        public static SkryptObject Next       (SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
+        public static SkryptObject HasNext    (SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
+        public static SkryptObject Reset      (SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
     }
 }

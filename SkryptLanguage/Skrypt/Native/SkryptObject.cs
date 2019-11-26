@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BaseObject {
+    public class SkryptObject {
         public virtual string Name { get; set; }
 
-        public Engine Engine { get; set; }
+        public SkryptEngine Engine { get; set; }
         public Dictionary<string, Member> Members = new Dictionary<string, Member>();
 
-        public BaseObject(Engine engine) {
+        public SkryptObject(SkryptEngine engine) {
             Engine = engine;
         }
 
@@ -30,7 +30,7 @@ namespace Skrypt {
             Name = template.Name;
         }
 
-        public Member SetProperty (string name, BaseObject value) {
+        public Member SetProperty (string name, SkryptObject value) {
             if (!Members.ContainsKey(name)) {
                 throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
             }
@@ -40,7 +40,7 @@ namespace Skrypt {
             return Members[name];
         }
 
-        public Member CreateProperty(string name, BaseObject value, bool isPrivate = false, bool isConstant = false) {
+        public Member CreateProperty(string name, SkryptObject value, bool isPrivate = false, bool isConstant = false) {
             Members[name] = new Member(value, isPrivate, null);
 
             Members[name].isConstant = isConstant;
@@ -56,7 +56,7 @@ namespace Skrypt {
             return Members[name];
         }
 
-        public T AsType<T>() where T : BaseObject {
+        public T AsType<T>() where T : SkryptObject {
             return (T)this;
         }
 
@@ -64,8 +64,8 @@ namespace Skrypt {
             return true;
         }
 
-        public BaseObject Clone() {
-            return (BaseObject)MemberwiseClone();
+        public SkryptObject Clone() {
+            return (SkryptObject)MemberwiseClone();
         }
 
         protected string FormattedString (int depth) {
@@ -97,8 +97,6 @@ namespace Skrypt {
         public override string ToString() {
             var str = $"{Name}";
 
-            var isContainer = this is BaseType || this is BaseModule;
-
             if (Members.Any()) {
                 str += " {";
 
@@ -108,8 +106,6 @@ namespace Skrypt {
 
                 str += "\n}";
             }
-
-            //Console.WriteLine(FormattedString(0));
 
             return FormattedString(0);
         }

@@ -1,9 +1,9 @@
 ﻿
 namespace Skrypt {
     public class MultiplicableTrait : BaseTrait {
-        public MultiplicableTrait(Engine engine) : base(engine) {
+        public MultiplicableTrait(SkryptEngine engine) : base(engine) {
         }
 
-        public static BaseObject Mul(Engine engine, BaseObject self, Arguments arguments) => null;
+        public static SkryptObject Mul(SkryptEngine engine, SkryptObject self, Arguments arguments) => null;
     }
 }

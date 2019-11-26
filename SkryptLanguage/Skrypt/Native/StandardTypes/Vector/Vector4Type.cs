@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class Vector4Type : VectorType {
-        public Vector4Type(Engine engine) : base(engine) {
+        public Vector4Type(SkryptEngine engine) : base(engine) {
             CreateProperty("zero", Construct(0, 0, 0, 0));
             CreateProperty("one", Construct(1, 1, 1, 1));
             CreateProperty("positiveInfinity", Construct(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity));

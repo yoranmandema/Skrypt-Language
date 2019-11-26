@@ -8,7 +8,7 @@ using Antlr4.Runtime;
 namespace Skrypt {
 
     public class DefaultErrorHandler : ErrorHandler {
-        public DefaultErrorHandler(Engine engine) : base(engine) { }
+        public DefaultErrorHandler(SkryptEngine engine) : base(engine) { }
 
         public override void FatalError(IToken token, string msg) {
             var errorMsg = ReportError(new ParseError(token, msg, _engine.FileHandler.File));

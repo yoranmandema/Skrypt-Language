@@ -4,11 +4,11 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
-        public override BaseObject VisitFunctionCallExp(SkryptParser.FunctionCallExpContext context) {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+        public override SkryptObject VisitFunctionCallExp(SkryptParser.FunctionCallExpContext context) {
             var length = context.Arguments.expression().Length;
 
-            var arguments = new BaseObject[length];
+            var arguments = new SkryptObject[length];
 
             for (var i = 0; i < length; i++) {
                 arguments[i] = Visit(context.Arguments.expression(i));

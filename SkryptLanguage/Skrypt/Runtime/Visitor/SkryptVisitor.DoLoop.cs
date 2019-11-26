@@ -4,7 +4,7 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         void DoLoop(SkryptParser.StmntBlockContext stmntBlock, ILoop context, Func<bool> cond, Action callback = null) {
             var block = stmntBlock.block();
             var expression = (RuleContext)stmntBlock.expression();

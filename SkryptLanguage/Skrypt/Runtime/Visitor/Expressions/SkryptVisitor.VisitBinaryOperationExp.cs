@@ -5,9 +5,9 @@ using Skrypt.ANTLR;
 using System.Linq;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<BaseObject> {
+    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
 
-        public BaseObject EvaluateExpression (string operationName, BaseObject left, BaseObject right, IToken token) {
+        public SkryptObject EvaluateExpression (string operationName, SkryptObject left, SkryptObject right, IToken token) {
             object result = new InvalidOperation();
 
             switch (operationName) {
@@ -95,16 +95,16 @@ namespace Skrypt {
             }
 
             if (left != null) {
-                if (left.AsType<BaseInstance>().HasTrait<SubtractableTrait>()) {
+                if (left.AsType<SkryptInstance>().HasTrait<SubtractableTrait>()) {
                     result = EvaluateTraitOperator("Sub", left, right);
                 }
-                else if (left.AsType<BaseInstance>().HasTrait<AddableTrait>()) {
+                else if (left.AsType<SkryptInstance>().HasTrait<AddableTrait>()) {
                     result = EvaluateTraitOperator("Add", left, right);
                 }
-                else if (left.AsType<BaseInstance>().HasTrait<MultiplicableTrait>()) {
+                else if (left.AsType<SkryptInstance>().HasTrait<MultiplicableTrait>()) {
                     result = EvaluateTraitOperator("Mul", left, right);
                 }
-                else if (left.AsType<BaseInstance>().HasTrait<DividableTrait>()) {
+                else if (left.AsType<SkryptInstance>().HasTrait<DividableTrait>()) {
                     result = EvaluateTraitOperator("Div", left, right);
                 }
             }
@@ -118,10 +118,10 @@ namespace Skrypt {
                 }
             }
 
-            return (BaseObject)result;
+            return (SkryptObject)result;
         }
 
-        public override BaseObject VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
+        public override SkryptObject VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
             var operationName = context.Operation.Text;
 
             var left = Visit(context.Left);
@@ -134,8 +134,8 @@ namespace Skrypt {
             return result;
         }
 
-        private object EvaluateTraitOperator (string name, BaseObject left, BaseObject right) {
-            return left.AsType<BaseInstance>().GetProperty(name).value.AsType<FunctionInstance>().RunOnSelf(left, left, right);
+        private object EvaluateTraitOperator (string name, SkryptObject left, SkryptObject right) {
+            return left.AsType<SkryptInstance>().GetProperty(name).value.AsType<FunctionInstance>().RunOnSelf(left, left, right);
         }
     }
 }

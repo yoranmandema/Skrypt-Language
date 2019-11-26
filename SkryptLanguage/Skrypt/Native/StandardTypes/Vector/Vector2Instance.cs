@@ -8,25 +8,25 @@ namespace Skrypt {
     public class Vector2Instance : VectorInstance, IValue {
         public override string Name => "Vector2";
 
-        public Vector2Instance(Engine engine, double x, double y) : base(engine) {
+        public Vector2Instance(SkryptEngine engine, double x, double y) : base(engine) {
             Components = new double[2];
             Components[0] = x;
             Components[1] = y;
         }
 
-        public static BaseObject X(Engine engine, BaseObject self) {
+        public static SkryptObject X(SkryptEngine engine, SkryptObject self) {
             var vector = self as Vector2Instance;
 
             return engine.CreateNumber(vector.Components[0]);
         }
 
-        public static BaseObject Y(Engine engine, BaseObject self) {
+        public static SkryptObject Y(SkryptEngine engine, SkryptObject self) {
             var vector = self as Vector2Instance;
 
             return engine.CreateNumber(vector.Components[1]);
         }
 
-        public BaseObject Copy() {
+        public SkryptObject Copy() {
             return Engine.CreateVector2(Components[0], Components[1]);
         }
         bool IValue.Equals(IValue other) {

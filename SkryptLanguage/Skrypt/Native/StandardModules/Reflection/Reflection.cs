@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public partial class ReflectionModule : BaseModule {
-        public ReflectionModule(Engine engine) : base(engine) {
+        public ReflectionModule(SkryptEngine engine) : base(engine) {
         }
 
         public class MemoryModule : BaseModule {
-            public MemoryModule(Engine engine) : base(engine) {
+            public MemoryModule(SkryptEngine engine) : base(engine) {
             }
 
-            public static BaseObject GetSizeOfObject (Engine engine, BaseObject self, Arguments arguments) {
-                var target = arguments.GetAs<BaseObject>(0);
-                var clone = default(BaseObject);
+            public static SkryptObject GetSizeOfObject (SkryptEngine engine, SkryptObject self, Arguments arguments) {
+                var target = arguments.GetAs<SkryptObject>(0);
+                var clone = default(SkryptObject);
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -31,7 +31,7 @@ namespace Skrypt {
                 return engine.CreateNumber(after - before);
             }
 
-            public static BaseObject GetSizeOfAction (Engine engine, BaseObject self, Arguments arguments) {
+            public static SkryptObject GetSizeOfAction (SkryptEngine engine, SkryptObject self, Arguments arguments) {
                 var target = arguments.GetAs<FunctionInstance>(0);
 
                 GC.Collect();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class ScriptModule : BaseModule {
-        public ScriptModule(string name, Engine engine) : base(engine) {
+        public ScriptModule(string name, SkryptEngine engine) : base(engine) {
             Name = name;
         }
     }

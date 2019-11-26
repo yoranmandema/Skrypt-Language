@@ -4,9 +4,9 @@ using Skrypt;
 
 namespace Skrypt.Tests {
     public class LiteralTests {
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
         public LiteralTests() {
-            _engine = new Engine();
+            _engine = new SkryptEngine();
         }
 
         [Fact]

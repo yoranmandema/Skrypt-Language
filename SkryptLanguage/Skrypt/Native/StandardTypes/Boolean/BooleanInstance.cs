@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class BooleanInstance : BaseInstance, IValue {
+    public class BooleanInstance : SkryptInstance, IValue {
         public override string Name => "Boolean";
 
         public bool Value { get; set; }
 
-        public BooleanInstance(Engine engine, bool value) : base(engine) {
+        public BooleanInstance(SkryptEngine engine, bool value) : base(engine) {
             Value = value;
         }
 
@@ -26,11 +26,11 @@ namespace Skrypt {
             return Value.ToString();
         }
 
-        public BaseObject Copy() {
+        public SkryptObject Copy() {
             return Engine.CreateBoolean(Value);
         }
 
-        BaseObject IValue.Copy() {
+        SkryptObject IValue.Copy() {
             throw new NotImplementedException();
         }
 

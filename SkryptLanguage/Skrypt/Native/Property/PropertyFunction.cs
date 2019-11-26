@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public delegate BaseObject GetPropertyDelegate(Engine engine, BaseObject self);
+    public delegate SkryptObject GetPropertyDelegate(SkryptEngine engine, SkryptObject self);
 
     public class GetPropertyFunction : IGetProperty {
         public GetPropertyDelegate Property;
@@ -14,7 +14,7 @@ namespace Skrypt {
             Property = del;
         }
 
-        public BaseObject Run(Engine engine, BaseObject self) {
+        public SkryptObject Run(SkryptEngine engine, SkryptObject self) {
             return Property.Invoke(engine, self);
         }
     }

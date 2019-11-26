@@ -9,17 +9,17 @@ namespace Skrypt {
         public string File { get; set; }
         public ScriptFunction Constructor;
 
-        public ScriptType(string name, Engine engine) : base(engine) {
+        public ScriptType(string name, SkryptEngine engine) : base(engine) {
             Name = name;
         }
 
-        public override BaseInstance Construct(Arguments arguments) {
+        public override SkryptInstance Construct(Arguments arguments) {
             var instance = new ScriptInstance(Engine);
 
             instance.GetProperties(Template);
             instance.TypeObject = this;
 
-            var constructorResult = default(BaseObject);
+            var constructorResult = default(SkryptObject);
 
             if (Constructor != null) {
                 constructorResult = Constructor.Run(Engine, instance, arguments);

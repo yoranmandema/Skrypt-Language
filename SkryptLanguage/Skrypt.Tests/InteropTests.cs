@@ -5,10 +5,10 @@ using System;
 namespace Skrypt.Tests {
     public class InteropTests {
 
-        private readonly Engine _engine;
+        private readonly SkryptEngine _engine;
 
         public InteropTests() {
-            _engine = new Engine();
+            _engine = new SkryptEngine();
 
             _engine
                 .SetValue("assert", new Action<bool>(Assert.True))

@@ -4,13 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Skrypt;
 
 namespace Skrypt.REPL {
     class Program {
         static void Main(string[] args) {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
+            string path;
 
-            var engine = new Engine();
+            if (!args.Any()) {
+                path = Console.ReadLine();
+            }
+            else {
+                path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
+            }
+
+            var engine = new SkryptEngine();
 
             engine.SetValue("print", (e, s, i) => {
 
@@ -54,7 +62,7 @@ namespace Skrypt.REPL {
             engine.SetValue("benchmark", (e, s, i) => {
                 var function = i.GetAs<FunctionInstance>(0);
                 var amount = i.GetAs<NumberInstance>(1).Value;
-                var lastResult = default(BaseObject);
+                var lastResult = default(SkryptObject);
 
                 var sw = System.Diagnostics.Stopwatch.StartNew();
 
