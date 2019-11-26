@@ -3,22 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Antlr4.Runtime;
-using Antlr4;
-using Skrypt.ANTLR;
 using System.IO;
-using Skrypt.Extensions.Image;
-using Skrypt.CLR;
 
-namespace Skrypt {
+namespace Skrypt.REPL {
     class Program {
         static void Main(string[] args) {
             var path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
-                    
+
             var engine = new Engine();
-            
-            engine.FastAdd(new TimeModule(engine));
-            engine.FastAdd(new ImproModule(engine));
 
             engine.SetValue("print", (e, s, i) => {
 
@@ -81,8 +73,6 @@ namespace Skrypt {
             });
 
             engine.SetValue("log", new Action<object>(Console.WriteLine));
-
-            engine.SetValue("CLRMath", CLRTypeConverter.CreateModuleFromObject(engine, typeof(Math)));
 
             engine.DoFile(path).ReportErrors().CreateGlobals();
 

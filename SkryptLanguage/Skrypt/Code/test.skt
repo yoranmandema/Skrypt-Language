@@ -1,2 +1,10 @@
 ﻿
-Console.WriteLine("Hello world!")
+fn fibonacci(num) {
+    if (num <= 1) return 1
+
+    return fibonacci(num - 1) + fibonacci(num - 2)
+}
+
+benchmark(_ => {
+	result = fibonacci(8)
+},5000)
