@@ -17,68 +17,14 @@ namespace Skrypt.REPL {
 
             var engine = new SkryptEngine();
 
-            engine.SetValue("print", (e, s, i) => {
-
-                var str = "";
-
-                for (var j = 0; j < i.Length; j++) {
-                    if (i[j] == null) {
-                        str += "null";
-                    }
-                    else if (i[j].Members.ContainsKey("string")) {
-                        str += (i[j].Members["string"].value as FunctionInstance).Function.Run(engine, i[j], Arguments.Empty).ToString();
-                    }
-                    else {
-                        str += i[j].ToString();
-                    }
-
-                    if (j < i.Length - 1) str += ", ";
-                }
-
-                Console.WriteLine(str);
-
-                return null;
-            });
-
-            engine.SetValue("input", (e, s, i) => {
-                if (i.Length == 1) Console.WriteLine(i[0]);
-
-                string fullString = "";
-                string line;
-                while (!String.IsNullOrWhiteSpace(line = Console.ReadLine())) {
-                    fullString += line;
-                }
-
-                return engine.CreateString(fullString);
-            });
+            engine.SetValue("print", new MethodDelegate(print));
+            engine.SetValue("input", new MethodDelegate(input));
+            engine.SetValue("benchmark", new MethodDelegate(benchmark));
 
             engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));
-            });
-
-            engine.SetValue("benchmark", (e, s, i) => {
-                var function = i.GetAs<FunctionInstance>(0);
-                var amount = i.GetAs<NumberInstance>(1).Value;
-                var lastResult = default(SkryptObject);
-
-                var sw = System.Diagnostics.Stopwatch.StartNew();
-
-                for (int x = 0; x < amount; x++) {
-                    lastResult = function.Function.Run(engine, null, Arguments.Empty);
-                }
-
-                sw.Stop();
-
-                Console.WriteLine($"Executed function {amount} times in {sw.Elapsed.TotalMilliseconds}ms");
-                Console.WriteLine($"Equals {1 / sw.Elapsed.TotalSeconds * amount} times per second");
-                Console.WriteLine($"Average {(sw.Elapsed.TotalMilliseconds / amount).ToString(".####################")}ms");
-                if (lastResult != null) Console.WriteLine($"Last result: {lastResult}");
-
-                return null;
-            });
-
-            engine.SetValue("log", new Action<object>(Console.WriteLine));
-
+            });       
+            
             if (!string.IsNullOrEmpty(path))
                 engine.DoFile(path).ReportErrors().CreateGlobals();
 
@@ -94,6 +40,72 @@ namespace Skrypt.REPL {
                     Console.WriteLine(e);
                 }
             }
+        }
+
+        private static SkryptObject print (SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            var str = "";
+
+            for (var j = 0; j < arguments.Length; j++) {
+                Member stringMember = null;
+                IFunction stringFunction = null;
+
+                if (arguments[j].Members.ContainsKey("string")) {
+                    stringMember = arguments[j].Members["string"];
+
+                    if (stringMember?.value is FunctionInstance) {
+                        stringFunction = (stringMember.value as FunctionInstance).Function;
+                    }
+                }
+
+                if (arguments[j] == null) {
+                    str += "null";
+                }
+                else if (stringFunction != null) {
+                    str += stringFunction.Run(engine, arguments[j], Arguments.Empty).ToString();
+                }
+                else {
+                    str += arguments[j].ToString();
+                }
+
+                if (j < arguments.Length - 1) str += ", ";
+            }
+
+            Console.WriteLine(str);
+
+            return null;
+        }
+
+        private static SkryptObject input(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            if (arguments.Length == 1) Console.WriteLine(arguments[0]);
+
+            string fullString = "";
+            string line;
+            while (!String.IsNullOrWhiteSpace(line = Console.ReadLine())) {
+                fullString += line;
+            }
+
+            return engine.CreateString(fullString);
+        }
+
+        private static SkryptObject benchmark(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            var function = arguments.GetAs<FunctionInstance>(0);
+            var amount = arguments.GetAs<NumberInstance>(1).Value;
+            var lastResult = default(SkryptObject);
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            for (int x = 0; x < amount; x++) {
+                lastResult = function.Function.Run(engine, null, Arguments.Empty);
+            }
+
+            sw.Stop();
+
+            Console.WriteLine($"Executed function {amount} times in {sw.Elapsed.TotalMilliseconds}ms");
+            Console.WriteLine($"Equals {1 / sw.Elapsed.TotalSeconds * amount} times per second");
+            Console.WriteLine($"Average {(sw.Elapsed.TotalMilliseconds / amount).ToString(".####################")}ms");
+            if (lastResult != null) Console.WriteLine($"Last result: {lastResult}");
+
+            return null;
         }
     }
 }

@@ -28,6 +28,9 @@ namespace Skrypt.CLR {
                 else if (arg is BooleanInstance && parameters[i].ParameterType == typeof(bool)) {
                     continue;
                 }
+                else if (typeof(SkryptObject).IsAssignableFrom(parameters[i].ParameterType)) {
+                    continue;
+                }
                 else if (parameters[i].ParameterType == typeof(object)) {
                     continue;
                 }
@@ -52,6 +55,9 @@ namespace Skrypt.CLR {
                 }
                 else if (arg is BooleanInstance booleanInstance && typeof(bool).IsAssignableFrom(parameters[i].ParameterType)) {
                     convertedArguments[i] = Convert.ChangeType(booleanInstance.Value, parameters[i].ParameterType);
+                }
+                else if (arg is SkryptObject skryptObject && typeof(SkryptObject).IsAssignableFrom(parameters[i].ParameterType)) {
+                    convertedArguments[i] = skryptObject;
                 }
                 else if (typeof(object).IsAssignableFrom(parameters[i].ParameterType)) {
                     convertedArguments[i] = arg;
