@@ -208,30 +208,6 @@
       <CustomToolNamespace>Skrypt.ANTLR</CustomToolNamespace>
     </Antlr4>
     <None Include="App.config" />
-    <None Include="Code\importTest.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\InvalidImport.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\library.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\matrix.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\neuralnetwork.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\LyricsAnalyzer.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\test.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Code\Types\BasicStruct.skt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <Compile Include="Runtime\Visitor\SkryptVisitor.VisitTryStatement.cs" />
   </ItemGroup>

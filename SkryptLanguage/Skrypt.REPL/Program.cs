@@ -9,12 +9,9 @@ using Skrypt;
 namespace Skrypt.REPL {
     class Program {
         static void Main(string[] args) {
-            string path;
+            string path = null;
 
-            if (!args.Any()) {
-                path = Console.ReadLine();
-            }
-            else {
+            if (args.Any()) {
                 path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
             }
 
@@ -82,7 +79,8 @@ namespace Skrypt.REPL {
 
             engine.SetValue("log", new Action<object>(Console.WriteLine));
 
-            engine.DoFile(path).ReportErrors().CreateGlobals();
+            if (!string.IsNullOrEmpty(path))
+                engine.DoFile(path).ReportErrors().CreateGlobals();
 
             while (true) {
                 string line = Console.ReadLine();
