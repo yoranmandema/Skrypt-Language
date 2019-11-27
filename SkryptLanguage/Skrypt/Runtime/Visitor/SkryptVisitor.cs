@@ -27,7 +27,7 @@ namespace Skrypt {
                     var realBytes = bytes - _engine.InitialMemoryUsage;
 
                     if (realBytes > _engine.MemoryLimit) {
-                        throw new SkryptException($"Engine exceeded memory usage ({_engine.MemoryLimit}) at {realBytes} bytes");
+                        throw new SkryptException($"Engine exceeded memory limit ({_engine.MemoryLimit} bytes) at {realBytes} bytes");
                     }
                 }
             }

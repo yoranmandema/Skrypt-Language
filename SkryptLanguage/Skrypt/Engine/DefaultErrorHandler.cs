@@ -16,10 +16,9 @@ namespace Skrypt {
 
         public override string ReportError(SkryptException error) {
             string positionString = $"({error.Line},{error.Column})";
+            string fileAndPosition = $"{error.File}{positionString}: ";
 
-            var msg = error.Message;
-
-            var finalMessage = $"{error.File}{positionString}: {msg}";
+            var finalMessage = (error.Index > -1 ? fileAndPosition : "") + $"{error.Message}";
 
             Console.WriteLine(finalMessage);
 
