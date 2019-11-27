@@ -5,35 +5,20 @@ using Xunit.Abstractions;
 
 namespace Skrypt.Tests {
     [TestCaseOrderer("Skrypt.Tests.PriorityOrderer", "Skrypt.Tests")]
-    public class StructTests {
+    public class ModuleTests {
 
         private readonly SkryptEngine _engine;
         private readonly ITestOutputHelper _output;
 
-        public StructTests(ITestOutputHelper output) {
+        public ModuleTests(ITestOutputHelper output) {
             _output = output;
             _engine = new SkryptEngine();
 
             _engine
                 .SetValue("assert", new Action<bool>(Assert.True))
                 .SetValue("equal", new Action<object, object>(Assert.Equal))
+                .SetValue("log", new Action<string>(_output.WriteLine))
                 ;
-
-            _engine.Run(@"
-struct BasicStruct {
-    A = 0
-    B = """"
-
-    fn init (a,b) {
-        self.A = a
-        self.B = b
-    }
-
-    fn toString () {
-        return ""{"" + self.A + "","" + self.B + ""}""
-    }
-}
-            ").CreateGlobals();
         }
 
         private void RunTest(string source) {
@@ -50,29 +35,26 @@ struct BasicStruct {
             }
         }
 
-        [Fact, TestPriority(0)]
-        public void ShouldParseStruct() {
+        [Fact, TestPriority(1)]
+        public void ShouldParseModule() {
             RunTest(@"
-struct TestStruct {
+struct TestModule {
     A = 0
-    B = """"
+    B = ""Hello world!""
 
-    fn init (a,b) {
-        self.A = a
-        self.B = b
-    }
-
-    fn toString () {
-        return ""{"" + self.A + "","" + self.B + ""}""
+    fn Print() {
+        log(self.B)
     }
 }
             ");
         }
 
-        [Fact, TestPriority(1)]
-        public void ShouldConstructStruct() {
+        [Fact, TestPriority(0)]
+        public void ShouldImportModule() {
             RunTest(@"
-instance = BasicStruct(1,""Hello"")
+import Math
+
+a = Sin(PI)
             ");
         }
     }

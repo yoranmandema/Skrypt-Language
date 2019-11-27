@@ -61,6 +61,7 @@
     <Compile Include="ExpressionTests.cs" />
     <Compile Include="InteropTests.cs" />
     <Compile Include="LiteralTests.cs" />
+    <Compile Include="ModuleTests.cs" />
     <Compile Include="PriorityOrderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructTests.cs" />
