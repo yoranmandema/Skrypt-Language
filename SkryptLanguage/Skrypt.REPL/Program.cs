@@ -18,7 +18,7 @@ namespace Skrypt.REPL {
                 path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
             }
 
-            _engine = new SkryptEngine();
+            _engine = new SkryptEngine(new Options().LimitMemory(1000));
 
             _engine.SetValue("print", new MethodDelegate(Print));
             _engine.SetValue("input", new MethodDelegate(Input));

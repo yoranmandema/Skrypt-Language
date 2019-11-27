@@ -24,6 +24,8 @@ namespace Skrypt {
         public SkryptObject CompletionValue => Visitor.LastResult;
         public Stack<Call> CallStack { get; internal set; } = new Stack<Call>();
 
+        public readonly long MemoryLimit;
+
         internal Stopwatch SW { get; private set; }
         internal SkryptParser Parser { get; private set; }
         internal SkryptVisitor Visitor { get; private set; }
@@ -33,10 +35,9 @@ namespace Skrypt {
         internal TextWriter TextWriter { get; private set; }
 
         internal static Func<long> GetAllocatedBytesForCurrentThread;
+        internal long InitialMemoryUsage;
 
         private readonly bool   _discardGlobal;
-        private readonly long   _memoryLimit;
-        private long            _initialMemoryUsage;
         private readonly int    _maxRecursionDepth = -1;
 
         #region Traits
@@ -118,7 +119,7 @@ namespace Skrypt {
             if (options != null) {
                 _discardGlobal = options.DiscardGlobal;
                 _maxRecursionDepth = options.MaxRecursionDepth;
-                _memoryLimit = options.MaxMemory;
+                MemoryLimit = options.MaxMemory;
             }
         }
 
@@ -154,7 +155,7 @@ namespace Skrypt {
 
         public void ResetMemoryUsage () {
             if (GetAllocatedBytesForCurrentThread != null) {
-                _initialMemoryUsage = GetAllocatedBytesForCurrentThread();
+                InitialMemoryUsage = GetAllocatedBytesForCurrentThread();
             }
         }
 
@@ -205,12 +206,11 @@ namespace Skrypt {
         }
 
         public SkryptEngine Execute(string code, ParserOptions parserOptions) {
+            ProgramContext = ParseProgram(code, parserOptions);
 
-            if (_memoryLimit > 0) {
+            if (MemoryLimit > 0) {
                 ResetMemoryUsage();
             }
-
-            ProgramContext = ParseProgram(code, parserOptions);
 
             Visitor.CurrentEnvironment = GlobalEnvironment;
             Visitor.Visit(ProgramContext);

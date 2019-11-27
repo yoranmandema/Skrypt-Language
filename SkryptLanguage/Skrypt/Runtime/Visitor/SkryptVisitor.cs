@@ -19,6 +19,22 @@ namespace Skrypt {
             _engine = engine;
         }
 
+        public override SkryptObject Visit([NotNull] IParseTree tree) {
+            
+            if (_engine.MemoryLimit > 0) {
+                if (SkryptEngine.GetAllocatedBytesForCurrentThread != null) {
+                    var bytes = SkryptEngine.GetAllocatedBytesForCurrentThread();
+                    var realBytes = bytes - _engine.InitialMemoryUsage;
+
+                    if (realBytes > _engine.MemoryLimit) {
+                        throw new SkryptException($"Engine exceeded memory usage ({_engine.MemoryLimit}) at {realBytes} bytes");
+                    }
+                }
+            }
+
+            return base.Visit(tree);
+        }
+
         public override SkryptObject VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
         public override SkryptObject VisitImportFromStatement(SkryptParser.ImportFromStatementContext context) => DefaultResult;
         public override SkryptObject VisitImportAllFromStatement(SkryptParser.ImportAllFromStatementContext context) => DefaultResult;
