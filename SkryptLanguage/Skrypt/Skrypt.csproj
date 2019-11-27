@@ -167,7 +167,7 @@
     <Compile Include="Native\Module\BaseModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Engine\Variable.cs" />
+    <Compile Include="Native\Variable.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitBinaryOperationExp.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitConditionalExp.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitNameExp.cs" />

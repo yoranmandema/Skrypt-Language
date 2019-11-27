@@ -6,6 +6,7 @@ block				: (
 					importStmnt
 					| importAllFromStmnt
 					| importFromStmnt
+					| importFromModuleStmnt
 					| moduleStmnt
 					| structStmnt
 					| traitStmnt
@@ -87,12 +88,31 @@ importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
 }																																#importFromStatement
 					;
 
+importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
+	var Ctx = ($ctx as ImportFromModuleStatementContext);
+	var scope = GetDefinitionBlock($ctx);
+
+	var module = Ctx.Module.variable.Value;
+
+	if (module == null) Engine.ErrorHandler.AddParseError(Ctx.Module.Start, "Module can't be null.");
+
+	foreach (var n in Ctx.NAME()) {
+		try {
+			var name = n.GetText();	
+			var value = module.GetProperty(name).value;
+
+			scope.LexicalEnvironment.AddVariable(new Skrypt.Variable(name, value, scope.LexicalEnvironment));
+		} catch (NonExistingMemberException e) {
+			Engine.ErrorHandler.AddParseError(n.Symbol, e.Message);
+		}
+	}
+}																																#importFromModuleStatement
+					;
+
 moduleStmnt			: MODULE name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
-	if (!isInValidContext) {
-		Engine.ErrorHandler.AddParseError($ctx.Start, "Module has to be in global scope or module block.");
-	}
+	if (!isInValidContext) Engine.ErrorHandler.AddParseError($ctx.Start, "Module has to be in global scope or module block.");
 
 	var Ctx = ($ctx as ModuleStatementContext);
 	var nameCtx = Ctx.name();

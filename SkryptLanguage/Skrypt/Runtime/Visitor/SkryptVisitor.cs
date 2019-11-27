@@ -20,6 +20,9 @@ namespace Skrypt {
         }
 
         public override SkryptObject VisitImportStatement(SkryptParser.ImportStatementContext context) => DefaultResult;
+        public override SkryptObject VisitImportFromStatement(SkryptParser.ImportFromStatementContext context) => DefaultResult;
+        public override SkryptObject VisitImportAllFromStatement(SkryptParser.ImportAllFromStatementContext context) => DefaultResult;
+        public override SkryptObject VisitImportFromModuleStatement(SkryptParser.ImportFromModuleStatementContext context) => DefaultResult;
         public override SkryptObject VisitFunctionStatement(SkryptParser.FunctionStatementContext context) => DefaultResult;
         public override SkryptObject VisitModuleStatement(SkryptParser.ModuleStatementContext context) => null;
         public override SkryptObject VisitStructStatement(SkryptParser.StructStatementContext context) => null;

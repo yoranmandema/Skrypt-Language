@@ -36,6 +36,8 @@ namespace Skrypt.REPL {
 
                 if (line == "exit") break;
 
+                _engine.ErrorHandler.Errors.Clear();
+
                 try {
                     Console.WriteLine(_engine.Run(line).ReportErrors().CreateGlobals().CompletionValue);
                 }
