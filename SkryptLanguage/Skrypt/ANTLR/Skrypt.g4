@@ -137,7 +137,6 @@ structStmnt			: STRUCT name {
 	var template = new Template {Name = typeName};
 
 	block.LexicalEnvironment.AddVariable(type);
-	Ctx.LexicalEnvironment.AddVariable(type);
 
 	}  '{' structProperty* '}' {
 
