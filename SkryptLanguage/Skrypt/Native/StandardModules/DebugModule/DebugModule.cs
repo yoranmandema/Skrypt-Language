@@ -18,31 +18,30 @@ namespace Skrypt {
             var message = arguments.Length > 1 ? arguments.GetAs<StringInstance>(1) : "Assertion failed!";
 
             if (!condition) {
-                engine.Print(message);
+                Console.WriteLine(message);
 
-                PrintCallStack(engine, self, arguments);
+                Console.WriteLine(CallStack(engine, self, arguments));
             }
 
             return condition;
         }
 
-        public static SkryptObject PrintCallStack(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+        public static SkryptObject CallStack(SkryptEngine engine, SkryptObject self, Arguments arguments) {
 
             int i = 0;
             int count = engine.CallStack.Count();
+            string str = "";
 
             foreach (Call c in engine.CallStack) {
                 var file = i == count - 1 ? c.callFile : c.file;
                 file = file ?? c.callFile;
 
-                engine.Print(
-                    $"\tat {c.name}() in {file} ({c.line},{c.column})"
-                    );
+                str += $"\tat {c.name}() in {file} ({c.line},{c.column})\n";
 
                 i++;
             }
 
-            return null;
+            return engine.CreateString(str);
         }
     }
 }

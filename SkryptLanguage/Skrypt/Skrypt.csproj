@@ -69,38 +69,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANTLR\AdditionalLexerFields.cs" />
-    <Compile Include="ANTLR\TreeDuplicator.cs" />
+    <Compile Include="Compiling\AdditionalLexerFields.cs" />
+    <Compile Include="Compiling\ErrorHandling\CompileErrorHandler.cs" />
+    <Compile Include="Compiling\ErrorHandling\ICompileErrorHandler.cs" />
+    <Compile Include="Compiling\ParserOptions.cs" />
+    <Compile Include="Compiling\TreeDuplicator.cs" />
     <Compile Include="CLR\CLRFunction.cs" />
     <Compile Include="CLR\CLRMethod.cs" />
     <Compile Include="CLR\CLRTypeConverter.cs" />
     <Compile Include="CLR\CLRMethodGroup.cs" />
     <Compile Include="CLR\MethodWrapper.cs" />
     <Compile Include="Engine\DefaultErrorHandler.cs" />
+    <Compile Include="Engine\EngineOptions.cs" />
     <Compile Include="Engine\ErrorHandling\ErrorListener.cs" />
-    <Compile Include="ANTLR\Contexts\IFunctionContext.cs" />
-    <Compile Include="ANTLR\Skrypt.g4.lexer.cs">
+    <Compile Include="Compiling\Contexts\IFunctionContext.cs" />
+    <Compile Include="Compiling\Skrypt.g4.lexer.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>
-    <Compile Include="ANTLR\Skrypt.g4.parser.cs">
+    <Compile Include="Compiling\Skrypt.g4.parser.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine\Call.cs" />
-    <Compile Include="Engine\ErrorHandling\CodeError.cs" />
-    <Compile Include="ANTLR\Contexts\ILoopContext.cs" />
-    <Compile Include="ANTLR\Contexts\IScopedContext.cs" />
-    <Compile Include="ANTLR\LexingErrorListener.cs" />
-    <Compile Include="ANTLR\AdditionalParserFields.cs" />
-    <Compile Include="ANTLR\ParsingErrorListener.cs" />
+    <Compile Include="Engine\ErrorHandling\ParseError.cs" />
+    <Compile Include="Compiling\Contexts\ILoopContext.cs" />
+    <Compile Include="Compiling\Contexts\IScopedContext.cs" />
+    <Compile Include="Compiling\LexingErrorListener.cs" />
+    <Compile Include="Compiling\AdditionalParserFields.cs" />
+    <Compile Include="Compiling\ParsingErrorListener.cs" />
     <Compile Include="Engine\SkryptEngine.cs" />
     <Compile Include="Engine\DefaultFileHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ErrorHandler.cs" />
-    <Compile Include="Engine\ErrorHandling\LexError.cs" />
     <Compile Include="Engine\IFileHandler.cs" />
-    <Compile Include="Engine\ErrorHandling\ParseError.cs" />
     <Compile Include="Engine\LexicalEnvironment\LexicalEnvironment.cs" />
     <Compile Include="Extensions\Image\ImproModule.cs" />
     <Compile Include="Native\Arguments.cs" />
+    <Compile Include="Native\Exceptions\ParserException.cs" />
     <Compile Include="Native\IDefined.cs" />
     <Compile Include="Engine\Interop.cs" />
     <Compile Include="Native\StandardModules\DebugModule\DebugModule.cs" />
@@ -115,7 +118,7 @@
     <Compile Include="Native\StandardTraits\Iterator\EnumerableTrait.cs" />
     <Compile Include="Native\StandardTraits\Iterator\IteratorTrait.cs" />
     <Compile Include="Native\IValue.cs" />
-    <Compile Include="Native\StandardModules\Reflection\Reflection.cs" />
+    <Compile Include="Native\StandardModules\Memory\MemoryModule.cs" />
     <Compile Include="Native\ScriptInstance.cs" />
     <Compile Include="Native\StandardTraits\Operators\AddableTrait.cs" />
     <Compile Include="Native\StandardTraits\Operators\SubtractableTrait.cs" />
@@ -203,7 +206,7 @@
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitMemberAccessExp.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Antlr4 Include="ANTLR\Skrypt.g4">
+    <Antlr4 Include="Compiling\Skrypt.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Skrypt.ANTLR</CustomToolNamespace>
     </Antlr4>

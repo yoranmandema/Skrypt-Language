@@ -96,7 +96,7 @@ namespace Skrypt {
                 if (line == "exit") break;
 
                 try {
-                    Console.WriteLine(engine.Run(line).ReportErrors().CreateGlobals().CompletionValue);
+                    Console.WriteLine(engine.Execute(line).ReportErrors().CreateGlobals().CompletionValue);
                 }
                 catch (Exception e) {
                     Console.WriteLine(e);

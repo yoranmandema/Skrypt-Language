@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skrypt.ANTLR {
-    public partial class SkryptLexer {
-        public SkryptEngine Engine { get; internal set; }
+namespace Skrypt.Compiling {
+    public class ParserOptions {
+        public bool Tolerant { get; set; }
     }
 }

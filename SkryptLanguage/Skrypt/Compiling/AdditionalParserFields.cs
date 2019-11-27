@@ -9,13 +9,9 @@ using Antlr4;
 namespace Skrypt.ANTLR {
     public partial class SkryptParser {
         public SkryptEngine Engine { get; internal set; }
-
-        public TreeDuplicator TreeDuplicator = new TreeDuplicator();
-
-        //public Dictionary<string, Variable> Globals = new Dictionary<string, Variable>();
         public LexicalEnvironment GlobalEnvironment;
-
         public ITokenStream TokenStream { get; internal set; }
+        public CompileErrorHandler ErrorHandler { get; internal set; }
 
         public partial class ModuleStmntContext : IScopedContext {
             public RuleContext Context => this;
@@ -97,7 +93,7 @@ namespace Skrypt.ANTLR {
             var value = ctx.LexicalEnvironment.Variables[nameToken.Text].Value;
 
             if (value == null) {
-                Engine.ErrorHandler.AddParseError(nameToken, "Field can't be set to an undefined value.");
+                ErrorHandler.TolerateError(nameToken, "Field can't be set to an undefined value.");
             }
 
             target.CreateProperty(nameToken.Text, value, isPrivate, ctx.LexicalEnvironment.Variables[nameToken.Text].IsConstant);
