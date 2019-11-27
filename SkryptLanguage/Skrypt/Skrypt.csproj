@@ -80,7 +80,7 @@
     <Compile Include="CLR\CLRMethodGroup.cs" />
     <Compile Include="CLR\MethodWrapper.cs" />
     <Compile Include="Engine\DefaultErrorHandler.cs" />
-    <Compile Include="Engine\EngineOptions.cs" />
+    <Compile Include="Engine\Options.cs" />
     <Compile Include="Compiling\ErrorHandling\ErrorListener.cs" />
     <Compile Include="Compiling\Contexts\IFunctionContext.cs" />
     <Compile Include="Compiling\Skrypt.g4.lexer.cs">

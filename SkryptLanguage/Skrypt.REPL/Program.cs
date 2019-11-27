@@ -20,6 +20,7 @@ namespace Skrypt.REPL {
 
             _engine = new SkryptEngine(
                     new Options()
+                        .MeasureOperationsPerSecond(true)
                         .LimitMemory(1000)
                         .HaltOnMemoryLimit(false)
                 );

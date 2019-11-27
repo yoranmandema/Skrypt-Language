@@ -10,7 +10,7 @@ namespace Skrypt {
         }
 
         public static SkryptObject GetAllocatedBytes(SkryptEngine engine, SkryptObject self, Arguments arguments) {
-            var bytes = SkryptEngine.GetAllocatedBytesForCurrentThread();
+            var bytes = SkryptEngine.GetAllocatedBytesForCurrentThread() - engine.InitialMemoryUsage;
 
             return engine.CreateNumber(bytes);
         }
@@ -18,10 +18,6 @@ namespace Skrypt {
         public static SkryptObject GetSizeOfObject(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var target = arguments.GetAs<SkryptObject>(0);
             var clone = default(SkryptObject);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
 
             var before = SkryptEngine.GetAllocatedBytesForCurrentThread();
 
@@ -37,15 +33,11 @@ namespace Skrypt {
         public static SkryptObject GetSizeOfAction(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var target = arguments.GetAs<FunctionInstance>(0);
 
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
-
-            var before = GC.GetTotalMemory(true);
+            var before = SkryptEngine.GetAllocatedBytesForCurrentThread();
 
             target.Run();
 
-            var after = GC.GetTotalMemory(true);
+            var after = SkryptEngine.GetAllocatedBytesForCurrentThread();
 
             return engine.CreateNumber(after - before);
         }

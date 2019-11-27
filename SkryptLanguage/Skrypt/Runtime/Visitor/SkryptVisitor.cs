@@ -21,6 +21,14 @@ namespace Skrypt {
 
         public override SkryptObject Visit([NotNull] IParseTree tree) {
             
+            if (_engine.MeasureOPS) {
+                _engine.OPS++;
+
+                var ops = _engine.OPS / _engine.SW.Elapsed.TotalSeconds;
+
+                Console.WriteLine(ops);
+            }
+
             if (_engine.MemoryLimit > 0) {
                 if (SkryptEngine.GetAllocatedBytesForCurrentThread != null) {
                     var bytes = SkryptEngine.GetAllocatedBytesForCurrentThread();
@@ -32,6 +40,10 @@ namespace Skrypt {
                             throw new SkryptException($"Engine exceeded memory limit ({_engine.MemoryLimit} bytes) at {realBytes} bytes");
                         } else {
                             GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            GC.Collect();
+
+                            _engine.ResetMemoryUsage();
                         }
                     }
                 }

@@ -37,6 +37,8 @@ namespace Skrypt {
         internal static Func<long> GetAllocatedBytesForCurrentThread { get; private set; }
         internal long InitialMemoryUsage { get; private set; }
         internal bool HaltMemory { get; private set; }
+        internal bool MeasureOPS { get; private set; }
+        internal long OPS { get; set; }
 
         private readonly bool   _discardGlobal;
         private readonly int    _maxRecursionDepth = -1;
@@ -115,13 +117,12 @@ namespace Skrypt {
             Memory                  = FastAdd(new MemoryModule(this));
             Debug                   = FastAdd(new DebugModule(this));
 
-            SW = Stopwatch.StartNew();
-
             if (options != null) {
                 _discardGlobal = options.DiscardGlobal;
                 _maxRecursionDepth = options.MaxRecursionDepth;
                 MemoryLimit = options.MaxMemory;
                 HaltMemory = options.MemoryHalt;
+                MeasureOPS = options.MeasureOPS;
             }
         }
 
@@ -208,6 +209,12 @@ namespace Skrypt {
         }
 
         public SkryptEngine Execute(string code, ParserOptions parserOptions) {
+            if (SW == null) {
+                SW = Stopwatch.StartNew();
+            } else {
+                SW.Start();
+            }
+
             ProgramContext = ParseProgram(code, parserOptions);
 
             if (MemoryLimit > 0) {
@@ -218,6 +225,8 @@ namespace Skrypt {
             Visitor.Visit(ProgramContext);
 
             if (!_discardGlobal) CreateGlobals();
+
+            SW.Stop();
 
             return this;
         }
