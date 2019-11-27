@@ -1,10 +1,10 @@
 ﻿
-fn fibonacci(num) {
-    if (num <= 1) return 1
+module HelloWorld {
+	A = "Hello world!"
 
-    return fibonacci(num - 1) + fibonacci(num - 2)
+	fn Print() {
+		print(self.B)
+	}
 }
 
-benchmark(_ => {
-	result = fibonacci(8)
-},5000)
+HelloWorld.Print()

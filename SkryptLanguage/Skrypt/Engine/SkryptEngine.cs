@@ -55,16 +55,13 @@ namespace Skrypt {
         #endregion
 
 
-        //public Dictionary<string, Variable> Globals { get; set; } = new Dictionary<string, Variable>();
         public ErrorHandler ErrorHandler { get; set; }
         public IFileHandler FileHandler { get; set; }
         public TemplateMaker TemplateMaker { get; private set; }
         public LexicalEnvironment GlobalEnvironment { get; set; }
-        //public LexicalEnvironment CurrentEnvironment { get; set; }
 
         public SkryptEngine() {
             GlobalEnvironment       = new LexicalEnvironment();
-            //CurrentEnvironment      = GlobalEnvironment;
 
             ErrorHandler            = new DefaultErrorHandler(this);
             ExpressionInterpreter   = new ExpressionInterpreter(this);
@@ -119,13 +116,13 @@ namespace Skrypt {
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
 
             FileHandler.File = newFile;
-            FileHandler.Folder = System.IO.Path.GetDirectoryName(newFile);
+            FileHandler.Folder = Path.GetDirectoryName(newFile);
 
             var code = FileHandler.Read(file);
             var result = Run(code);
 
             FileHandler.File = oldFile;
-            FileHandler.Folder = System.IO.Path.GetDirectoryName(oldFile);
+            FileHandler.Folder =  Path.GetDirectoryName(oldFile);
 
             return result;
         }
