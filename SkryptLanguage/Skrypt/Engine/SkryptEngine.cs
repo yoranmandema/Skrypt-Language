@@ -34,8 +34,9 @@ namespace Skrypt {
         internal List<BaseTrait> StandardTraits { get; private set; } = new List<BaseTrait>();
         internal TextWriter TextWriter { get; private set; }
 
-        internal static Func<long> GetAllocatedBytesForCurrentThread;
-        internal long InitialMemoryUsage;
+        internal static Func<long> GetAllocatedBytesForCurrentThread { get; private set; }
+        internal long InitialMemoryUsage { get; private set; }
+        internal bool HaltMemory { get; private set; }
 
         private readonly bool   _discardGlobal;
         private readonly int    _maxRecursionDepth = -1;
@@ -120,6 +121,7 @@ namespace Skrypt {
                 _discardGlobal = options.DiscardGlobal;
                 _maxRecursionDepth = options.MaxRecursionDepth;
                 MemoryLimit = options.MaxMemory;
+                HaltMemory = options.MemoryHalt;
             }
         }
 

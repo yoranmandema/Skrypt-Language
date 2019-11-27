@@ -9,6 +9,7 @@ namespace Skrypt {
         public bool DiscardGlobal { get; private set; }
         public int MaxRecursionDepth { get; private set; } = -1;
         public long MaxMemory { get; private set; }
+        public bool MemoryHalt { get; private set; }
 
         /// <summary>
         /// Gets rid of new global variables after executing code.
@@ -27,6 +28,15 @@ namespace Skrypt {
         }
 
         public Options LimitMemory(long memoryLimit) {
+            MaxMemory = memoryLimit;
+            return this;
+        }
+
+        /// <summary>
+        /// Halts the engine when the memory limit has been reached. 
+        /// When set to <code>false</code> it will try to limit memory at a performance cost.
+        /// </summary>
+        public Options HaltOnMemoryLimit(long memoryLimit) {
             MaxMemory = memoryLimit;
             return this;
         }

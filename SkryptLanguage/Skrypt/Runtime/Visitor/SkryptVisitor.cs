@@ -27,7 +27,12 @@ namespace Skrypt {
                     var realBytes = bytes - _engine.InitialMemoryUsage;
 
                     if (realBytes > _engine.MemoryLimit) {
-                        throw new SkryptException($"Engine exceeded memory limit ({_engine.MemoryLimit} bytes) at {realBytes} bytes");
+
+                        if (_engine.HaltMemory) {
+                            throw new SkryptException($"Engine exceeded memory limit ({_engine.MemoryLimit} bytes) at {realBytes} bytes");
+                        } else {
+                            GC.Collect();
+                        }
                     }
                 }
             }
