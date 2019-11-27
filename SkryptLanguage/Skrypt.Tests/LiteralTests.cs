@@ -11,7 +11,7 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldParseNull() {
-            var nullValue = _engine.Run("null").CompletionValue;
+            var nullValue = _engine.Execute("null").CompletionValue;
 
             Assert.Null(nullValue);
         }
@@ -22,7 +22,7 @@ namespace Skrypt.Tests {
         [InlineData(0.14, "0.14")]
         [InlineData(3.14159, "3.14159")]
         public void ShouldParseNumericLiterals(object expected, string source) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(Convert.ToDouble(expected), value.AsType<NumberInstance>().Value);
@@ -33,7 +33,7 @@ namespace Skrypt.Tests {
         [InlineData("\"\"", "")]
         [InlineData("\"\\n\"", "\n")]
         public void ShouldParseStringLiterals(string source, string expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<StringInstance>().Value);
@@ -43,7 +43,7 @@ namespace Skrypt.Tests {
         [InlineData("true", true)]
         [InlineData("false", false)]
         public void ShouldParseBoolLiterals(string source, bool expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<BooleanInstance>().Value);

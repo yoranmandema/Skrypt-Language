@@ -11,9 +11,15 @@ using System.Diagnostics;
 using System.Reflection;
 using System.IO;
 using Skrypt.CLR;
+using Skrypt.Compiling;
 
 namespace Skrypt {
     public partial class SkryptEngine {
+
+        private static readonly ParserOptions DefaultParserOptions = new ParserOptions {
+            Tolerant = false,
+        };
+
         public SkryptObject CompletionValue => Visitor.LastResult;
         public Stack<Call> CallStack { get; internal set; } = new Stack<Call>();
 
@@ -23,8 +29,14 @@ namespace Skrypt {
         internal ExpressionInterpreter ExpressionInterpreter { get; private set; }
         internal SkryptParser.ProgramContext ProgramContext { get; private set; }
         internal List<BaseTrait> StandardTraits { get; private set; } = new List<BaseTrait>();
-
         internal TextWriter TextWriter { get; private set; }
+
+        internal static Func<long> GetAllocatedBytesForCurrentThread;
+
+        private readonly bool   _discardGlobal;
+        private readonly long   _memoryLimit;
+        private long            _initialMemoryUsage;
+        private readonly int    _maxRecursionDepth = -1;
 
         #region Traits
         internal EnumerableTrait Enumerable { get; private set; }
@@ -51,7 +63,7 @@ namespace Skrypt {
         internal DebugModule Debug { get; private set; }
         internal MathModule Math { get; private set; }
         internal IOModule IO { get; private set; }
-        internal ReflectionModule Reflection { get; private set; }
+        internal MemoryModule Memory { get; private set; }
         #endregion
 
 
@@ -60,7 +72,17 @@ namespace Skrypt {
         public TemplateMaker TemplateMaker { get; private set; }
         public LexicalEnvironment GlobalEnvironment { get; set; }
 
-        public SkryptEngine() {
+        static SkryptEngine() {
+            var methodInfo = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread");
+
+            if (methodInfo != null) {
+                GetAllocatedBytesForCurrentThread = (Func<long>)Delegate.CreateDelegate(typeof(Func<long>), null, methodInfo);
+            }
+        }
+
+        public SkryptEngine() : this(null) {}
+
+        public SkryptEngine(Options options) {
             GlobalEnvironment       = new LexicalEnvironment();
 
             ErrorHandler            = new DefaultErrorHandler(this);
@@ -87,18 +109,16 @@ namespace Skrypt {
 
             Math                    = FastAdd(new MathModule(this));
             IO                      = FastAdd(new IOModule(this));
-            Reflection              = FastAdd(new ReflectionModule(this));
+            Memory                  = FastAdd(new MemoryModule(this));
             Debug                   = FastAdd(new DebugModule(this));
 
             SW = Stopwatch.StartNew();
-        }
 
-        public SkryptEngine SetOut (TextWriter textWriter) {
-            TextWriter = textWriter;
-
-            Console.SetOut(textWriter);
-
-            return this;
+            if (options != null) {
+                _discardGlobal = options.DiscardGlobal;
+                _maxRecursionDepth = options.MaxRecursionDepth;
+                _memoryLimit = options.MaxMemory;
+            }
         }
 
         public SkryptEngine DoFile(string file) {
@@ -108,7 +128,7 @@ namespace Skrypt {
 
             var code = FileHandler.Read(file);
 
-            return Run(code);
+            return Execute(code);
         }
 
         public SkryptEngine DoRelativeFile (string file) {
@@ -119,7 +139,7 @@ namespace Skrypt {
             FileHandler.Folder = Path.GetDirectoryName(newFile);
 
             var code = FileHandler.Read(file);
-            var result = Run(code);
+            var result = Execute(code);
 
             FileHandler.File = oldFile;
             FileHandler.Folder =  Path.GetDirectoryName(oldFile);
@@ -127,12 +147,24 @@ namespace Skrypt {
             return result;
         }
 
-        public SkryptEngine Run(string code) {
-            var errorListener = new ErrorListener(this);
 
-            var inputStream = new AntlrInputStream(code);
+        public void ResetMemoryUsage () {
+            if (GetAllocatedBytesForCurrentThread != null) {
+                _initialMemoryUsage = GetAllocatedBytesForCurrentThread();
+            }
+        }
+
+        public SkryptParser.ProgramContext ParseProgram (string source, ParserOptions options) {
+            var errorHandler = new CompileErrorHandler(this, source) {
+                Tolerant = options.Tolerant
+            };
+
+            var errorListener = new ErrorListener(this, errorHandler);
+
+            var inputStream = new AntlrInputStream(source);
             var skryptLexer = new SkryptLexer(inputStream) {
-                Engine = this
+                Engine = this,
+                ErrorHandler = errorHandler
             };
 
             skryptLexer.RemoveErrorListeners();
@@ -142,7 +174,8 @@ namespace Skrypt {
 
             Parser = new SkryptParser(commonTokenStream) {
                 Engine = this,
-                TokenStream = commonTokenStream 
+                TokenStream = commonTokenStream,
+                ErrorHandler = errorHandler
             };
 
             Parser.RemoveErrorListeners();
@@ -150,16 +183,31 @@ namespace Skrypt {
 
             Parser.GlobalEnvironment = GlobalEnvironment;
 
-            ProgramContext = Parser.program();
+            var program = Parser.program();
 
-            Parser.LinkLexicalEnvironments(ProgramContext, GlobalEnvironment);
+            Parser.LinkLexicalEnvironments(program, GlobalEnvironment);
 
-            if (!ErrorHandler.HasErrors) {
-                Visitor.CurrentEnvironment = GlobalEnvironment;
-                Visitor.Visit(ProgramContext);
+            return program;
+        }
+
+        public SkryptEngine Execute(string code, ParserOptions parserOptions) {
+
+            if (_memoryLimit > 0) {
+                ResetMemoryUsage();
             }
 
+            ProgramContext = ParseProgram(code, parserOptions);
+
+            Visitor.CurrentEnvironment = GlobalEnvironment;
+            Visitor.Visit(ProgramContext);
+
+            if (!_discardGlobal) CreateGlobals();
+
             return this;
+        }
+
+        public SkryptEngine Execute(string code) {
+            return Execute(code, DefaultParserOptions);
         }
 
         public SkryptEngine ReportErrors () {
@@ -190,10 +238,6 @@ namespace Skrypt {
             } else {
                 GlobalEnvironment.Variables[name] = new Variable(name, value);
             }
-        }
-
-        public void Print(string message) {
-            Console.WriteLine(message);
         }
 
         public SkryptEngine SetValue(string name, SkryptObject value) {

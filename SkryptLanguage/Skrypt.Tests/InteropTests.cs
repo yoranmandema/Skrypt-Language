@@ -17,7 +17,7 @@ namespace Skrypt.Tests {
         }
 
         private void RunTest(string source) {
-            _engine.Run(source).ReportErrors();
+            _engine.Execute(source).ReportErrors();
 
             if (_engine.ErrorHandler.HasErrors) {
                 throw new FatalErrorException();

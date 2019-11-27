@@ -16,7 +16,7 @@ namespace Skrypt.Tests {
         }
 
         private void RunTest(string source) {
-            _engine.Run(source).ReportErrors();
+            _engine.Execute(source).ReportErrors();
 
             if (_engine.ErrorHandler.HasErrors) {
                 throw new FatalErrorException();
@@ -34,7 +34,7 @@ namespace Skrypt.Tests {
         [InlineData("(2 + 13) * 2", 30)]
         [InlineData("-30", -30)]
         public void ShouldEvaluateNumericExpressions(string source, double expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
@@ -54,7 +54,7 @@ namespace Skrypt.Tests {
         [InlineData("!true", false)]
         [InlineData("!false", true)]
         public void ShouldEvaluateBooleanExpressions(string source, bool expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<BooleanInstance>().Value);
@@ -65,7 +65,7 @@ namespace Skrypt.Tests {
         [InlineData("false ? 1 : 0", 0)]
         [InlineData("1 > 0 ? 1 : 0", 1)]
         public void ShouldEvaluateConditional(string source, double expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
@@ -74,7 +74,7 @@ namespace Skrypt.Tests {
         [Theory]
         [InlineData("(String(1)).Length", 1)]
         public void ShouldEvaluateMemberAccessAfterParenthesis (string source, double expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.NotNull(value);
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
@@ -92,7 +92,7 @@ namespace Skrypt.Tests {
         [InlineData("9 >> 2", 2d)]
         [InlineData("19 >>> 2", 4d)]
         public void ShouldEvaluateBinaryExpression(string source, double expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
         }
@@ -101,7 +101,7 @@ namespace Skrypt.Tests {
         [InlineData("~58", -59d)]
         [InlineData("~~58", 58d)]
         public void ShouldInterpretUnaryExpression(string source, double expected) {
-            var value = _engine.Run(source).CompletionValue;
+            var value = _engine.Execute(source).CompletionValue;
 
             Assert.Equal(expected, value.AsType<NumberInstance>().Value);
         }

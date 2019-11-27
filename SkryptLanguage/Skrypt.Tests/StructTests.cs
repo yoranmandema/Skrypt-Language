@@ -19,7 +19,7 @@ namespace Skrypt.Tests {
                 .SetValue("equal", new Action<object, object>(Assert.Equal))
                 ;
 
-            _engine.Run(@"
+            _engine.Execute(@"
 struct BasicStruct {
     A = 0
     B = """"
@@ -37,13 +37,13 @@ struct BasicStruct {
         }
 
         private void RunTest(string source) {
-            _engine.Run(source).ReportErrors().CreateGlobals();
+            _engine.Execute(source).ReportErrors().CreateGlobals();
 
             if (_engine.ErrorHandler.HasErrors) {
                 _output.WriteLine($"Errors:");
 
                 foreach (var err in _engine.ErrorHandler.Errors) {
-                    _output.WriteLine($"({err.Line},{err.CharInLine}) {err.Message}");
+                    _output.WriteLine($"({err.Line},{err.Column}) {err.Message}");
                 }
 
                 throw new FatalErrorException();

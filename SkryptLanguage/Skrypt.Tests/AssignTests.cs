@@ -22,7 +22,7 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldAssignVariable() {
-            var value = _engine.Run("a = 1").CreateGlobals().GetValue("a");
+            var value = _engine.Execute("a = 1").CreateGlobals().GetValue("a");
 
             Assert.NotNull(value);
             Assert.Equal(1, value.AsType<NumberInstance>().Value);
@@ -30,9 +30,9 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldAssignIndex() {
-            _engine.Run("a = [0,0,0]").CreateGlobals();
+            _engine.Execute("a = [0,0,0]").CreateGlobals();
 
-            var value = _engine.Run("a[1] = 1").GetValue("a");
+            var value = _engine.Execute("a[1] = 1").GetValue("a");
 
             Assert.NotNull(value);
             Assert.Equal(1, value.AsType<ArrayInstance>().SequenceValues[1].AsType<NumberInstance>().Value);
@@ -40,7 +40,7 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldAssignMember() {
-            var value = _engine.Run("BasicStruct.Property = 1").GetValue("BasicStruct");
+            var value = _engine.Execute("BasicStruct.Property = 1").GetValue("BasicStruct");
 
             Assert.NotNull(value);
             Assert.Equal(1, value.GetProperty("Property").value.AsType<NumberInstance>().Value);
@@ -48,7 +48,7 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldDoAssignWithOperator() {
-            var value = _engine.Run("numberVariable += 2").GetValue("numberVariable");
+            var value = _engine.Execute("numberVariable += 2").GetValue("numberVariable");
 
             Assert.NotNull(value);
             Assert.Equal(7, value.AsType<NumberInstance>().Value);

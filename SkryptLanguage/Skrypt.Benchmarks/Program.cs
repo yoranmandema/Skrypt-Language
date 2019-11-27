@@ -24,7 +24,7 @@ namespace Skrypt.Benchmarks {
             _engine.SetValue("A", 1);
             _engine.SetValue("CLRMath", CLRTypeConverter.CreateModuleFromObject(_engine, typeof(Math)));
 
-            _engine.Run(@"
+            _engine.Execute(@"
 fn fibonacci(num) {
     if (num <= 1) return 1
 
@@ -40,7 +40,7 @@ fn fibonacci(num) {
 
         [Benchmark]
         public SkryptEngine ExecuteNumericalExpression() {
-            return _engine.Run(@"result = ((A - 2) * 4) / 2");
+            return _engine.Execute(@"result = ((A - 2) * 4) / 2");
         }
 
         //[Benchmark]
@@ -50,17 +50,17 @@ fn fibonacci(num) {
 
         [Benchmark]
         public SkryptEngine ExecuteFib8Function() {
-            return _engine.Run(@"result = fibonacci(8)");
+            return _engine.Execute(@"result = fibonacci(8)");
         }
 
         [Benchmark]
         public SkryptEngine ExecuteFib16Function() {
-            return _engine.Run(@"result = fibonacci(16)");
+            return _engine.Execute(@"result = fibonacci(16)");
         }
 
         [Benchmark]
         public SkryptEngine ExecuteVectorExpression() {
-            return _engine.Run(@"result = ((Vector(1,2,3) - Vector(3,2,1)) * 4).Normalized");
+            return _engine.Execute(@"result = ((Vector(1,2,3) - Vector(3,2,1)) * 4).Normalized");
         }
     }
 
