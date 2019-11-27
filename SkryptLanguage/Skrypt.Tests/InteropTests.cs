@@ -17,11 +17,9 @@ namespace Skrypt.Tests {
         }
 
         private void RunTest(string source) {
-            _engine.Execute(source).ReportErrors();
-
-            if (_engine.ErrorHandler.HasErrors) {
-                throw new FatalErrorException();
-            }
+            _engine.Execute(source, new Compiling.ParserOptions {
+                Tolerant = false
+            });
         }
 
         [Fact]

@@ -37,17 +37,9 @@ struct BasicStruct {
         }
 
         private void RunTest(string source) {
-            _engine.Execute(source).ReportErrors();
-
-            if (_engine.ErrorHandler.HasErrors) {
-                _output.WriteLine($"Errors:");
-
-                foreach (var err in _engine.ErrorHandler.Errors) {
-                    _output.WriteLine($"({err.Line},{err.Column}) {err.Message}");
-                }
-
-                throw new FatalErrorException();
-            }
+            _engine.Execute(source, new Compiling.ParserOptions {
+                Tolerant = false
+            });
         }
 
         [Fact, TestPriority(0)]
