@@ -222,7 +222,7 @@ namespace Skrypt {
             return obj;
         }
 
-        public SkryptEngine CreateGlobals () {
+        internal SkryptEngine CreateGlobals () {
             var block = ProgramContext.block();
 
             foreach (var v in block.LexicalEnvironment.Variables) {

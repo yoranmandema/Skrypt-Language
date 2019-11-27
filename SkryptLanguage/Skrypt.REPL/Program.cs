@@ -29,7 +29,7 @@ namespace Skrypt.REPL {
             });       
             
             if (!string.IsNullOrEmpty(path))
-                _engine.DoFile(path).ReportErrors().CreateGlobals();
+                _engine.DoFile(path).ReportErrors();
 
             while (true) {
                 string line = Console.ReadLine();
@@ -40,7 +40,7 @@ namespace Skrypt.REPL {
                 _engine.ErrorHandler.Errors.Clear();
 
                 try {
-                    Console.WriteLine(_engine.Execute(line).ReportErrors().CreateGlobals().CompletionValue);
+                    Console.WriteLine(_engine.Execute(line).ReportErrors().CompletionValue);
                 }
                 catch (Exception e) {
                     Console.WriteLine(e);

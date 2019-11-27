@@ -33,11 +33,11 @@ struct BasicStruct {
         return ""{"" + self.A + "","" + self.B + ""}""
     }
 }
-            ").CreateGlobals();
+            ");
         }
 
         private void RunTest(string source) {
-            _engine.Execute(source).ReportErrors().CreateGlobals();
+            _engine.Execute(source).ReportErrors();
 
             if (_engine.ErrorHandler.HasErrors) {
                 _output.WriteLine($"Errors:");

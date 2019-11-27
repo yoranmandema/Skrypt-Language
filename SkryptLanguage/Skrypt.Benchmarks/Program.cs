@@ -30,7 +30,7 @@ fn fibonacci(num) {
 
     return fibonacci(num - 1) + fibonacci(num - 2)
 }
-            ").CreateGlobals();
+            ");
         }
 
         //[Benchmark]

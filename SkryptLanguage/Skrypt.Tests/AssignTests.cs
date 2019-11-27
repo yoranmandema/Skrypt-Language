@@ -22,7 +22,7 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldAssignVariable() {
-            var value = _engine.Execute("a = 1").CreateGlobals().GetValue("a");
+            var value = _engine.Execute("a = 1").GetValue("a");
 
             Assert.NotNull(value);
             Assert.Equal(1, value.AsType<NumberInstance>().Value);
@@ -30,7 +30,7 @@ namespace Skrypt.Tests {
 
         [Fact]
         public void ShouldAssignIndex() {
-            _engine.Execute("a = [0,0,0]").CreateGlobals();
+            _engine.Execute("a = [0,0,0]");
 
             var value = _engine.Execute("a[1] = 1").GetValue("a");
 
