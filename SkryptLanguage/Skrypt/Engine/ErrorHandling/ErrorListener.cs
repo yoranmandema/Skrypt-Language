@@ -12,29 +12,19 @@ namespace Skrypt {
     internal class ErrorListener : BaseErrorListener, IAntlrErrorListener<int>{
 
         private readonly SkryptEngine _engine;
+        private readonly CompileErrorHandler _compileErrorHandler;
 
-        public ErrorListener (SkryptEngine engine) {
+        public ErrorListener (SkryptEngine engine, CompileErrorHandler compileErrorHandler) {
             _engine = engine;
+            _compileErrorHandler = compileErrorHandler;
         }
 
         public override void SyntaxError([NotNull] IRecognizer recognizer, [Nullable] IToken offendingSymbol, int line, int charPositionInLine, [NotNull] string msg, [Nullable] RecognitionException e) {
-            //ThrowError(recognizer, offendingSymbol.TokenIndex, line, charPositionInLine, msg, e);
-
-            _engine.ErrorHandler.AddParseError(offendingSymbol, msg);
+            _compileErrorHandler.TolerateError(offendingSymbol, msg);
         }
 
         void IAntlrErrorListener<int>.SyntaxError(IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e) {
-            //ThrowError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
-
-            _engine.ErrorHandler.AddLexError(line, charPositionInLine, msg);
+            _compileErrorHandler.TolerateError(e.OffendingToken, msg);
         }
-
-        //void ThrowError(IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e) {
-        //    //Console.WriteLine(offendingSymbol);
-
-        //    //throw new ParseCanceledException($"{_engine.FileHandler.File}({line},{charPositionInLine}): {msg}");
-
-        //    _engine.Add
-        //}
     }
 }

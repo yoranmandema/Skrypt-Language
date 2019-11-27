@@ -10,7 +10,7 @@ namespace Skrypt {
        
         protected readonly SkryptEngine _engine;
 
-        public List<CodeError> Errors = new List<CodeError>();
+        public List<ParseError> Errors = new List<ParseError>();
         public bool HasErrors => Errors.Any();
 
         public ErrorHandler (SkryptEngine engine) {
@@ -18,18 +18,18 @@ namespace Skrypt {
         }
 
         public void AddParseError (IToken token, string message) {
-            Errors.Add(new ParseError(token, message, _engine.FileHandler.File));
+            //Errors.Add(new ParseErrorOLD(token, message, _engine.FileHandler.File));
         }
 
         public void AddLexError (int line, int charInLine, string message) {
-            Errors.Add(new LexError(line, charInLine, message, _engine.FileHandler.File));
+            //Errors.Add(new LexError(line, charInLine, message, _engine.FileHandler.File));
         }
 
         public abstract void FatalError(IToken token, string msg); 
-        public abstract string ReportError(CodeError error);
+        public abstract string ReportError(ParseError error);
 
         public void ReportAllErrors() {
-            var sorted = Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.CharInLine);
+            var sorted = Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.Column);
 
             foreach (var error in sorted) {
                 ReportError(error);

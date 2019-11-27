@@ -4,16 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
+using Antlr4;
+using Skrypt.ANTLR;
+using Skrypt.Runtime;
 
 namespace Skrypt {
-    public class ParseError : CodeError {
-        public IToken Token { get; private set; }
+    public class ParseError {
+        public string Message { get; protected set; }
+        public string File { get; protected set; }
+        public int Line { get; protected set; }
+        public int Column { get; protected set; }
+        public int Index { get; protected set; }
 
-        public ParseError(IToken token, string message, string file) : base (message, file) {
-            Token = token;
+        public string Source { get; protected set; }
+
+        public ParseError (string message, string source, string file) {
+            Message = message;
+            File = file;
+            Source = source;
+        }
+
+        public ParseError(IToken token, string message, string source, string file) : this(message, source, file) {
+            Index = token.StartIndex;
             Message = message;
             Line = token.Line;
-            CharInLine = token.Column;
+            Column = token.Column;
+        }
+
+        public ParseError(int index, int line, int column, string message, string source, string file) : this(message, source, file) {
+            Index = index;
+            Line = line;
+            Column = column;
+            Message = message;
         }
     }
 }
