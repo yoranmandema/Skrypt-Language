@@ -8,6 +8,9 @@ using Skrypt;
 
 namespace Skrypt.REPL {
     class Program {
+
+        private static SkryptEngine _engine;
+
         static void Main(string[] args) {
             string path = null;
 
@@ -15,18 +18,18 @@ namespace Skrypt.REPL {
                 path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
             }
 
-            var engine = new SkryptEngine();
+            _engine = new SkryptEngine();
 
-            engine.SetValue("print", new MethodDelegate(print));
-            engine.SetValue("input", new MethodDelegate(input));
-            engine.SetValue("benchmark", new MethodDelegate(benchmark));
+            _engine.SetValue("print", new MethodDelegate(print));
+            _engine.SetValue("input", new MethodDelegate(input));
+            _engine.SetValue("benchmark", new MethodDelegate(benchmark));
 
-            engine.SetValue("error", (e, s, i) => {
+            _engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));
             });       
             
             if (!string.IsNullOrEmpty(path))
-                engine.DoFile(path).ReportErrors().CreateGlobals();
+                _engine.DoFile(path).ReportErrors().CreateGlobals();
 
             while (true) {
                 string line = Console.ReadLine();
@@ -34,7 +37,7 @@ namespace Skrypt.REPL {
                 if (line == "exit") break;
 
                 try {
-                    Console.WriteLine(engine.Run(line).ReportErrors().CreateGlobals().CompletionValue);
+                    Console.WriteLine(_engine.Run(line).ReportErrors().CreateGlobals().CompletionValue);
                 }
                 catch (Exception e) {
                     Console.WriteLine(e);
