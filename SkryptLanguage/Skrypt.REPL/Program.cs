@@ -20,9 +20,9 @@ namespace Skrypt.REPL {
 
             _engine = new SkryptEngine();
 
-            _engine.SetValue("print", new MethodDelegate(print));
-            _engine.SetValue("input", new MethodDelegate(input));
-            _engine.SetValue("benchmark", new MethodDelegate(benchmark));
+            _engine.SetValue("print", new MethodDelegate(Print));
+            _engine.SetValue("input", new MethodDelegate(Input));
+            _engine.SetValue("benchmark", new MethodDelegate(Benchmark));
 
             _engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));
@@ -34,12 +34,13 @@ namespace Skrypt.REPL {
             while (true) {
                 string line = Console.ReadLine();
 
-                if (line == "exit") break;
+                if (line == "exit") return;
+
 
                 _engine.ErrorHandler.Errors.Clear();
 
                 try {
-                    Console.WriteLine(_engine.Run(line).ReportErrors().CreateGlobals().CompletionValue);
+                    Console.WriteLine(_engine.Execute(line).ReportErrors().CreateGlobals().CompletionValue);
                 }
                 catch (Exception e) {
                     Console.WriteLine(e);
@@ -47,7 +48,7 @@ namespace Skrypt.REPL {
             }
         }
 
-        private static SkryptObject print (SkryptEngine engine, SkryptObject self, Arguments arguments) {
+        private static SkryptObject Print (SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var str = "";
 
             for (var j = 0; j < arguments.Length; j++) {
@@ -66,7 +67,7 @@ namespace Skrypt.REPL {
             return null;
         }
 
-        private static SkryptObject input(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+        private static SkryptObject Input(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             if (arguments.Length == 1) Console.WriteLine(arguments[0]);
 
             string fullString = "";
@@ -78,7 +79,7 @@ namespace Skrypt.REPL {
             return engine.CreateString(fullString);
         }
 
-        private static SkryptObject benchmark(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+        private static SkryptObject Benchmark(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var function = arguments.GetAs<FunctionInstance>(0);
             var amount = arguments.GetAs<NumberInstance>(1).Value;
             var lastResult = default(SkryptObject);
