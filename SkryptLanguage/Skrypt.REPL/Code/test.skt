@@ -1,10 +1,20 @@
 ﻿
-module HelloWorld {
-	A = "Hello world!"
+struct BasicStruct {
+    A = 0
+    B = ""
 
-	fn Print() {
-		print(self.B)
-	}
+    fn init (a,b) {
+        self.A = a
+        self.B = b
+    }
+
+    fn toString () {
+        return "{" + self.A + "," + self.B + "}"
+    }
 }
 
-HelloWorld.Print()
+instance = BasicStruct(1,"Hello")
+
+toString = "" + instance
+
+print(toString)

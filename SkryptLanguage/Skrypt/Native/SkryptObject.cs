@@ -95,6 +95,14 @@ namespace Skrypt {
         }
 
         public override string ToString() {
+            var hasToString = Members.ContainsKey("toString") && Members["toString"].value is FunctionInstance;
+
+            if (hasToString) {
+                FunctionInstance toStringFunc = Members["toString"].value as FunctionInstance;
+
+                return toStringFunc.Function.Run(Engine, this, Arguments.Empty).ToString();
+            }
+
             var str = $"{Name}";
 
             if (Members.Any()) {

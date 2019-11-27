@@ -46,22 +46,8 @@ namespace Skrypt.REPL {
             var str = "";
 
             for (var j = 0; j < arguments.Length; j++) {
-                Member stringMember = null;
-                IFunction stringFunction = null;
-
-                if (arguments[j].Members.ContainsKey("string")) {
-                    stringMember = arguments[j].Members["string"];
-
-                    if (stringMember?.value is FunctionInstance) {
-                        stringFunction = (stringMember.value as FunctionInstance).Function;
-                    }
-                }
-
                 if (arguments[j] == null) {
                     str += "null";
-                }
-                else if (stringFunction != null) {
-                    str += stringFunction.Run(engine, arguments[j], Arguments.Empty).ToString();
                 }
                 else {
                     str += arguments[j].ToString();

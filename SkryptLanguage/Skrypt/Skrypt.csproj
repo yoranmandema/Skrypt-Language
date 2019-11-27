@@ -78,7 +78,7 @@
     <Compile Include="CLR\MethodWrapper.cs" />
     <Compile Include="Engine\DefaultErrorHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ErrorListener.cs" />
-    <Compile Include="ANTLR\IFunctionContext.cs" />
+    <Compile Include="ANTLR\Contexts\IFunctionContext.cs" />
     <Compile Include="ANTLR\Skrypt.g4.lexer.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>
@@ -87,8 +87,8 @@
     </Compile>
     <Compile Include="Engine\Call.cs" />
     <Compile Include="Engine\ErrorHandling\CodeError.cs" />
-    <Compile Include="ANTLR\ILoop.cs" />
-    <Compile Include="ANTLR\IScoped.cs" />
+    <Compile Include="ANTLR\Contexts\ILoopContext.cs" />
+    <Compile Include="ANTLR\Contexts\IScopedContext.cs" />
     <Compile Include="ANTLR\LexingErrorListener.cs" />
     <Compile Include="ANTLR\AdditionalParserFields.cs" />
     <Compile Include="ANTLR\ParsingErrorListener.cs" />
