@@ -142,9 +142,7 @@ namespace Skrypt {
 
             Parser = new SkryptParser(commonTokenStream) {
                 Engine = this,
-                TokenStream = commonTokenStream
-                //Engine = this,
-                //ErrorHandler = new BailErrorStrategy()
+                TokenStream = commonTokenStream 
             };
 
             Parser.RemoveErrorListeners();

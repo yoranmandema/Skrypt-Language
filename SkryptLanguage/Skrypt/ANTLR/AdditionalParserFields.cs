@@ -17,33 +17,33 @@ namespace Skrypt.ANTLR {
 
         public ITokenStream TokenStream { get; internal set; }
 
-        public partial class ModuleStmntContext : IScoped {
+        public partial class ModuleStmntContext : IScopedContext {
             public RuleContext Context => this;
 
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
-        public partial class StructStmntContext : IScoped {
+        public partial class StructStmntContext : IScopedContext {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
-        public partial class TraitStmntContext : IScoped {
+        public partial class TraitStmntContext : IScopedContext {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
-        public partial class TraitImplStmntContext : IScoped {
+        public partial class TraitImplStmntContext : IScopedContext {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
-        public partial class BlockContext : IScoped {
+        public partial class BlockContext : IScopedContext {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
         }
 
-        public partial class CatchStmtContext : IScoped {
+        public partial class CatchStmtContext : IScopedContext {
             public RuleContext Context => this;
             public LexicalEnvironment LexicalEnvironment { get; set; } = new LexicalEnvironment();
             public Exception error;
@@ -69,11 +69,11 @@ namespace Skrypt.ANTLR {
             public JumpState JumpState { get; set; }
         }
 
-        public partial class WhileStatementContext : ILoop {
+        public partial class WhileStatementContext : ILoopContext {
             public JumpState JumpState { get; set; } = JumpState.None;
         }
 
-        public partial class ForStatementContext : ILoop {
+        public partial class ForStatementContext : ILoopContext {
             public JumpState JumpState { get; set; } = JumpState.None;
         }
 
@@ -81,7 +81,7 @@ namespace Skrypt.ANTLR {
             public string CallFile { get; set; }
         }
 
-        void CreateProperty(SkryptObject target, IScoped ctx, ParserRuleContext propertyTree, bool isPrivate) {
+        void CreateProperty(SkryptObject target, IScopedContext ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
 
             if (propertyTree.GetChild(0) is MemberDefinitionStatementContext assignCtx) {
@@ -130,13 +130,13 @@ namespace Skrypt.ANTLR {
             return nameToken;
         }
 
-        IScoped GetDefinitionBlock (string name, RuleContext ctx) {
-            IScoped scope = null;
-            IScoped first = null;
+        IScopedContext GetDefinitionBlock (string name, RuleContext ctx) {
+            IScopedContext scope = null;
+            IScopedContext first = null;
 
             RuleContext currentContext = ctx;
             while (currentContext.Parent != null) {
-                if (currentContext is IScoped scopedCtx) {
+                if (currentContext is IScopedContext scopedCtx) {
                     if (first == null) first = scopedCtx;
 
                     if (scopedCtx.LexicalEnvironment.Variables.ContainsKey(name)) {
@@ -155,9 +155,9 @@ namespace Skrypt.ANTLR {
             return scope;
         }
 
-        IScoped GetDefinitionBlock(RuleContext ctx) {
+        IScopedContext GetDefinitionBlock(RuleContext ctx) {
             while (ctx.Parent != null) {
-                if (ctx is IScoped scopedCtx) {
+                if (ctx is IScopedContext scopedCtx) {
                     return scopedCtx;
                 }
 
@@ -195,11 +195,11 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        ILoop GetFirstLoopStatement(RuleContext ctx) {
+        ILoopContext GetFirstLoopStatement(RuleContext ctx) {
             RuleContext currentContext = ctx;
 
             while (currentContext.Parent != null) {
-                if (currentContext is ILoop loopCtx) {
+                if (currentContext is ILoopContext loopCtx) {
                     return loopCtx;
                 }
 
@@ -209,7 +209,7 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        Variable GetReference (string name, IScoped scope) {
+        Variable GetReference (string name, IScopedContext scope) {
             Variable variable = null;
 
             if (scope.LexicalEnvironment.Variables.ContainsKey(name)) {
@@ -222,7 +222,7 @@ namespace Skrypt.ANTLR {
         }
 
         public void LinkLexicalEnvironments (RuleContext context, LexicalEnvironment parentEnvironment) {
-            if (context is IScoped scoped) {
+            if (context is IScopedContext scoped) {
                 var defBlock = GetDefinitionBlock(context);
 
                 parentEnvironment.AddChild(scoped.LexicalEnvironment);

@@ -5,7 +5,7 @@ using Skrypt.ANTLR;
 
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
-        void DoLoop(SkryptParser.StmntBlockContext stmntBlock, ILoop context, Func<bool> cond, Action callback = null) {
+        void DoLoop(SkryptParser.StmntBlockContext stmntBlock, ILoopContext context, Func<bool> cond, Action callback = null) {
             var block = stmntBlock.block();
             var expression = (RuleContext)stmntBlock.expression();
             var assignStmnt = (RuleContext)stmntBlock.assignStmnt();
@@ -18,7 +18,7 @@ namespace Skrypt {
             if (block != null) {
                 var previousEnvironment = CurrentEnvironment;
 
-                CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (block as IScoped));
+                CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (block as IScopedContext));
 
                 while (cond()) {
                     for (int i = 0; i < block.ChildCount; i++) {

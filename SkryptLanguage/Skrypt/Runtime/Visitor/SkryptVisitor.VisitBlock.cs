@@ -8,7 +8,7 @@ namespace Skrypt {
         public override SkryptObject VisitBlock([NotNull] SkryptParser.BlockContext context) {
             var previousEnvironment = CurrentEnvironment;
 
-            CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (context as IScoped));
+            CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (context as IScopedContext));
 
             var result = base.VisitBlock(context);
 
