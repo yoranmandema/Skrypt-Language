@@ -26,21 +26,30 @@ namespace Skrypt.REPL {
 
             _engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));
-            });       
-            
-            if (!string.IsNullOrEmpty(path))
-                _engine.DoFile(path).ReportErrors();
+            });
+
+            if (!string.IsNullOrEmpty(path)) {
+                try {
+                    _engine.DoFile(path);
+                }
+                catch (SkryptException e) {
+                    _engine.ErrorHandler.ReportError(e);
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e);
+                }
+            }
 
             while (true) {
                 string line = Console.ReadLine();
 
                 if (line == "exit") return;
 
-
-                _engine.ErrorHandler.Errors.Clear();
-
                 try {
-                    Console.WriteLine(_engine.Execute(line).ReportErrors().CompletionValue);
+                    Console.WriteLine(_engine.Execute(line).CompletionValue);
+                }
+                catch (SkryptException e) {
+                    _engine.ErrorHandler.ReportError(e);
                 }
                 catch (Exception e) {
                     Console.WriteLine(e);

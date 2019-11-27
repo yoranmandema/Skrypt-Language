@@ -9,31 +9,28 @@ namespace Skrypt {
     public abstract class ErrorHandler {
        
         protected readonly SkryptEngine _engine;
-
-        public List<ParseError> Errors = new List<ParseError>();
-        public bool HasErrors => Errors.Any();
+        public string Source { get; internal set; }
+        public string File { get; internal set; }
 
         public ErrorHandler (SkryptEngine engine) {
             _engine = engine;
         }
 
-        public void AddParseError (IToken token, string message) {
-            //Errors.Add(new ParseErrorOLD(token, message, _engine.FileHandler.File));
+        public SkryptException CreateError(int index, int line, int column, string message) {
+            return new SkryptException(message, new Error(index, line, column, message, Source, File));
         }
 
-        public void AddLexError (int line, int charInLine, string message) {
-            //Errors.Add(new LexError(line, charInLine, message, _engine.FileHandler.File));
+        public abstract void FatalError(int index, int line, int column, string msg);
+
+        public void FatalError(IToken token, string msg) {
+            FatalError(
+                token.StartIndex,
+                token.Line,
+                token.Column,
+                msg
+            );
         }
 
-        public abstract void FatalError(IToken token, string msg); 
-        public abstract string ReportError(ParseError error);
-
-        public void ReportAllErrors() {
-            var sorted = Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.Column);
-
-            foreach (var error in sorted) {
-                ReportError(error);
-            }
-        }
+        public abstract string ReportError(SkryptException error);
     }
 }

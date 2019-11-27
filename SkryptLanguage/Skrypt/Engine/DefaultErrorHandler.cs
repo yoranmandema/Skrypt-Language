@@ -10,13 +10,11 @@ namespace Skrypt {
     public class DefaultErrorHandler : ErrorHandler {
         public DefaultErrorHandler(SkryptEngine engine) : base(engine) { }
 
-        public override void FatalError(IToken token, string msg) {
-            //var errorMsg = ReportError(new ParseErrorOLD(token, msg, _engine.FileHandler.File));
-
-            throw new FatalErrorException(msg);
+        public override void FatalError(int index, int line, int column, string msg) {
+            throw CreateError(index, line, column, msg);
         }
 
-        public override string ReportError(ParseError error) {
+        public override string ReportError(SkryptException error) {
             string positionString = $"({error.Line},{error.Column})";
 
             var msg = error.Message;

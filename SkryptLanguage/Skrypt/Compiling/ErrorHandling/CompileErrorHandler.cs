@@ -9,7 +9,7 @@ namespace Skrypt {
     public class CompileErrorHandler : ICompileErrorHandler {
         protected readonly SkryptEngine _engine;
 
-        public IList<ParserException> Errors = new List<ParserException>();
+        public IList<ParserException> Errors { get; set; } = new List<ParserException>();
         public bool HasErrors => Errors.Any();
         public string Source { get; set; }
         public string File { get; set; }
@@ -34,7 +34,7 @@ namespace Skrypt {
         }
 
         public ParserException CreateError(int index, int line, int column, string message) {
-            return new ParserException(new ParseError(index, line, column, message, Source, File));
+            return new ParserException(message, new Error(index, line, column, message, Source, File));
         }
 
         public void TolerateError (IToken token, string message) {
@@ -42,7 +42,7 @@ namespace Skrypt {
                 token.StartIndex,
                 token.Line,
                 token.Column,
-                "Trait expected."
+                message
             );
         }
 

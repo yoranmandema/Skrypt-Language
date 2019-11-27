@@ -18,6 +18,7 @@ namespace Skrypt {
 
         private static readonly ParserOptions DefaultParserOptions = new ParserOptions {
             Tolerant = false,
+            ReportErrors = true
         };
 
         public SkryptObject CompletionValue => Visitor.LastResult;
@@ -122,8 +123,7 @@ namespace Skrypt {
         }
 
         public SkryptEngine DoFile(string file) {
-            FileHandler.File = file;
-            FileHandler.Folder = System.IO.Path.GetDirectoryName(file);
+            SetFile(file);
             FileHandler.BaseFolder = System.IO.Path.GetDirectoryName(file);
 
             var code = FileHandler.Read(file);
@@ -131,18 +131,22 @@ namespace Skrypt {
             return Execute(code);
         }
 
+        private void SetFile (string file) {
+            FileHandler.File = file;
+            FileHandler.Folder = Path.GetDirectoryName(file);
+            ErrorHandler.File = file;
+        }
+
         public SkryptEngine DoRelativeFile (string file) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
 
-            FileHandler.File = newFile;
-            FileHandler.Folder = Path.GetDirectoryName(newFile);
+            SetFile(newFile);
 
             var code = FileHandler.Read(file);
             var result = Execute(code);
 
-            FileHandler.File = oldFile;
-            FileHandler.Folder =  Path.GetDirectoryName(oldFile);
+            SetFile(oldFile);
 
             return result;
         }
@@ -155,6 +159,8 @@ namespace Skrypt {
         }
 
         public SkryptParser.ProgramContext ParseProgram (string source, ParserOptions options) {
+            ErrorHandler.Source = source;
+
             var errorHandler = new CompileErrorHandler(this, source) {
                 Tolerant = options.Tolerant
             };
@@ -187,6 +193,14 @@ namespace Skrypt {
 
             Parser.LinkLexicalEnvironments(program, GlobalEnvironment);
 
+            if (errorHandler.Errors.Any() && options.ReportErrors) {
+                var sorted = errorHandler.Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.Column);
+
+                foreach (var err in sorted) {
+                    ErrorHandler.ReportError(err);
+                }
+            } 
+
             return program;
         }
 
@@ -208,12 +222,6 @@ namespace Skrypt {
 
         public SkryptEngine Execute(string code) {
             return Execute(code, DefaultParserOptions);
-        }
-
-        public SkryptEngine ReportErrors () {
-            ErrorHandler.ReportAllErrors();
-
-            return this;
         }
 
         public T FastAdd<T> (T obj) where T : SkryptObject {

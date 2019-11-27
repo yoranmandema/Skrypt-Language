@@ -81,7 +81,7 @@
     <Compile Include="CLR\MethodWrapper.cs" />
     <Compile Include="Engine\DefaultErrorHandler.cs" />
     <Compile Include="Engine\EngineOptions.cs" />
-    <Compile Include="Engine\ErrorHandling\ErrorListener.cs" />
+    <Compile Include="Compiling\ErrorHandling\ErrorListener.cs" />
     <Compile Include="Compiling\Contexts\IFunctionContext.cs" />
     <Compile Include="Compiling\Skrypt.g4.lexer.cs">
       <DependentUpon>Skrypt.g4</DependentUpon>
@@ -90,12 +90,14 @@
       <DependentUpon>Skrypt.g4</DependentUpon>
     </Compile>
     <Compile Include="Engine\Call.cs" />
-    <Compile Include="Engine\ErrorHandling\ParseError.cs" />
+    <Compile Include="Compiling\ErrorHandling\Error.cs" />
     <Compile Include="Compiling\Contexts\ILoopContext.cs" />
     <Compile Include="Compiling\Contexts\IScopedContext.cs" />
     <Compile Include="Compiling\LexingErrorListener.cs" />
     <Compile Include="Compiling\AdditionalParserFields.cs" />
     <Compile Include="Compiling\ParsingErrorListener.cs" />
+    <Compile Include="Engine\ErrorHandling\IErrorHandler.cs" />
+    <Compile Include="Native\Exceptions\SkryptException.cs" />
     <Compile Include="Engine\SkryptEngine.cs" />
     <Compile Include="Engine\DefaultFileHandler.cs" />
     <Compile Include="Engine\ErrorHandling\ErrorHandler.cs" />
@@ -168,7 +170,6 @@
     <Compile Include="Runtime\JumpState.cs" />
     <Compile Include="Runtime\Scope.cs" />
     <Compile Include="Native\Module\BaseModule.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Native\Variable.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitBinaryOperationExp.cs" />

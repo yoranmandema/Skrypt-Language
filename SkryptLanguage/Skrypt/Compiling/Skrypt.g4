@@ -272,9 +272,11 @@ traitStmnt			: TRAIT name {
 traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ProgramContext)});
 
-	if (!isInValidContext) {
-		Engine.ErrorHandler.AddParseError($ctx.Start, "Implementation has to be in global scope.");
-	}
+	if (!isInValidContext)
+		ErrorHandler.TolerateError(
+			$ctx.Start,
+			"Implementation has to be in global scope."
+		);
 
 	var Ctx = ($ctx as TraitImplStatementContext);
 	var traitNameCtx = Ctx.name(0);
