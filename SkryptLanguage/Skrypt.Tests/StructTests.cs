@@ -1,32 +1,59 @@
 ﻿using Xunit;
 using Skrypt;
 using System;
+using Xunit.Abstractions;
 
 namespace Skrypt.Tests {
+    [TestCaseOrderer("Skrypt.Tests.PriorityOrderer", "Skrypt.Tests")]
     public class StructTests {
 
         private readonly SkryptEngine _engine;
-        public StructTests() {
+        private readonly ITestOutputHelper _output;
+
+        public StructTests(ITestOutputHelper output) {
+            _output = output;
             _engine = new SkryptEngine();
 
             _engine
                 .SetValue("assert", new Action<bool>(Assert.True))
                 .SetValue("equal", new Action<object, object>(Assert.Equal))
                 ;
+
+            _engine.Run(@"
+struct BasicStruct {
+    A = 0
+    B = """"
+
+    fn init (a,b) {
+        self.A = a
+        self.B = b
+    }
+
+    fn toString () {
+        return ""{"" + self.A + "","" + self.B + ""}""
+    }
+}
+            ").CreateGlobals();
         }
 
         private void RunTest(string source) {
-            _engine.Run(source).CreateGlobals().ReportErrors();
+            _engine.Run(source).ReportErrors().CreateGlobals();
 
             if (_engine.ErrorHandler.HasErrors) {
+                _output.WriteLine($"Errors:");
+
+                foreach (var err in _engine.ErrorHandler.Errors) {
+                    _output.WriteLine($"({err.Line},{err.CharInLine}) {err.Message}");
+                }
+
                 throw new FatalErrorException();
             }
         }
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public void ShouldParseStruct() {
             RunTest(@"
-struct BasicStruct {
+struct TestStruct {
     A = 0
     B = """"
 
@@ -42,7 +69,7 @@ struct BasicStruct {
             ");
         }
 
-        [Fact]
+        [Fact, TestPriority(0)]
         public void ShouldConstructStruct() {
             RunTest(@"
 instance = BasicStruct(1,""Hello"")
