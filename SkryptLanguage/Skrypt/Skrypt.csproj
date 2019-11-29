@@ -78,7 +78,6 @@
     <Compile Include="CLR\CLRMethod.cs" />
     <Compile Include="CLR\CLRTypeConverter.cs" />
     <Compile Include="CLR\CLRMethodGroup.cs" />
-    <Compile Include="CLR\MethodWrapper.cs" />
     <Compile Include="Engine\DefaultErrorHandler.cs" />
     <Compile Include="Engine\Options.cs" />
     <Compile Include="Compiling\ErrorHandling\ErrorListener.cs" />
