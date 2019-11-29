@@ -233,7 +233,7 @@ namespace Skrypt.Runtime {
         public object EvaluateIsExpression(SkryptObject left, SkryptObject right) {
             if (
                 (left is SkryptInstance || left is BaseType) && 
-                (right is SkryptInstance || right is BaseType)
+                (right is SkryptInstance || (right is BaseType || right is BaseTrait))
                 ) {
 
                 var leftType = default(BaseType);
