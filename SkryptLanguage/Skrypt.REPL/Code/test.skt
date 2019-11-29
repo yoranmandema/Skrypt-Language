@@ -1,8 +1,4 @@
 ﻿
-a = 0
+import Math
 
-while (true) {
-	a = 1 + 2
-
-	print(Memory.GetAllocatedBytes())
-}
+Sin(123123)

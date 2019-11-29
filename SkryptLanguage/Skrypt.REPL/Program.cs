@@ -7,23 +7,17 @@ using System.IO;
 using Skrypt;
 
 namespace Skrypt.REPL {
-    class Program {
+    internal static class Program {
 
         private static SkryptEngine _engine;
 
         static void Main(string[] args) {
             string path = null;
 
-            if (args.Any()) {
+            if (args.Any())
                 path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
-            }
 
-            _engine = new SkryptEngine(
-                    new Options()
-                        .MeasureOperationsPerSecond(true)
-                        .LimitMemory(1000)
-                        .HaltOnMemoryLimit(false)
-                );
+            _engine = new SkryptEngine();
 
             _engine.SetValue("print", new MethodDelegate(Print));
             _engine.SetValue("input", new MethodDelegate(Input));

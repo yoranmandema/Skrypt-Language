@@ -9,7 +9,13 @@ namespace Skrypt.CLR {
     public class CLRMethod {
         public ParameterInfo[] parameters;
         public Delegate del;
-        public MethodInfo methodInfo;
+        private readonly MethodInfo _methodInfo;
+        private readonly SkryptEngine _engine;
+
+        public CLRMethod (SkryptEngine e, MethodInfo methodInfo) {
+            _engine = e;
+            methodInfo = _methodInfo;
+        }
 
         public bool HasValidArguments (Arguments arguments) {
             if (arguments.Length != parameters.Length) return false;
@@ -19,16 +25,7 @@ namespace Skrypt.CLR {
             for (int i = 0; i < arguments.Length; i++) {
                 var arg = arguments[i];
 
-                if (arg is NumberInstance && typeof(double).IsAssignableFrom(parameters[i].ParameterType)) {
-                    continue;
-                }
-                else if (arg is StringInstance && parameters[i].ParameterType == typeof(string)) {
-                    continue;
-                }
-                else if (arg is BooleanInstance && parameters[i].ParameterType == typeof(bool)) {
-                    continue;
-                }
-                else if (typeof(SkryptObject).IsAssignableFrom(parameters[i].ParameterType)) {
+                if (_engine.ExportTypeMappers.ContainsKey(arg.GetType())) {
                     continue;
                 }
                 else if (parameters[i].ParameterType == typeof(object)) {
@@ -47,19 +44,10 @@ namespace Skrypt.CLR {
             for (int i = 0; i < arguments.Length; i++) {
                 var arg = arguments[i];
 
-                if (arg is NumberInstance numberInstance && typeof(double).IsAssignableFrom(parameters[i].ParameterType)) {
-                    convertedArguments[i] = Convert.ChangeType(numberInstance.Value, parameters[i].ParameterType);
+                if (_engine.ExportTypeMappers.ContainsKey(arg.GetType())) {
+                    convertedArguments[i] = _engine.ExportTypeMappers[arg.GetType()](arg);
                 }
-                else if (arg is StringInstance stringInstance && typeof(string).IsAssignableFrom(parameters[i].ParameterType)) {
-                    convertedArguments[i] = Convert.ChangeType(stringInstance.Value, parameters[i].ParameterType);
-                }
-                else if (arg is BooleanInstance booleanInstance && typeof(bool).IsAssignableFrom(parameters[i].ParameterType)) {
-                    convertedArguments[i] = Convert.ChangeType(booleanInstance.Value, parameters[i].ParameterType);
-                }
-                else if (arg is SkryptObject skryptObject && typeof(SkryptObject).IsAssignableFrom(parameters[i].ParameterType)) {
-                    convertedArguments[i] = skryptObject;
-                }
-                else if (typeof(object).IsAssignableFrom(parameters[i].ParameterType)) {
+                else if (parameters[i].ParameterType == typeof(object)) {
                     convertedArguments[i] = arg;
                 }
             }

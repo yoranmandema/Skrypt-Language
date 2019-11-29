@@ -37,11 +37,31 @@ namespace Skrypt {
         internal static Func<long> GetAllocatedBytesForCurrentThread { get; private set; }
         internal long InitialMemoryUsage { get; private set; }
         internal bool HaltMemory { get; private set; }
-        internal bool MeasureOPS { get; private set; }
         internal long OPS { get; set; }
 
-        private readonly bool   _discardGlobal;
-        private readonly int    _maxRecursionDepth = -1;
+        internal Dictionary<Type, Func<SkryptEngine, object, SkryptObject>> ImportTypeMappers = new Dictionary<Type, Func<SkryptEngine, object, SkryptObject>> {
+            { typeof(bool), (engine, v) => engine.CreateBoolean((bool)v) },
+            { typeof(double), (engine, v) => engine.CreateNumber((double)v) },
+            { typeof(float), (engine, v) => engine.CreateNumber((float)v) },
+            { typeof(decimal), (engine, v) => engine.CreateNumber((double)(decimal)v) },
+            { typeof(Int16), (engine, v) => engine.CreateNumber((Int16)v) },
+            { typeof(Int32), (engine, v) => engine.CreateNumber((Int32)v) },
+            { typeof(Int64), (engine, v) => engine.CreateNumber((Int64)v) },
+            { typeof(UInt16), (engine, v) => engine.CreateNumber((UInt16)v) },
+            { typeof(UInt32), (engine, v) => engine.CreateNumber((UInt32)v) },
+            { typeof(UInt64), (engine, v) => engine.CreateNumber((UInt64)v) },
+            { typeof(byte), (engine, v) => engine.CreateNumber((byte)v) },
+            { typeof(string), (engine, v) => engine.CreateString((string)v) }
+        };
+
+        internal Dictionary<Type, Func<SkryptObject, object>> ExportTypeMappers = new Dictionary<Type, Func<SkryptObject, object>> {
+            { typeof(BooleanInstance), (v) => ((BooleanInstance)v).Value },
+            { typeof(NumberInstance), (v) => ((NumberInstance)v).Value },
+            { typeof(StringInstance), (v) => ((StringInstance)v).Value }
+        };
+
+        private readonly bool _discardGlobal;
+        private readonly int _maxRecursionDepth = -1;
 
         #region Traits
         internal EnumerableTrait Enumerable { get; private set; }
@@ -85,44 +105,43 @@ namespace Skrypt {
             }
         }
 
-        public SkryptEngine() : this(null) {}
+        public SkryptEngine() : this(null) { }
 
         public SkryptEngine(Options options) {
-            GlobalEnvironment       = new LexicalEnvironment();
+            GlobalEnvironment = new LexicalEnvironment();
 
-            ErrorHandler            = new DefaultErrorHandler(this);
-            ExpressionInterpreter   = new ExpressionInterpreter(this);
-            TemplateMaker           = new TemplateMaker(this);
-            FileHandler             = new DefaultFileHandler(this);
-            Visitor                 = new SkryptVisitor(this);
+            ErrorHandler = new DefaultErrorHandler(this);
+            ExpressionInterpreter = new ExpressionInterpreter(this);
+            TemplateMaker = new TemplateMaker(this);
+            FileHandler = new DefaultFileHandler(this);
+            Visitor = new SkryptVisitor(this);
 
-            Enumerable              = FastAdd(new EnumerableTrait(this));
-            Iterator                = FastAdd(new IteratorTrait(this));
-            AddableTrait            = FastAdd(new AddableTrait(this));
-            SubtractableTrait       = FastAdd(new SubtractableTrait(this));
-            DividableTrait          = FastAdd(new DividableTrait(this));
-            MultiplicableTrait      = FastAdd(new MultiplicableTrait(this));
+            Enumerable = FastAdd(new EnumerableTrait(this));
+            Iterator = FastAdd(new IteratorTrait(this));
+            AddableTrait = FastAdd(new AddableTrait(this));
+            SubtractableTrait = FastAdd(new SubtractableTrait(this));
+            DividableTrait = FastAdd(new DividableTrait(this));
+            MultiplicableTrait = FastAdd(new MultiplicableTrait(this));
 
-            Number                  = FastAdd(new NumberType(this));
-            String                  = FastAdd(new StringType(this));
-            Boolean                 = FastAdd(new BooleanType(this));
-            Vector                  = FastAdd(new VectorType(this));
-            Vector2                 = FastAdd(new Vector2Type(this));
-            Vector3                 = FastAdd(new Vector3Type(this));
-            Vector4                 = FastAdd(new Vector4Type(this));
-            Array                   = FastAdd(new ArrayType(this));
+            Number = FastAdd(new NumberType(this));
+            String = FastAdd(new StringType(this));
+            Boolean = FastAdd(new BooleanType(this));
+            Vector = FastAdd(new VectorType(this));
+            Vector2 = FastAdd(new Vector2Type(this));
+            Vector3 = FastAdd(new Vector3Type(this));
+            Vector4 = FastAdd(new Vector4Type(this));
+            Array = FastAdd(new ArrayType(this));
 
-            Math                    = FastAdd(new MathModule(this));
-            IO                      = FastAdd(new IOModule(this));
-            Memory                  = FastAdd(new MemoryModule(this));
-            Debug                   = FastAdd(new DebugModule(this));
+            Math = FastAdd(new MathModule(this));
+            IO = FastAdd(new IOModule(this));
+            Memory = FastAdd(new MemoryModule(this));
+            Debug = FastAdd(new DebugModule(this));
 
             if (options != null) {
                 _discardGlobal = options.DiscardGlobal;
                 _maxRecursionDepth = options.MaxRecursionDepth;
                 MemoryLimit = options.MaxMemory;
                 HaltMemory = options.MemoryHalt;
-                MeasureOPS = options.MeasureOPS;
             }
         }
 
@@ -135,13 +154,13 @@ namespace Skrypt {
             return Execute(code);
         }
 
-        private void SetFile (string file) {
+        private void SetFile(string file) {
             FileHandler.File = file;
             FileHandler.Folder = Path.GetDirectoryName(file);
             ErrorHandler.File = file;
         }
 
-        public SkryptEngine DoRelativeFile (string file) {
+        public SkryptEngine DoRelativeFile(string file) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
 
@@ -156,13 +175,13 @@ namespace Skrypt {
         }
 
 
-        public void ResetMemoryUsage () {
+        public void ResetMemoryUsage() {
             if (GetAllocatedBytesForCurrentThread != null) {
                 InitialMemoryUsage = GetAllocatedBytesForCurrentThread();
             }
         }
 
-        public SkryptParser.ProgramContext ParseProgram (string source, ParserOptions options) {
+        public SkryptParser.ProgramContext ParseProgram(string source, ParserOptions options) {
             ErrorHandler.Source = source;
 
             var errorHandler = new CompileErrorHandler(this, source) {
@@ -203,19 +222,19 @@ namespace Skrypt {
                 foreach (var err in sorted) {
                     ErrorHandler.ReportError(err);
                 }
-            } 
+            }
 
             return program;
         }
 
-        public SkryptEngine Execute(string code, ParserOptions parserOptions) {
+        public SkryptEngine Execute(SkryptParser.ProgramContext program) {
             if (SW == null) {
                 SW = Stopwatch.StartNew();
             } else {
                 SW.Start();
             }
 
-            ProgramContext = ParseProgram(code, parserOptions);
+            ProgramContext = program;
 
             if (MemoryLimit > 0) {
                 ResetMemoryUsage();
@@ -231,17 +250,23 @@ namespace Skrypt {
             return this;
         }
 
+        public SkryptEngine Execute(string code, ParserOptions parserOptions) {
+            var program = ParseProgram(code, parserOptions);
+
+            return Execute(program);
+        }
+
         public SkryptEngine Execute(string code) {
             return Execute(code, DefaultParserOptions);
         }
 
-        public T FastAdd<T> (T obj) where T : SkryptObject {
+        public T FastAdd<T>(T obj) where T : SkryptObject {
             SetGlobal(obj.Name, obj);
 
             return obj;
         }
 
-        internal SkryptEngine CreateGlobals () {
+        internal SkryptEngine CreateGlobals() {
             var block = ProgramContext.block();
 
             foreach (var v in block.LexicalEnvironment.Variables) {
@@ -251,7 +276,7 @@ namespace Skrypt {
             return this;
         }
 
-        internal void SetGlobal (string name, SkryptObject value) {
+        internal void SetGlobal(string name, SkryptObject value) {
             if (GlobalEnvironment.Variables.ContainsKey(name)) {
                 GlobalEnvironment.Variables[name].Value = value;
             } else {
@@ -289,16 +314,16 @@ namespace Skrypt {
             return this;
         }
 
-        public SkryptEngine SetValue (string name, MethodDelegate value) {
+        public SkryptEngine SetValue(string name, MethodDelegate value) {
             var val = new FunctionInstance(this, value);
 
-            SetGlobal(name,val);
+            SetGlobal(name, val);
 
             return this;
         }
 
         public SkryptEngine SetValue(string name, Delegate value) {
-            var val = new FunctionInstance(this, new CLRFunction(value));
+            var val = new FunctionInstance(this, new CLRFunction(this, value));
 
             SetGlobal(name, val);
 
@@ -315,6 +340,37 @@ namespace Skrypt {
             } else {
                 throw new VariableNotFoundException($"A variable with the name {name} was not found.");
             }
+        }
+
+        public bool TryGetValue(string name, out SkryptObject value) {
+            if (GlobalEnvironment.Variables.ContainsKey(name)) {
+                value = GlobalEnvironment.Variables[name].Value;
+
+                return true;
+            }
+
+            value = null;
+            return false;
+        }
+
+        public SkryptEngine AddImportTypeMapper(Type type, Func<SkryptEngine, object, SkryptObject> func) {
+            if (ImportTypeMappers.ContainsKey(type)) {
+                throw new SkryptException($"Typemapper for type {type.FullName} already exists!");
+            }
+
+            ImportTypeMappers.Add(type, func);
+
+            return this;
+        }
+
+        public SkryptEngine AddExportTypeMapper(Type type, Func<SkryptObject, object> func) {
+            if (ExportTypeMappers.ContainsKey(type)) {
+                throw new SkryptException($"Typemapper for type {type.FullName} already exists!");
+            }
+
+            ExportTypeMappers.Add(type, func);
+
+            return this;
         }
 
         public NumberInstance CreateNumber(double value) {

@@ -10,8 +10,8 @@ namespace Skrypt.CLR {
         public string Name { get; set; }
         public CLRMethod Function { get; set; }
 
-        public CLRFunction (Delegate del) {
-            Function = CLRTypeConverter.CreateCLRFunction(del);
+        public CLRFunction (SkryptEngine engine, Delegate del) {
+            Function = CLRTypeConverter.CreateCLRFunction(engine, del);
         }
 
         public SkryptObject Run(SkryptEngine engine, SkryptObject self, Arguments arguments) {
