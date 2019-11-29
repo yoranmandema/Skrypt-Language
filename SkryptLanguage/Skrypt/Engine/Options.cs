@@ -10,7 +10,6 @@ namespace Skrypt {
         public int MaxRecursionDepth { get; private set; } = -1;
         public long MaxMemory { get; private set; }
         public bool MemoryHalt { get; private set; }
-        public bool MeasureOPS { get; private set; }
 
         /// <summary>
         /// Gets rid of new global variables after executing code.
@@ -32,12 +31,6 @@ namespace Skrypt {
             MaxMemory = memoryLimit;
             return this;
         }
-
-        public Options MeasureOperationsPerSecond(bool measureOperationsPerSecond) {
-            MeasureOPS = measureOperationsPerSecond;
-            return this;
-        }
-
 
         /// <summary>
         /// Halts the engine when the memory limit has been reached. 
