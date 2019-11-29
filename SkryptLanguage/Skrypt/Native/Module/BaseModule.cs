@@ -11,6 +11,12 @@ namespace Skrypt {
 
             GetProperties(template.Members);
 
+            foreach (var member in Members) {
+                if (member.Value.value is FunctionInstance function) {
+                    function.Self = this;
+                }
+            }
+
             Name = template.Name;
         }
     }

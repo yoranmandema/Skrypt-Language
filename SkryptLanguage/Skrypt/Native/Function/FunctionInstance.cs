@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class FunctionInstance : SkryptInstance, IDefined {
+        public SkryptObject Self { get; set; }
         public string File { get; set; }
         public override string Name => "Function";
         public IFunction Function { get; set; }

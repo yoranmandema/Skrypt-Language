@@ -19,7 +19,6 @@ namespace Skrypt {
             Context = block;
         }
 
-
         public SkryptObject Run(SkryptEngine engine, SkryptObject self, Arguments args) {
             var blockStmnt = Context.StmntBlock;
             var visitor = new SkryptVisitor(engine);

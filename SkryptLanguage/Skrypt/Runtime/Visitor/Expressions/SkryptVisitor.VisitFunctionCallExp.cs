@@ -40,8 +40,13 @@ namespace Skrypt {
                 returnValue = (function as BaseType).Construct(args);
             }
             else {
-                returnValue = (function as FunctionInstance).Function.Run(_engine, accessed, args);
+                var functionInstance = function as FunctionInstance;
+                var self = accessed ?? functionInstance.Self;
+
+                returnValue = functionInstance.Function.Run(_engine, self, args);
             }
+
+            accessed = null;
 
             _engine.CallStack.Pop();
 
