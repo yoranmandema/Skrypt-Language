@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Skrypt.CLR {
-    public class CLRTypeConverter {
+    public static class CLRTypeConverter {
         private static Delegate CreateDelegate(MethodInfo methodInfo, object target) {
             Func<Type[], Type> getType;
             var isAction = methodInfo.ReturnType.Equals((typeof(void)));
@@ -26,10 +26,9 @@ namespace Skrypt.CLR {
             return Delegate.CreateDelegate(getType(types.ToArray()), target, methodInfo.Name);
         }
 
-        public static CLRMethod CreateCLRFunction(MethodInfo methodInfo, object target) {
-            var newCLRFunction = new CLRMethod() {
-                parameters = methodInfo.GetParameters(),
-                methodInfo = methodInfo
+        public static CLRMethod CreateCLRFunction(SkryptEngine engine, MethodInfo methodInfo, object target) {
+            var newCLRFunction = new CLRMethod(engine, methodInfo) {
+                parameters = methodInfo.GetParameters()
             };
 
             newCLRFunction.del = CreateDelegate(methodInfo, target);
@@ -37,10 +36,9 @@ namespace Skrypt.CLR {
             return newCLRFunction;
         }
 
-        public static CLRMethod CreateCLRFunction(Delegate del) {
-            var newCLRFunction = new CLRMethod() {
-                parameters = del.Method.GetParameters(),
-                methodInfo = del.Method
+        public static CLRMethod CreateCLRFunction(SkryptEngine engine, Delegate del) {
+            var newCLRFunction = new CLRMethod(engine, del.Method) {
+                parameters = del.Method.GetParameters()
             };
 
             newCLRFunction.del = del;
@@ -84,7 +82,7 @@ namespace Skrypt.CLR {
 
                     if (!hasValidParameters) continue;
 
-                    var clrFunction = CreateCLRFunction(methodInfo, type);
+                    var clrFunction = CreateCLRFunction(engine, methodInfo, type);
 
                     functions.Add(clrFunction);
                 }
