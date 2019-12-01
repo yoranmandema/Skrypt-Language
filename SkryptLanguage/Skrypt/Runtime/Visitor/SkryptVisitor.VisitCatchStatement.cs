@@ -7,18 +7,21 @@ namespace Skrypt {
     [CLSCompliant(false)]
     internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitCatchStatement(SkryptParser.CatchStatementContext context) {
-            CurrentEnvironment = CurrentEnvironment.Parent;
+            var previousEnvironment = CurrentEnvironment.Parent;
 
-            var stackTrace = DebugModule.CallStack(_engine, null, Arguments.Empty);
-            var previousEnvironment = CurrentEnvironment;
-            var block = context.stmntBlock();
-
-            CurrentEnvironment = CurrentEnvironment.Children.Find(x => x.Context == (context as IScopedContext));
+            CurrentEnvironment = CurrentEnvironment.Parent.Children.Find(x => x.Context == (context as IScopedContext));
 
             CurrentEnvironment.Variables[context.name().GetText()].Value =
-                _engine.Exception.Construct(context.error.Message, stackTrace.AsType<StringInstance>().Value);
+                _engine.Exception.Construct(
+                    context.error.Message, 
+                    DebugModule.CallStack(
+                        _engine, 
+                        null, 
+                        Arguments.Empty
+                        ).AsType<StringInstance>().Value
+                    );
 
-            Visit(block);
+            Visit(context.stmntBlock());
 
             CurrentEnvironment = previousEnvironment;
 
