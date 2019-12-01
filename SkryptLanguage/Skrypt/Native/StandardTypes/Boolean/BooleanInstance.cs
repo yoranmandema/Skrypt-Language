@@ -31,7 +31,7 @@ namespace Skrypt {
         }
 
         SkryptObject IValue.Copy() {
-            throw new NotImplementedException();
+            return Engine.CreateBoolean(Value);
         }
 
         bool IValue.Equals(IValue other) {
