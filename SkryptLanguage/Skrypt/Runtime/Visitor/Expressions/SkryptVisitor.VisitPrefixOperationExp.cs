@@ -64,6 +64,8 @@ namespace Skrypt {
                 _engine.ErrorHandler.FatalError(context.Target.Start, $"No such operation: {name} {operationName}");
             }
 
+            if (result is IValue noref) result = noref.Copy();
+
             LastResult = (SkryptObject)result;
 
             return (SkryptObject)result;
