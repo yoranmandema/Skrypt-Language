@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class ExceptionInstance : SkryptInstance {
-        public ExceptionInstance(SkryptEngine engine) : base(engine) {
+        public override string Name => "Exception";
+
+        public ExceptionInstance(SkryptEngine engine, string message, string stackTrace) : base(engine) {
+            CreateProperty("message", engine.CreateString(message), false, true);
+            CreateProperty("stackTrace", engine.CreateString(stackTrace), false, true);
         }
     }
 }
