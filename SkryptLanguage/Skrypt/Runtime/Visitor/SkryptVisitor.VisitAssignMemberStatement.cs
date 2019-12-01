@@ -9,26 +9,10 @@ namespace Skrypt {
             var target = Visit(context.memberAccess().expression());
             var memberName = context.memberAccess().NAME().GetText();
 
-            var property = target.GetProperty(memberName);
+            if (!target.GetPropertyInContext(memberName, context, out Member property))
+                _engine.ErrorHandler.FatalError(context.memberAccess().Start, $"Private property {memberName} is not accessible in the current context.");
 
             if (property.isConstant) _engine.ErrorHandler.FatalError(context.Start, "Constant member cannot be redefined.");
-
-            if (property.isPrivate && property.definitionBlock != null) {
-                var parent = context.Parent;
-                var canAccess = false;
-
-                while (parent != null) {
-                    if (parent == property.definitionBlock) {
-                        canAccess = true;
-                    }
-
-                    parent = parent.Parent;
-                }
-
-                if (!canAccess) {
-                    _engine.ErrorHandler.FatalError(context.memberAccess().Start, $"Private property {memberName} is not accessible in the current context.");
-                }
-            }
 
             var value = Visit(context.expression());
 

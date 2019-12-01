@@ -6,45 +6,26 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitMemberAccessExp(SkryptParser.MemberAccessExpContext context) {
-            var obj = Visit(context.expression());
+            var target = Visit(context.expression());
             var memberName = context.NAME().GetText();
 
-            if (obj == null) {
+            if (target == null) {
                 throw new NonExistingMemberException($"Tried to get member from null value.");
             }
 
-            var property = obj.GetProperty(memberName);
-
-            if (property.isPrivate && property.definitionBlock != null) {
-                var parent = context.Parent;
-                var canAccess = false;
-
-                while (parent != null) {
-                    if (parent == property.definitionBlock) {
-                        canAccess = true;
-                    }
-
-                    parent = parent.Parent;
-                }
-
-                if (!canAccess) {
-                    _engine.ErrorHandler.FatalError(context.NAME().Symbol, $"Private property {memberName} is not accessible in the current context.");
-                }
-            }
+            if (!target.GetPropertyInContext(memberName, context, out Member property))
+                _engine.ErrorHandler.FatalError(context.NAME().Symbol, $"Private property {memberName} is not accessible in the current context.");
 
             var value = property.value;
 
-            if (value is GetPropertyInstance) {
-                var newVal = (value as GetPropertyInstance).Property.Run(_engine, obj);
+            if (value is GetPropertyInstance)
+                value = (value as GetPropertyInstance)?.Property.Run(_engine, target);
 
-                value = newVal;
-            }
-
-            accessed = obj;
+            accessed = target;
 
             LastResult = value;
 
-            //if (value is IValue noref) value = noref.Copy();
+            if (value is IValue noref) value = noref.Copy();
 
             return value;
         }

@@ -68,6 +68,22 @@ namespace Skrypt {
             return Members[name];
         }
 
+        internal bool GetPropertyInContext (string name, Antlr4.Runtime.RuleContext scope, out Member property) {
+            property = GetProperty(name);
+            var parent = ((IScopedContext)scope.Parent).LexicalEnvironment;
+            var canAccess = false;
+             
+            while (parent != null) {
+                if (parent.Context == property.definitionBlock) {
+                    canAccess = true;
+                }
+
+                parent = parent.Parent;
+            }
+
+            return canAccess;
+        }
+
         public T AsType<T>() where T : SkryptObject {
             return (T)this;
         }
