@@ -6,11 +6,9 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitFunctionCallExp(SkryptParser.FunctionCallExpContext context) {
-            var length = context.Arguments.expression().Length;
+            var arguments = new SkryptObject[context.Arguments.expression().Length];
 
-            var arguments = new SkryptObject[length];
-
-            for (var i = 0; i < length; i++) {
+            for (var i = 0; i < arguments.Length; i++) {
                 arguments[i] = Visit(context.Arguments.expression(i));
             }
 
@@ -18,7 +16,7 @@ namespace Skrypt {
 
             var function = Visit(context.Function);
             var isConstructor = false;
-            var returnValue = DefaultResult;
+            SkryptObject returnValue;
 
             if (function is SkryptType) {
                 isConstructor = true;
@@ -41,9 +39,8 @@ namespace Skrypt {
             }
             else {
                 var functionInstance = function as FunctionInstance;
-                var self = accessed ?? functionInstance.Self;
 
-                returnValue = functionInstance.Function.Run(_engine, self, args);
+                returnValue = functionInstance.Function.Run(_engine, accessed ?? functionInstance.Self, args);
             }
 
             accessed = null;
