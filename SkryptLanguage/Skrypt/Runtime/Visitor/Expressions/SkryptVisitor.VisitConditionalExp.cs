@@ -6,10 +6,9 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitConditionalExp(SkryptParser.ConditionalExpContext context) {
-            var condition = Visit(context.expression(0));
-            var value = DefaultResult;
+            SkryptObject value;
 
-            if (condition.IsTrue()) {
+            if (Visit(context.expression(0)).IsTrue()) {
                 value = Visit(context.expression(1));
             } else {
                 value = Visit(context.expression(2));
