@@ -8,8 +8,7 @@ namespace Skrypt {
         public override SkryptObject VisitPostfixOperationExp(SkryptParser.PostfixOperationExpContext context) {
             var operationName = context.Operation.Text;
 
-            var target = Visit(context.Target);
-            var value = target;
+            var value = Visit(context.Target);
             object result = value;
 
             switch (operationName) {
@@ -36,6 +35,8 @@ namespace Skrypt {
             if (result is InvalidOperation) {
                 throw new InvalidOperationException($"No such operation: {value?.Name ?? "null"} {operationName}");
             }
+
+            if (result is IValue noref) result = noref.Copy();
 
             LastResult = (SkryptObject)result;
 
