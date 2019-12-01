@@ -427,7 +427,7 @@ whileStmnt			: WHILE '(' Condition=expression ')' stmntBlock																#whi
 					;
 
 continueStmnt		locals [
-					RuleContext Statement,
+					ILoopContext Statement,
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: CONTINUE {
@@ -443,7 +443,7 @@ continueStmnt		locals [
 					;
 
 breakStmnt			locals [
-					RuleContext Statement,
+					ILoopContext Statement,
 					Skrypt.JumpState JumpState = Skrypt.JumpState.None
 					]
 					: BREAK {
