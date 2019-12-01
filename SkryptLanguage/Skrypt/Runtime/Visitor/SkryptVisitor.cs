@@ -8,7 +8,7 @@ using System.Linq;
 using Skrypt.Runtime;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+    internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public SkryptObject LastResult { get; private set; }
 
         public LexicalEnvironment CurrentEnvironment { get; internal set; }

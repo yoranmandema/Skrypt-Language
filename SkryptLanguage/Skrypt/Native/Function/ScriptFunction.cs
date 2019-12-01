@@ -15,7 +15,7 @@ namespace Skrypt {
         internal Parameter[] Parameters;
         internal LexicalEnvironment BaseEnvironment;
 
-        public ScriptFunction(IFunctionContext block) {
+        internal ScriptFunction(IFunctionContext block) {
             Context = block;
         }
 

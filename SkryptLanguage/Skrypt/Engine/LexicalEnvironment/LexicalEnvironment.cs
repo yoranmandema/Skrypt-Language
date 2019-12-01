@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class LexicalEnvironment {
         public Dictionary<string, Variable> Variables { get; set; } = new Dictionary<string, Variable>();
-        public RuleContext Context { get; internal set; }
         public LexicalEnvironment Parent { get; set; }
         public List<LexicalEnvironment> Children { get; set; } = new List<LexicalEnvironment>();
+        internal RuleContext Context { get; set; }
 
-        public void PrintAllChildVariables () {
+        public void PrintAllChildVariables() {
             foreach (var kv in Variables) Console.WriteLine($"{kv.Key}: {kv.Value.Value}");
 
             if (Children != null) foreach (var child in Children) child.PrintAllChildVariables();
@@ -22,26 +22,28 @@ namespace Skrypt {
             foreach (var kv in Variables) Console.WriteLine($"{kv.Key}: {kv.Value.Value}");
         }
 
-        public void AddVariable (Variable variable) {
+        public void AddVariable(Variable variable) {
             Variables[variable.Name] = variable;
         }
 
-        public Variable GetVariable (string name) {
+        public Variable GetVariable(string name) {
             if (Variables.ContainsKey(name)) {
                 return Variables[name];
-            } else if (Parent != null)  {
+            }
+            else if (Parent != null) {
                 return Parent.GetVariable(name);
-            } else {
+            }
+            else {
                 throw new VariableNotFoundException($"Variable {name} not found in current context.");
             }
         }
 
-        public void AddChild (LexicalEnvironment child) {
+        public void AddChild(LexicalEnvironment child) {
             child.Parent = this;
             Children.Add(child);
         }
 
-        public static LexicalEnvironment MakeCopy (LexicalEnvironment lexicalEnvironment) {
+        public static LexicalEnvironment MakeCopy(LexicalEnvironment lexicalEnvironment) {
             var newEnvironment = new LexicalEnvironment {
                 Context = lexicalEnvironment.Context,
                 Parent = lexicalEnvironment.Parent
@@ -52,7 +54,8 @@ namespace Skrypt {
 
                 if (kv.Value.Value is IValue valueType) {
                     variable.Value = valueType.Copy();
-                } else {
+                }
+                else {
                     variable.Value = kv.Value.Value;
                 }
 
@@ -66,17 +69,17 @@ namespace Skrypt {
             return newEnvironment;
         }
 
-        public void AddChildren (List<LexicalEnvironment> children) {
+        public void AddChildren(List<LexicalEnvironment> children) {
             foreach (var child in children) {
                 this.AddChild(child);
             }
         }
 
-        public static List<LexicalEnvironment> CopyChildrenRecursively (LexicalEnvironment lexicalEnvironment) {
-            if (!lexicalEnvironment.Children.Any()) {
+        public static List<LexicalEnvironment> CopyChildrenRecursively(LexicalEnvironment lexicalEnvironment) {
+            if (lexicalEnvironment.Children.Count == 0) {
                 return null;
             }
-            
+
             var newChildren = new List<LexicalEnvironment>();
 
             foreach (var child in lexicalEnvironment.Children) {
@@ -84,7 +87,6 @@ namespace Skrypt {
                 var children = CopyChildrenRecursively(child);
 
                 if (children != null) newChild.AddChildren(children);
-
 
                 newChildren.Add(newChild);
             }

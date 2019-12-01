@@ -15,7 +15,6 @@ using Skrypt.Compiling;
 
 namespace Skrypt {
     public partial class SkryptEngine {
-
         private static readonly ParserOptions DefaultParserOptions = new ParserOptions {
             Tolerant = false,
             ReportErrors = true
@@ -91,7 +90,6 @@ namespace Skrypt {
         internal IOModule IO { get; private set; }
         internal MemoryModule Memory { get; private set; }
         #endregion
-
 
         public ErrorHandler ErrorHandler { get; set; }
         public IFileHandler FileHandler { get; set; }
@@ -176,14 +174,13 @@ namespace Skrypt {
             return result;
         }
 
-
         public void ResetMemoryUsage() {
             if (GetAllocatedBytesForCurrentThread != null) {
                 InitialMemoryUsage = GetAllocatedBytesForCurrentThread();
             }
         }
 
-        public SkryptParser.ProgramContext ParseProgram(string source, ParserOptions options) {
+        internal SkryptParser.ProgramContext ParseProgram(string source, ParserOptions options) {
             ErrorHandler.Source = source;
 
             var errorHandler = new CompileErrorHandler(this, source) {
@@ -195,7 +192,7 @@ namespace Skrypt {
             var inputStream = new AntlrInputStream(source);
             var skryptLexer = new SkryptLexer(inputStream) {
                 Engine = this,
-                ErrorHandler = errorHandler
+                CompileErrorHandler = errorHandler
             };
 
             skryptLexer.RemoveErrorListeners();
@@ -218,7 +215,7 @@ namespace Skrypt {
 
             Parser.LinkLexicalEnvironments(program, GlobalEnvironment);
 
-            if (errorHandler.Errors.Any() && options.ReportErrors) {
+            if (errorHandler.Errors.Count > 0 && options.ReportErrors) {
                 var sorted = errorHandler.Errors.OrderBy(x => x.File).ThenBy(x => x.Line).ThenBy(x => x.Column);
 
                 foreach (var err in sorted) {
@@ -229,7 +226,7 @@ namespace Skrypt {
             return program;
         }
 
-        public SkryptEngine Execute(SkryptParser.ProgramContext program) {
+        internal SkryptEngine Execute(SkryptParser.ProgramContext program) {
             if (SW == null) {
                 SW = Stopwatch.StartNew();
             } else {
@@ -335,7 +332,7 @@ namespace Skrypt {
         public SkryptObject GetValue(string name) {
             var block = ProgramContext?.block();
 
-            if (block != null && block.LexicalEnvironment.Variables.ContainsKey(name)) {
+            if (block?.LexicalEnvironment.Variables.ContainsKey(name) == true) {
                 return block.LexicalEnvironment.Variables[name].Value;
             } else if (GlobalEnvironment.Variables.ContainsKey(name)) {
                 return GlobalEnvironment.Variables[name].Value;

@@ -12,6 +12,6 @@ namespace Skrypt {
         public int line;
         public string callFile;
         public string file;
-        public IToken token;
+        internal IToken token;
     }
 }

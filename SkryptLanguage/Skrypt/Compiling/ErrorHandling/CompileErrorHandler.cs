@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Skrypt {
     public class CompileErrorHandler : ICompileErrorHandler {
-        protected readonly SkryptEngine _engine;
+        protected readonly SkryptEngine engine;
 
         public IList<ParserException> Errors { get; set; } = new List<ParserException>();
-        public bool HasErrors => Errors.Any();
+        public bool HasErrors => Errors.Count > 0;
         public string Source { get; set; }
         public string File { get; set; }
         public bool Tolerant { get; set; }
 
         public CompileErrorHandler(SkryptEngine engine, string source) {
-            _engine = engine;
+            this.engine = engine;
             Source = source;
         }
 
@@ -37,7 +37,7 @@ namespace Skrypt {
             return new ParserException(message, new Error(index, line, column, message, Source, File));
         }
 
-        public void TolerateError (IToken token, string message) {
+        internal void TolerateError (IToken token, string message) {
             TolerateError(
                 token.StartIndex,
                 token.Line,

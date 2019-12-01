@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public interface IFunctionContext : IScopedContext {
+    internal interface IFunctionContext : IScopedContext {
         JumpState JumpState { get; set; }
         SkryptObject ReturnValue { get; set; }
-        SkryptParser.StmntBlockContext StmntBlock { get; } 
+        SkryptParser.StmntBlockContext StmntBlock { get; }
     }
-} 
+}

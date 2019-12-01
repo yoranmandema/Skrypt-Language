@@ -38,7 +38,7 @@ importStmnt			: IMPORT name (DOT NAME)*?	{
 	var scope = GetDefinitionBlock($ctx);
 
 	if (nameCtx.variable == null) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
             nameCtx.NAME().Symbol,
             "Undefined variable: " + nameCtx.GetText()
         );
@@ -51,7 +51,7 @@ importStmnt			: IMPORT name (DOT NAME)*?	{
 			try {
 				target = target.GetProperty(m.GetText()).value;
 			} catch (System.Exception e) {
-				ErrorHandler.TolerateError(
+				CompileErrorHandler.TolerateError(
 					nameCtx.NAME().Symbol,
 					e.Message
 				);
@@ -101,7 +101,7 @@ importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
 	var module = Ctx.Module.variable.Value;
 
 	if (module == null)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			Ctx.Module.Start,
 			"Module can't be null."
 		);
@@ -113,7 +113,7 @@ importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
 
 			scope.LexicalEnvironment.AddVariable(new Skrypt.Variable(name, value, scope.LexicalEnvironment));
 		} catch (NonExistingMemberException e) {
-			ErrorHandler.TolerateError(
+			CompileErrorHandler.TolerateError(
 				n.Symbol,
 				e.Message
 			);
@@ -126,7 +126,7 @@ moduleStmnt			: MODULE name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
 	if (!isInValidContext)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			$ctx.Start,
 			"Module has to be in global scope or module block."
 		);
@@ -136,7 +136,7 @@ moduleStmnt			: MODULE name {
 	var block = GetDefinitionBlock($ctx.Parent);
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			nameCtx.Start,
 			"Constant cannot be redefined."
 		);
@@ -164,7 +164,7 @@ structStmnt			: STRUCT name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
 
 	if (!isInValidContext)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			$ctx.Start,
 			"Struct has to be in global scope, module block or struct block."
 		);
@@ -175,7 +175,7 @@ structStmnt			: STRUCT name {
 	var typeName = nameCtx.GetText();
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			nameCtx.Start,
 			"Constant cannot be redefined."
 		);
@@ -201,7 +201,7 @@ structStmnt			: STRUCT name {
 			var value = Ctx.LexicalEnvironment.GetVariable(nameToken.Text).Value;
 
 			if (value == null) {
-				ErrorHandler.TolerateError(
+				CompileErrorHandler.TolerateError(
 					c.Property.Start,
 					"Field can't be set to an undefined value."
 				);
@@ -227,7 +227,7 @@ traitStmnt			: TRAIT name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
 	if (!isInValidContext) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			$ctx.Start,
 			"Trait has to be in global scope or module block."
 		);
@@ -239,7 +239,7 @@ traitStmnt			: TRAIT name {
 	var traitName = nameCtx.GetText();
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			nameCtx.Start,
 			"Constant cannot be redefined."
 		);
@@ -258,7 +258,7 @@ traitStmnt			: TRAIT name {
 		var value = Ctx.LexicalEnvironment.GetVariable(nameToken.Text).Value;
 
 		if (value == null) {
-			ErrorHandler.TolerateError(
+			CompileErrorHandler.TolerateError(
 				nameToken,
 				"Field can't be set to an undefined value."
 			);
@@ -273,7 +273,7 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ProgramContext)});
 
 	if (!isInValidContext)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			$ctx.Start,
 			"Implementation has to be in global scope."
 		);
@@ -286,14 +286,14 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 	var type = typeNameCtx.variable.Value as SkryptType;
 
 	if (!typeof(SkryptTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			traitNameCtx.NAME().Symbol,
 			"Trait expected."
 		);
 	}
 
 	if (!typeof(SkryptType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			traitNameCtx.NAME().Symbol,
 			"Type expected."
 		);
@@ -317,7 +317,7 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 			var value = Ctx.LexicalEnvironment.GetVariable(nameToken.Text).Value;
 
 			if (!trait.TraitMembers.ContainsKey(nameToken.Text)) {
-				ErrorHandler.TolerateError(
+				CompileErrorHandler.TolerateError(
 					nameToken,
 					$"Trait does not contain property {nameToken.Text}."
 				);
@@ -325,7 +325,7 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 			}
 
 			if (value == null) {
-				ErrorHandler.TolerateError(
+				CompileErrorHandler.TolerateError(
 					nameToken,
 					"Field can't be set to an undefined value."
 				);
@@ -349,7 +349,7 @@ fnStmnt				: CONST? FN name '(' parameterGroup ')' {
 	var isConstant = fnCtx.CONST() != null;
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			nameCtx.Start,
 			"Constant cannot be redefined."
 		);
@@ -394,7 +394,7 @@ returnStmnt			locals [
 	$Statement = GetFirstFunctionStatement($ctx);
 
 	if ($Statement == null) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			(_localctx as ReturnStatementContext).RETURN().Symbol,
 			"Return statement must be inside a function."
 		);
@@ -434,7 +434,7 @@ continueStmnt		locals [
 	$Statement = GetFirstLoopStatement($ctx) as RuleContext;
 
 	if ($Statement == null) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			(_localctx as ContinueStatementContext).CONTINUE().Symbol,
 			"Continue statement must be inside a loop."
 		);
@@ -450,7 +450,7 @@ breakStmnt			locals [
 	$Statement = GetFirstLoopStatement($ctx) as RuleContext;
 
 	if ($Statement == null) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			(_localctx as BreakStatementContext).BREAK().Symbol,
 			"Break statement must be inside a loop."
 		);
@@ -478,7 +478,7 @@ memberDefStmnt		: CONST? name ASSIGN expression {
 	var isConstant = memberDefCtx.CONST() != null;
 
 	if (nameCtx.variable != null)
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			nameCtx.Start,
 			 $"Member {nameCtx} is already defined."
 		);
@@ -505,19 +505,19 @@ assignStmnt			: CONST? name assign expression {
 
 	if (hasOperator) {
 		if (nameCtx.variable == null)
-			ErrorHandler.TolerateError(
+			CompileErrorHandler.TolerateError(
 				nameCtx.Start,
 				"Undefined variable: " + nameCtx.GetText()
 			);
 		if (isConstant)
-			ErrorHandler.TolerateError(
+			CompileErrorHandler.TolerateError(
 				assignNameCtx.Start,
 				"Const keyword cannot be used for operator assignment."
 			);
 	}
 
 	if (nameCtx.variable != null && nameCtx.variable.IsConstant) 
-			ErrorHandler.TolerateError(
+			CompileErrorHandler.TolerateError(
 				nameCtx.Start,
 				"Constant cannot be redefined."
 			);
@@ -581,7 +581,7 @@ functionCtx.CallFile = Engine.FileHandler.File;
 	var nameCtx = ($ctx as NameExpContext).name();
 
 	if (nameCtx.variable == null) {
-		ErrorHandler.TolerateError(
+		CompileErrorHandler.TolerateError(
 			nameCtx.NAME().Symbol,
 			"Undefined variable: " + nameCtx.GetText()
 		);
@@ -738,7 +738,7 @@ NAME					: ('_' | LETTER) ('_' | LETTER | DIGIT)*;
 NUMBER					: DIGIT+ ('.' DIGIT+)?;
 
 STRING					: '"' ~('"')* ('"' | {
-	ErrorHandler.TolerateError(
+	CompileErrorHandler.TolerateError(
 		CharIndex,
 		_tokenStartLine,
 		_tokenStartCharPositionInLine,

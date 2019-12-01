@@ -4,7 +4,7 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+    internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitFunctionLiteral([NotNull] SkryptParser.FunctionLiteralContext context) {
             var fn = context.fnLiteral().value;
 

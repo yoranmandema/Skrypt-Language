@@ -4,7 +4,7 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+    internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitBreakStatement([NotNull] SkryptParser.BreakStatementContext context) {
             var loopCtx = context.Statement;
 

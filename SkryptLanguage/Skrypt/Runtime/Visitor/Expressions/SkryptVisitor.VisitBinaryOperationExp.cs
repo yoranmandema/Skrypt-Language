@@ -5,8 +5,7 @@ using Skrypt.ANTLR;
 using System.Linq;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
-
+    internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public SkryptObject EvaluateExpression (string operationName, SkryptObject left, SkryptObject right, IToken token) {
             object result = new InvalidOperation();
 

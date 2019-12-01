@@ -24,7 +24,7 @@ namespace Skrypt {
             Source = source;
         }
 
-        public Error(IToken token, string message, string source, string file) : this(message, source, file) {
+        internal Error(IToken token, string message, string source, string file) : this(message, source, file) {
             Index = token.StartIndex;
             Message = message;
             Line = token.Line;

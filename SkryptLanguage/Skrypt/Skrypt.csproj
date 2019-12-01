@@ -73,7 +73,6 @@
     <Compile Include="Compiling\ErrorHandling\CompileErrorHandler.cs" />
     <Compile Include="Compiling\ErrorHandling\ICompileErrorHandler.cs" />
     <Compile Include="Compiling\ParserOptions.cs" />
-    <Compile Include="Compiling\TreeDuplicator.cs" />
     <Compile Include="CLR\CLRFunction.cs" />
     <Compile Include="CLR\CLRMethod.cs" />
     <Compile Include="CLR\CLRTypeConverter.cs" />

@@ -52,7 +52,7 @@ namespace Skrypt.ANTLR {
             public SkryptObject ReturnValue { get; set; }
             public JumpState JumpState { get; set; }
 
-            public FunctionStatementContext Clone () {
+            public FunctionStatementContext Clone() {
                 return (FunctionStatementContext)MemberwiseClone();
             }
         }
@@ -77,16 +77,19 @@ namespace Skrypt.ANTLR {
             public string CallFile { get; set; }
         }
 
-        void CreateProperty(SkryptObject target, IScopedContext ctx, ParserRuleContext propertyTree, bool isPrivate) {
+        private void CreateProperty(SkryptObject target, IScopedContext ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
 
             if (propertyTree.GetChild(0) is MemberDefinitionStatementContext assignCtx) {
                 nameToken = assignCtx.name().NAME().Symbol;
-            } else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
+            }
+            else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
                 nameToken = fnCtx.name().NAME().Symbol;
-            } else if (propertyTree.GetChild(0) is ModuleStatementContext moduleCtx) {
+            }
+            else if (propertyTree.GetChild(0) is ModuleStatementContext moduleCtx) {
                 nameToken = moduleCtx.name().NAME().Symbol;
-            } else if (propertyTree.GetChild(0) is StructStatementContext structCtx) {
+            }
+            else if (propertyTree.GetChild(0) is StructStatementContext structCtx) {
                 nameToken = structCtx.name().NAME().Symbol;
             }
 
@@ -99,8 +102,7 @@ namespace Skrypt.ANTLR {
             target.CreateProperty(nameToken.Text, value, isPrivate, ctx.LexicalEnvironment.Variables[nameToken.Text].IsConstant);
         }
 
-        bool ContextIsIn(RuleContext context, Type[] types) {
-
+        private bool ContextIsIn(RuleContext context, Type[] types) {
             foreach (var t in types) {
                 if (context.parent.parent.GetType() == t) {
                     return true;
@@ -110,23 +112,21 @@ namespace Skrypt.ANTLR {
             return false;
         }
 
-        IToken GetPropertyNameToken(ParserRuleContext propertyTree) {
-            IToken nameToken = null;
-
+        private IToken GetPropertyNameToken(ParserRuleContext propertyTree) {
             if (propertyTree.GetChild(0) is AssignNameStatementContext assignCtx) {
-                nameToken = assignCtx.name().NAME().Symbol;
+                return assignCtx.name().NAME().Symbol;
             }
             else if (propertyTree.GetChild(0) is FunctionStatementContext fnCtx) {
-                nameToken = fnCtx.name().NAME().Symbol;
+                return fnCtx.name().NAME().Symbol;
             }
             else if (propertyTree.GetChild(0) is MemberDefinitionStatementContext mdCtx) {
-                nameToken = mdCtx.name().NAME().Symbol;
+                return mdCtx.name().NAME().Symbol;
             }
 
-            return nameToken;
+            return null;
         }
 
-        IScopedContext GetDefinitionBlock (string name, RuleContext ctx) {
+        private IScopedContext GetDefinitionBlock(string name, RuleContext ctx) {
             IScopedContext scope = null;
             IScopedContext first = null;
 
@@ -151,7 +151,7 @@ namespace Skrypt.ANTLR {
             return scope;
         }
 
-        IScopedContext GetDefinitionBlock(RuleContext ctx) {
+        private IScopedContext GetDefinitionBlock(RuleContext ctx) {
             while (ctx.Parent != null) {
                 if (ctx is IScopedContext scopedCtx) {
                     return scopedCtx;
@@ -163,7 +163,7 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        T GetFirstOfType<T>(RuleContext ctx) where T : RuleContext {
+        private T GetFirstOfType<T>(RuleContext ctx) where T : RuleContext {
             RuleContext currentContext = ctx;
 
             while (currentContext.Parent != null) {
@@ -177,7 +177,7 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        IFunctionContext GetFirstFunctionStatement (RuleContext ctx){
+        private IFunctionContext GetFirstFunctionStatement(RuleContext ctx) {
             RuleContext currentContext = ctx;
 
             while (currentContext.Parent != null) {
@@ -191,7 +191,7 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        ILoopContext GetFirstLoopStatement(RuleContext ctx) {
+        private ILoopContext GetFirstLoopStatement(RuleContext ctx) {
             RuleContext currentContext = ctx;
 
             while (currentContext.Parent != null) {
@@ -205,19 +205,18 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        Variable GetReference (string name, IScopedContext scope) {
-            Variable variable = null;
-
+        private Variable GetReference(string name, IScopedContext scope) {
             if (scope.LexicalEnvironment.Variables.ContainsKey(name)) {
-                variable = scope.LexicalEnvironment.GetVariable(name);
-            } else if (this.GlobalEnvironment.Variables.ContainsKey(name)) {
-                variable = this.GlobalEnvironment.Variables[name];
+                return scope.LexicalEnvironment.GetVariable(name);
+            }
+            else if (this.GlobalEnvironment.Variables.ContainsKey(name)) {
+                return this.GlobalEnvironment.Variables[name];
             }
 
-            return variable;
+            return null;
         }
 
-        public void LinkLexicalEnvironments (RuleContext context, LexicalEnvironment parentEnvironment) {
+        public void LinkLexicalEnvironments(RuleContext context, LexicalEnvironment parentEnvironment) {
             if (context is IScopedContext scoped) {
                 parentEnvironment.AddChild(scoped.LexicalEnvironment);
                 parentEnvironment = scoped.LexicalEnvironment;

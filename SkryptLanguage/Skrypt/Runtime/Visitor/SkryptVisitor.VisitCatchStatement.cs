@@ -4,7 +4,8 @@ using Antlr4.Runtime.Misc;
 using Skrypt.ANTLR;
 
 namespace Skrypt {
-    public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
+    [CLSCompliant(false)]
+    internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitCatchStatement(SkryptParser.CatchStatementContext context) {
             CurrentEnvironment = CurrentEnvironment.Parent;
 

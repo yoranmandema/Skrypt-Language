@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace Skrypt.ANTLR {
     public partial class SkryptLexer {
         public SkryptEngine Engine { get; internal set; }
-        public CompileErrorHandler ErrorHandler { get; internal set; }
+        public CompileErrorHandler CompileErrorHandler { get; internal set; }
     }
 }
