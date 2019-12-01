@@ -206,7 +206,7 @@ namespace Skrypt {
             Parser = new SkryptParser(commonTokenStream) {
                 Engine = this,
                 TokenStream = commonTokenStream,
-                ErrorHandler = errorHandler
+                CompileErrorHandler = errorHandler
             };
 
             Parser.RemoveErrorListeners();

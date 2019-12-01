@@ -11,7 +11,7 @@ namespace Skrypt.ANTLR {
         public SkryptEngine Engine { get; internal set; }
         public LexicalEnvironment GlobalEnvironment;
         public ITokenStream TokenStream { get; internal set; }
-        public CompileErrorHandler ErrorHandler { get; internal set; }
+        public CompileErrorHandler CompileErrorHandler { get; internal set; }
 
         public partial class ModuleStmntContext : IScopedContext {
             public RuleContext Context => this;
@@ -93,7 +93,7 @@ namespace Skrypt.ANTLR {
             var value = ctx.LexicalEnvironment.Variables[nameToken.Text].Value;
 
             if (value == null) {
-                ErrorHandler.TolerateError(nameToken, "Field can't be set to an undefined value.");
+                CompileErrorHandler.TolerateError(nameToken, "Field can't be set to an undefined value.");
             }
 
             target.CreateProperty(nameToken.Text, value, isPrivate, ctx.LexicalEnvironment.Variables[nameToken.Text].IsConstant);
