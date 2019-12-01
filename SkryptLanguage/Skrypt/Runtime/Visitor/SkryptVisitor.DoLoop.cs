@@ -5,15 +5,8 @@ using Skrypt.ANTLR;
 
 namespace Skrypt {
     internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
-        void DoLoop(SkryptParser.StmntBlockContext stmntBlock, ILoopContext context, Func<bool> cond, Action callback = null) {
+        private void DoLoop(SkryptParser.StmntBlockContext stmntBlock, ILoopContext context, Func<bool> cond, Action callback = null) {
             var block = stmntBlock.block();
-            var expression = (RuleContext)stmntBlock.expression();
-            var assignStmnt = (RuleContext)stmntBlock.assignStmnt();
-            var returnStmnt = (RuleContext)stmntBlock.returnStmnt();
-            var continueStmnt = (RuleContext)stmntBlock.continueStmnt();
-            var breakStmnt = (RuleContext)stmntBlock.breakStmnt();
-
-            var singleLine = expression ?? assignStmnt ?? returnStmnt ?? continueStmnt ?? breakStmnt;
 
             if (block != null) {
                 var previousEnvironment = CurrentEnvironment;
@@ -45,9 +38,9 @@ namespace Skrypt {
 
                 CurrentEnvironment = previousEnvironment;
             }
-            else if (singleLine != null) {
+            else {
                 while (cond()) {
-                    Visit(singleLine);
+                    Visit(stmntBlock.GetChild(0));
 
                     callback?.Invoke();
 

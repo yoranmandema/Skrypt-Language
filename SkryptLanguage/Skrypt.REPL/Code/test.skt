@@ -1,12 +1,3 @@
 ﻿
-fn Test () {
-	try {
-		a = 1 * ""
-	} catch (err) {
-		print(err)
-		print(err.message)
-		print(err.stackTrace)
-	}
-}
 
-Test()
+for (i = 0, i < 10, i++) print(i)
