@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    internal interface ILoopContext {
+    public interface ILoopContext {
         JumpState JumpState { get; set; }
     }
 }

@@ -69,13 +69,32 @@ namespace Skrypt.ANTLR {
             public JumpState JumpState { get; set; } = JumpState.None;
         }
 
+        public partial class ContinueStmntContext {
+            internal ILoopContext Statement;
+            public Skrypt.JumpState JumpState = Skrypt.JumpState.None;
+        }
+
+        public partial class BreakStmntContext {
+            internal ILoopContext Statement;
+            public Skrypt.JumpState JumpState = Skrypt.JumpState.None;
+        }
+
         public partial class ForStatementContext : ILoopContext {
             public JumpState JumpState { get; set; } = JumpState.None;
+        }
+
+        public partial class FnLiteralContext {
+            internal FunctionInstance value;
+        }
+
+        public partial class ReturnStmntContext {
+            internal IFunctionContext Statement;
         }
 
         public partial class FunctionCallExpContext {
             public string CallFile { get; set; }
         }
+
 
         private void CreateProperty(SkryptObject target, IScopedContext ctx, ParserRuleContext propertyTree, bool isPrivate) {
             IToken nameToken = null;
@@ -163,19 +182,19 @@ namespace Skrypt.ANTLR {
             return null;
         }
 
-        private T GetFirstOfType<T>(RuleContext ctx) where T : RuleContext {
-            RuleContext currentContext = ctx;
+        //private T GetFirstOfType<T>(RuleContext ctx) where T : RuleContext {
+        //    RuleContext currentContext = ctx;
 
-            while (currentContext.Parent != null) {
-                if (currentContext is T typeCtx) {
-                    return typeCtx;
-                }
+        //    while (currentContext.Parent != null) {
+        //        if (currentContext is T typeCtx) {
+        //            return typeCtx;
+        //        }
 
-                currentContext = currentContext.Parent;
-            }
+        //        currentContext = currentContext.Parent;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         private IFunctionContext GetFirstFunctionStatement(RuleContext ctx) {
             RuleContext currentContext = ctx;

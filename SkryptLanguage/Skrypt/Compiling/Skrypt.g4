@@ -387,13 +387,10 @@ fnStmnt				: CONST? FN name '(' parameterGroup ')' {
 }																																#functionStatement
 					;											
 
-returnStmnt			locals [
-					IFunctionContext Statement
-					]
-					: RETURN expression? {
-	$Statement = GetFirstFunctionStatement($ctx);
+returnStmnt			: RETURN expression? {
+	$ctx.Statement = GetFirstFunctionStatement($ctx);
 
-	if ($Statement == null) {
+	if ($ctx.Statement == null) {
 		CompileErrorHandler.TolerateError(
 			(_localctx as ReturnStatementContext).RETURN().Symbol,
 			"Return statement must be inside a function."
@@ -426,14 +423,10 @@ forStmnt			: FOR '(' Instantiator=assignStmnt ',' Condition=expression ',' Modif
 whileStmnt			: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
 					;
 
-continueStmnt		locals [
-					ILoopContext Statement,
-					Skrypt.JumpState JumpState = Skrypt.JumpState.None
-					]
-					: CONTINUE {
-	$Statement = GetFirstLoopStatement($ctx) as RuleContext;
+continueStmnt		: CONTINUE {
+	$ctx.Statement = GetFirstLoopStatement($ctx);
 
-	if ($Statement == null) {
+	if ($ctx.Statement == null) {
 		CompileErrorHandler.TolerateError(
 			(_localctx as ContinueStatementContext).CONTINUE().Symbol,
 			"Continue statement must be inside a loop."
@@ -442,14 +435,10 @@ continueStmnt		locals [
 }																																#continueStatement
 					;
 
-breakStmnt			locals [
-					ILoopContext Statement,
-					Skrypt.JumpState JumpState = Skrypt.JumpState.None
-					]
-					: BREAK {
-	$Statement = GetFirstLoopStatement($ctx) as RuleContext;
+breakStmnt			: BREAK {
+	$ctx.Statement = GetFirstLoopStatement($ctx);
 
-	if ($Statement == null) {
+	if ($ctx.Statement == null) {
 		CompileErrorHandler.TolerateError(
 			(_localctx as BreakStatementContext).BREAK().Symbol,
 			"Break statement must be inside a loop."
@@ -620,8 +609,7 @@ null returns [object value] : NULL {
 	$value = null; 
 } ;
 
-fnLiteral			returns [Skrypt.FunctionInstance value]
-					:  ('(' parameterGroup ')' | parameter) '=>' {
+fnLiteral			:  ('(' parameterGroup ')' | parameter) '=>' {
 	var fnCtx = ($ctx as FnLiteralContext);
 	var scope = GetDefinitionBlock($ctx.Parent);
 
@@ -646,9 +634,7 @@ fnLiteral			returns [Skrypt.FunctionInstance value]
 		Parameters = processedParameters
 	}; 
 
-	var functionVar = new Skrypt.FunctionInstance(this.Engine, function); 
-
-	$value = functionVar;	
+	$ctx.value = new Skrypt.FunctionInstance(this.Engine, function);	
 }																																				
 					;					
 
