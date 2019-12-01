@@ -9,14 +9,8 @@ namespace Skrypt {
             Visit(context.Instantiator);
 
             DoLoop(context.stmntBlock(), context,
-            () => {
-                var result = Visit(context.Condition).IsTrue();
-
-                return result;
-            },
-            () => {
-                Visit(context.Modifier);
-            });
+            () => Visit(context.Condition).IsTrue(),
+            () => Visit(context.Modifier));
 
             return DefaultResult;
         }
