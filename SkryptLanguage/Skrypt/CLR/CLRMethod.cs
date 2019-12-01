@@ -25,7 +25,10 @@ namespace Skrypt.CLR {
             for (int i = 0; i < arguments.Length; i++) {
                 var arg = arguments[i];
 
-                if (_engine.ExportTypeMappers.ContainsKey(arg.GetType())) {
+                if (parameters[i].ParameterType == arg.GetType()) {
+                    continue;
+                }
+                else if (_engine.ExportTypeMappers.ContainsKey(arg.GetType())) {
                     continue;
                 }
                 else if (parameters[i].ParameterType == typeof(object)) {
@@ -44,7 +47,10 @@ namespace Skrypt.CLR {
             for (int i = 0; i < arguments.Length; i++) {
                 var arg = arguments[i];
 
-                if (_engine.ExportTypeMappers.ContainsKey(arg.GetType())) {
+                if (parameters[i].ParameterType == arg.GetType()) {
+                    convertedArguments[i] = arg;
+                }
+                else if (_engine.ExportTypeMappers.ContainsKey(arg.GetType())) {
                     convertedArguments[i] = _engine.ExportTypeMappers[arg.GetType()](arg);
                 }
                 else if (parameters[i].ParameterType == typeof(object)) {

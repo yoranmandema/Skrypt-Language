@@ -355,7 +355,7 @@ namespace Skrypt {
 
         public SkryptEngine AddImportTypeMapper(Type type, Func<SkryptEngine, object, SkryptObject> func) {
             if (ImportTypeMappers.ContainsKey(type)) {
-                throw new SkryptException($"Typemapper for type {type.FullName} already exists!");
+                throw new SkryptException($"Type mapper for type {type.FullName} already exists!");
             }
 
             ImportTypeMappers.Add(type, func);
@@ -365,12 +365,20 @@ namespace Skrypt {
 
         public SkryptEngine AddExportTypeMapper(Type type, Func<SkryptObject, object> func) {
             if (ExportTypeMappers.ContainsKey(type)) {
-                throw new SkryptException($"Typemapper for type {type.FullName} already exists!");
+                throw new SkryptException($"Type mapper for type {type.FullName} already exists!");
             }
 
             ExportTypeMappers.Add(type, func);
 
             return this;
+        }
+
+        public SkryptEngine AddTypeMapper<T> (Func<SkryptEngine, object, SkryptObject> func) {
+            return AddImportTypeMapper(typeof(T), func);
+        }
+
+        public SkryptEngine AddTypeMapper<T>(Func<SkryptObject, object> func) where T : SkryptObject {
+            return AddExportTypeMapper(typeof(T), func);
         }
 
         public NumberInstance CreateNumber(double value) {
