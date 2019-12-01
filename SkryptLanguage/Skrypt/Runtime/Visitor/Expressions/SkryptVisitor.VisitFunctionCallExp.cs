@@ -35,7 +35,7 @@ namespace Skrypt {
             });
 
             if (isConstructor) {
-                returnValue = (function as SkryptType).Construct(args);
+                returnValue = ((SkryptType)function).Construct(args);
             }
             else {
                 var functionInstance = function as FunctionInstance;
