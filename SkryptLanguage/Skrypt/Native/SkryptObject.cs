@@ -17,6 +17,12 @@ namespace Skrypt {
 
         public void GetProperties (Dictionary<string, Member> properties) {
             Members = Members.Concat(properties).ToDictionary(d => d.Key, d => d.Value);
+
+            foreach (var member in Members) {
+                if (member.Value.value is FunctionInstance function) {
+                    function.Self = this;
+                }
+            }
         }
 
         public void GetProperties(Template template) {
@@ -35,6 +41,8 @@ namespace Skrypt {
                 throw new NonExistingMemberException($"Value does not contain a member with the name '{name}'.");
             }
 
+            if (value is FunctionInstance function) function.Self = this;
+
             Members[name].value = value;
 
             return Members[name];
@@ -42,6 +50,8 @@ namespace Skrypt {
 
         public Member CreateProperty(string name, SkryptObject value, bool isPrivate = false, bool isConstant = false) {
             Members[name] = new Member(value, isPrivate, null);
+
+            if (value is FunctionInstance function) function.Self = this;
 
             Members[name].isConstant = isConstant;
 
