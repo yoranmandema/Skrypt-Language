@@ -49,11 +49,13 @@ namespace Skrypt {
         }
 
         public Member CreateProperty(string name, SkryptObject value, bool isPrivate = false, bool isConstant = false) {
-            Members[name] = new Member(value, isPrivate, null);
+            Members[name] = new Member() {
+                value = value,
+                isConstant = isConstant,
+                isPrivate = isPrivate
+            };
 
             if (value is FunctionInstance function) function.Self = this;
-
-            Members[name].isConstant = isConstant;
 
             return Members[name];
         }
@@ -80,8 +82,6 @@ namespace Skrypt {
 
         protected string FormattedString (int depth) {
             var isContainer = this is BaseModule || this is BaseType;
-
-            //if (!isContainer) return this.ToString();
 
             var indent = new string('\t',depth);
             var str = $"{Name}";

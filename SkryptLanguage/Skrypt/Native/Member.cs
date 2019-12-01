@@ -13,6 +13,10 @@ namespace Skrypt {
         public bool isConstant;
         public RuleContext definitionBlock;
 
+        public Member () {
+
+        }
+
         public Member(SkryptObject v, bool isPrivate, RuleContext block) {
             value = v;
             this.isPrivate = isPrivate;
