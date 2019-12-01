@@ -8,25 +8,21 @@ namespace Skrypt {
         public override SkryptObject VisitComputedMemberAccessExp([NotNull] SkryptParser.ComputedMemberAccessExpContext context) {
             var obj = Visit(context.expression(0));
             var index = Visit(context.expression(1));
+            SkryptObject value = null;
+
+            if (!(obj is StringInstance) && !(obj is ArrayInstance))
+                _engine.ErrorHandler.FatalError(context.expression(0).Start, "Expected string or array instance.");
 
             if (obj is StringInstance stringInstance) {
-                var value = stringInstance.Get(index);
-
-                if (value is IValue noref) value = noref.Copy();
-
-                return value;
+                value = stringInstance.Get(index);
             }
             else if (obj is ArrayInstance arrayInstance) {
-                var value = arrayInstance.Get(index);
-
-                if (value is IValue noref) value = noref.Copy();
-
-                return value;
+                value = arrayInstance.Get(index);
             }
 
-            _engine.ErrorHandler.FatalError(context.expression(0).Start, "Expected string or array instance.");
+            if (value is IValue noref) value = noref.Copy();
 
-            return null;
+            return value;
         }
     }
 }
