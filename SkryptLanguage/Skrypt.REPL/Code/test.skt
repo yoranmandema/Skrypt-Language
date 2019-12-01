@@ -1,14 +1,8 @@
 ﻿
-struct Test {
-	private a = 0
-
-	fn Print() {
-		print(self.a)
-	}
+add = (a, b) => {
+    return a + b
 }
 
-if (true) {
-	Test().Print()
+x = add(1, 2)
 
-	Test().a
-}
+assert(x == 3)
