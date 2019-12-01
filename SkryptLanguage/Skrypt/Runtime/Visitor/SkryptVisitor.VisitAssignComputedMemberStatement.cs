@@ -8,14 +8,12 @@ namespace Skrypt {
         public override SkryptObject VisitAssignComputedMemberStatement([NotNull] SkryptParser.AssignComputedMemberStatementContext context) {
             var lhs = context.memberAccessComp();
 
-            var obj = Visit(lhs.expression(0));
-            var index = Visit(lhs.expression(1));
             var value = Visit(context.expression());
 
             if (value is IValue noref) value = noref.Copy();
 
-            if (obj is ArrayInstance arrayInstance) {
-                return arrayInstance.Set(index, value);
+            if (Visit(lhs.expression(0)) is ArrayInstance arrayInstance) {
+                return arrayInstance.Set(Visit(lhs.expression(1)), value);
             }
 
             _engine.ErrorHandler.FatalError(lhs.expression(0).Start, "Expected array instance.");
