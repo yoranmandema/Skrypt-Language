@@ -282,17 +282,17 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 	var traitNameCtx = Ctx.name(0);
 	var typeNameCtx = Ctx.name(1);
 
-	var trait = traitNameCtx.variable.Value as BaseTrait;
-	var type = typeNameCtx.variable.Value as BaseType;
+	var trait = traitNameCtx.variable.Value as SkryptTrait;
+	var type = typeNameCtx.variable.Value as SkryptType;
 
-	if (!typeof(BaseTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
+	if (!typeof(SkryptTrait).IsAssignableFrom(traitNameCtx.variable.Value.GetType())) {
 		ErrorHandler.TolerateError(
 			traitNameCtx.NAME().Symbol,
 			"Trait expected."
 		);
 	}
 
-	if (!typeof(BaseType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
+	if (!typeof(SkryptType).IsAssignableFrom(typeNameCtx.variable.Value.GetType())) {
 		ErrorHandler.TolerateError(
 			traitNameCtx.NAME().Symbol,
 			"Type expected."
@@ -414,8 +414,7 @@ catchStmt			: CATCH '('name')' {
 	var nameCtx = catchCtx.name();
 	var newVar = new Skrypt.Variable(nameCtx.GetText(), catchCtx.LexicalEnvironment);
 
-	var scope = GetDefinitionBlock($ctx);
-	scope.LexicalEnvironment.AddVariable(newVar);
+	catchCtx.LexicalEnvironment.AddVariable(newVar);
 
 	nameCtx.variable = newVar;	
 } stmntBlock 																													#catchStatement
