@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public abstract class BaseType : SkryptObject {
         public BaseType(SkryptEngine engine) : base(engine) {
-            var template = engine.TemplateMaker.CreateTemplate(this.GetType());
+            Template = engine.TemplateMaker.CreateTemplate(this.GetType());
 
-            GetProperties(template.Members);
+            GetProperties(Template.Members);
 
-            Name = template.Name;
+            Name = Template.Name;
         }
 
         public Dictionary<string, Member> ImplementTrait (BaseTrait trait) {
