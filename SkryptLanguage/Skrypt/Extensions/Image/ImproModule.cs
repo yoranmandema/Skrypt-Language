@@ -53,7 +53,8 @@ namespace Skrypt.Extensions.Image {
             public override string Name => "Image";
 
             public Bitmap bitMap;
-            public ImageInstance(SkryptEngine engine) : base(engine) {}
+
+            public ImageInstance(SkryptEngine engine) : base(engine) { }
 
             public ImageInstance(SkryptEngine engine, int width, int height) : base(engine) {
                 bitMap = new Bitmap(width, height);
@@ -97,7 +98,7 @@ namespace Skrypt.Extensions.Image {
                 return null;
             }
 
-            public static SkryptObject SetPixel (SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            public static SkryptObject SetPixel(SkryptEngine engine, SkryptObject self, Arguments arguments) {
                 var x = arguments.GetAs<NumberInstance>(0);
                 var y = arguments.GetAs<NumberInstance>(1);
                 var color = arguments.GetAs<ColorInstance>(2);
@@ -113,7 +114,7 @@ namespace Skrypt.Extensions.Image {
 
                 var color = self.AsType<ImageInstance>().bitMap.GetPixel((int)x, (int)y);
 
-                return engine.GetValue("Color").AsType<ColorType>().Construct(color.R,color.G,color.B);
+                return engine.GetValue("Color").AsType<ColorType>().Construct(color.R, color.G, color.B);
             }
 
             public override string ToString() {
@@ -127,7 +128,7 @@ namespace Skrypt.Extensions.Image {
             }
 
             public SkryptInstance Construct(int r, int g, int b) {
-                var obj = new ColorInstance(Engine, Color.FromArgb(255,r,g,b));
+                var obj = new ColorInstance(Engine, Color.FromArgb(255, r, g, b));
 
                 obj.GetProperties(Template);
                 obj.TypeObject = this;
@@ -144,11 +145,13 @@ namespace Skrypt.Extensions.Image {
                         (int)arguments.GetAs<NumberInstance>(1),
                         (int)arguments.GetAs<NumberInstance>(2)
                         );
-                } else if (argCount == 1) {
+                }
+                else if (argCount == 1) {
                     var val = (int)arguments.GetAs<NumberInstance>(0);
 
                     return Construct(val, val, val);
-                } else {
+                }
+                else {
                     throw new ArgumentException("Expected at least 1 number input.");
                 }
             }
@@ -158,10 +161,13 @@ namespace Skrypt.Extensions.Image {
             public override string Name => "Color";
 
             public Color color;
+
             public ColorInstance(SkryptEngine engine) : base(engine) { }
+
             public ColorInstance(SkryptEngine engine, Color col) : base(engine) {
                 color = col;
             }
+
             public override string ToString() {
                 return $"{color.R} {color.R} {color.B}";
             }
