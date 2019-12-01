@@ -9,12 +9,9 @@ namespace Skrypt {
             var fnCtx = context.Statement;
             var expression = context.expression();
 
-            if (expression != null) {
-                var returnValue = Visit(expression);
-
-                fnCtx.ReturnValue = returnValue;
-            }
-
+            if (expression != null)
+                fnCtx.ReturnValue = Visit(expression);
+   
             fnCtx.JumpState = JumpState.Return;
 
             return DefaultResult;
