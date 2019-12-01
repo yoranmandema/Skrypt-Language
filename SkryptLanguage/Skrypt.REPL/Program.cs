@@ -28,15 +28,15 @@ namespace Skrypt.REPL {
             });
 
             if (!string.IsNullOrEmpty(path)) {
-                try {
+                //try {
                     _engine.DoFile(path);
-                }
-                catch (SkryptException e) {
-                    _engine.ErrorHandler.ReportError(e);
-                }
-                catch (Exception e) {
-                    Console.WriteLine(e);
-                }
+                //}
+                //catch (SkryptException e) {
+                //    _engine.ErrorHandler.ReportError(e);
+                //}
+                //catch (Exception e) {
+                //    Console.WriteLine(e);
+                //}
             }
 
             while (true) {

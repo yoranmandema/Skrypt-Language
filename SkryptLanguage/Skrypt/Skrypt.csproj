@@ -152,7 +152,7 @@
     <Compile Include="Native\SkryptInstance.cs" />
     <Compile Include="Native\Member.cs" />
     <Compile Include="Native\Template\TemplateMaker.cs" />
-    <Compile Include="Native\Trait\BaseTrait.cs" />
+    <Compile Include="Native\Trait\SkryptTrait.cs" />
     <Compile Include="Native\Type\ScriptType.cs" />
     <Compile Include="Native\StandardTypes\Vector\Vector2Instance.cs" />
     <Compile Include="Native\StandardTypes\Vector\Vector2Type.cs" />

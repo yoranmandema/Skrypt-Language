@@ -1,4 +1,12 @@
 ﻿
-import Math
+fn Test () {
+	try {
+		a = 1 * ""
+	} catch (err) {
+		print(err)
+		print(err.message)
+		print(err.stackTrace)
+	}
+}
 
-Sin(123123)
+Test()

@@ -82,6 +82,7 @@ namespace Skrypt {
         internal VectorType Vector3 { get; private set; }
         internal VectorType Vector4 { get; private set; }
         internal ArrayType Array { get; private set; }
+        internal ExceptionType Exception { get; private set; }
         #endregion
 
         #region Modules
@@ -131,6 +132,7 @@ namespace Skrypt {
             Vector3 = FastAdd(new Vector3Type(this));
             Vector4 = FastAdd(new Vector4Type(this));
             Array = FastAdd(new ArrayType(this));
+            Exception = FastAdd(new ExceptionType(this));
 
             Math = FastAdd(new MathModule(this));
             IO = FastAdd(new IOModule(this));

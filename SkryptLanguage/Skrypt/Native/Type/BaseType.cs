@@ -31,6 +31,7 @@ namespace Skrypt {
 
         public Template Template;
         public List<SkryptTrait> Traits = new List<SkryptTrait>();
+
         public abstract SkryptInstance Construct(Arguments arguments);
 
         public override string ToString() {

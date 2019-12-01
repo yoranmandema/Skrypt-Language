@@ -219,13 +219,9 @@ namespace Skrypt.ANTLR {
 
         public void LinkLexicalEnvironments (RuleContext context, LexicalEnvironment parentEnvironment) {
             if (context is IScopedContext scoped) {
-                var defBlock = GetDefinitionBlock(context);
-
                 parentEnvironment.AddChild(scoped.LexicalEnvironment);
-                parentEnvironment = defBlock?.LexicalEnvironment ?? parentEnvironment;
-                parentEnvironment.Context = (defBlock as RuleContext);
-
-                //Console.WriteLine($"{context.GetText()} linked to {parentEnvironment.Context?.GetText()}");
+                parentEnvironment = scoped.LexicalEnvironment;
+                parentEnvironment.Context = context;
             }
 
             for (int i = 0; i < context.ChildCount; i++) {
