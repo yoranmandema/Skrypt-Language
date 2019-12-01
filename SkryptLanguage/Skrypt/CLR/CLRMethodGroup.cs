@@ -24,7 +24,14 @@ namespace Skrypt.CLR {
 
                     var res = function.del.DynamicInvoke(args);
 
-                    result = CLRTypeConverter.ConvertToSkryptObject(engine, res);
+                    if (res != null) {
+                        if (engine.ImportTypeMappers.ContainsKey(res.GetType())) {
+                            result = engine.ImportTypeMappers[res.GetType()](engine, res);
+                        }
+                        else {
+                            throw new SkryptException($"No type mapper found for {res.GetType().FullName}");
+                        }
+                    }
 
                     break;
                 }
