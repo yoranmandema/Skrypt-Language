@@ -70,7 +70,10 @@ namespace Skrypt {
 
         internal bool GetPropertyInContext (string name, Antlr4.Runtime.RuleContext scope, out Member property) {
             property = GetProperty(name);
-            var parent = ((IScopedContext)scope.Parent).LexicalEnvironment;
+
+            if (!property.isPrivate) return true;
+
+            var parent = (Engine.Parser.GetDefinitionBlock(scope)).LexicalEnvironment;
             var canAccess = false;
              
             while (parent != null) {

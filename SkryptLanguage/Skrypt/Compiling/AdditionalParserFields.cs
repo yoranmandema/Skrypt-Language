@@ -151,7 +151,7 @@ namespace Skrypt.ANTLR {
             return scope;
         }
 
-        private IScopedContext GetDefinitionBlock(RuleContext ctx) {
+        internal IScopedContext GetDefinitionBlock(RuleContext ctx) {
             while (ctx.Parent != null) {
                 if (ctx is IScopedContext scopedCtx) {
                     return scopedCtx;

@@ -1,8 +1,14 @@
 ﻿
 struct Test {
 	private a = 0
+
+	fn Print() {
+		print(self.a)
+	}
 }
 
 if (true) {
+	Test().Print()
+
 	Test().a
 }
