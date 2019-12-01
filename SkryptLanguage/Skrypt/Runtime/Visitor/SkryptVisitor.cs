@@ -10,27 +10,26 @@ using Skrypt.Runtime;
 namespace Skrypt {
     public partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public SkryptObject LastResult { get; private set; }
-        
+
         public LexicalEnvironment CurrentEnvironment { get; internal set; }
         private readonly SkryptEngine _engine;
         private SkryptObject accessed;
 
-        public SkryptVisitor (SkryptEngine engine) {
+        public SkryptVisitor(SkryptEngine engine) {
             _engine = engine;
         }
 
         public override SkryptObject Visit([NotNull] IParseTree tree) {
-            
             if (_engine.MemoryLimit > 0) {
                 if (SkryptEngine.GetAllocatedBytesForCurrentThread != null) {
                     var bytes = SkryptEngine.GetAllocatedBytesForCurrentThread();
                     var realBytes = bytes - _engine.InitialMemoryUsage;
 
                     if (realBytes > _engine.MemoryLimit) {
-
                         if (_engine.HaltMemory) {
                             throw new SkryptException($"Engine exceeded memory limit ({_engine.MemoryLimit} bytes) at {realBytes} bytes");
-                        } else {
+                        }
+                        else {
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
                             GC.Collect();

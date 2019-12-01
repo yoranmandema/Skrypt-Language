@@ -19,11 +19,7 @@ namespace Skrypt {
             instance.GetProperties(Template);
             instance.TypeObject = this;
 
-            var constructorResult = default(SkryptObject);
-
-            if (Constructor != null) {
-                constructorResult = Constructor.Run(Engine, instance, arguments);
-            }
+            Constructor?.Run(Engine, instance, arguments);
 
             return instance;
         }
