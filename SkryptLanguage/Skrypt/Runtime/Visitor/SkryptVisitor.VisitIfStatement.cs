@@ -6,23 +6,17 @@ using Skrypt.ANTLR;
 namespace Skrypt {
     internal partial class SkryptVisitor : SkryptBaseVisitor<SkryptObject> {
         public override SkryptObject VisitIfStatement(SkryptParser.IfStatementContext context) {
-            var isTrue = false;
-
-            isTrue = Visit(context.@if().Condition).IsTrue();
-
-            if (isTrue) {
+            if (Visit(context.@if().Condition).IsTrue()) {
                 Visit(context.@if().stmntBlock());
 
-                return null;
+                return DefaultResult;
             }
             else if (context.elseif().Length > 0) {
                 foreach (var stmnt in context.elseif()) {
-                    isTrue = Visit(stmnt.Condition).IsTrue();
-
-                    if (isTrue) {
+                    if (Visit(stmnt.Condition).IsTrue()) {
                         Visit(stmnt.stmntBlock());
 
-                        return null;
+                        return DefaultResult;
                     }
                 }
             }
