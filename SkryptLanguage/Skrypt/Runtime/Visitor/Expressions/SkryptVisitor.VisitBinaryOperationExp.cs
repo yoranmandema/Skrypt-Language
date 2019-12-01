@@ -77,21 +77,13 @@ namespace Skrypt {
                     break;
             }
 
-            if (result is bool) {
-                result = _engine.CreateBoolean((bool)result);
-            }
+            if (result is bool) result = _engine.CreateBoolean((bool)result);
 
-            if (result is double) {
-                result = _engine.CreateNumber((double)result);
-            }
+            if (result is double) result = _engine.CreateNumber((double)result);
 
-            if (result is int) {
-                result = _engine.CreateNumber((int)result);
-            }
+            if (result is int) result = _engine.CreateNumber((int)result);
 
-            if (result is string) {
-                result = _engine.CreateString((string)result);
-            }
+            if (result is string) result = _engine.CreateString((string)result);
 
             if (left != null) {
                 if (left.AsType<SkryptInstance>().HasTrait<SubtractableTrait>()) {
@@ -121,12 +113,7 @@ namespace Skrypt {
         }
 
         public override SkryptObject VisitBinaryOperationExp(SkryptParser.BinaryOperationExpContext context) {
-            var operationName = context.Operation.Text;
-
-            var left = Visit(context.Left);
-            var right = Visit(context.Right);
-
-            var result = EvaluateExpression(operationName, left, right, context.Left.start);
+            var result = EvaluateExpression(context.Operation.Text, Visit(context.Left), Visit(context.Right), context.Left.start);
 
             LastResult = result;
 
