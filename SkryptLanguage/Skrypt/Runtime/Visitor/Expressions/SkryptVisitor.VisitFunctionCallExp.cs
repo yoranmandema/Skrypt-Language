@@ -20,7 +20,7 @@ namespace Skrypt {
             var isConstructor = false;
             var returnValue = DefaultResult;
 
-            if (function is BaseType) {
+            if (function is SkryptType) {
                 isConstructor = true;
             }
             else if (!(function is FunctionInstance)) {
@@ -37,7 +37,7 @@ namespace Skrypt {
             });
 
             if (isConstructor) {
-                returnValue = (function as BaseType).Construct(args);
+                returnValue = (function as SkryptType).Construct(args);
             }
             else {
                 var functionInstance = function as FunctionInstance;

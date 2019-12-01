@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class DebugModule : BaseModule {
+    public class DebugModule : SkryptModule {
         public override string Name => "Debug";
 
         public DebugModule(SkryptEngine engine) : base(engine) {

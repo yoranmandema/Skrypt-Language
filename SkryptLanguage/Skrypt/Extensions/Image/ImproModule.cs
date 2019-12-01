@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt.Extensions.Image {
-    public class ImproModule : BaseModule {
+    public class ImproModule : SkryptModule {
         public ImproModule(SkryptEngine engine) : base(engine) { }
 
         public static SkryptObject WriteImage(SkryptEngine engine, SkryptObject self, Arguments arguments) {
@@ -27,7 +27,7 @@ namespace Skrypt.Extensions.Image {
             return null;
         }
 
-        public class ImageType : BaseType {
+        public class ImageType : SkryptType {
             public ImageType(SkryptEngine engine) : base(engine) {
                 Template = engine.TemplateMaker.CreateTemplate(typeof(ImageInstance));
             }
@@ -121,7 +121,7 @@ namespace Skrypt.Extensions.Image {
             }
         }
 
-        public class ColorType : BaseType {
+        public class ColorType : SkryptType {
             public ColorType(SkryptEngine engine) : base(engine) {
                 Template = engine.TemplateMaker.CreateTemplate(typeof(ColorInstance));
             }

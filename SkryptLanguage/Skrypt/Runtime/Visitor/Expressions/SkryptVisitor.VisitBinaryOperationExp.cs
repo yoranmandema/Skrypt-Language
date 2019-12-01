@@ -111,8 +111,8 @@ namespace Skrypt {
 
             if (result is InvalidOperation) {
                 if (result is InvalidOperation) {
-                    var lname = left == null ? "null" : typeof(BaseType).IsAssignableFrom(left.GetType()) ? "type" : left.Name;
-                    var rname = right == null ? "null" : typeof(BaseType).IsAssignableFrom(right.GetType()) ? "type" : right.Name;
+                    var lname = left == null ? "null" : typeof(SkryptType).IsAssignableFrom(left.GetType()) ? "type" : left.Name;
+                    var rname = right == null ? "null" : typeof(SkryptType).IsAssignableFrom(right.GetType()) ? "type" : right.Name;
 
                     _engine.ErrorHandler.FatalError(token, $"No such operation: {lname} {operationName} {rname}.");
                 }

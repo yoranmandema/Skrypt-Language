@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class TimeModule : BaseModule {
+    public class TimeModule : SkryptModule {
         public TimeModule(SkryptEngine engine) : base(engine) {}
 
         public static SkryptObject ExecutionTime (SkryptEngine engine, SkryptObject self) {

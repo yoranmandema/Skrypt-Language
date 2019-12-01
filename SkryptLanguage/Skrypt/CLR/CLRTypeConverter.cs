@@ -59,8 +59,8 @@ namespace Skrypt.CLR {
             return true;
         }
 
-        public static BaseModule CreateModuleFromObject (SkryptEngine engine, Type type) {
-            var module = new BaseModule(engine);
+        public static SkryptModule CreateModuleFromObject (SkryptEngine engine, Type type) {
+            var module = new SkryptModule(engine);
             var methodInfos = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
             var methodGroups = new Dictionary<string, List<MethodInfo>>();
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class VectorType : BaseType {
+    public class VectorType : SkryptType {
 
         Template Template2;
         Template Template3;

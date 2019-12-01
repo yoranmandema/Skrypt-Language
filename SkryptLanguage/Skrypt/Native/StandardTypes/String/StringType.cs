@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    class StringType : BaseType {
+    class StringType : SkryptType {
         public StringType(SkryptEngine engine) : base(engine) {
             Template = engine.TemplateMaker.CreateTemplate(typeof(StringInstance));
         }

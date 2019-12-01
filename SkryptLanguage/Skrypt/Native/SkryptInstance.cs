@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class SkryptInstance : SkryptObject {
         public SkryptInstance(SkryptEngine engine) : base(engine) { }
-        public BaseType TypeObject { get; set; }
+        public SkryptType TypeObject { get; set; }
 
         public static SkryptObject Type(SkryptEngine engine, SkryptObject self) {
             return (self as SkryptInstance).TypeObject;
         }
 
-        public bool HasTrait<T> () where T : BaseTrait {
+        public bool HasTrait<T> () where T : SkryptTrait {
             return TypeObject.Traits.OfType<T>().Any();
         }
     }

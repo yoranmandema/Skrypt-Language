@@ -1,6 +1,6 @@
 ﻿
 namespace Skrypt {
-    public class AddableTrait : BaseTrait {
+    public class AddableTrait : SkryptTrait {
         public AddableTrait(SkryptEngine engine) : base(engine) {
         }
 

@@ -1,6 +1,6 @@
 ﻿
 namespace Skrypt {
-    public class MultiplicableTrait : BaseTrait {
+    public class MultiplicableTrait : SkryptTrait {
         public MultiplicableTrait(SkryptEngine engine) : base(engine) {
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class MemoryModule : BaseModule {
+    public class MemoryModule : SkryptModule {
         public MemoryModule(SkryptEngine engine) : base(engine) {
         }
 

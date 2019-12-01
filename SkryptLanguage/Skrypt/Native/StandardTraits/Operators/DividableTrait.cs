@@ -1,6 +1,6 @@
 ﻿
 namespace Skrypt {
-    public class DividableTrait : BaseTrait {
+    public class DividableTrait : SkryptTrait {
         public DividableTrait(SkryptEngine engine) : base(engine) {
         }
 

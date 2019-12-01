@@ -59,7 +59,7 @@ namespace Skrypt {
             }
 
             if (result is InvalidOperation) {
-                var name = value == null ? "null" : typeof(BaseType).IsAssignableFrom(value.GetType()) ? "type" : value.Name;
+                var name = value == null ? "null" : typeof(SkryptType).IsAssignableFrom(value.GetType()) ? "type" : value.Name;
 
                 _engine.ErrorHandler.FatalError(context.Target.Start, $"No such operation: {name} {operationName}");
             }

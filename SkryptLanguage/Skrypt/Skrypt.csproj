@@ -124,6 +124,8 @@
     <Compile Include="Native\StandardTraits\Operators\AddableTrait.cs" />
     <Compile Include="Native\StandardTraits\Operators\SubtractableTrait.cs" />
     <Compile Include="Native\StandardModules\Time\TimeModule.cs" />
+    <Compile Include="Native\StandardTypes\Exception\ExceptionInstance.cs" />
+    <Compile Include="Native\StandardTypes\Exception\ExceptionType.cs" />
     <Compile Include="Native\Trait\ScriptTrait.cs" />
     <Compile Include="Native\Type\BaseType.cs" />
     <Compile Include="Native\StandardTypes\Boolean\BooleanInstance.cs" />
@@ -168,7 +170,7 @@
     <Compile Include="Runtime\InvalidOperation.cs" />
     <Compile Include="Runtime\JumpState.cs" />
     <Compile Include="Runtime\Scope.cs" />
-    <Compile Include="Native\Module\BaseModule.cs" />
+    <Compile Include="Native\Module\SkryptModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Native\Variable.cs" />
     <Compile Include="Runtime\Visitor\Expressions\SkryptVisitor.VisitBinaryOperationExp.cs" />

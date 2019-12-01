@@ -31,7 +31,7 @@ namespace Skrypt {
         internal SkryptVisitor Visitor { get; private set; }
         internal ExpressionInterpreter ExpressionInterpreter { get; private set; }
         internal SkryptParser.ProgramContext ProgramContext { get; private set; }
-        internal List<BaseTrait> StandardTraits { get; private set; } = new List<BaseTrait>();
+        internal List<SkryptTrait> StandardTraits { get; private set; } = new List<SkryptTrait>();
         internal TextWriter TextWriter { get; private set; }
 
         internal static Func<long> GetAllocatedBytesForCurrentThread { get; private set; }

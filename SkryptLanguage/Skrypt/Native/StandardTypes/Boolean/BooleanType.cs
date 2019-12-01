@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    class BooleanType : BaseType {
+    class BooleanType : SkryptType {
         public BooleanType(SkryptEngine engine) : base(engine) {
             Template = engine.TemplateMaker.CreateTemplate(typeof(BooleanInstance));
         }

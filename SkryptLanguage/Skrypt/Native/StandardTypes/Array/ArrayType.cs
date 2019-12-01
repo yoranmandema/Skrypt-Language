@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt{
-    public class ArrayType : BaseType {
+    public class ArrayType : SkryptType {
         public ArrayType(SkryptEngine engine) : base(engine) {
             Template = Engine.TemplateMaker.CreateTemplate(typeof(ArrayInstance));
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 
 namespace Skrypt {
-    public class IOModule : BaseModule {
+    public class IOModule : SkryptModule {
         public override string Name => "IO";
 
         public IOModule(SkryptEngine engine) : base(engine) {

@@ -1,6 +1,6 @@
 ﻿
 namespace Skrypt {
-    public class SubtractableTrait : BaseTrait {
+    public class SubtractableTrait : SkryptTrait {
         public SubtractableTrait(SkryptEngine engine) : base(engine) {
         }
 

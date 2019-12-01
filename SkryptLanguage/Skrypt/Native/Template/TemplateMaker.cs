@@ -20,9 +20,9 @@ namespace Skrypt {
 
             if (
                 !typeof(SkryptInstance).IsAssignableFrom(t) && 
-                !typeof(BaseModule).IsAssignableFrom(t) && 
-                !typeof(BaseType).IsAssignableFrom(t) &&
-                !typeof(BaseTrait).IsAssignableFrom(t)
+                !typeof(SkryptModule).IsAssignableFrom(t) && 
+                !typeof(SkryptType).IsAssignableFrom(t) &&
+                !typeof(SkryptTrait).IsAssignableFrom(t)
                 ) {
                 throw new InvalidTemplateTargetException("Target type must derive from BaseInstance, BaseModule, BaseType or BaseTrait.");
             }
@@ -49,9 +49,9 @@ namespace Skrypt {
                 template.Members[m.Name] = new Member(function, m.IsPrivate, null);
             }
 
-            if (typeof(BaseModule).IsAssignableFrom(t)) {
+            if (typeof(SkryptModule).IsAssignableFrom(t)) {
                 foreach (var type in subTypes) {
-                    if (typeof(BaseType).IsAssignableFrom(type)) {
+                    if (typeof(SkryptType).IsAssignableFrom(type)) {
                         var instance = (SkryptObject)Activator.CreateInstance(type, _engine);
 
                         template.Members[instance.Name] = new Member(instance, type.IsNestedPrivate, null);

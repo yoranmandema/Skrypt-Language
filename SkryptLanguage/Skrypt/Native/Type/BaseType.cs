@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public abstract class BaseType : SkryptObject {
-        public BaseType(SkryptEngine engine) : base(engine) {
+    public abstract class SkryptType : SkryptObject {
+        public SkryptType(SkryptEngine engine) : base(engine) {
             Template = engine.TemplateMaker.CreateTemplate(this.GetType());
 
             GetProperties(Template.Members);
@@ -14,7 +14,7 @@ namespace Skrypt {
             Name = Template.Name;
         }
 
-        public Dictionary<string, Member> ImplementTrait (BaseTrait trait) {
+        public Dictionary<string, Member> ImplementTrait (SkryptTrait trait) {
             var dict = new Dictionary<string, Member>();
 
             Traits.Add(trait);
@@ -30,7 +30,7 @@ namespace Skrypt {
         }
 
         public Template Template;
-        public List<BaseTrait> Traits = new List<BaseTrait>();
+        public List<SkryptTrait> Traits = new List<SkryptTrait>();
         public abstract SkryptInstance Construct(Arguments arguments);
 
         public override string ToString() {

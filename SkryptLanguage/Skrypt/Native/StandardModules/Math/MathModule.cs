@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class MathModule : BaseModule {
+    public class MathModule : SkryptModule {
         public override string Name => "Math";
 
         static Random _random = new Random();

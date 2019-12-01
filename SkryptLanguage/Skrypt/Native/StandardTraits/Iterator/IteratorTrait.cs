@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt {
-    public class IteratorTrait : BaseTrait {
+    public class IteratorTrait : SkryptTrait {
         public IteratorTrait(SkryptEngine engine) : base(engine) {
         }
 

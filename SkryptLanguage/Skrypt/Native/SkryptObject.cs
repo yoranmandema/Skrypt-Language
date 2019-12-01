@@ -81,7 +81,7 @@ namespace Skrypt {
         }
 
         protected string FormattedString (int depth) {
-            var isContainer = this is BaseModule || this is BaseType;
+            var isContainer = this is SkryptModule || this is SkryptType;
 
             var indent = new string('\t',depth);
             var str = $"{Name}";
@@ -91,7 +91,7 @@ namespace Skrypt {
 
                 foreach (var kv in Members) {
                     var objectString =
-                        (kv.Value.value is BaseModule || kv.Value.value is BaseType) ?
+                        (kv.Value.value is SkryptModule || kv.Value.value is SkryptType) ?
                         $"{kv.Value.value.FormattedString(depth + 1)}" :
                         $"{kv.Key} ({kv.Value.value.Name}): {kv.Value.value}";
 

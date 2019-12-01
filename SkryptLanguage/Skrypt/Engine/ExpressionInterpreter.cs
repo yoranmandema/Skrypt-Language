@@ -232,29 +232,29 @@ namespace Skrypt.Runtime {
 
         public object EvaluateIsExpression(SkryptObject left, SkryptObject right) {
             if (
-                (left is SkryptInstance || left is BaseType) && 
-                (right is SkryptInstance || (right is BaseType || right is BaseTrait))
+                (left is SkryptInstance || left is SkryptType) && 
+                (right is SkryptInstance || (right is SkryptType || right is SkryptTrait))
                 ) {
 
-                var leftType = default(BaseType);
+                var leftType = default(SkryptType);
 
                 if (typeof(SkryptInstance).IsAssignableFrom(left.GetType())) {
                     var leftInstance = left as SkryptInstance;
                     leftType = leftInstance.TypeObject;
                 } else {
-                    leftType = left as BaseType;
+                    leftType = left as SkryptType;
                 }
 
-                if (right is BaseType rightType) {
+                if (right is SkryptType rightType) {
                     return leftType.Equals(rightType);
-                } else if (right is BaseTrait rightTrait) {
+                } else if (right is SkryptTrait rightTrait) {
                     return leftType.Traits.Contains(rightTrait);
                 }
             }
 
             if (!(left is SkryptInstance)) 
                 throw new InvalidOperationException("Expected instance on left-hand side.");
-            if (!(right is BaseType || right is BaseTrait))
+            if (!(right is SkryptType || right is SkryptTrait))
                 throw new InvalidOperationException("Expected type or trait on right-hand side.");
 
             return new InvalidOperation();
