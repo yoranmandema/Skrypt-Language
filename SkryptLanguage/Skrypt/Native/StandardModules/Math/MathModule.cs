@@ -8,7 +8,7 @@ namespace Skrypt {
     public class MathModule : SkryptModule {
         public override string Name => "Math";
 
-        static Random _random = new Random();
+        private readonly static Random _random = new Random();
 
         public MathModule(SkryptEngine engine) : base(engine) {
             CreateProperty("PI", engine.CreateNumber(Math.PI));

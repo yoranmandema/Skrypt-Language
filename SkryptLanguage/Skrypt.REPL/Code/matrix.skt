@@ -5,6 +5,7 @@ struct Matrix {
     Data = []
 
     fn init (rows = 0, cols = 0) {
+		self.Data = []
         self.Rows = rows
         self.Cols = cols
 
@@ -17,7 +18,7 @@ struct Matrix {
         }
     }
 
-    fn string () {
+    fn toString () {
         str = ""
 
         for (i = 0, i < self.Rows, i++) {
@@ -59,9 +60,11 @@ struct Matrix {
     fn Randomize() {
         for (i = 0, i < self.Rows, i++) {
             for (j = 0, j < self.Cols, j++) {
-                self.Data[i][j] = Math.Random ** Math.Random
+                self.Data[i][j] = Math.Random()
             }
         }
+
+		return self
     }
 
     // This adds another Data or a single value
@@ -69,7 +72,7 @@ struct Matrix {
         result = Matrix(self.Rows, self.Cols)
 
         // Are we trying to add a Data?
-        if (other is Data) {
+        if (other is Matrix) {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
                     result.Data[i][j] = self.Data[i][j] + other.Data[i][j]
@@ -95,14 +98,14 @@ struct Matrix {
         if (other is Data) {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Data[i][j] = self.Data[i][j] + other.Data[i][j]
+                    result.Data[i][j] = self.Data[i][j] - other.Data[i][j]
                 }
             }
             // Or just a single scalar value?
         } else {
             for (i = 0, i < self.Rows, i++) {
                 for (j = 0, j < self.Cols, j++) {
-                    result.Data[i][j] = self.Data[i][j] + other
+                    result.Data[i][j] = self.Data[i][j] - other
                 }
             }
         }
@@ -113,7 +116,7 @@ struct Matrix {
     // This multiplies another Data or a single value
     // This is different than the dot() function!
     fn Multiply (other) {
-        result = Matrix(self.Rows, self.Cols)
+	    result = Matrix(self.Rows, self.Cols)
 
         // Are we trying to add a Data?
         if (other is Matrix) {
@@ -160,15 +163,13 @@ struct Matrix {
     }
 
     fn Map (function) {
-        result = Matrix(self.Rows, self.Cols)
-
-        for (i = 0, i < result.Rows, i++) {
-            for (j = 0, j < result.Cols, j++) {
-                result.Data[i][j] = function(self.Data[i][j])
+        for (i = 0, i < self.Rows, i++) {
+            for (j = 0, j < self.Cols, j++) {
+                self.Data[i][j] = function(self.Data[i][j])
             }
         }
 
-        return result
+        return self
     }
 
     static fn FromArray (array) {

@@ -9,14 +9,10 @@ using Skrypt;
 namespace Skrypt.REPL {
     internal static class Program {
 
-        private static SkryptEngine _engine;
+        private static readonly SkryptEngine _engine;
+        private static string _file = null;
 
-        static void Main(string[] args) {
-            string path = null;
-
-            if (args.Any())
-                path = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
-
+        static Program () {
             _engine = new SkryptEngine();
 
             _engine.SetValue("print", new MethodDelegate(Print));
@@ -26,37 +22,68 @@ namespace Skrypt.REPL {
             _engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));
             });
+        }
 
-            if (!string.IsNullOrEmpty(path)) {
-                //try {
-                    _engine.DoFile(path);
-                //}
-                //catch (SkryptException e) {
-                //    _engine.ErrorHandler.ReportError(e);
-                //}
-                //catch (Exception e) {
-                //    Console.WriteLine(e);
-                //}
-            }
+        static void Main(string[] args) {
+            if (args.Any())
+                _file = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
+
+            if (!string.IsNullOrEmpty(_file)) RunFile(_file);
 
             while (true) {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(">");
+
                 string line = Console.ReadLine();
 
                 if (line == "exit") return;
 
+                if (line.StartsWith("run ")) {
+                    _file = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        line.Substring(4)
+                        );
+
+                    if (!string.IsNullOrEmpty(_file)) RunFile(_file);
+
+                    continue;
+                }
+
                 try {
-                    Console.WriteLine(_engine.Execute(line).CompletionValue);
+                    _engine.Execute(line);
+
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+
+                    Console.WriteLine(_engine.CompletionValue?.ToString() ?? "null");
                 }
                 catch (SkryptException e) {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     _engine.ErrorHandler.ReportError(e);
                 }
                 catch (Exception e) {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(e);
                 }
             }
         }
 
+        private static void RunFile (string file) {        
+            try {
+                _engine.DoFile(file);
+            }
+            catch (SkryptException e) {
+                Console.ForegroundColor = ConsoleColor.Red;
+                _engine.ErrorHandler.ReportError(e);
+            }
+            catch (Exception e) {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(e);
+            }
+        }
+
         private static SkryptObject Print (SkryptEngine engine, SkryptObject self, Arguments arguments) {
+            Console.ForegroundColor = ConsoleColor.White;
+
             var str = "";
 
             for (var j = 0; j < arguments.Length; j++) {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Skrypt {
     public class ScriptInstance : SkryptInstance {
         public ScriptInstance(SkryptEngine engine) : base(engine) {
+            CreateProperty("Hash", engine.CreateNumber(GetHashCode()));
         }
     }
 }

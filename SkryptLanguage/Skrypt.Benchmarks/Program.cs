@@ -22,7 +22,6 @@ namespace Skrypt.Benchmarks {
 
             // Pre-set value to make sure it exists in the GetValue benchmark
             _engine.SetValue("A", 1);
-            _engine.SetValue("CLRMath", CLRTypeConverter.CreateModuleFromObject(_engine, typeof(Math)));
 
             _engine.Execute(@"
 fn fibonacci(num) {
@@ -33,29 +32,19 @@ fn fibonacci(num) {
             ");
         }
 
-        //[Benchmark]
-        //public Engine ExecuteCLRMethod() {
-        //    return _engine.Run(@"CLRMath.Max(-387912564,12378683)");
-        //}
-
         [Benchmark]
         public SkryptEngine ExecuteNumericalExpression() {
             return _engine.Execute(@"result = ((A - 2) * 4) / 2");
         }
 
-        //[Benchmark]
-        //public Engine ExecuteStringExpression() {
-        //    return _engine.Run(@"result = ""Hello "" + ""world!""");
-        //}
+        [Benchmark]
+        public SkryptEngine ExecuteStringExpression() {
+            return _engine.Execute(@"result = ""Hello "" + ""world!""");
+        }
 
         [Benchmark]
         public SkryptEngine ExecuteFib8Function() {
             return _engine.Execute(@"result = fibonacci(8)");
-        }
-
-        [Benchmark]
-        public SkryptEngine ExecuteFib16Function() {
-            return _engine.Execute(@"result = fibonacci(16)");
         }
 
         [Benchmark]

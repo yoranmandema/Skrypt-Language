@@ -1,8 +1,8 @@
-﻿
-add = (a, b) => {
-    return a + b
-}
+﻿import Matrix from "matrix.skt"
 
-x = add(1, 2)
+benchmark(_ => {
+	a = Matrix(4,4).Map(x => 1)
+	b = Matrix(4,4).Map(x => 2)
 
-assert(x == 3)
+	return a.Multiply(b)
+}, 1000)
