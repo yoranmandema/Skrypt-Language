@@ -1,4 +1,9 @@
 ﻿import * from "subcode1.skt"
+
+module1 = SomeModule
+
 import * from "subcode2.skt"
 
-print(SomeModule)
+module2 = SomeModule
+
+print(module1 == module2)

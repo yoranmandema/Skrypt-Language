@@ -12,6 +12,7 @@ using System.Reflection;
 using System.IO;
 using Skrypt.CLR;
 using Skrypt.Compiling;
+using Skrypt.Native;
 
 namespace Skrypt {
     public partial class SkryptEngine {
@@ -96,6 +97,10 @@ namespace Skrypt {
         public TemplateMaker TemplateMaker { get; private set; }
         public LexicalEnvironment GlobalEnvironment { get; set; }
 
+        internal Dictionary<string, IInitializeOnParse> InitializeOnParse { get; set; } = new Dictionary<string, IInitializeOnParse>();
+
+        internal Dictionary<string, LexicalEnvironment> fileEnvironments = new Dictionary<string, LexicalEnvironment>();
+
         static SkryptEngine() {
             var methodInfo = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread");
 
@@ -167,11 +172,18 @@ namespace Skrypt {
             SetFile(newFile);
 
             var code = FileHandler.Read(file);
-            var result = Execute(code);
+
+            if (!fileEnvironments.ContainsKey(file)) {
+                var result = Execute(code);
+
+                fileEnvironments[file] = result.ProgramContext.block().LexicalEnvironment;
+            } else {
+                this.ProgramContext.block().LexicalEnvironment = fileEnvironments[file];
+            }
 
             SetFile(oldFile);
 
-            return result;
+            return this;
         }
 
         public void ResetMemoryUsage() {
@@ -241,6 +253,12 @@ namespace Skrypt {
 
             Visitor.CurrentEnvironment = lexicalEnvironment ?? GlobalEnvironment;
             Visitor.Visit(ProgramContext);
+
+            foreach (var kv in InitializeOnParse) {
+                if (!kv.Value.IsInitialized) {
+                    kv.Value.Initialize();
+                }
+            }
 
             if (!_discardGlobal) CreateGlobals();
 

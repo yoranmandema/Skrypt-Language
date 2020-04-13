@@ -85,17 +85,17 @@ namespace Skrypt {
 
             if (result is string) result = _engine.CreateString((string)result);
 
-            if (left != null) {
-                if (left.AsType<SkryptInstance>().HasTrait<SubtractableTrait>()) {
+            if (left != null && left is SkryptInstance skryptInstance) {
+                if (skryptInstance.HasTrait<SubtractableTrait>()) {
                     result = EvaluateTraitOperator("Sub", left, right);
                 }
-                else if (left.AsType<SkryptInstance>().HasTrait<AddableTrait>()) {
+                else if (skryptInstance.HasTrait<AddableTrait>()) {
                     result = EvaluateTraitOperator("Add", left, right);
                 }
-                else if (left.AsType<SkryptInstance>().HasTrait<MultiplicableTrait>()) {
+                else if (skryptInstance.HasTrait<MultiplicableTrait>()) {
                     result = EvaluateTraitOperator("Mul", left, right);
                 }
-                else if (left.AsType<SkryptInstance>().HasTrait<DividableTrait>()) {
+                else if (skryptInstance.HasTrait<DividableTrait>()) {
                     result = EvaluateTraitOperator("Div", left, right);
                 }
             }

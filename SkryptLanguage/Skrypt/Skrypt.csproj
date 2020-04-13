@@ -115,6 +115,7 @@
     <Compile Include="Native\Exceptions\ParserException.cs" />
     <Compile Include="Native\IDefined.cs" />
     <Compile Include="Engine\Interop.cs" />
+    <Compile Include="Native\IInitializeOnParse.cs" />
     <Compile Include="Native\StandardModules\DebugModule\DebugModule.cs" />
     <Compile Include="Native\StandardTraits\Operators\MultiplicableTrait.cs" />
     <Compile Include="Native\StandardTraits\Operators\DividableTrait.cs" />

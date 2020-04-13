@@ -211,7 +211,7 @@ namespace Skrypt.Runtime {
                 return valL.Equals(valR);
             }
             else {
-                return left == right;
+                return ReferenceEquals(left, right);
             }
         }
 

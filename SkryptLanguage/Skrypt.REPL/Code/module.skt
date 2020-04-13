@@ -1,5 +1,7 @@
-﻿module SomeModule {
+﻿print("Running module file...")
 
+module SomeModule {
+	fn init () {
+		print("Poop")
+	}
 }
-
-print(SomeModule)

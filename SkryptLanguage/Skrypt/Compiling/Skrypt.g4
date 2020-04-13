@@ -124,42 +124,54 @@ importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
 					;
 
 moduleStmnt			: MODULE name {
-	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
-
-	if (!isInValidContext)
-		CompileErrorHandler.TolerateError(
-			$ctx.Start,
-			"Module has to be in global scope or module block."
-		);
-
 	var Ctx = ($ctx as ModuleStatementContext);
+
 	var nameCtx = Ctx.name();
-	var block = GetDefinitionBlock($ctx.Parent);
+	
+	var key = $"{this.Engine.FileHandler.File}@{nameCtx.GetText()}";
+	var isParsed = this.Engine.InitializeOnParse.ContainsKey(key);
+	Variable variable = null;
+	SkryptModule module = null;
 
-	if (nameCtx.variable != null && nameCtx.variable.IsConstant)
-		CompileErrorHandler.TolerateError(
-			nameCtx.Start,
-			"Constant cannot be redefined."
-		);
+	if (!isParsed) {
+		var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
-	var module = new ScriptModule(nameCtx.GetText(), this.Engine);
+		if (!isInValidContext)
+			CompileErrorHandler.TolerateError(
+				$ctx.Start,
+				"Module has to be in global scope or module block."
+			);
 
-	this.Engine.FastAdd(module);
+		var block = GetDefinitionBlock($ctx.Parent);
 
-	var variable = new Skrypt.Variable(nameCtx.GetText(), module, block.LexicalEnvironment);
+		if (nameCtx.variable != null && nameCtx.variable.IsConstant)
+			CompileErrorHandler.TolerateError(
+				nameCtx.Start,
+				"Constant cannot be redefined."
+			);
 
-	block.LexicalEnvironment.AddVariable(variable);
+		module = new ScriptModule(nameCtx.GetText(), this.Engine);
+
+		this.Engine.FastAdd(module);
+
+		variable = new Skrypt.Variable(nameCtx.GetText(), module, block.LexicalEnvironment);
+
+		block.LexicalEnvironment.AddVariable(variable);
+	}
 
 	} '{' moduleProperty* '}' {
 
-	foreach (var c in Ctx.moduleProperty()) {
-		this.Engine.Visitor.Visit(c);
+	if (!isParsed) {
+		foreach (var c in Ctx.moduleProperty()) {
+			this.Engine.Visitor.Visit(c);
 
-		CreateProperty(variable.Value, Ctx, c, false);
+			CreateProperty(variable.Value, Ctx, c, false);
+		}
+
+		this.Engine.InitializeOnParse[key] = module;
 	}
-}																																#moduleStatement
-					;
-
+}		
+#moduleStatement;
 
 structStmnt			: STRUCT name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
