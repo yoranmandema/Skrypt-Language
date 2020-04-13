@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Skrypt;
+using Skrypt.Extensions;
+using Skrypt.Extensions.Image;
+using Skrypt.Extensions.JSON;
 
 namespace Skrypt.REPL {
     internal static class Program {
@@ -18,6 +21,8 @@ namespace Skrypt.REPL {
             _engine.SetValue("print", new MethodDelegate(Print));
             _engine.SetValue("input", new MethodDelegate(Input));
             _engine.SetValue("benchmark", new MethodDelegate(Benchmark));
+            _engine.FastAdd(new ImproModule(_engine));
+            _engine.FastAdd(new JSONModule(_engine));
 
             _engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));
