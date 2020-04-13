@@ -98,8 +98,12 @@
     <Compile Include="Compiling\AdditionalParserFields.cs" />
     <Compile Include="Compiling\ParsingErrorListener.cs" />
     <Compile Include="Engine\ErrorHandling\IErrorHandler.cs" />
-    <Compile Include="Extensions\JSON\JSONModule.cs" />
-    <Compile Include="Extensions\JSON\JSONConverter.cs" />
+    <Compile Include="Extensions\JSON\JsonModule.cs" />
+    <Compile Include="Extensions\JSON\SkryptArrayJsonConverter.cs" />
+    <Compile Include="Extensions\JSON\SkryptBooleanJsonConverter.cs" />
+    <Compile Include="Extensions\JSON\SkryptObjectJsonConverter.cs" />
+    <Compile Include="Extensions\JSON\SkryptNumberJsonConverter.cs" />
+    <Compile Include="Extensions\JSON\SkryptStringJsonConverter.cs" />
     <Compile Include="Native\Exceptions\SkryptException.cs" />
     <Compile Include="Engine\SkryptEngine.cs" />
     <Compile Include="Engine\DefaultFileHandler.cs" />

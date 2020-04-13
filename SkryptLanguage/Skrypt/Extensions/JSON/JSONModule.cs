@@ -6,17 +6,24 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Skrypt.Extensions.JSON {
-    public class JSONModule : SkryptModule {
-        public JSONModule(SkryptEngine engine) : base(engine) {
+    public class JsonModule : SkryptModule {
+        public JsonModule(SkryptEngine engine) : base(engine) {
         }
 
-        public static SkryptObject ToJSON(SkryptEngine engine, SkryptObject self, Arguments arguments) {
+        public static SkryptObject ToJson(SkryptEngine engine, SkryptObject self, Arguments arguments) {
             var value = arguments[0];
             var indented = arguments.Length > 1 ? arguments.GetAs<BooleanInstance>(1): false;
+            var writeFunctions = arguments.Length > 2 ? arguments.GetAs<BooleanInstance>(2) : false;
 
             var jsonString = JsonConvert.SerializeObject(value, indented ? Formatting.Indented : Formatting.None, new JsonSerializerSettings {
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                Converters = new[] { new JSONConverter() }
+                Converters = new JsonConverter[] {
+                    new SkryptNumberJsonConverter(),
+                    new SkryptStringJsonConverter(),
+                    new SkryptBooleanJsonConverter(),
+                    new SkryptArrayJsonConverter(),
+                    new SkryptObjectJsonConverter(writeFunctions)
+                }
             });
 
             return engine.CreateString(jsonString);

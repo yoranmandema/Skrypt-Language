@@ -160,7 +160,7 @@ namespace Skrypt {
             ErrorHandler.File = file;
         }
 
-        public SkryptEngine DoRelativeFile(string file) {
+        public SkryptEngine DoRelativeFile(string file, LexicalEnvironment lexicalEnvironment = null) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
 
@@ -226,7 +226,7 @@ namespace Skrypt {
             return program;
         }
 
-        internal SkryptEngine Execute(SkryptParser.ProgramContext program) {
+        internal SkryptEngine Execute(SkryptParser.ProgramContext program, LexicalEnvironment lexicalEnvironment = null) {
             if (SW == null) {
                 SW = Stopwatch.StartNew();
             } else {
@@ -239,7 +239,7 @@ namespace Skrypt {
                 ResetMemoryUsage();
             }
 
-            Visitor.CurrentEnvironment = GlobalEnvironment;
+            Visitor.CurrentEnvironment = lexicalEnvironment ?? GlobalEnvironment;
             Visitor.Visit(ProgramContext);
 
             if (!_discardGlobal) CreateGlobals();
@@ -249,10 +249,10 @@ namespace Skrypt {
             return this;
         }
 
-        public SkryptEngine Execute(string code, ParserOptions parserOptions) {
+        public SkryptEngine Execute(string code, ParserOptions parserOptions, LexicalEnvironment lexicalEnvironment = null) {
             var program = ParseProgram(code, parserOptions);
 
-            return Execute(program);
+            return Execute(program, lexicalEnvironment);
         }
 
         public SkryptEngine Execute(string code) {

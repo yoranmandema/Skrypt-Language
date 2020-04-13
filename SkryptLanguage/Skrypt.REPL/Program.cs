@@ -22,7 +22,7 @@ namespace Skrypt.REPL {
             _engine.SetValue("input", new MethodDelegate(Input));
             _engine.SetValue("benchmark", new MethodDelegate(Benchmark));
             _engine.FastAdd(new ImproModule(_engine));
-            _engine.FastAdd(new JSONModule(_engine));
+            _engine.FastAdd(new JsonModule(_engine));
 
             _engine.SetValue("error", (e, s, i) => {
                 throw new FatalErrorException(i.GetAs<StringInstance>(0));

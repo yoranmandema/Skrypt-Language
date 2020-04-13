@@ -7,7 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Skrypt.Extensions.JSON {
-    public class JSONConverter : JsonConverter {
+    public class SkryptObjectJsonConverter : JsonConverter {
+
+        private bool _writeFunctions;
+
+        public SkryptObjectJsonConverter (bool writeFunctions) {
+            _writeFunctions = writeFunctions;
+        }
+
         public override bool CanConvert(Type objectType) {
 
             //Console.WriteLine(objectType);
@@ -26,12 +33,15 @@ namespace Skrypt.Extensions.JSON {
             writer.WriteStartObject();
 
             foreach (var property in skryptObject.Members) {
-                if (property.Value.value is FunctionInstance functionInstance) {
+
+                // Serialize Functions
+                if (property.Value.value is FunctionInstance functionInstance && _writeFunctions) {
                     writer.WritePropertyName(property.Key);
                     serializer.Serialize(writer, $"{property.Key}()");
-                } else {
+                } 
+                else {
                     writer.WritePropertyName(property.Key);
-                    serializer.Serialize(writer, property.Value.value.ToString());
+                    serializer.Serialize(writer, property.Value.value);
                 }
 
                 //writer.WriteValue(serializer.);

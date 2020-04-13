@@ -1,12 +1,4 @@
-﻿import JSON
+﻿import * from "subcode1.skt"
+import * from "subcode2.skt"
 
-struct Test {
-	public n = 1
-	public arrayValue = [1,2,3]
-
-	public fn init () {
-		print("poop")
-		print(self.n)
-		print(self.arrayValue)
-	}
-}
+print(SomeModule)

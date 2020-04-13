@@ -31,10 +31,10 @@ namespace Skrypt.Tests {
         public void ShouldParseModule() {
             RunTest(@"
 struct TestModule {
-    A = 0
-    B = ""Hello world!""
+    public A = 0
+    public B = ""Hello world!""
 
-    fn Print() {
+    public fn Print() {
         log(self.B)
     }
 }

@@ -1,10 +1,10 @@
 ﻿
 struct Matrix {
-    Rows = 0
-    Cols = 0
-    Data = []
+    public Rows = 0
+    public Cols = 0
+    public Data = []
 
-    fn init (rows = 0, cols = 0) {
+    public fn init (rows = 0, cols = 0) {
 		self.Data = []
         self.Rows = rows
         self.Cols = cols
@@ -18,7 +18,7 @@ struct Matrix {
         }
     }
 
-    fn toString () {
+    public fn toString () {
         str = ""
 
         for (i = 0, i < self.Rows, i++) {
@@ -32,7 +32,7 @@ struct Matrix {
 
     // This transposes a Data
     // rows X cols --> cols X rows
-    fn Transpose () {
+    public fn Transpose () {
         result = Matrix(self.Cols, self.Rows)
 
         for (i = 0, i < result.Rows, i++) {
@@ -45,7 +45,7 @@ struct Matrix {
     }
 
     // This makes a copy of the Data
-    fn Copy () {
+    public fn Copy () {
         result = Matrix(self.Rows, self.Cols)
 
         for (i = 0, i < result.Rows, i++) {
@@ -57,7 +57,7 @@ struct Matrix {
         return result
     }
 
-    fn Randomize() {
+    public fn Randomize() {
         for (i = 0, i < self.Rows, i++) {
             for (j = 0, j < self.Cols, j++) {
                 self.Data[i][j] = Math.Random()
@@ -68,7 +68,7 @@ struct Matrix {
     }
 
     // This adds another Data or a single value
-    fn Add (other) {
+    public fn Add (other) {
         result = Matrix(self.Rows, self.Cols)
 
         // Are we trying to add a Data?
@@ -91,7 +91,7 @@ struct Matrix {
     }
 
     // This subtracts another Data or a single value
-    fn Subtract (other) {
+    public fn Subtract (other) {
         result = Matrix(self.Rows, self.Cols)
 
         // Are we trying to add a Data?
@@ -115,7 +115,7 @@ struct Matrix {
 
     // This multiplies another Data or a single value
     // This is different than the dot() function!
-    fn Multiply (other) {
+    public fn Multiply (other) {
 	    result = Matrix(self.Rows, self.Cols)
 
         // Are we trying to add a Data?
@@ -137,7 +137,7 @@ struct Matrix {
         return result
     }
 
-    fn Dot(other) {
+    public fn Dot(other) {
         // Won't work if columns of self don't equal columns of other
         // if (self.Cols != other.Rows) {
         //     print("Incompatible Data sizes!")
@@ -162,7 +162,7 @@ struct Matrix {
         return result
     }
 
-    fn Map (function) {
+    public fn Map (function) {
         for (i = 0, i < self.Rows, i++) {
             for (j = 0, j < self.Cols, j++) {
                 self.Data[i][j] = function(self.Data[i][j])
@@ -172,7 +172,7 @@ struct Matrix {
         return self
     }
 
-    static fn FromArray (array) {
+    public static fn FromArray (array) {
         m = Matrix(array.Length, 1)
 
         for (i = 0, i < array.Length, i++) {

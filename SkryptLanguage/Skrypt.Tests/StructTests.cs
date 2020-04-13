@@ -21,15 +21,15 @@ namespace Skrypt.Tests {
 
             _engine.Execute(@"
 struct BasicStruct {
-    A = 0
-    B = """"
+    public A = 0
+    public B = """"
 
-    fn init (a,b) {
+    public fn init (a,b) {
         self.A = a
         self.B = b
     }
 
-    fn toString () {
+    public fn toString () {
         return ""{"" + self.A + "","" + self.B + ""}""
     }
 }
@@ -46,15 +46,15 @@ struct BasicStruct {
         public void ShouldParseStruct() {
             RunTest(@"
 struct TestStruct {
-    A = 0
-    B = """"
+    public A = 0
+    public B = """"
 
-    fn init (a,b) {
+    public fn init (a,b) {
         self.A = a
         self.B = b
     }
 
-    fn toString () {
+    public fn toString () {
         return ""{"" + self.A + "","" + self.B + ""}""
     }
 }

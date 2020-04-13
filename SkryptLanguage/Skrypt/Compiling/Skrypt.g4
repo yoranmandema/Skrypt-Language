@@ -64,18 +64,19 @@ importStmnt			: IMPORT name (DOT NAME)*?	{
 			scope.LexicalEnvironment.AddVariable(new Skrypt.Variable(m.Key,v.value, scope.LexicalEnvironment));
 		}
 	}
-}																																#importStatement
-					;
+}																																
+#importStatement;
 
 importAllFromStmnt	: IMPORT ASTERISK FROM string {
 	var Ctx = ($ctx as ImportAllFromStatementContext);
+	var scope = GetDefinitionBlock($ctx);
 
 	var relativePath = Ctx.@string().value;
 	var input = Engine.FileHandler.Read(relativePath);
 
-	Engine.DoRelativeFile(relativePath).CreateGlobals();
-}																																#importAllFromStatement
-					;
+	Engine.DoRelativeFile(relativePath, scope.LexicalEnvironment);
+}		
+#importAllFromStatement;
 
 importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
 	var Ctx = ($ctx as ImportFromStatementContext);
@@ -91,8 +92,8 @@ importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
 
 		scope.LexicalEnvironment.AddVariable(new Skrypt.Variable(name, Engine.GetValue(name), scope.LexicalEnvironment));
 	}
-}																																#importFromStatement
-					;
+}
+#importFromStatement;
 
 importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
 	var Ctx = ($ctx as ImportFromModuleStatementContext);
