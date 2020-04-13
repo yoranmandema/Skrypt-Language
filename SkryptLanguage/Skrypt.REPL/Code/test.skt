@@ -1,8 +1,12 @@
-﻿import Matrix from "matrix.skt"
+﻿import JSON
 
-benchmark(_ => {
-	a = Matrix(4,4).Map(x => 1)
-	b = Matrix(4,4).Map(x => 2)
+struct Test {
+	public n = 1
+	public arrayValue = [1,2,3]
 
-	return a.Multiply(b)
-}, 1000)
+	public fn init () {
+		print("poop")
+		print(self.n)
+		print(self.arrayValue)
+	}
+}

@@ -339,7 +339,7 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
-structProperty		: PRIVATE? STATIC? Property=property ;
+structProperty		: (PRIVATE | PUBLIC) STATIC? Property=property ;
 moduleProperty		: moduleStmnt | structStmnt | memberDefStmnt | fnStmnt;
 property			: memberDefStmnt | fnStmnt ;
 
@@ -673,6 +673,7 @@ BREAK					: 'break' ;
 CONTINUE				: 'continue' ;
 STATIC					: 'static' ;
 PRIVATE					: 'private' ;
+PUBLIC					: 'public' ;
 CONST					: 'const' ;
 TYPEOF					: 'typeof' ;
 TRY						: 'try' ;
