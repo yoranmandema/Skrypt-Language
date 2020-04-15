@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Skrypt.Extensions.JSON {
-    public class JsonModule : SkryptModule {
-        public JsonModule(SkryptEngine engine) : base(engine) {
+    public class JSONModule : SkryptModule {
+        public JSONModule(SkryptEngine engine) : base(engine) {
         }
 
         public static SkryptObject ToJson(SkryptEngine engine, SkryptObject self, Arguments arguments) {

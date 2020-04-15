@@ -99,7 +99,7 @@ namespace Skrypt {
 
         internal Dictionary<string, IInitializeOnParse> InitializeOnParse { get; set; } = new Dictionary<string, IInitializeOnParse>();
 
-        internal Dictionary<string, LexicalEnvironment> fileEnvironments = new Dictionary<string, LexicalEnvironment>();
+        internal Dictionary<string, LexicalEnvironment> ImportableEnvironments { get; set; } = new Dictionary<string, LexicalEnvironment>();
 
         static SkryptEngine() {
             var methodInfo = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread");
@@ -165,7 +165,7 @@ namespace Skrypt {
             ErrorHandler.File = file;
         }
 
-        public SkryptEngine DoRelativeFile(string file, LexicalEnvironment lexicalEnvironment = null) {
+        public SkryptEngine DoRelativeFile(string file, bool isImporting = false, LexicalEnvironment lexicalEnvironment = null) {
             var oldFile = FileHandler.File;
             var newFile = System.IO.Path.Combine(FileHandler.Folder, file);
 
@@ -173,13 +173,19 @@ namespace Skrypt {
 
             var code = FileHandler.Read(file);
 
-            if (!fileEnvironments.ContainsKey(file)) {
-                var result = Execute(code);
-
-                fileEnvironments[file] = result.ProgramContext.block().LexicalEnvironment;
-            } else {
-                this.ProgramContext.block().LexicalEnvironment = fileEnvironments[file];
+            if (isImporting) {
+                if (!ImportableEnvironments.ContainsKey(file)) {
+                    ImportableEnvironments[file] = Execute(code).ProgramContext.block().LexicalEnvironment;
+                }
+                else {
+                    ProgramContext.block().LexicalEnvironment = ImportableEnvironments[file];
+                }
             }
+            else {
+                Execute(code);
+            }
+
+            //Execute(code, DefaultParserOptions, isImporting, lexicalEnvironment);
 
             SetFile(oldFile);
 
@@ -238,7 +244,7 @@ namespace Skrypt {
             return program;
         }
 
-        internal SkryptEngine Execute(SkryptParser.ProgramContext program, LexicalEnvironment lexicalEnvironment = null) {
+        internal SkryptEngine Execute(SkryptParser.ProgramContext program, bool isImporting = false, LexicalEnvironment lexicalEnvironment = null) {
             if (SW == null) {
                 SW = Stopwatch.StartNew();
             } else {
@@ -267,10 +273,10 @@ namespace Skrypt {
             return this;
         }
 
-        public SkryptEngine Execute(string code, ParserOptions parserOptions, LexicalEnvironment lexicalEnvironment = null) {
+        public SkryptEngine Execute(string code, ParserOptions parserOptions, bool isImporting = false, LexicalEnvironment lexicalEnvironment = null) {
             var program = ParseProgram(code, parserOptions);
 
-            return Execute(program, lexicalEnvironment);
+            return Execute(program, isImporting, lexicalEnvironment);
         }
 
         public SkryptEngine Execute(string code) {

@@ -1,1 +1,5 @@
-﻿import * from "module.skt"
+﻿import Module2 from "subcode1.skt"
+
+module Module1 {
+	public module2 = Module2
+}

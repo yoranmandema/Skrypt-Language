@@ -1,9 +1,6 @@
-﻿import * from "subcode1.skt"
+﻿
+struct Test {
+	public someArray = [Math]
+}
 
-module1 = SomeModule
-
-import * from "subcode2.skt"
-
-module2 = SomeModule
-
-print(module1 == module2)
+print(Test())

@@ -33,7 +33,7 @@ stmntBlock			: '{' Block=block '}'
 					| expression
 					;
 
-importStmnt			: IMPORT name (DOT NAME)*?	{
+importStmnt	: IMPORT name (DOT NAME)*?	{
 	var nameCtx = ($ctx as ImportStatementContext).name();
 	var scope = GetDefinitionBlock($ctx);
 
@@ -74,18 +74,18 @@ importAllFromStmnt	: IMPORT ASTERISK FROM string {
 	var relativePath = Ctx.@string().value;
 	var input = Engine.FileHandler.Read(relativePath);
 
-	Engine.DoRelativeFile(relativePath, scope.LexicalEnvironment);
+	Engine.DoRelativeFile(relativePath, true, scope.LexicalEnvironment);
 }		
 #importAllFromStatement;
 
-importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
+importFromStmnt	: IMPORT NAME (',' NAME)* FROM string {
 	var Ctx = ($ctx as ImportFromStatementContext);
 	var scope = GetDefinitionBlock($ctx);
 
 	var relativePath = Ctx.@string().value;
 	var input = Engine.FileHandler.Read(relativePath);
 
-	Engine.DoRelativeFile(relativePath);
+	Engine.DoRelativeFile(relativePath, true);
 
 	foreach (var n in Ctx.NAME()) {
 		var name = n.GetText();
@@ -95,7 +95,7 @@ importFromStmnt		: IMPORT NAME (',' NAME)* FROM string {
 }
 #importFromStatement;
 
-importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
+importFromModuleStmnt : IMPORT NAME (',' NAME)* FROM Module=name {
 	var Ctx = ($ctx as ImportFromModuleStatementContext);
 	var scope = GetDefinitionBlock($ctx);
 
@@ -120,10 +120,10 @@ importFromModuleStmnt		: IMPORT NAME (',' NAME)* FROM Module=name {
 			);
 		}
 	}
-}																																#importFromModuleStatement
-					;
+}								
+#importFromModuleStatement;
 
-moduleStmnt			: MODULE name {
+moduleStmnt	: MODULE name {
 	var Ctx = ($ctx as ModuleStatementContext);
 
 	var nameCtx = Ctx.name();
@@ -173,7 +173,7 @@ moduleStmnt			: MODULE name {
 }		
 #moduleStatement;
 
-structStmnt			: STRUCT name {
+structStmnt	: STRUCT name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext), typeof(StructStatementContext)});
 
 	if (!isInValidContext)
@@ -233,10 +233,10 @@ structStmnt			: STRUCT name {
 
 	finalType.Template = template;
 	finalType.File = Engine.FileHandler.File;
-}																																#structStatement
-					;
+}	
+#structStatement;
 
-traitStmnt			: TRAIT name {
+traitStmnt : TRAIT name {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ModuleStatementContext), typeof(ProgramContext)});
 
 	if (!isInValidContext) {
@@ -279,10 +279,10 @@ traitStmnt			: TRAIT name {
 
 		trait.TraitMembers[nameToken.Text] = new Member(value, false, Ctx);
 	}
-}																																#traitStatement
-					;
+}				
+#traitStatement;
 
-traitImplStmnt		: IMPL name FOR name propertiesBlock? {
+traitImplStmnt : IMPL name FOR name propertiesBlock? {
 	var isInValidContext = ContextIsIn($ctx, new [] {typeof(ProgramContext)});
 
 	if (!isInValidContext)
@@ -347,8 +347,8 @@ traitImplStmnt		: IMPL name FOR name propertiesBlock? {
 			type.Template.Members[nameToken.Text].value = value;
 		}
 	}
-}																																#traitImplStatement
-					;
+}				
+#traitImplStatement;
 
 propertiesBlock		: '{' property+ '}' ;
 traitProperty		: property ;
@@ -356,7 +356,7 @@ structProperty		: (PRIVATE | PUBLIC) STATIC? Property=property ;
 moduleProperty		: moduleStmnt | structStmnt | memberDefStmnt | fnStmnt;
 property			: memberDefStmnt | fnStmnt ;
 
-fnStmnt				: CONST? FN name '(' parameterGroup ')' {
+fnStmnt	: CONST? FN name '(' parameterGroup ')' {
 	var fnCtx = ($ctx as FunctionStatementContext);
 	var nameCtx = fnCtx.name();
 	var isConstant = fnCtx.CONST() != null;
@@ -397,10 +397,10 @@ fnStmnt				: CONST? FN name '(' parameterGroup ')' {
 	var functionVar = new Skrypt.FunctionInstance(this.Engine, function); 
 
 	newVar.Value = functionVar;
-}																																#functionStatement
-					;											
+}				
+#functionStatement;											
 
-returnStmnt			: RETURN expression? {
+returnStmnt	: RETURN expression? {
 	$ctx.Statement = GetFirstFunctionStatement($ctx);
 
 	if ($ctx.Statement == null) {
@@ -409,17 +409,17 @@ returnStmnt			: RETURN expression? {
 			"Return statement must be inside a function."
 		);
 	}
-}																																#returnStatement
-					;
+}					
+#returnStatement;
 
-parameterGroup		: (parameter (',' parameter)*)? ;								
+parameterGroup : (parameter (',' parameter)*)? ;								
 
-parameter			: NAME ('=' expression)?;
+parameter : NAME ('=' expression)?;
 		
-tryStmnt			: TRY stmntBlock catchStmt 																					#tryStatement
-					;
+tryStmnt : TRY stmntBlock catchStmt 																					
+#tryStatement;
 
-catchStmt			: CATCH '('name')' {
+catchStmt : CATCH '('name')' {
 	var catchCtx = ($ctx as CatchStatementContext);
 	var nameCtx = catchCtx.name();
 	var newVar = new Skrypt.Variable(nameCtx.GetText(), catchCtx.LexicalEnvironment);
@@ -427,16 +427,16 @@ catchStmt			: CATCH '('name')' {
 	catchCtx.LexicalEnvironment.AddVariable(newVar);
 
 	nameCtx.variable = newVar;	
-} stmntBlock 																													#catchStatement
-					;
+} stmntBlock 		
+#catchStatement;
 
-forStmnt			: FOR '(' Instantiator=assignStmnt ',' Condition=expression ',' Modifier=expression ')' stmntBlock			#forStatement
-					;
+forStmnt : FOR '(' Instantiator=assignStmnt ',' Condition=expression ',' Modifier=expression ')' stmntBlock			
+#forStatement;
 
-whileStmnt			: WHILE '(' Condition=expression ')' stmntBlock																#whileStatement
-					;
+whileStmnt: WHILE '(' Condition=expression ')' stmntBlock															
+#whileStatement;
 
-continueStmnt		: CONTINUE {
+continueStmnt : CONTINUE {
 	$ctx.Statement = GetFirstLoopStatement($ctx);
 
 	if ($ctx.Statement == null) {
@@ -445,10 +445,10 @@ continueStmnt		: CONTINUE {
 			"Continue statement must be inside a loop."
 		);
 	}
-}																																#continueStatement
-					;
+}				
+#continueStatement;
 
-breakStmnt			: BREAK {
+breakStmnt : BREAK {
 	$ctx.Statement = GetFirstLoopStatement($ctx);
 
 	if ($ctx.Statement == null) {
@@ -457,22 +457,19 @@ breakStmnt			: BREAK {
 			"Break statement must be inside a loop."
 		);
 	}
-}																																#breakStatement
-					;
+}					
+#breakStatement;
 
-ifStmnt				: if (elseif)* else?																						#ifStatement			
-					;
+ifStmnt	: if (elseif)* else?	
+#ifStatement;
 
-if					: IF '(' Condition=expression ')' stmntBlock 
-					;
+if : IF '(' Condition=expression ')' stmntBlock;
 
-elseif				: ELSE IF '(' Condition=expression ')' stmntBlock
-					;
+elseif : ELSE IF '(' Condition=expression ')' stmntBlock;
 
-else				: ELSE stmntBlock																			
-					;
+else : ELSE stmntBlock;
 
-memberDefStmnt		: CONST? name ASSIGN expression {
+memberDefStmnt : CONST? name ASSIGN expression {
 	var memberDefCtx = ($ctx as MemberDefinitionStatementContext);
 	var nameCtx = memberDefCtx.name();
 	var block = GetDefinitionBlock($ctx);
@@ -493,12 +490,13 @@ memberDefStmnt		: CONST? name ASSIGN expression {
 		block.LexicalEnvironment.AddVariable(newVar);
 		nameCtx.variable = newVar;
 	} 	
-} #memberDefinitionStatement
-;
+} 
+#memberDefinitionStatement;
 
-assign				: Operator=(PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR)? ASSIGN  #assignOperator ;
+assign : Operator=(PLUS|MINUS|ASTERISK|REMAINDER|BITAND|BITNOT|BITOR|BITXOR)? ASSIGN  
+#assignOperator;
 
-assignStmnt			: CONST? name assign expression {
+assignStmnt	: CONST? name assign expression {
 	var assignNameCtx = ($ctx as AssignNameStatementContext);
 	var nameCtx = assignNameCtx.name();
 	var block = GetDefinitionBlock(nameCtx.GetText(), $ctx);
@@ -534,10 +532,10 @@ assignStmnt			: CONST? name assign expression {
 	} 	
 
 	var isInFunction = block.Context.Parent is StmntBlockContext SmntBlock && SmntBlock.Parent is FunctionStatementContext;
-}																																#assignNameStatement
-					| memberAccess		assign expression																		#assignMemberStatement
-					| memberAccessComp	assign expression																		#assignComputedMemberStatement					
-					;
+}																																
+#assignNameStatement
+| memberAccess		assign expression	#assignMemberStatement
+| memberAccessComp	assign expression	#assignComputedMemberStatement;
 
 expression          : '(' expression ')'																						#parenthesisExp
 					| fnLiteral																									#functionLiteral		
